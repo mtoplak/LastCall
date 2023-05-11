@@ -4,13 +4,16 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProductsModule } from './products/products.module';
 import { config } from 'dotenv';
+import { BuyersModule } from './buyers/buyers.module';
 config();
 
 const databaseHost = require("../constants").databaseHost;
 
 @Module({
-  imports: [ProductsModule,
-    MongooseModule.forRoot(databaseHost)
+  imports: [
+    BuyersModule,
+    ProductsModule,
+    MongooseModule.forRoot(databaseHost),
   ],
   controllers: [AppController],
   providers: [AppService],
