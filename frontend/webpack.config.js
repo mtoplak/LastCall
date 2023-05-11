@@ -12,7 +12,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(ts|tsx)$/,
+        test: /.(ts|tsx)$/,
         exclude: /node_modules/,
         resolve: {
           extensions: ['.ts', '.tsx', '.js', '.json'],
@@ -20,10 +20,14 @@ module.exports = {
         use: 'ts-loader',
       },
       {
-        test: /\.css$/,
+        test: /.css$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
-    ]
+      {
+        test: /.(png|jpe?g|gif)$/i,
+        type: 'asset/resource',
+      },
+    ],
   },
   devtool: prod ? undefined : 'source-map',
   plugins: [

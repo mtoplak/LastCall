@@ -1,9 +1,6 @@
 import React from "react";
+import Homepage from "./components/homepage/Homepage";
 const App = () => {
-  return (
-    <div>
-      <h1>Hello world</h1>
-    </div>
-  );
+  return <Homepage />;
 };
 export default App;
