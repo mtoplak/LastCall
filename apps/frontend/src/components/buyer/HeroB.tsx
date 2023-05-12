@@ -3,7 +3,7 @@ import { Container } from '@mui/system';
 import React from 'react';
 import banner from '../../assets/images/drinks-banner.jpg';
 import NavbarB from './NavbarB';
-import CustomButton from '../../components/homepage/CustomButton';
+import CustomButton from '../homepage/CustomButton';
 import heroImg from '../../assets/images/homepageDrink.png';
 import SearchInput from './SearchInput';
 
@@ -49,7 +49,8 @@ const Hero = () => {
 							Welcome to LastCall
 						</Typography>
 						<Title variant="h1">
-							Bridging the Gap Between Drink Buyers and Sellers
+							Bridging the Gap Between Drink {" "} 
+							<span style={{ color: "#24336e" }}>Buyers</span> and Sellers
 						</Title>
 						<Typography
 							variant="body2"
@@ -60,12 +61,6 @@ const Hero = () => {
 							suppliers, distributors, retailers, and enthusiastic
 							consumers.
 						</Typography>
-						<CustomButton
-							backgroundColor="#0F1B4C"
-							color="#fff"
-							buttonText="More About Us"
-							heroBtn={true}
-						/>
 					</Box>
 
 					<Box sx={{ flex: '1.25' }}>

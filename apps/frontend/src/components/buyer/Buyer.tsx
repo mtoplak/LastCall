@@ -1,6 +1,6 @@
 import React from "react";
-import Hero from "./Hero";
-import Products from "./Products";
+import Hero from "./HeroB";
+import Products from "./ProductsB";
 import { Box } from "@mui/material";
 import Footer from "../homepage/Footer";
 

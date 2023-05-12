@@ -1,5 +1,6 @@
-import { Box, styled, Typography } from "@mui/material";
+import { Box, styled, Typography, IconButton } from "@mui/material";
 import React from "react";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 interface DrinkProps {
   name: string;
@@ -7,12 +8,12 @@ interface DrinkProps {
   price: number;
 }
 
-const Drink: React.FC<DrinkProps> = ({ name, img, price }) => {
+const DrinkB: React.FC<DrinkProps> = ({ name, img, price }) => {
   const HouseBox = styled(Box)(({ theme }) => ({
     borderRadius: theme.spacing(1),
     maxWidth: 350,
-    backgroundColor: "#262626",
-    color: "white",
+    backgroundColor: "#E6F0FF",
+    color: "black",
     boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
     transition: "transform 0.3s ease-in-out",
     margin: theme.spacing(2),
@@ -56,9 +57,12 @@ const Drink: React.FC<DrinkProps> = ({ name, img, price }) => {
         <Typography variant="body1" sx={{ my: 1 }}>
           Cena: {price}€
         </Typography>
+        <IconButton color="primary" aria-label="Add to Order">
+          <AddCircleOutlineIcon />
+        </IconButton>
       </InfoBox>
     </HouseBox>
   );
 };
 
-export default Drink;
+export default DrinkB;

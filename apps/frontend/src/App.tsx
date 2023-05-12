@@ -6,6 +6,8 @@ import { store, persistor } from 'redux-store';
 import { Loading } from 'shared';
 import Routing from 'routes';
 import Buyer from 'components/buyer/Buyer';
+import Seller from 'components/seller/Seller';
+import Homepage from 'components/homepage/Homepage';
 
 function App() {
 	return (
@@ -17,7 +19,7 @@ function App() {
 				</PersistGate>
 			</Provider>
 		</Suspense>*/
-		<Buyer />
+		<Homepage />
 	);
 }
 

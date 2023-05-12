@@ -62,13 +62,20 @@ const Homepage = () => {
               buttonText="I'm a buyer!"
               heroBtn={true}
             />
+            <br/>
+            <CustomButton
+              backgroundColor="#0F1B4C"
+              color="#fff"
+              buttonText="I'm a seller!"
+              heroBtn={true}
+            />
           </Box>
 
           <Box sx={{ flex: "1.25" }}>
             <img
               src={heroImg}
               alt="heroImg"
-              style={{ maxWidth: "100%", marginTop: "5rem" }}
+              style={{ maxWidth: "100%", marginTop: "10rem" }}
             />
           </Box>
         </CustomBox>

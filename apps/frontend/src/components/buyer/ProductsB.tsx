@@ -1,7 +1,8 @@
 import { Box, Container, styled, Typography } from "@mui/material";
 import React from "react";
 import { drinks } from "../data/data";
-import Drink from "./Drink";
+import Drink from "./DrinkB";
+import SearchInput from "./SearchInput";
 
 const Products = () => {
   const PropertiesBox = styled(Box)(({ theme }) => ({
@@ -29,6 +30,9 @@ const Products = () => {
   return (
     <Box sx={{ mt: 5, backgroundColor:"white", py: 10 }}>
       <Container>
+        <Box>
+          <SearchInput />
+        </Box>
         <PropertiesTextBox>
           <Typography
             sx={{ color: "#000339", fontSize: "35px", fontWeight: "bold" }}
