@@ -9,11 +9,21 @@ export class ProductsService {
     constructor(@InjectModel('Product') private readonly productModel: Model<Product>,
     ) {}
 
-    async insertProduct(naziv: string, opis: string, cena: number) {
+    async insertProduct(
+        title: string,
+        description: string,
+        packaging: string,
+        size: string,
+        price: number,
+        stock: number
+        ) {
         const newProduct = new this.productModel({
-            naziv,
-            opis,
-            cena
+            title,
+            description,
+            packaging, //?
+            size,
+            price,
+            stock,
         });
         const result = await newProduct.save();
         console.log(result);
@@ -25,9 +35,13 @@ export class ProductsService {
         //return products as Product[];
         return products.map((prod) => ({
             id: prod.id,
-            naziv: prod.naziv,
-            opis: prod.opis,
-            cena: prod.cena}));
+            title: prod.title,
+            description: prod.description,
+            packaging: prod.packaging,
+            size: prod.size,
+            price: prod.price,
+            stock: prod.stock,
+        }));
     }
 
     async getSingleProduct(productId: string) {
@@ -37,26 +51,42 @@ export class ProductsService {
         }
         return {
             id: product.id,
-            naziv: product.naziv,
-            opis: product.opis,
-            cena: product.cena};
+            title: product.title,
+            description: product.description,
+            packaging: product.packaging,
+            size: product.size,
+            price: product.price,
+            stock: product.stock,
+        };
     }
 
     async updateProduct(
         productId: string,
-        naziv: string,
-        opis: string,
-        cena: number
+        title: string,
+        description: string,
+        packaging: string,
+        size: string,
+        price: number,
+        stock: number
     ) {
         const updatedProduct = await this.findProduct(productId);
-        if (naziv) {
-            updatedProduct.naziv = naziv;
+        if (title) {
+            updatedProduct.title = title;
         }
-        if (opis) {
-            updatedProduct.opis = opis;
+        if (description) {
+            updatedProduct.description = description;
         }
-        if (cena) {
-            updatedProduct.cena = cena;
+        if (packaging) {
+            updatedProduct.packaging = packaging;
+        }
+        if (size) {
+            updatedProduct.size = size;
+        }
+        if (price) {
+            updatedProduct.price = price;
+        }
+        if (stock) {
+            updatedProduct.stock = stock;
         }
         updatedProduct.save();
     }
@@ -65,7 +95,7 @@ export class ProductsService {
         const result = await this.productModel.deleteOne({_id: productId}).exec(); //v bazi je id shranjen kot _id
         console.log(result);
         if(result.deletedCount === 0){
-            throw new NotFoundException('Ne najdem produkta.');
+            throw new NotFoundException('Could not find the product.');
         }
     }
 
@@ -74,10 +104,10 @@ export class ProductsService {
         try{
             product = await this.productModel.findById(productId).exec();
         } catch (error) {
-            throw new NotFoundException('Ne najdem produkta.');
+            throw new NotFoundException('Could not find the product.');
         }
         if (!product) {
-            throw new NotFoundException('Ne najdem produkta.');
+            throw new NotFoundException('Could not find the product.');
         }
         return product;
         //return { id: product.id, naziv: product.naziv, opis: product.opis, cena: product.cena};

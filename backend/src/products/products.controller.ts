@@ -7,14 +7,20 @@ export class ProductsController {
 
     @Post()
     async addProduct(
-        @Body('naziv') prodNaziv: string,
-        @Body('opis') prodOpis: string,
-        @Body('cena') prodCena: number
+        @Body('title') title: string,
+        @Body('description') description: string,
+        @Body('packaging') packaging: string,
+        @Body('size') size: string,
+        @Body('price') price: number,
+        @Body('stock') stock: number
     ) {
         const generatedID = await this.productService.insertProduct(
-            prodNaziv,
-            prodOpis,
-            prodCena
+            title,
+            description,
+            packaging,
+            size,
+            price,
+            stock,
             );
         return { id: generatedID };
     }
@@ -25,26 +31,37 @@ export class ProductsController {
         return products;
     }
 
-    @Get(':ime')
-    getSingleProduct(@Param('ime') ime: string) {
-        const product = this.productService.getSingleProduct(ime);
+    @Get(':id')
+    getSingleProduct(@Param('id') id: string) {
+        const product = this.productService.getSingleProduct(id);
         return product;
     }
 
-    @Patch(':ime')
+    @Patch(':id')
     async updateProduct(
-        @Param('ime') ime: string,
-        @Body('naziv') naziv: string,
-        @Body('opis') opis: string,
-        @Body('cena') cena: number
+        @Param('id') id: string,
+        @Body('title') title: string,
+        @Body('description') description: string,
+        @Body('packaging') packaging: string,
+        @Body('size') size: string,
+        @Body('price') price: number,
+        @Body('stock') stock: number
     ) {
-        await this.productService.updateProduct(ime, naziv, opis, cena);
+        await this.productService.updateProduct(
+            id,
+            title,
+            description,
+            packaging,
+            size,
+            price,
+            stock,
+            );
         return null;
     }
 
-    @Delete(':ime')
-    async removeProduct(@Param('ime') ime: string) {
-        await this.productService.deleteProduct(ime);
+    @Delete(':id')
+    async removeProduct(@Param('id') id: string) {
+        await this.productService.deleteProduct(id);
         return null;
     }
 

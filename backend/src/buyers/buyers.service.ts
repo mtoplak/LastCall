@@ -10,30 +10,32 @@ export class BuyersService {
     ) {}
 
     async addBuyer(
-        ime: string,
-        priimek: string,
-        pravnaOseba: boolean,
-        nazivPodjetja: string,
-        davcnaStevilka: number,
-        naslov: string,
-        mesto: string,
-        drzava: string,
-        ciljniTrg: string,
+        name: string,
+        surname: string,
+        legalPerson: boolean,
+        title: string,
+        registerNumber: number,
+        targetedMarket: string,
+        address: string, //array
+        city: string,
+        country: string,
+        phone: string,
         email: string,
-        telefon: string,
+        password: string,
         ) {
         const newBuyer = new this.buyerModel({
-            ime,
-            priimek,
-            pravnaOseba,
-            nazivPodjetja,
-            davcnaStevilka,
-            naslov,
-            mesto,
-            drzava,
-            ciljniTrg,
+            name,
+            surname,
+            legalPerson,
+            title,
+            registerNumber,
+            targetedMarket,
+            address, //array
+            city,
+            country,
+            phone,
             email,
-            telefon,
+            password,
         });
         const result = await newBuyer.save();
         console.log(result);
@@ -44,88 +46,94 @@ export class BuyersService {
         const buyers = await this.buyerModel.find().exec();
         return buyers.map((buyer) => ({
             id: buyer.id,
-            ime: buyer.ime,
-            priimek: buyer.priimek,
-            pravnaOseba: buyer.pravnaOseba,
-            nazivPodjetja: buyer.nazivPodjetja,
-            davcnaStevilka: buyer.davcnaStevilka,
-            naslov: buyer.naslov,
-            mesto: buyer.mesto,
-            drzava: buyer.drzava,
-            ciljniTrg: buyer.ciljniTrg,
+            name: buyer.name,
+            surname: buyer.surname,
+            legalPerson: buyer.legalPerson,
+            title: buyer.title,
+            registerNumber: buyer.registerNumber,
+            targetedMarket: buyer.targetedMarket,
+            address: buyer.address, //array
+            city: buyer.city,
+            country: buyer.country, //? caches.getCountry(buyer.country,
+            phone: buyer.phone,
             email: buyer.email,
-            telefon: buyer.telefon,
+            password: buyer.password,
         }));
     }
 
     async getSingleBuyer(productId: string) {
         const buyer = await this.findBuyer(productId);
         if (!buyer) {
-            throw new NotFoundException('Ne najdem kupca.');
+            throw new NotFoundException('Could not find the buyer.');
         }
         return {
             id: buyer.id,
-            ime: buyer.ime,
-            priimek: buyer.priimek,
-            pravnaOseba: buyer.pravnaOseba,
-            nazivPodjetja: buyer.nazivPodjetja,
-            davcnaStevilka: buyer.davcnaStevilka,
-            naslov: buyer.naslov,
-            mesto: buyer.mesto,
-            drzava: buyer.drzava,
-            ciljniTrg: buyer.ciljniTrg,
+            name: buyer.name,
+            surname: buyer.surname,
+            legalPerson: buyer.legalPerson,
+            title: buyer.title,
+            registerNumber: buyer.registerNumber,
+            targetedMarket: buyer.targetedMarket,
+            address: buyer.address, //array
+            city: buyer.city,
+            country: buyer.country, //? caches.getCountry(buyer.country,
+            phone: buyer.phone,
             email: buyer.email,
-            telefon: buyer.telefon,
+            password: buyer.password,
         };
     }
 
     async updateBuyer(
         buyerId: string,
-        ime: string,
-        priimek: string,
-        pravnaOseba: boolean,
-        nazivPodjetja: string,
-        davcnaStevilka: number,
-        naslov: string,
-        mesto: string,
-        drzava: string,
-        ciljniTrg: string,
+        name: string,
+        surname: string,
+        legalPerson: boolean,
+        title: string,
+        registerNumber: number,
+        targetedMarket: string,
+        address: string, //array
+        city: string,
+        country: string,
+        phone: string,
         email: string,
-        telefon: string,
+        password: string,
     ) {
         const updatedBuyer = await this.findBuyer(buyerId);
-        if (ime) {
-            updatedBuyer.ime = ime;
+        if (name) {
+            updatedBuyer.name = name;
         }
-        if (priimek) {
-            updatedBuyer.priimek = priimek;
+        if (surname) {
+            updatedBuyer.surname = surname;
         }
-        if (pravnaOseba) {
-            updatedBuyer.pravnaOseba = pravnaOseba;
+        if (legalPerson) {
+            updatedBuyer.legalPerson = legalPerson;
         }
-        if (nazivPodjetja) {
-            updatedBuyer.nazivPodjetja = nazivPodjetja;
+        if (title) {
+            updatedBuyer.title = title;
         }
-        if (davcnaStevilka) {
-            updatedBuyer.davcnaStevilka = davcnaStevilka;
+        if (registerNumber) {
+            updatedBuyer.registerNumber = registerNumber;
         }
-        if (naslov) {
-            updatedBuyer.naslov = naslov;
+        if (targetedMarket) {
+            updatedBuyer.targetedMarket = targetedMarket;
         }
-        if (mesto) {
-            updatedBuyer.mesto = mesto;
+        if (address) {
+            updatedBuyer.address = address;
         }
-        if (drzava) {
-            updatedBuyer.drzava = drzava;
+        if (city) {
+            updatedBuyer.city = city;
         }
-        if (ciljniTrg) {
-            updatedBuyer.ciljniTrg = ciljniTrg;
+        if (country) {
+            updatedBuyer.country = country;
+        }
+        if (phone) {
+            updatedBuyer.phone = phone;
         }
         if (email) {
             updatedBuyer.email = email;
         }
-        if (telefon) {
-            updatedBuyer.telefon = telefon;
+        if (password) {
+            updatedBuyer.password = password;
         }
         updatedBuyer.save();
     }
@@ -134,7 +142,7 @@ export class BuyersService {
         const result = await this.buyerModel.deleteOne({_id: buyerId}).exec(); //v bazi je id shranjen kot _id
         console.log(result);
         if(result.deletedCount === 0){
-            throw new NotFoundException('Ne najdem kupca.');
+            throw new NotFoundException('Could not find the buyer.');
         }
     }
 
@@ -143,10 +151,10 @@ export class BuyersService {
         try{
             buyer = await this.buyerModel.findById(buyerId).exec();
         } catch (error) {
-            throw new NotFoundException('Ne najdem kupca.');
+            throw new NotFoundException('Could not find the buyer.');
         }
         if (!buyer) {
-            throw new NotFoundException('Ne najdem kupca.');
+            throw new NotFoundException('Could not find the buyer.');
         }
         return buyer;
     }

@@ -7,31 +7,32 @@ export class BuyersController {
 
     @Post()
     async addBuyer(
-        @Body('ime') ime: string,
-        @Body('priimek') priimek: string,
-        @Body('pravnaOseba') pravnaOseba: boolean,
-        @Body('nazivPodjetja') nazivPodjetja: string,
-        @Body('davcnaStevilka') davcnaStevilka: number,
-        @Body('naslov') naslov: string,
-        @Body('mesto') mesto: string,
-        @Body('drzava') drzava: string,
-        @Body('ciljniTrg') ciljniTrg: string,
+        @Body('name') name: string,
+        @Body('surname') surname: string,
+        @Body('legalPerson') legalPerson: boolean,
+        @Body('title') title: string,
+        @Body('registerNumber') registerNumber: number,
+        @Body('targetedMarket') targetedMarket: string,
+        @Body('address') address: string,
+        @Body('city') city: string,
+        @Body('country') country: string,
+        @Body('phone') phone: string,
         @Body('email') email: string,
-        @Body('telefon') telefon: string,
-
+        @Body('password') password: string,
     ) {
         const generatedID = await this.buyersService.addBuyer(
-            ime,
-            priimek,
-            pravnaOseba,
-            nazivPodjetja,
-            davcnaStevilka,
-            naslov,
-            mesto,
-            drzava,
-            ciljniTrg,
+            name,
+            surname,
+            legalPerson,
+            title,
+            registerNumber,
+            targetedMarket,
+            address, //array
+            city,
+            country,
+            phone,
             email,
-            telefon,
+            password,
             );
         return { id: generatedID };
     }
@@ -51,30 +52,34 @@ export class BuyersController {
     @Patch(':id')
     async updateBuyer(
         @Param('id') id: string,
-        @Body('ime') ime: string,
-        @Body('priimek') priimek: string,
-        @Body('pravnaOseba') pravnaOseba: boolean,
-        @Body('nazivPodjetja') nazivPodjetja: string,
-        @Body('davcnaStevilka') davcnaStevilka: number,
-        @Body('naslov') naslov: string,
-        @Body('mesto') mesto: string,
-        @Body('drzava') drzava: string,
-        @Body('ciljniTrg') ciljniTrg: string,
+        @Body('name') name: string,
+        @Body('surname') surname: string,
+        @Body('legalPerson') legalPerson: boolean,
+        @Body('title') title: string,
+        @Body('registerNumber') registerNumber: number,
+        @Body('targetedMarket') targetedMarket: string,
+        @Body('address') address: string,
+        @Body('city') city: string,
+        @Body('country') country: string,
+        @Body('phone') phone: string,
         @Body('email') email: string,
-        @Body('telefon') telefon: string
+        @Body('password') password: string,
     ) {
-        await this.buyersService.updateBuyer(id,
-            ime,
-            priimek,
-            pravnaOseba,
-            nazivPodjetja,
-            davcnaStevilka,
-            naslov,
-            mesto,
-            drzava,
-            ciljniTrg,
+        await this.buyersService.updateBuyer(
+            id,
+            name,
+            surname,
+            legalPerson,
+            title,
+            registerNumber,
+            targetedMarket,
+            address,
+            city,
+            country,
+            phone,
             email,
-            telefon,);
+            password
+            );
         return null;
     }
 
