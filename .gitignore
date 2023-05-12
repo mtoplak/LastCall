@@ -29,7 +29,11 @@ apps/**/dist
 **/.env
 **/.env.dev
 **/.env.prod
-.yarn
+.yarn/cache
+# ?
+.github/workflows
+**/.github/workflows
+.github/**
 
 
 npm-debug.log*
