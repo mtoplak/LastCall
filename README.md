@@ -1,37 +1,37 @@
 # LastCall
 
-## Installation
+## Installation and usage
 
-Install dependencies:
+Install `node_modules` in the root directory
 
 ```
-cd frontend
-npm install
-
-cd ../backend
-npm install
+yarn
 ```
 
-Create a `.env` file in the `backend` directory with the following content:
+Build the `@core/lib` first.
+
+```
+yarn build:lib
+```
+
+Create `.env.dev` and `.env.prod` files in the `apps/fastify-backend` directory directory with the following content:
 
 ```env
- DATABASE_URI=mongodb+srv://<username>:<password>@cluster0.g1ftw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+ DATABASE_URI = "mongodb+srv://<username>:<password>@lastcall.apyanwb.mongodb.net/?retryWrites=true&w=majority"
 ```
 
-Create a `.env` file in the `frontend` directory with the following content:
+Create a `.env` file in the `apps/frontend` directory with the following content:
 
 ```env
 REACT_APP_API_URL=http://localhost:4000
 ```
 
-## Usage
+Run the `frontend` and `fastify-server` in one command thanks to [Turborepo's Pipelines](https://turborepo.org/docs/core-concepts/pipelines)
 
-### Development
+```
+yarn dev
+```
 
-Start client:
+## Docker
 
-`npm start`
-
-Start server:
-
-`npm run start` or `npm run start:dev` (watch mode)
+...
