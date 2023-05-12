@@ -1,12 +1,13 @@
 import React from "react";
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, BrowserRouter } from 'react-router-dom';
 import Homepage from "../homepage/Homepage";
+import Buyer from "components/buyer/Buyer";
 const Routing = () => {
     return(
-        <Routes>
+        <BrowserRouter>
             <Route path="/" element={<Homepage />} />
-            
-        </Routes>
+            <Route path="/buyer" element={<Buyer />} />
+        </BrowserRouter>
     );
 }
 export default Routing;

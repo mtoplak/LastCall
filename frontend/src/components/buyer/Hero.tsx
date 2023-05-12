@@ -1,12 +1,13 @@
-import { Box, Button, styled, Typography } from "@mui/material";
+import { Box, Button, styled, TextField, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import React from "react";
-
+import banner from "../../assets/images/drinks-banner.jpg";
+import NavbarB from "./NavbarB";
+import CustomButton from "../../components/homepage/CustomButton";
 import heroImg from "../../assets/images/homepageDrink.png";
-import CustomButton from "./CustomButton";
-import Navbar from "./Navbar";
+import SearchInput from "./SearchInput";
 
-const Homepage = () => {
+const Hero = () => {
   const CustomBox = styled(Box)(({ theme }) => ({
     display: "flex",
     justifyContent: "center",
@@ -21,7 +22,7 @@ const Homepage = () => {
 
   const Title = styled(Typography)(({ theme }) => ({
     fontSize: "64px",
-    color: "#000336",
+    color: "#262626",
     fontWeight: "bold",
     margin: theme.spacing(4, 0, 4, 0),
     [theme.breakpoints.down("sm")]: {
@@ -30,8 +31,9 @@ const Homepage = () => {
   }));
 
   return (
-    <Box sx={{backgroundColor: "#E6F0FF", minHeight: "100vh" }}>
+    <Box sx={{ backgroundColor: "#E6F0FF", minHeight: "100vh" }}>
       <Container>
+        <NavbarB />
         <CustomBox>
           <Box sx={{ flex: "1" }}>
             <Typography
@@ -53,22 +55,25 @@ const Homepage = () => {
               variant="body2"
               sx={{ fontSize: "18px", color: "#5A6473", my: 4 }}
             >
-              With an unwavering commitment to enhancing the beverage industry, 
-              LastCall bridges the gap between suppliers, distributors, retailers, and enthusiastic consumers.
+              With an unwavering commitment to enhancing the beverage industry,
+              LastCall bridges the gap between suppliers, distributors,
+              retailers, and enthusiastic consumers.
             </Typography>
+            <Typography>
             <CustomButton
               backgroundColor="#0F1B4C"
               color="#fff"
-              buttonText="I'm a buyer!"
+              buttonText="More About Us"
               heroBtn={true}
             />
+            </Typography>
           </Box>
 
           <Box sx={{ flex: "1.25" }}>
             <img
               src={heroImg}
               alt="heroImg"
-              style={{ maxWidth: "100%", marginTop: "5rem" }}
+              style={{ maxWidth: "100%", marginTop: "7rem" }}
             />
           </Box>
         </CustomBox>
@@ -77,4 +82,4 @@ const Homepage = () => {
   );
 };
 
-export default Homepage;
+export default Hero;
