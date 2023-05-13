@@ -1,6 +1,9 @@
 import * as mongoose from 'mongoose';
+import { Order } from '../orders/order.model';
 
-export const SellerSchema = new mongoose.Schema({
+const schema = mongoose.Schema;
+
+export const SellerSchema = new schema({
     name: { type: String, required: true },
     surname: { type: String, required: true },
     title: { type: String, required: true },
@@ -12,8 +15,10 @@ export const SellerSchema = new mongoose.Schema({
     targetedMarket: { type: String, required: true },
     phone: { type: String, required: true },
     website: { type: String, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true, lowercase: true },
     password: { type: String, required: true },
+    orders: [{type: schema.Types.ObjectId, ref: "Order"}],
+    products: [{type: schema.Types.ObjectId, ref: "Product"}],
 });
 
 export interface Seller extends mongoose.Document {
@@ -31,4 +36,8 @@ export interface Seller extends mongoose.Document {
     website: string;
     email: string;
     password: string;
+    orders: string[];
+    products: string[];
 }
+
+export const SellerModel: mongoose.Model<Seller> = mongoose.model<Seller>("Seller", SellerSchema);

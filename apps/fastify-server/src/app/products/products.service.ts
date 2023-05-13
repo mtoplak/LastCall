@@ -2,11 +2,16 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { Product } from './product.model';
 import { InjectModel } from '@nestjs/mongoose/dist';
 import { Model } from 'mongoose';
+import { Order } from "../orders/order.model";
+import { Seller } from "../sellers/sellers.model";
 
 @Injectable()
 export class ProductsService {
 
-    constructor(@InjectModel('Product') private readonly productModel: Model<Product>,
+    constructor(
+        @InjectModel('Product') private readonly productModel: Model<Product>,
+        @InjectModel('Order') private readonly orderModel: Model<Order>,
+        @InjectModel('Seller') private readonly sellerModel: Model<Seller>,
     ) {}
 
     async insertProduct(
@@ -15,21 +20,47 @@ export class ProductsService {
         packaging: string,
         size: string,
         price: number,
-        stock: number
-        ) {
+        stock: number,
+        orders: string[] | undefined, // Update the parameter name to 'orders'
+        sellerId: string
+      ) {
+
+        const seller = await this.sellerModel.findById(sellerId);
+        if (!seller) {
+          throw new NotFoundException('Seller not found');
+        }
+
         const newProduct = new this.productModel({
-            title,
-            description,
-            packaging, //?
-            size,
-            price,
-            stock,
+          title,
+          description,
+          packaging,
+          size,
+          price,
+          stock,
+          orders: orders || [], // Assign the 'orders' parameter or an empty array if it's not provided
+          seller: seller._id
         });
+      
         const result = await newProduct.save();
+      
+        seller.products.push(result._id);
+        await seller.save();
+
+        if (orders && orders.length > 0) {
+          for (const orderId of orders) {
+            const order = await this.orderModel.findById(orderId);
+            if (!order) {
+              throw new NotFoundException('Order not found');
+            }
+            order.products.push(result._id);
+            await order.save();
+          }
+        }
+      
         console.log(result);
         return result.id as string;
-    }
-
+      }
+      
     async getAllProducts() {
         const products = await this.productModel.find().exec();
         //return products as Product[];
@@ -41,13 +72,15 @@ export class ProductsService {
             size: prod.size,
             price: prod.price,
             stock: prod.stock,
+            orders: prod.orders,
+            seller: prod.seller
         }));
     }
 
     async getSingleProduct(productId: string) {
         const product = await this.findProduct(productId);
         if (!product) {
-            throw new NotFoundException('Ne najdem produkta.');
+            throw new NotFoundException('Product not found.');
         }
         return {
             id: product.id,
@@ -57,6 +90,8 @@ export class ProductsService {
             size: product.size,
             price: product.price,
             stock: product.stock,
+            orders: product.orders,
+            seller: product.seller
         };
     }
 
@@ -67,27 +102,27 @@ export class ProductsService {
         packaging: string,
         size: string,
         price: number,
-        stock: number
+        stock: number,
+        orders: string[],
+        seller: Seller
     ) {
         const updatedProduct = await this.findProduct(productId);
-        if (title) {
-            updatedProduct.title = title;
-        }
-        if (description) {
-            updatedProduct.description = description;
-        }
-        if (packaging) {
-            updatedProduct.packaging = packaging;
-        }
-        if (size) {
-            updatedProduct.size = size;
-        }
-        if (price) {
-            updatedProduct.price = price;
-        }
-        if (stock) {
-            updatedProduct.stock = stock;
-        }
+        const updatedFields = {
+            title,
+            description,
+            packaging,
+            size,
+            price,
+            stock,
+            orders,
+            seller
+          };
+          
+          for (const [key, value] of Object.entries(updatedFields)) {
+            if (value) {
+              updatedProduct[key] = value;
+            }
+          }
         updatedProduct.save();
     }
 
@@ -110,6 +145,5 @@ export class ProductsService {
             throw new NotFoundException('Could not find the product.');
         }
         return product;
-        //return { id: product.id, naziv: product.naziv, opis: product.opis, cena: product.cena};
     }
 }

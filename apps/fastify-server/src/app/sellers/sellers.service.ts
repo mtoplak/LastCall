@@ -61,6 +61,8 @@ export class SellersService {
             website: seller.website,
             email: seller.email,
             password: seller.password,
+            orders: seller.orders,
+            products: seller.products
         }));
     }
 
@@ -84,6 +86,8 @@ export class SellersService {
             website: seller.website,
             email: seller.email,
             password: seller.password,
+            orders: seller.orders,
+            products: seller.products
         };
     }
 

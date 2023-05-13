@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post, Param, Patch, Delete } from "@nestjs/common";
 import { ProductsService } from "./products.service";
+import { Seller } from "../sellers/sellers.model";
 
 @Controller('products')
 export class ProductsController {
@@ -12,7 +13,9 @@ export class ProductsController {
         @Body('packaging') packaging: string,
         @Body('size') size: string,
         @Body('price') price: number,
-        @Body('stock') stock: number
+        @Body('stock') stock: number,
+        @Body('orders') orders: string[],
+        @Body('seller') seller: string
     ) {
         const generatedID = await this.productService.insertProduct(
             title,
@@ -21,6 +24,8 @@ export class ProductsController {
             size,
             price,
             stock,
+            orders,
+            seller
             );
         return { id: generatedID };
     }
@@ -45,7 +50,9 @@ export class ProductsController {
         @Body('packaging') packaging: string,
         @Body('size') size: string,
         @Body('price') price: number,
-        @Body('stock') stock: number
+        @Body('stock') stock: number,
+        @Body('orders') orders: string[],
+        @Body('seller') seller: Seller
     ) {
         await this.productService.updateProduct(
             id,
@@ -55,6 +62,8 @@ export class ProductsController {
             size,
             price,
             stock,
+            orders,
+            seller
             );
         return null;
     }
