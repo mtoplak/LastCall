@@ -6,6 +6,10 @@ import { store, persistor } from 'redux-store';
 import { Loading } from 'shared';
 import Routing from 'routes/Routing';
 import { BrowserRouter } from 'react-router-dom';
+import LoginB from 'components/buyer/login/LoginB';
+import LoginS from 'components/seller/login/LoginS';
+import RegisterS from 'components/seller/login/RegisterS';
+import RegisterB from 'components/buyer/login/RegisterB';
 
 /*
 <Suspense fallback={<Loading />}>
@@ -16,15 +20,14 @@ import { BrowserRouter } from 'react-router-dom';
 				</Provider>
 			</Suspense>
 
+
 */
 
 function App() {
 	return (
-		<>
-			<BrowserRouter>
-				<Routing />
-			</BrowserRouter>
-		</>
+		<BrowserRouter>
+			<Routing />
+		</BrowserRouter>
 	);
 }
 
