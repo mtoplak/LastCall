@@ -4,7 +4,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import { store, persistor } from 'redux-store';
 import { Loading } from 'shared';
-import Routing from 'routes/Routing';
+import Routing from 'components/route/Routing';
 import { BrowserRouter } from 'react-router-dom';
 
 /*
