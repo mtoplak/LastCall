@@ -4,22 +4,27 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import { store, persistor } from 'redux-store';
 import { Loading } from 'shared';
-import Routing from 'routes';
-import Buyer from 'components/buyer/Buyer';
-import Seller from 'components/seller/Seller';
-import Homepage from 'components/homepage/Homepage';
+import Routing from 'routes/Routing';
+import { BrowserRouter } from 'react-router-dom';
+
+/*
+<Suspense fallback={<Loading />}>
+				<Provider store={store}>
+					<PersistGate loading={''} persistor={persistor}>
+						<Routing />
+					</PersistGate>
+				</Provider>
+			</Suspense>
+
+*/
 
 function App() {
 	return (
-		/*
-		<Suspense fallback={<Loading />}>
-			<Provider store={store}>
-				<PersistGate loading={''} persistor={persistor}>
-					<Routing />
-				</PersistGate>
-			</Provider>
-		</Suspense>*/
-		<Homepage />
+		<>
+			<BrowserRouter>
+				<Routing />
+			</BrowserRouter>
+		</>
 	);
 }
 

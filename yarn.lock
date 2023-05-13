@@ -10450,6 +10450,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lastcall@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "lastcall@workspace:."
+  dependencies:
+    husky: ^8.0.1
+    lint-staged: ^13.0.3
+    prettier: ^2.7.1
+    turbo: ^1.4.3
+  languageName: unknown
+  linkType: soft
+
 "leven@npm:^3.1.0":
   version: 3.1.0
   resolution: "leven@npm:3.1.0"
@@ -13188,17 +13199,6 @@ __metadata:
   checksum: e72d0ba81b5922759e4aff17e0252bd29988f9642ed817f56b25a3e217e13eea8a7f2322af99a06edb779da12d5d636e9fda473d620df9a3da0df2a74141d53e
   languageName: node
   linkType: hard
-
-"react-nestjs-monorepo@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "react-nestjs-monorepo@workspace:."
-  dependencies:
-    husky: ^8.0.1
-    lint-staged: ^13.0.3
-    prettier: ^2.7.1
-    turbo: ^1.4.3
-  languageName: unknown
-  linkType: soft
 
 "react-redux@npm:^8.0.2":
   version: 8.0.2

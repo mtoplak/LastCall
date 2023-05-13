@@ -5,6 +5,7 @@ import React from "react";
 import heroImg from "../../assets/images/homepageDrink.png";
 import CustomButton from "./CustomButton";
 import Navbar from "./Navbar";
+import { Link } from "react-router-dom";
 
 const Homepage = () => {
   const CustomBox = styled(Box)(({ theme }) => ({
@@ -56,19 +57,23 @@ const Homepage = () => {
               With an unwavering commitment to enhancing the beverage industry, 
               LastCall bridges the gap between suppliers, distributors, retailers, and enthusiastic consumers.
             </Typography>
+            <Link to={"/buyer"}>
             <CustomButton
               backgroundColor="#0F1B4C"
               color="#fff"
               buttonText="I'm a buyer!"
               heroBtn={true}
             />
+            </Link>
             <br/>
+            <Link to={"/seller"}>
             <CustomButton
               backgroundColor="#0F1B4C"
               color="#fff"
               buttonText="I'm a seller!"
               heroBtn={true}
             />
+            </Link>
           </Box>
 
           <Box sx={{ flex: "1.25" }}>

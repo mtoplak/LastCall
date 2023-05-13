@@ -1,6 +1,6 @@
 {
-	"name": "react-nestjs-monorepo",
-	"author": "Nishant Kohli",
+	"name": "lastcall",
+	"author": "",
 	"version": "1.0.0",
 	"private": true,
 	"workspaces": [
