@@ -6,7 +6,7 @@ const SearchInput = () => {
     <Box sx={{ backgroundColor: "#F5F5F5", p: 2 }}>
       <FormControl sx={{ display: "block", alignItems: "center" }}>
         <TextField id="outlined-basic" label="Product Name" variant="outlined" sx={{ mr: 3, mb: 2, mt: 2 }} />
-        <InputLabel id="filter-location" />
+        <InputLabel id="filter-location"/>
         <Select labelId="filter-location" sx={{ mr: 3, mb: 2, mt: 2 }} defaultValue="location">
           <MenuItem value="location">-- Location --</MenuItem>
           <MenuItem value="location1">Slovenia</MenuItem>
