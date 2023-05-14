@@ -30,6 +30,7 @@ apps/**/dist
 **/.env.dev
 **/.env.prod
 .yarn/cache
+.yarn/install-state.gz
 # ?
 .yarn/install-state.gz
 

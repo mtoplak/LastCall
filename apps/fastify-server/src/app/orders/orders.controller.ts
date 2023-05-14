@@ -10,27 +10,34 @@ export class OrdersController {
 
     @Post()
     async addOrder(
-        @Body('products') products: string[],
-        @Body('buyer') buyer: string,
-        @Body('seller') seller: string,
-        @Body('totalPrice') totalPrice: number,
-        @Body('lastDateOfDelivery') lastDateOfDelivery: Date,
-        @Body('address') address: string,
-        @Body('city') city: string,
-        @Body('country') country: string,
+      @Body('products') products: { productId: string, quantity: number }[],
+      @Body('buyer') buyer: string,
+      @Body('seller') seller: string,
+      @Body('totalPrice') totalPrice: number,
+      @Body('lastDateOfDelivery') lastDateOfDelivery: Date,
+      @Body('address') address: string,
+      @Body('city') city: string,
+      @Body('country') country: string,
     ) {
-        const generatedID = await this.ordersService.addOrder(
-            products,
-            buyer,
-            seller,
-            totalPrice,
-            lastDateOfDelivery,
-            address,
-            city,
-            country
-            );
-        return { id: generatedID };
+      const productIds = products.map((product) => product.productId);
+      const quantities = products.map((product) => product.quantity);
+    
+      const generatedID = await this.ordersService.addOrder(
+        productIds,
+        buyer,
+        seller,
+        totalPrice,
+        lastDateOfDelivery,
+        address,
+        city,
+        country,
+        quantities
+      );
+    
+      return { id: generatedID };
     }
+    
+    
 
     @Get()
     async getAllOrders() {

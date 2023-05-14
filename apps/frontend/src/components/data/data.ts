@@ -37,19 +37,20 @@ export const drinks: Drinks[] = [
     seller: "Juan Perez",
   },
   {
-    id: 2,
-    name: "Pepsi",
-    img: drink2,
+    id: 4,
+    name: "Coca-Cola",
+    img: drink1,
     price: 1,
     type: "Pepsi",
     seller: "Juan Perez",
-  },  {
-    id: 2,
+  },
+
+  {
+    id: 5,
     name: "Pepsi",
     img: drink2,
     price: 1,
     type: "Pepsi",
     seller: "Juan Perez",
   },
-
 ];

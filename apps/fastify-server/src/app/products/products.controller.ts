@@ -9,22 +9,22 @@ export class ProductsController {
     @Post()
     async addProduct(
         @Body('title') title: string,
-        @Body('description') description: string,
+        @Body('drinkCategory') drinkCategory: string,
         @Body('packaging') packaging: string,
         @Body('size') size: string,
         @Body('price') price: number,
         @Body('stock') stock: number,
-        @Body('orders') orders: string[],
+        //@Body('orders') orders: string[],
         @Body('seller') seller: string
     ) {
         const generatedID = await this.productService.insertProduct(
             title,
-            description,
+            drinkCategory,
             packaging,
             size,
             price,
             stock,
-            orders,
+            //orders,
             seller
             );
         return { id: generatedID };
@@ -46,23 +46,23 @@ export class ProductsController {
     async updateProduct(
         @Param('id') id: string,
         @Body('title') title: string,
-        @Body('description') description: string,
+        @Body('drinkCategory') drinkCategory: string,
         @Body('packaging') packaging: string,
         @Body('size') size: string,
         @Body('price') price: number,
         @Body('stock') stock: number,
-        @Body('orders') orders: string[],
+        //@Body('orders') orders: string[],
         @Body('seller') seller: Seller
     ) {
         await this.productService.updateProduct(
             id,
             title,
-            description,
+            drinkCategory,
             packaging,
             size,
             price,
             stock,
-            orders,
+            //orders,
             seller
             );
         return null;

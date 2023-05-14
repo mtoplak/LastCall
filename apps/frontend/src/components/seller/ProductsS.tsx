@@ -13,6 +13,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import React from 'react';
 import { drinks } from '../data/data';
 import Drink from './DrinkS';
+import CustomFileInput from './CustomFileInput';
 
 const ProductsS = () => {
 	const PropertiesBox = styled(Box)(({ theme }) => ({
@@ -56,7 +57,7 @@ const ProductsS = () => {
 	return (
 		<Box sx={{ mt: 5, backgroundColor: 'white', py: 10 }}>
 			<Container>
-				<Box></Box>
+
 				<PropertiesTextBox>
 					<Typography
 						sx={{
@@ -129,6 +130,11 @@ const ProductsS = () => {
 											fullWidth
 											required
 										/>
+								</Typography>
+								<Typography>
+									<CustomFileInput onChange={function (file: File | null): void {
+										throw new Error('Function not implemented.');
+									} } />
 								</Typography>
 								<Typography sx={{ mt: 2 }}>
 								<Button
