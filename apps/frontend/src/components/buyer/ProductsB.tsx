@@ -9,6 +9,12 @@ import drink1 from '../../assets/images/cocacola.jpg';
 
 const Products = () => {
 	const [drinks2, setDrinks] = useState<IDrink[]>([]);
+
+	// filtering
+	const [filterName, setFilterName] = useState<string>('');
+	const [filterLocation, setFilterLocation] = useState<string>('');
+	const [filterType, setFilterType] = useState<string>('');
+
 	const PropertiesBox = styled(Box)(({ theme }) => ({
 		display: 'flex',
 		justifyContent: 'space-between',
@@ -44,11 +50,29 @@ const Products = () => {
 		fetchData();
 	}, []);
 
+  const filteredDrinks = drinks2.filter((drink) => {
+    if (filterName === 'any') {
+      return true;
+    } else if (
+      drink.title.toLowerCase().includes(filterName.toLowerCase())
+    ) {
+      return true;
+    }
+    return false;
+  });
+
 	return (
 		<Box sx={{ mt: 5, backgroundColor: 'white', py: 10 }}>
 			<Container>
 				<Box>
-					<SearchInput />
+					<SearchInput
+						setFilterName={setFilterName}
+						setFilterLocation={setFilterLocation}
+						setFilterType={setFilterType}
+						filterLocation={filterLocation}
+						filterName={filterName}
+						filterType={filterType}
+					/>
 				</Box>
 				<PropertiesTextBox>
 					<Typography
@@ -68,25 +92,25 @@ const Products = () => {
 				</PropertiesTextBox>
 
 				<PropertiesBox>
-					{drinks.map((drink, index) => (
-						<DrinkContainer key={index}>
-							<Drink
-								name={drink.name}
-								img={drink.img}
-								price={drink.price}
-							/>
-						</DrinkContainer>
-					))}
-					{drinks &&
-						drinks2.map((drink, index) => (
-							<DrinkContainer key={index}>
-								<Drink
-									name={drink.title}
-									img={drink1}
-									price={drink.price}
-								/>
-							</DrinkContainer>
-						))}
+					{filteredDrinks.length > 0
+						? filteredDrinks.map((drink, index) => (
+								<DrinkContainer key={index}>
+									<Drink
+										name={drink.title}
+										img={drink1}
+										price={drink.price}
+									/>
+								</DrinkContainer>
+						  ))
+						: drinks2.map((drink, index) => (
+								<DrinkContainer key={index}>
+									<Drink
+										name={drink.title}
+										img={drink1}
+										price={drink.price}
+									/>
+								</DrinkContainer>
+						  ))}
 				</PropertiesBox>
 			</Container>
 		</Box>
