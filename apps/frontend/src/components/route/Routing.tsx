@@ -1,7 +1,9 @@
 import React from 'react';
-import { Route, BrowserRouter, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Homepage from '../homepage/Homepage';
 import Buyer from 'components/buyer/Buyer';
+import Page404 from 'components/404/Page404';
+
 const Routing = () => {
 	return (
 		<>
@@ -9,6 +11,7 @@ const Routing = () => {
 				<Route path="/" element={<Homepage />} />
 				<Route path="/buyer" element={<Buyer />} />
 				<Route path="/seller" element={<Homepage />} />
+				<Route path="*" element={<Page404 />} />
 			</Routes>
 		</>
 	);

@@ -99,41 +99,26 @@ export class BuyersService {
         password: string,
     ) {
         const updatedBuyer = await this.findBuyer(buyerId);
-        if (name) {
-            updatedBuyer.name = name;
-        }
-        if (surname) {
-            updatedBuyer.surname = surname;
-        }
-        if (legalPerson) {
-            updatedBuyer.legalPerson = legalPerson;
-        }
-        if (title) {
-            updatedBuyer.title = title;
-        }
-        if (registerNumber) {
-            updatedBuyer.registerNumber = registerNumber;
-        }
-        if (targetedMarket) {
-            updatedBuyer.targetedMarket = targetedMarket;
-        }
-        if (address) {
-            updatedBuyer.address = address;
-        }
-        if (city) {
-            updatedBuyer.city = city;
-        }
-        if (country) {
-            updatedBuyer.country = country;
-        }
-        if (phone) {
-            updatedBuyer.phone = phone;
-        }
-        if (email) {
-            updatedBuyer.email = email;
-        }
-        if (password) {
-            updatedBuyer.password = password;
+
+        const updatedFields = {
+          name,
+          surname,
+          legalPerson,
+          title,
+          registerNumber,
+          targetedMarket,
+          address,
+          city,
+          country,
+          phone,
+          email,
+          password,
+        };
+        
+        for (const [key, value] of Object.entries(updatedFields)) {
+          if (value) {
+            updatedBuyer[key] = value;
+          }
         }
         updatedBuyer.save();
     }

@@ -1,6 +1,8 @@
 import * as mongoose from 'mongoose';
 
-export const BuyerSchema = new mongoose.Schema({
+const schema = mongoose.Schema;
+
+export const BuyerSchema = new schema({
     name: { type: String, required: true },
     surname: { type: String, required: true },
     legalPerson: { type: String, required: true},
@@ -13,6 +15,7 @@ export const BuyerSchema = new mongoose.Schema({
     phone: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
+    orders: [{type: schema.Types.ObjectId, ref: "Order"}]
 });
 
 export interface Buyer extends mongoose.Document {
@@ -29,4 +32,7 @@ export interface Buyer extends mongoose.Document {
     phone: string;
     email: string;
     password: string;
+    orders: string[];
 }
+
+export const BuyerModel: mongoose.Model<Buyer> = mongoose.model<Buyer>("Buyer", BuyerSchema);

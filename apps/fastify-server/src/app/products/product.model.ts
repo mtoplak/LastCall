@@ -1,4 +1,7 @@
 import * as mongoose from 'mongoose';
+import { Seller } from '../sellers/sellers.model';
+
+const schema = mongoose.Schema;
 
 export const ProductSchema = new mongoose.Schema({
     title: { type: String, required: true },
@@ -7,6 +10,8 @@ export const ProductSchema = new mongoose.Schema({
     size: { type: String, required: true },
     price: { type: Number, required: true },
     stock: { type: Number, required: true },
+    orders: [{type: schema.Types.ObjectId, ref: "Order"}],
+    seller: {type: schema.Types.ObjectId, ref: "Seller"}
 });
 
 export interface Product extends mongoose.Document {
@@ -17,5 +22,9 @@ export interface Product extends mongoose.Document {
     size: string;
     price: number;
     stock: number;
+    orders: string[];
+    seller: Seller;
     //slike
 }
+
+export const ProductModel: mongoose.Model<Product> = mongoose.model<Product>("Product", ProductSchema);

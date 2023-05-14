@@ -7,6 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ProductsModule } from './app/products/products.module';
 import { BuyersModule } from './app/buyers/buyers.module';
 import { SellersModule } from './app/sellers/sellers.module';
+import { OrdersModule } from './app/orders/orders.module';
 
 const databaseHost = require("../constants").databaseHost;
 
@@ -16,6 +17,7 @@ const databaseHost = require("../constants").databaseHost;
 		BuyersModule,
 		ProductsModule,
 		SellersModule,
+		OrdersModule,
 		MongooseModule.forRoot(databaseHost),
 		ConfigModule.forRoot({
 			cache: true,
