@@ -32,6 +32,8 @@ apps/**/dist
 .yarn/cache
 .yarn/install-state.gz
 # ?
+.yarn/install-state.gz
+
 .github/workflows
 **/.github/workflows
 .github/**

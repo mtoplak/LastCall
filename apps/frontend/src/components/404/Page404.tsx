@@ -1,13 +1,10 @@
-import { Box, Button, styled, TextField, Typography } from '@mui/material';
-import { Container } from '@mui/system';
-import React from 'react';
-import banner from '../../assets/images/drinks-banner.jpg';
-import NavbarB from './NavbarB';
-import CustomButton from '../homepage/CustomButton';
+import { Box, Container, Typography, styled } from '@mui/material';
+import { FC } from 'react';
 import heroImg from '../../assets/images/homepageDrink.png';
-import SearchInput from './SearchInput';
+import { Link } from 'react-router-dom';
+import CustomButton from 'components/homepage/CustomButton';
 
-const Hero = () => {
+const Page404: FC = () => {
 	const CustomBox = styled(Box)(({ theme }) => ({
 		display: 'flex',
 		justifyContent: 'center',
@@ -21,7 +18,7 @@ const Hero = () => {
 
 	const Title = styled(Typography)(({ theme }) => ({
 		fontSize: '64px',
-		color: '#262626',
+		color: '#000336',
 		fontWeight: 'bold',
 		margin: theme.spacing(4, 0, 4, 0),
 		[theme.breakpoints.down('sm')]: {
@@ -31,7 +28,6 @@ const Hero = () => {
 
 	return (
 		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '100vh' }}>
-			<NavbarB />
 			<Container>
 				<CustomBox>
 					<Box sx={{ flex: '1' }}>
@@ -45,28 +41,48 @@ const Hero = () => {
 								mb: 4,
 							}}
 						>
-							Welcome to LastCall
+							<Link to={'/'}>LastCall</Link>
 						</Typography>
 						<Title variant="h1">
-							Bridging the Gap Between Drink {" "} 
-							<span style={{ color: "#24336e" }}>Buyers</span> and Sellers
+							Error 404 - Page Not Found &#128549;
 						</Title>
 						<Typography
 							variant="body2"
-							sx={{ fontSize: '18px', color: '#5A6473', my: 4 }}
+							sx={{
+								fontSize: '18px',
+								color: '#5A6473',
+								my: 4,
+							}}
 						>
 							With an unwavering commitment to enhancing the
 							beverage industry, LastCall bridges the gap between
 							suppliers, distributors, retailers, and enthusiastic
 							consumers.
 						</Typography>
+						<Link to={'/buyer'}>
+							<CustomButton
+								backgroundColor="#0F1B4C"
+								color="#fff"
+								buttonText="I'm a buyer!"
+								heroBtn={true}
+							/>
+						</Link>
+						<br />
+						<Link to={'/seller'}>
+							<CustomButton
+								backgroundColor="#0F1B4C"
+								color="#fff"
+								buttonText="I'm a seller!"
+								heroBtn={true}
+							/>
+						</Link>
 					</Box>
 
 					<Box sx={{ flex: '1.25' }}>
 						<img
 							src={heroImg}
 							alt="heroImg"
-							style={{ maxWidth: '100%', marginTop: '7rem' }}
+							style={{ maxWidth: '100%', marginTop: '10rem' }}
 						/>
 					</Box>
 				</CustomBox>
@@ -75,4 +91,4 @@ const Hero = () => {
 	);
 };
 
-export default Hero;
+export default Page404;
