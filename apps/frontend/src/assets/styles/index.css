@@ -20,3 +20,7 @@ code {
 	font-size: 20;
 	color: #006699;
 }
+
+a {
+	text-decoration: none;
+}

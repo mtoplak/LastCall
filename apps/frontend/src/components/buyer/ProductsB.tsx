@@ -6,6 +6,7 @@ import SearchInput from './SearchInput';
 import api from 'services/api';
 import { IDrink } from 'models/drink';
 import drink1 from '../../assets/images/cocacola.jpg';
+import { Link } from 'react-router-dom';
 
 const Products = () => {
 	const [drinks2, setDrinks] = useState<IDrink[]>([]);
@@ -50,16 +51,16 @@ const Products = () => {
 		fetchData();
 	}, []);
 
-  const filteredDrinks = drinks2.filter((drink) => {
-    if (filterName === 'any') {
-      return true;
-    } else if (
-      drink.title.toLowerCase().includes(filterName.toLowerCase())
-    ) {
-      return true;
-    }
-    return false;
-  });
+	const filteredDrinks = drinks2.filter((drink) => {
+		if (filterName === 'any') {
+			return true;
+		} else if (
+			drink.title.toLowerCase().includes(filterName.toLowerCase())
+		) {
+			return true;
+		}
+		return false;
+	});
 
 	return (
 		<Box sx={{ mt: 5, backgroundColor: 'white', py: 10 }}>
@@ -90,26 +91,29 @@ const Products = () => {
 						Everything that you're looking for!
 					</Typography>
 				</PropertiesTextBox>
-
 				<PropertiesBox>
 					{filteredDrinks.length > 0
 						? filteredDrinks.map((drink, index) => (
-								<DrinkContainer key={index}>
-									<Drink
-										name={drink.title}
-										img={drink1}
-										price={drink.price}
-									/>
-								</DrinkContainer>
+								<Link to={`/product/${drink.id}`} key={index}>
+									<DrinkContainer>
+										<Drink
+											name={drink.title}
+											img={drink1}
+											price={drink.price}
+										/>
+									</DrinkContainer>
+								</Link>
 						  ))
 						: drinks2.map((drink, index) => (
-								<DrinkContainer key={index}>
-									<Drink
-										name={drink.title}
-										img={drink1}
-										price={drink.price}
-									/>
-								</DrinkContainer>
+								<Link to={`/product/${drink.id}`} key={index}>
+									<DrinkContainer>
+										<Drink
+											name={drink.title}
+											img={drink1}
+											price={drink.price}
+										/>
+									</DrinkContainer>
+								</Link>
 						  ))}
 				</PropertiesBox>
 			</Container>
