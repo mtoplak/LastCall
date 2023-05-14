@@ -5,24 +5,24 @@ const schema = mongoose.Schema;
 
 export const ProductSchema = new mongoose.Schema({
     title: { type: String, required: true },
-    description: { type: String, required: true },
+    drinkCategory: { type: String, required: true },
     packaging: { type: String, required: true },
     size: { type: String, required: true },
     price: { type: Number, required: true },
     stock: { type: Number, required: true },
-    orders: [{type: schema.Types.ObjectId, ref: "Order"}],
+    //orders: [{type: schema.Types.ObjectId, ref: "Order"}],
     seller: {type: schema.Types.ObjectId, ref: "Seller"}
 });
 
 export interface Product extends mongoose.Document {
     id: string;
     title: string;
-    description: string;
+    drinkCategory: string;
     packaging: string; 
     size: string;
     price: number;
     stock: number;
-    orders: string[];
+    //orders: string[];
     seller: Seller;
     //slike
 }

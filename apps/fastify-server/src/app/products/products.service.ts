@@ -16,12 +16,12 @@ export class ProductsService {
 
     async insertProduct(
         title: string,
-        description: string,
+        drinkCategory: string,
         packaging: string,
         size: string,
         price: number,
         stock: number,
-        orders: string[] | undefined, // Update the parameter name to 'orders'
+        //orders: string[] | undefined, // Update the parameter name to 'orders'
         sellerId: string
       ) {
 
@@ -32,12 +32,12 @@ export class ProductsService {
 
         const newProduct = new this.productModel({
           title,
-          description,
+          drinkCategory,
           packaging,
           size,
           price,
           stock,
-          orders: orders || [], // Assign the 'orders' parameter or an empty array if it's not provided
+          //orders: orders || [], // Assign the 'orders' parameter or an empty array if it's not provided
           seller: seller._id
         });
       
@@ -46,6 +46,7 @@ export class ProductsService {
         seller.products.push(result._id);
         await seller.save();
 
+        /*
         if (orders && orders.length > 0) {
           for (const orderId of orders) {
             const order = await this.orderModel.findById(orderId);
@@ -56,7 +57,8 @@ export class ProductsService {
             await order.save();
           }
         }
-      
+       */
+
         console.log(result);
         return result.id as string;
       }
@@ -67,12 +69,12 @@ export class ProductsService {
         return products.map((prod) => ({
             id: prod.id,
             title: prod.title,
-            description: prod.description,
+            drinkCategory: prod.drinkCategory,
             packaging: prod.packaging,
             size: prod.size,
             price: prod.price,
             stock: prod.stock,
-            orders: prod.orders,
+            //orders: prod.orders,
             seller: prod.seller
         }));
     }
@@ -85,12 +87,12 @@ export class ProductsService {
         return {
             id: product.id,
             title: product.title,
-            description: product.description,
+            drinkCategory: product.drinkCategory,
             packaging: product.packaging,
             size: product.size,
             price: product.price,
             stock: product.stock,
-            orders: product.orders,
+            //orders: product.orders,
             seller: product.seller
         };
     }
@@ -98,23 +100,23 @@ export class ProductsService {
     async updateProduct(
         productId: string,
         title: string,
-        description: string,
+        drinkCategory: string,
         packaging: string,
         size: string,
         price: number,
         stock: number,
-        orders: string[],
+        //orders: string[],
         seller: Seller
     ) {
         const updatedProduct = await this.findProduct(productId);
         const updatedFields = {
             title,
-            description,
+            drinkCategory,
             packaging,
             size,
             price,
             stock,
-            orders,
+            //orders,
             seller
           };
           

@@ -6,20 +6,23 @@ import { Seller } from '../sellers/sellers.model';
 const schema = mongoose.Schema;
 
 export const OrderSchema = new schema({
-    products: [{type: schema.Types.ObjectId, ref: "Product", required: true}],
+    products: [{
+        productId: { type: schema.Types.ObjectId, ref: "Product", required: true },
+        quantity: { type: Number, required: true }
+    }],
     buyer: { type: schema.Types.ObjectId, ref: "Buyer", required: true },
     seller: { type: schema.Types.ObjectId, ref: "Seller", required: true },
-    totalPrice: { type: Number, required: true},
-    dateOfPurchase: { type: Date, immutable: true, default: () => Date.now()},
+    totalPrice: { type: Number, required: true },
+    dateOfPurchase: { type: Date, immutable: true, default: () => Date.now() },
     lastDateOfDelivery: { type: Date, required: true },
-    address: { type: String, required: true}, //array naredi
+    address: { type: String, required: true },
     city: { type: String, required: true },
     country: { type: String, required: true },
 });
 
 export interface Order extends mongoose.Document {
     id: string;
-    products: string[];
+    products: { product: Product, quantity: number; }[];
     buyer: Buyer;
     seller: Seller;
     totalPrice: number;

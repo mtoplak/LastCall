@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from '@nestjs/mongoose/dist';
-import mongoose, { Model } from 'mongoose';
+import mongoose, { Model, Types } from 'mongoose';
 import { Order } from "./order.model";
 import { title } from "process";
 import { Product } from "../products/product.model";
@@ -18,65 +18,70 @@ export class OrdersService {
     ) {}
 
     async addOrder(
-        productIds: string[] | undefined,
-        buyerId: string,
-        sellerId: string,
-        totalPrice: number,
-        lastDateOfDelivery: Date,
-        address: string,
-        city: string,
-        country: string,
-      ) {
-        /*
-        if (!productIds || productIds.length === 0) {
-          throw new NotFoundException('Products not found');
-        }
-        */
-        const products = await this.productModel.find({ _id: { $in: productIds } });
-        if (products.length !== productIds.length) {
-          throw new NotFoundException('Products not found');
-        }
-      
-        const seller = await this.sellerModel.findById(sellerId);
-        if (!seller) {
-          throw new NotFoundException('Seller not found');
-        }
-      
-        const buyer = await this.buyerModel.findById(buyerId);
-        if (!buyer) {
-          throw new NotFoundException('Buyer not found');
-        }
-      
-        const newOrder = new this.orderModel({
-          products: products.map((product) => product._id),
-          buyer: buyer._id,
-          seller: seller._id,
-          totalPrice,
-          lastDateOfDelivery,
-          address,
-          city,
-          country,
-        });
-      
-        const result = await newOrder.save();
-      
-        // Update the products' orders array
-        for (const product of products) {
-          product.orders.push(result._id);
-          await product.save();
-        }
-      
-        // Update the seller's and buyer's orders array
-        seller.orders.push(result._id);
-        await seller.save();
-
-        buyer.orders.push(result._id);
-        await buyer.save();
-      
-        console.log(result);
-        return result.id as string;
+      productIds: string[],
+      buyerId: string,
+      sellerId: string,
+      totalPrice: number,
+      lastDateOfDelivery: Date,
+      address: string,
+      city: string,
+      country: string,
+      quantities: number[]
+    ) {
+      if (!productIds || productIds.length === 0) {
+        throw new NotFoundException('Products not found');
       }
-      
+    
+      const products = await this.productModel.find({ _id: { $in: productIds } });
+      if (products.length !== productIds.length) {
+        throw new NotFoundException('Products not found');
+      }
+    
+      const seller = await this.sellerModel.findById(sellerId);
+      if (!seller) {
+        throw new NotFoundException('Seller not found');
+      }
+    
+      const buyer = await this.buyerModel.findById(buyerId);
+      if (!buyer) {
+        throw new NotFoundException('Buyer not found');
+      }
+    
+      const orderedProducts = products.map((product, index) => ({
+        productId: product._id,
+        quantity: quantities[index],
+      }));
+    
+      const newOrder = new this.orderModel({
+        products: orderedProducts,
+        buyer: buyer._id,
+        seller: seller._id,
+        totalPrice,
+        lastDateOfDelivery,
+        address,
+        city,
+        country,
+      });
+    
+      const result = await newOrder.save();
+    
+      /* Update the products' orders array
+      for (const product of products) {
+        product.orders.push(result._id);
+        await product.save();
+      }
+      */
+    
+      // Update the seller's and buyer's orders array
+      seller.orders.push(result._id);
+      await seller.save();
+    
+      buyer.orders.push(result._id);
+      await buyer.save();
+    
+      console.log(result);
+      return result.id as string;
+    }
 
     async getAllOrders() {
         const orders = await this.orderModel.find().exec();
@@ -126,7 +131,7 @@ export class OrdersService {
     ) {
         const updatedOrder = await this.findOrder(orderId);
         
-        updatedOrder.products = products || updatedOrder.products;
+        //updatedOrder.products = products || updatedOrder.products;
         updatedOrder.buyer = buyer || updatedOrder.buyer;
         updatedOrder.seller = seller || updatedOrder.seller;
         updatedOrder.totalPrice = totalPrice || updatedOrder.totalPrice;
