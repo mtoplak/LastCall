@@ -20,6 +20,7 @@ async function bootstrap() {
 			logger: ['error', 'warn'],
 		}
 	);
+	app.enableCors();
 
 	/**
 	 * Unfortunately NestJs prod build with fastify, works on local machine,

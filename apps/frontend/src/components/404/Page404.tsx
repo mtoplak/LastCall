@@ -9,7 +9,6 @@ const Page404: FC = () => {
 		display: 'flex',
 		justifyContent: 'center',
 		gap: theme.spacing(5),
-		marginTop: theme.spacing(3),
 		[theme.breakpoints.down('md')]: {
 			flexDirection: 'column',
 			alignItems: 'center',
@@ -42,7 +41,7 @@ const Page404: FC = () => {
 								mb: 4,
 							}}
 						>
-							LastCall
+							<Link to={'/'}>LastCall</Link>
 						</Typography>
 						<Title variant="h1">
 							Error 404 - Page Not Found &#128549;

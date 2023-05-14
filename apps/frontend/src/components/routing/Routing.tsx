@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import Homepage from '../homepage/Homepage';
 import Buyer from 'components/buyer/Buyer';
 import Page404 from 'components/404/Page404';
-import Seller from 'components/seller/Seller';
+import Seller from '../seller/Seller';
 
 const Routing = () => {
 	return (
