@@ -4,7 +4,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import { store, persistor } from 'redux-store';
 import { Loading } from 'shared';
-import Routing from 'components/route/Routing';
+import Routing from 'components/routing/Routing';
 import { BrowserRouter } from 'react-router-dom';
 import LoginB from 'components/buyer/login/LoginB';
 import LoginS from 'components/seller/login/LoginS';
@@ -19,8 +19,6 @@ import RegisterB from 'components/buyer/login/RegisterB';
 					</PersistGate>
 				</Provider>
 			</Suspense>
-
-
 */
 
 function App() {

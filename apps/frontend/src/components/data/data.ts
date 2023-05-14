@@ -20,7 +20,6 @@ export const drinks: Drinks[] = [
     type: "Coca-Cola",
     seller: "Juan Perez",
   },
-
   {
     id: 2,
     name: "Pepsi",
@@ -38,15 +37,13 @@ export const drinks: Drinks[] = [
     seller: "Juan Perez",
   },
   {
-    id: 1,
-    name: "Coca-Cola",
-    img: drink1,
+    id: 2,
+    name: "Pepsi",
+    img: drink2,
     price: 1,
-    type: "Coca-Cola",
+    type: "Pepsi",
     seller: "Juan Perez",
-  },
-
-  {
+  },  {
     id: 2,
     name: "Pepsi",
     img: drink2,
@@ -54,12 +51,5 @@ export const drinks: Drinks[] = [
     type: "Pepsi",
     seller: "Juan Perez",
   },
-  {
-    id: 3,
-    name: "Fanta",
-    img: drink3,
-    price: 0.5,
-    type: "Fanta",
-    seller: "Juan Perez",
-  },
+
 ];
