@@ -64,7 +64,7 @@ export class ProductsService {
       }
       
     async getAllProducts() {
-        const products = await this.productModel.find().exec();
+        const products = await this.productModel.find().populate('seller').exec();
         //return products as Product[];
         return products.map((prod) => ({
             id: prod.id,
@@ -139,7 +139,7 @@ export class ProductsService {
     private async findProduct(productId: string): Promise<Product> {
         let product;
         try{
-            product = await this.productModel.findById(productId).exec();
+            product = await this.productModel.findById(productId).populate('seller').exec();
         } catch (error) {
             throw new NotFoundException('Could not find the product.');
         }

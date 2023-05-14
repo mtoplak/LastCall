@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from '@nestjs/mongoose/dist';
 import mongoose, { Model, Types } from 'mongoose';
-import { Order } from "./order.model";
+import { Order, OrderModel } from "./order.model";
 import { title } from "process";
 import { Product } from "../products/product.model";
 import { Seller } from "../sellers/sellers.model";
@@ -62,29 +62,22 @@ export class OrdersService {
         city,
         country,
       });
-    
+
       const result = await newOrder.save();
-    
-      /* Update the products' orders array
-      for (const product of products) {
-        product.orders.push(result._id);
-        await product.save();
-      }
-      */
-    
-      // Update the seller's and buyer's orders array
+
       seller.orders.push(result._id);
       await seller.save();
-    
+
       buyer.orders.push(result._id);
       await buyer.save();
-    
+
       console.log(result);
       return result.id as string;
     }
+    
 
     async getAllOrders() {
-        const orders = await this.orderModel.find().exec();
+        const orders = await this.orderModel.find().populate('seller').populate('buyer').populate({ path: 'products.productId', model: 'Product' }).exec();
         return orders.map((order) => ({
             id: order.id,
             products: order.products,
@@ -120,7 +113,7 @@ export class OrdersService {
 
     async updateOrder(
         orderId: string,
-        products: string[],
+        //products: string[],
         buyer: Buyer,
         seller: Seller,
         totalPrice: number,
@@ -154,7 +147,7 @@ export class OrdersService {
     private async findOrder(orderId: string): Promise<Order> {
         let order;
         try{
-            order = await this.orderModel.findById(orderId).exec();
+            order = await this.orderModel.findById(orderId).populate('seller').populate('buyer').populate({ path: 'products.productId', model: 'Product' }).exec();
         } catch (error) {
             throw new NotFoundException('Could not find the order.');
         }
