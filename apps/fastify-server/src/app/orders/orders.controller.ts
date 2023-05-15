@@ -54,7 +54,7 @@ export class OrdersController {
     @Patch(':id')
     async updateOrder(
         @Param('id') id: string,
-        @Body('products') products: string[],
+        //@Body('products') products: string[],
         @Body('buyer') buyer: Buyer,
         @Body('seller') seller: Seller,
         @Body('totalPrice') totalPrice: number,
@@ -65,7 +65,7 @@ export class OrdersController {
     ) {
         await this.ordersService.updateOrder(
             id,
-            products,
+            //products,
             buyer,
             seller,
             totalPrice,
