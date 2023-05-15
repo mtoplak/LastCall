@@ -9,11 +9,10 @@ import {
 	TextField,
 	Typography,
 } from '@mui/material';
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import React from 'react';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import React, { ChangeEvent } from 'react';
 import { drinks } from '../data/data';
 import Drink from './DrinkS';
-import CustomFileInput from './CustomFileInput';
 
 const ProductsS = () => {
 	const PropertiesBox = styled(Box)(({ theme }) => ({
@@ -54,10 +53,16 @@ const ProductsS = () => {
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
 
+	const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+		event.preventDefault();
+		const file = event.target.files?.[0] || null;
+		
+		
+	};
+
 	return (
 		<Box sx={{ mt: 5, backgroundColor: 'white', py: 10 }}>
 			<Container>
-
 				<PropertiesTextBox>
 					<Typography
 						sx={{
@@ -78,9 +83,7 @@ const ProductsS = () => {
 							aria-labelledby="modal-modal-title"
 							aria-describedby="modal-modal-description"
 						>
-							<Box 
-							 component="form"
-							sx={style}>
+							<Box component="form" sx={style}>
 								<Typography
 									id="modal-modal-title"
 									variant="h6"
@@ -93,58 +96,60 @@ const ProductsS = () => {
 									sx={{ mt: 2 }}
 								>
 									<TextField
-											label="Title"
-											placeholder="Enter title"
-											fullWidth
-											required
-										/>
-										<TextField
-											label="Description"
-											placeholder="Enter description"
-											fullWidth
-											required
-										/>
-                                        <TextField
-											label="Packaging"
-											placeholder="Enter packaging"
-											fullWidth
-											required
-										/>
-										<TextField
-											label="Size"
-											placeholder="Enter size"
-											fullWidth
-											required
-										/>
-                                        <TextField
-											label="Price"
-											placeholder="Enter price"
-											type="number"
-											fullWidth
-											required
-										/>
-										<TextField
-											label="Stock"
-											placeholder="Enter stock"
-											type="number"
-											fullWidth
-											required
-										/>
+										label="Title"
+										placeholder="Enter title"
+										fullWidth
+										required
+									/>
+									<TextField
+										label="Description"
+										placeholder="Enter description"
+										fullWidth
+										required
+									/>
+									<TextField
+										label="Packaging"
+										placeholder="Enter packaging"
+										fullWidth
+										required
+									/>
+									<TextField
+										label="Size"
+										placeholder="Enter size"
+										fullWidth
+										required
+									/>
+									<TextField
+										label="Price"
+										placeholder="Enter price"
+										type="number"
+										fullWidth
+										required
+									/>
+									<TextField
+										label="Stock"
+										placeholder="Enter stock"
+										type="number"
+										fullWidth
+										required
+									/>
 								</Typography>
 								<Typography>
-									<CustomFileInput onChange={function (file: File | null): void {
-										throw new Error('Function not implemented.');
-									} } />
+									<input
+										id="file-input"
+										type="file"
+										accept="image/*"
+										onChange={handleInputChange}
+									/>
 								</Typography>
 								<Typography sx={{ mt: 2 }}>
-								<Button
-									type="submit"
-									color="primary"
-									variant="contained"
-									fullWidth
-								>
-									Add
-								</Button>
+									<Button
+										color="primary"
+										variant="contained"
+										fullWidth
+									>
+										Add
+									</Button>
 								</Typography>
 							</Box>
 						</Modal>
