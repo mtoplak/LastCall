@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
 	Box,
 	Button,
+	Checkbox,
 	FormControl,
+	FormControlLabel,
 	InputLabel,
 	MenuItem,
 	Select,
@@ -13,16 +15,15 @@ interface SearchInputProps {
 	setFilterName: React.Dispatch<React.SetStateAction<string>>;
 	setFilterLocation: React.Dispatch<React.SetStateAction<string>>;
 	setFilterType: React.Dispatch<React.SetStateAction<string>>;
-	filterLocation: string;
-	filterName: string;
-	filterType: string;
+	setIsChecked: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SearchInput = ({
+function SearchSuppliersInput({
 	setFilterLocation,
 	setFilterName,
 	setFilterType,
-}: SearchInputProps) => {
+	setIsChecked,
+}: SearchInputProps) {
 	const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setFilterName(event.target.value);
 	};
@@ -35,31 +36,30 @@ const SearchInput = ({
 		setFilterType(event.target.value);
 	};
 
+	const handleChangeIsChecked = (event: any) => {
+		setIsChecked(event.target.checked);
+	};
+
 	return (
 		<Box sx={{ backgroundColor: '#F5F5F5', p: 2, textAlign: 'center' }}>
 			<FormControl sx={{ display: 'inline-block', alignItems: 'center' }}>
 				<TextField
 					id="outlined-basic"
-					label="Product Name"
+					label="Supplier Name"
 					variant="outlined"
 					sx={{ mr: 3, mb: 2, mt: 2 }}
 					onChange={handleChangeName}
 				/>
 			</FormControl>
 			<FormControl sx={{ display: 'inline-block', alignItems: 'center' }}>
-				<InputLabel id="filter-location">Location</InputLabel>
-				<Select
-					labelId="filter-location"
-					label="Location"
-					sx={{ mr: 3, mb: 2, mt: 2, width: '150px' }}
+				{/*<InputLabel id="filter-location">Location</InputLabel>*/}
+				<TextField
+					id="outlined-basic"
+					label="Supplier Location"
+					variant="outlined"
+					sx={{ mr: 3, mb: 2, mt: 2 }}
 					onChange={handleChangeLocation}
-					defaultValue="any"
-				>
-					<MenuItem value="any">Any</MenuItem>
-					<MenuItem value="Slovenia">Slovenia</MenuItem>
-					<MenuItem value="Austria">Austria</MenuItem>
-					<MenuItem value="United Kingdom">United Kingdom</MenuItem>
-				</Select>
+				/>
 			</FormControl>
 
 			<FormControl sx={{ display: 'inline-block', alignItems: 'center' }}>
@@ -72,19 +72,25 @@ const SearchInput = ({
 					onChange={handleChangeType}
 				>
 					<MenuItem value="any">Any</MenuItem>
-					<MenuItem value="Alcohol">Alcohol</MenuItem>
-					<MenuItem value="Carbonated">Carbonated</MenuItem>
-					<MenuItem value="Not carbonated">Not carbonated</MenuItem>
+					<MenuItem value="winery">Winery</MenuItem>
+					<MenuItem value="brewery">Brewery</MenuItem>
+					<MenuItem value="other">Other</MenuItem>
 				</Select>
-				{/*<Button
-					variant="contained"
-					sx={{ backgroundColor: '#262626', color: '#ffffff', mt: 0 }}
-				>
-					Filter
-				</Button>*/}
 			</FormControl>
+			<br />
+			<FormControlLabel
+				control={<Checkbox onChange={handleChangeIsChecked} />}
+				label="Show on maps"
+			/>
+
+			<Button
+				variant="contained"
+				sx={{ backgroundColor: '#262626', color: '#ffffff', mt: 0 }}
+			>
+				Search
+			</Button>
 		</Box>
 	);
-};
+}
 
-export default SearchInput;
+export default SearchSuppliersInput;

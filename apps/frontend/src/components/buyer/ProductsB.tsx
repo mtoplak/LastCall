@@ -1,7 +1,7 @@
 import { Box, Container, styled, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import Drink from './DrinkB';
-import SearchInput from './SearchInput';
+import SearchProductsInput from './SearchProductsInput';
 import api from 'services/api';
 import { IDrink } from 'models/drink';
 import drink1 from '../../assets/images/cocacola.jpg';
@@ -12,7 +12,7 @@ const Products = () => {
 
 	// filtering
 	const [filterName, setFilterName] = useState<string>('');
-	const [filterLocation, setFilterLocation] = useState<string>('');
+	const [filterLocation, setFilterLocation] = useState<string>('any');
 	const [filterType, setFilterType] = useState<string>('any');
 
 	const PropertiesBox = styled(Box)(({ theme }) => ({
@@ -49,35 +49,31 @@ const Products = () => {
 		};
 		fetchData();
 	}, []);
-	/*
-	const filteredDrinks = drinks.filter((drink) => {
-		if (filterName === 'any') {
-			return true;
-		} else if (
-			drink.title.toLowerCase().includes(filterName.toLowerCase())
-		) {
-			return true;
-		}
-		return false;
-	});*/
+
+	// filtering
 	const filteredDrinks = drinks.filter((drink) => {
 		const nameMatch =
-			filterName === 'any' ||
+			filterName === '' ||
 			drink.title.toLowerCase().includes(filterName.toLowerCase());
 		const typeMatch =
 			filterType === 'any' ||
 			drink.drinkCategory.toLowerCase() === filterType.toLowerCase();
-		return nameMatch && typeMatch;
+		console.log(drink.seller.country.toLowerCase());
+		const locationMatch =
+			filterLocation === 'any' ||
+			drink.seller.country.toLowerCase() === filterLocation.toLowerCase();
+		return nameMatch && typeMatch && locationMatch;
 	});
 
-	console.log(filterType);
 	console.log(filterName);
+	console.log(filterLocation);
+	console.log(filterType);
 	console.log(filteredDrinks);
 	return (
 		<Box sx={{ mt: 5, backgroundColor: 'white', py: 10 }}>
 			<Container>
 				<Box>
-					<SearchInput
+					<SearchProductsInput
 						setFilterName={setFilterName}
 						setFilterLocation={setFilterLocation}
 						setFilterType={setFilterType}
