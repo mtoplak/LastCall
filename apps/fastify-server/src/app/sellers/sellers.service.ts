@@ -45,7 +45,7 @@ export class SellersService {
     }
 
     async getAllSellers() {
-        const sellers = await this.sellerModel.find().exec();
+        const sellers = await this.sellerModel.find().populate('orders').populate('products').exec();
         return sellers.map((seller) => ({
             id: seller.id,
             name: seller.name,
@@ -137,7 +137,7 @@ export class SellersService {
     private async findSeller(sellerId: string): Promise<Seller> {
         let seller;
         try{
-            seller = await this.sellerModel.findById(sellerId).exec();
+            seller = await this.sellerModel.findById(sellerId).populate('orders').populate('products').exec();
         } catch (error) {
             throw new NotFoundException('Could not find the seller.');
         }

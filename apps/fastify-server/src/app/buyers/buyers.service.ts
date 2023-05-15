@@ -38,12 +38,13 @@ export class BuyersService {
             password,
         });
         const result = await newBuyer.save();
+        await result.populate('order');
         console.log(result);
         return result.id as string;
     }
 
     async getAllBuyers() {
-        const buyers = await this.buyerModel.find().exec();
+        const buyers = await this.buyerModel.find().populate('orders').exec();
         return buyers.map((buyer) => ({
             id: buyer.id,
             name: buyer.name,
@@ -58,6 +59,7 @@ export class BuyersService {
             phone: buyer.phone,
             email: buyer.email,
             password: buyer.password,
+            orders: buyer.orders
         }));
     }
 
@@ -80,6 +82,7 @@ export class BuyersService {
             phone: buyer.phone,
             email: buyer.email,
             password: buyer.password,
+            orders: buyer.orders
         };
     }
 
@@ -134,7 +137,7 @@ export class BuyersService {
     private async findBuyer(buyerId: string): Promise<Buyer> {
         let buyer;
         try{
-            buyer = await this.buyerModel.findById(buyerId).exec();
+            buyer = await this.buyerModel.findById(buyerId).populate('orders').exec();
         } catch (error) {
             throw new NotFoundException('Could not find the buyer.');
         }
