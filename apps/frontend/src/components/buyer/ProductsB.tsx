@@ -1,6 +1,5 @@
 import { Box, Container, styled, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { drinks } from '../data/data';
 import Drink from './DrinkB';
 import SearchInput from './SearchInput';
 import api from 'services/api';
@@ -9,12 +8,12 @@ import drink1 from '../../assets/images/cocacola.jpg';
 import { Link } from 'react-router-dom';
 
 const Products = () => {
-	const [drinks2, setDrinks] = useState<IDrink[]>([]);
+	const [drinks, setDrinks] = useState<IDrink[]>([]);
 
 	// filtering
 	const [filterName, setFilterName] = useState<string>('');
 	const [filterLocation, setFilterLocation] = useState<string>('');
-	const [filterType, setFilterType] = useState<string>('');
+	const [filterType, setFilterType] = useState<string>('any');
 
 	const PropertiesBox = styled(Box)(({ theme }) => ({
 		display: 'flex',
@@ -50,8 +49,8 @@ const Products = () => {
 		};
 		fetchData();
 	}, []);
-
-	const filteredDrinks = drinks2.filter((drink) => {
+	/*
+	const filteredDrinks = drinks.filter((drink) => {
 		if (filterName === 'any') {
 			return true;
 		} else if (
@@ -60,8 +59,20 @@ const Products = () => {
 			return true;
 		}
 		return false;
+	});*/
+	const filteredDrinks = drinks.filter((drink) => {
+		const nameMatch =
+			filterName === 'any' ||
+			drink.title.toLowerCase().includes(filterName.toLowerCase());
+		const typeMatch =
+			filterType === 'any' ||
+			drink.drinkCategory.toLowerCase() === filterType.toLowerCase();
+		return nameMatch && typeMatch;
 	});
 
+	console.log(filterType);
+	console.log(filterName);
+	console.log(filteredDrinks);
 	return (
 		<Box sx={{ mt: 5, backgroundColor: 'white', py: 10 }}>
 			<Container>
@@ -92,29 +103,39 @@ const Products = () => {
 					</Typography>
 				</PropertiesTextBox>
 				<PropertiesBox>
-					{filteredDrinks.length > 0
-						? filteredDrinks.map((drink, index) => (
-								<Link to={`/product/${drink.id}`} key={index}>
-									<DrinkContainer>
-										<Drink
-											name={drink.title}
-											img={drink1}
-											price={drink.price}
-										/>
-									</DrinkContainer>
-								</Link>
-						  ))
-						: drinks2.map((drink, index) => (
-								<Link to={`/product/${drink.id}`} key={index}>
-									<DrinkContainer>
-										<Drink
-											name={drink.title}
-											img={drink1}
-											price={drink.price}
-										/>
-									</DrinkContainer>
-								</Link>
-						  ))}
+					{filteredDrinks.length > 0 &&
+					(filterType !== 'any' ||
+						filterName !== '' ||
+						filterLocation !== 'any') ? (
+						filteredDrinks.map((drink) => (
+							<Link to={`/product/${drink.id}`} key={drink.id}>
+								<DrinkContainer>
+									<Drink
+										name={drink.title}
+										img={drink1}
+										price={drink.price}
+									/>
+								</DrinkContainer>
+							</Link>
+						))
+					) : (filterType !== 'any' ||
+							filterName !== '' ||
+							filterLocation !== 'any') &&
+					  filteredDrinks.length === 0 ? (
+						<>Nothing found &#128549;</>
+					) : (
+						drinks.map((drink) => (
+							<Link to={`/product/${drink.id}`} key={drink.id}>
+								<DrinkContainer>
+									<Drink
+										name={drink.title}
+										img={drink1}
+										price={drink.price}
+									/>
+								</DrinkContainer>
+							</Link>
+						))
+					)}
 				</PropertiesBox>
 			</Container>
 		</Box>

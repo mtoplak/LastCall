@@ -3,7 +3,7 @@ export interface IDrink {
     title: string;
     price: number;
     image: string;
-    description: string;
+    drinkCategory: string;
     quantity: number;
     package: string;
     orders: any[];
