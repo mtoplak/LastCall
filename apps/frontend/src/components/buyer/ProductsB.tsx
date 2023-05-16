@@ -1,5 +1,5 @@
 import { Box, Container, styled, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Drink from './DrinkB';
 import SearchProductsInput from './SearchProductsInput';
 import api from 'services/api';

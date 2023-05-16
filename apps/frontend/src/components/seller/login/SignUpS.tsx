@@ -2,6 +2,7 @@ import {
 	Avatar,
 	Box,
 	Button,
+	Checkbox,
 	Container,
 	FormControlLabel,
 	Grid,
@@ -14,7 +15,7 @@ import { Link } from 'react-router-dom';
 import heroImg from '../../../assets/images/homepageDrink.png';
 import React from 'react';
 
-const RegisterS = () => {
+const SignUpS = () => {
 	const CustomBox = styled(Box)(({ theme }) => ({
 		display: 'flex',
 		justifyContent: 'center',
@@ -39,14 +40,27 @@ const RegisterS = () => {
 		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '100vh' }}>
 			<Container>
 				<CustomBox>
-					<Box 
-					 component="form"
-					sx={{ flex: '1', marginTop: '10rem' }}>
+					<Box
+						component="form"
+						sx={{ flex: '1', marginTop: '10rem' }}
+					>
 						<Grid>
 							<Paper elevation={10} style={paperStyle}>
 								<Grid container spacing={2}>
 									<Grid item xs={6}>
 										<h2>Register</h2>
+										<TextField
+											label="First Name"
+											placeholder="Enter your first name"
+											fullWidth
+											required
+										/>
+										<TextField
+											label="Last Name"
+											placeholder="Enter your last name"
+											fullWidth
+											required
+										/>
 										<TextField
 											label="Title"
 											placeholder="Enter title"
@@ -59,19 +73,7 @@ const RegisterS = () => {
 											fullWidth
 											required
 										/>
-                                        <TextField
-											label="Country"
-											placeholder="Enter country"
-											fullWidth
-											required
-										/>
 										<TextField
-											label="Register Number"
-											placeholder="Enter register number"
-											fullWidth
-											required
-										/>
-                                        <TextField
 											label="Email"
 											placeholder="Enter email"
 											fullWidth
@@ -88,40 +90,40 @@ const RegisterS = () => {
 									<Grid item xs={6}>
 										<h2>Additional Information</h2>
 										<TextField
-											label="First Name"
-											placeholder="Enter your first name"
+											label="Title"
+											placeholder="Enter title"
 											fullWidth
 											required
 										/>
 										<TextField
-											label="Last Name"
-											placeholder="Enter your last name"
+											label="Country"
+											placeholder="Enter country"
 											fullWidth
 											required
 										/>
-                                        <TextField                                       
-											label="Type"
-											placeholder="Enter type"
+										<TextField
+											label="Register Number"
+											placeholder="Enter register number"
 											fullWidth
 											required
 										/>
-                                        <TextField
+										<TextField
 											label="City"
 											placeholder="Enter city"
 											fullWidth
 											required
 										/>
-                                        <TextField
+										<TextField
 											label="Phone Number"
 											placeholder="Enter phone number"
 											fullWidth
 											required
 										/>
-										<TextField
-											label="Website"
-											placeholder="Enter website URL"
-											fullWidth
-											required
+										<br />
+										<br />
+										<FormControlLabel
+											control={<Checkbox />}
+											label="Legal Person"
 										/>
 									</Grid>
 								</Grid>
@@ -135,7 +137,9 @@ const RegisterS = () => {
 								>
 									Sign up
 								</Button>
-								<Typography>Already have an account?</Typography>
+								<Typography>
+									Already have an account?
+								</Typography>
 							</Paper>
 						</Grid>
 					</Box>
@@ -145,4 +149,4 @@ const RegisterS = () => {
 	);
 };
 
-export default RegisterS;
+export default SignUpS;
