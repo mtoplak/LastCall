@@ -10,47 +10,48 @@ import React, { useState } from 'react';
 import api from '../../services/api';
 
 interface DrinkProps {
+	id: string;
 	name: string;
 	img: string;
 	price: number;
 }
 
-const DrinkS: React.FC<DrinkProps> = ({ name, img, price }) => {
-	const HouseBox = styled(Box)(({ theme }) => ({
-		borderRadius: theme.spacing(1),
-		maxWidth: 350,
-		backgroundColor: '#E6F0FF',
-		color: 'black',
-		boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-		transition: 'transform 0.3s ease-in-out',
-		margin: theme.spacing(2),
-		'&:hover': {
-			transform: 'scale(1.05)',
-		},
-		[theme.breakpoints.down('md')]: {
-			margin: theme.spacing(2, 0),
-		},
-	}));
+const HouseBox = styled(Box)(({ theme }) => ({
+	borderRadius: theme.spacing(1),
+	maxWidth: 350,
+	backgroundColor: '#E6F0FF',
+	color: 'black',
+	boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+	transition: 'transform 0.3s ease-in-out',
+	margin: theme.spacing(2),
+	'&:hover': {
+		transform: 'scale(1.05)',
+	},
+	[theme.breakpoints.down('md')]: {
+		margin: theme.spacing(2, 0),
+	},
+}));
 
-	const InfoBox = styled(Box)(({ theme }) => ({
-		display: 'flex',
-		flexDirection: 'column',
-		alignItems: 'center',
-		padding: theme.spacing(2),
-	}));
+const InfoBox = styled(Box)(({ theme }) => ({
+	display: 'flex',
+	flexDirection: 'column',
+	alignItems: 'center',
+	padding: theme.spacing(2),
+}));
 
-	const ImgContainer = styled(Box)(({ theme }) => ({
-		width: '100%',
-		borderTopLeftRadius: theme.spacing(1),
-		borderTopRightRadius: theme.spacing(1),
-		overflow: 'hidden',
-	}));
+const ImgContainer = styled(Box)(({ theme }) => ({
+	width: '100%',
+	borderTopLeftRadius: theme.spacing(1),
+	borderTopRightRadius: theme.spacing(1),
+	overflow: 'hidden',
+}));
 
-	const Image = styled('img')({
-		width: '100%',
-		height: 'auto',
-	});
+const Image = styled('img')({
+	width: '100%',
+	height: 'auto',
+});
 
+const DrinkS: React.FC<DrinkProps> = ({ id, name, img, price }) => {
 	const style = {
 		position: 'absolute' as 'absolute',
 		top: '50%',
@@ -92,15 +93,18 @@ const DrinkS: React.FC<DrinkProps> = ({ name, img, price }) => {
 	};
 
 	const handleFormSubmit = async () => {
+		console.log(productId);
 		try {
-		  const response = await api.patch(`/products/${productId}`, formData);
-		  console.log('Drink updated successfully:', response.data);
-		  handleClose();
+			const response = await api.patch(
+				`/products/${productId}`,
+				formData
+			);
+			console.log('Drink updated successfully:', response.data);
+			handleClose();
 		} catch (error) {
-		  console.error('Error updating drink:', error);
+			console.error('Error updating drink:', error);
 		}
-	  };
-
+	};
 
 	//delete
 	const [openDelete, setOpenDelete] = React.useState(false);
@@ -114,16 +118,14 @@ const DrinkS: React.FC<DrinkProps> = ({ name, img, price }) => {
 
 	const handleDeleteClick = async () => {
 		try {
-		  await api.delete(`/products/${productId}`);
-		  console.log('Drink deleted successfully');
-		  // Perform any necessary actions after deleting the product, such as updating the UI or fetching updated data
+			await api.delete(`/products/${productId}`);
+			console.log('Drink deleted successfully');
+			// Perform any necessary actions after deleting the product, such as updating the UI or fetching updated data
 		} catch (error) {
-		  console.error('Error deleting drink:', error);
+			console.error('Error deleting drink:', error);
 		}
-	  };
+	};
 
-
-	
 	return (
 		<HouseBox>
 			<ImgContainer>
@@ -147,7 +149,7 @@ const DrinkS: React.FC<DrinkProps> = ({ name, img, price }) => {
 					<Button
 						variant="contained"
 						color="primary"
-						onClick={() => handleEditClick(productId)}
+						onClick={(event) => handleEditClick(id)}
 					>
 						Edit
 					</Button>
@@ -240,7 +242,7 @@ const DrinkS: React.FC<DrinkProps> = ({ name, img, price }) => {
 					<Button
 						variant="contained"
 						color="error"
-						onClick={() => handleRemoveClick(productId)}
+						onClick={(event) => handleRemoveClick(id)}
 					>
 						Delete
 					</Button>

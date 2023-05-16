@@ -238,6 +238,7 @@ const ProductsS = () => {
 						drinks2.map((drink, index) => (
 							<DrinkContainer key={index}>
 								<Drink
+									id={drink.id}
 									name={drink.title}
 									img={drink1}
 									price={drink.price}
