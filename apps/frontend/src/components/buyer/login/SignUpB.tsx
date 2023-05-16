@@ -55,7 +55,8 @@ const SignUpB = () => {
 	const [password, setPassword] = useState('');
 
 	//context
-	const { signUp } = useUserAuth();
+	const { signUp, user } = useUserAuth();
+	console.log(user);
 
 	const handleSubmit = async (e: any) => {
 		setError('');

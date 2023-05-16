@@ -12,6 +12,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { ThemeProvider, createTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useUserAuth } from 'context/AuthContext';
 
 const pages = ['Products', 'Suppliers', 'Contact'];
 const settings = ['Profile', 'Shopping cart', 'My Orders', 'Logout'];
@@ -19,8 +20,6 @@ const settings = ['Profile', 'Shopping cart', 'My Orders', 'Logout'];
 function NavbarB() {
 	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 	const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);
@@ -37,6 +36,11 @@ function NavbarB() {
 		setAnchorElUser(null);
 	};
 
+	// context
+	const { user, logOut } = useUserAuth();
+	console.log(user);
+	console.log(user?.email);
+
 	const darkTheme = createTheme({
 		palette: {
 			mode: 'dark',
@@ -45,6 +49,15 @@ function NavbarB() {
 			},
 		},
 	});
+
+	const handleLogOut = async () => {
+		try {
+			await logOut();
+		} catch (error: any) {
+			console.log(error.message);
+		}
+	};
+
 	return (
 		<ThemeProvider theme={darkTheme}>
 			<AppBar position="static">
@@ -171,7 +184,7 @@ function NavbarB() {
 								Contact
 							</Button>
 						</Box>
-						{isLoggedIn ? (
+						{user ? (
 							<Box sx={{ flexGrow: 0 }}>
 								<Tooltip title="Open settings">
 									<IconButton
@@ -200,16 +213,21 @@ function NavbarB() {
 									open={Boolean(anchorElUser)}
 									onClose={handleCloseUserMenu}
 								>
-									{settings.map((setting) => (
-										<MenuItem
-											key={setting}
-											onClick={handleCloseUserMenu}
-										>
-											<Typography textAlign="center">
-												{setting}
-											</Typography>
-										</MenuItem>
-									))}
+									<MenuItem onClick={handleCloseUserMenu}>
+										<Typography textAlign="center">
+											Profile
+										</Typography>
+									</MenuItem>
+									<MenuItem onClick={handleCloseUserMenu}>
+										<Typography textAlign="center">
+											My orders
+										</Typography>
+									</MenuItem>
+									<MenuItem onClick={handleLogOut}>
+										<Typography textAlign="center">
+											Log out
+										</Typography>
+									</MenuItem>
 								</Menu>
 							</Box>
 						) : (
