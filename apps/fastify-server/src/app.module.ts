@@ -8,6 +8,7 @@ import { ProductsModule } from './app/products/products.module';
 import { BuyersModule } from './app/buyers/buyers.module';
 import { SellersModule } from './app/sellers/sellers.module';
 import { OrdersModule } from './app/orders/orders.module';
+import { MulterModule } from '@nestjs/platform-express/multer';
 
 const databaseHost = require("../constants").databaseHost;
 
@@ -18,6 +19,9 @@ const databaseHost = require("../constants").databaseHost;
 		ProductsModule,
 		SellersModule,
 		OrdersModule,
+		MulterModule.register({
+			dest: './uploads',
+		}),
 		MongooseModule.forRoot(databaseHost),
 		ConfigModule.forRoot({
 			cache: true,
