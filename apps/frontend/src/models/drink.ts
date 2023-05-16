@@ -3,8 +3,9 @@ export interface IDrink {
     title: string;
     price: number;
     image: string;
-    description: string;
-    quantity: number;
-    package: string;
-    orders: any[];
+    drinkCategory: string;
+    stock: number;
+    size: string;
+    packaging: string;
+    seller: any;
 }

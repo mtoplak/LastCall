@@ -11,6 +11,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { ThemeProvider, createTheme } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const pages = ['Products', 'Suppliers', 'Contact'];
 const settings = ['Profile', 'Shopping cart', 'My Orders', 'Logout'];
@@ -137,9 +138,8 @@ function NavbarB() {
 								display: { xs: 'none', md: 'flex' },
 							}}
 						>
-							{pages.map((page) => (
+							<Link to={'/buyer'}>
 								<Button
-									key={page}
 									onClick={handleCloseNavMenu}
 									sx={{
 										my: 2,
@@ -147,9 +147,31 @@ function NavbarB() {
 										display: 'block',
 									}}
 								>
-									{page}
+									Products
 								</Button>
-							))}
+							</Link>
+							<Link to="/suppliers">
+								<Button
+									onClick={handleCloseNavMenu}
+									sx={{
+										my: 2,
+										color: 'white',
+										display: 'block',
+									}}
+								>
+									Suppliers
+								</Button>
+							</Link>
+							<Button
+								onClick={handleCloseNavMenu}
+								sx={{
+									my: 2,
+									color: 'white',
+									display: 'block',
+								}}
+							>
+								Contact
+							</Button>
 						</Box>
 
 						<Box sx={{ flexGrow: 0 }}>

@@ -1,7 +1,7 @@
 import React from 'react';
 import {
 	Box,
-	Button,
+	//	Button,
 	FormControl,
 	InputLabel,
 	MenuItem,
@@ -18,7 +18,7 @@ interface SearchInputProps {
 	filterType: string;
 }
 
-const SearchInput = ({
+const SearchProductsInput = ({
 	setFilterLocation,
 	setFilterName,
 	setFilterType,
@@ -52,8 +52,8 @@ const SearchInput = ({
 					labelId="filter-location"
 					label="Location"
 					sx={{ mr: 3, mb: 2, mt: 2, width: '150px' }}
-					onChange={handleChangeLocation}
 					defaultValue="any"
+					onChange={handleChangeLocation}
 				>
 					<MenuItem value="any">Any</MenuItem>
 					<MenuItem value="Slovenia">Slovenia</MenuItem>
@@ -87,4 +87,4 @@ const SearchInput = ({
 	);
 };
 
-export default SearchInput;
+export default SearchProductsInput;

@@ -8,9 +8,9 @@ import { SellerSchema } from "../sellers/sellers.model";
 
 @Module({
     imports: [
-        MongooseModule.forFeature([{ name: 'Product', schema: ProductSchema}]),
-        MongooseModule.forFeature([{ name: 'Order', schema: OrderSchema}]),
-        MongooseModule.forFeature([{ name: 'Seller', schema: SellerSchema}])
+        MongooseModule.forFeature([{ name: 'Product', schema: ProductSchema }]),
+        MongooseModule.forFeature([{ name: 'Order', schema: OrderSchema }]),
+        MongooseModule.forFeature([{ name: 'Seller', schema: SellerSchema }])
     ], //injectalo bo module v katerikoli file ki ga rabi
     controllers: [ProductsController],
     providers: [ProductsService]
