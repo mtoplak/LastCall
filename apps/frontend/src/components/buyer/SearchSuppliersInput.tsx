@@ -15,14 +15,14 @@ interface SearchInputProps {
 	setFilterName: React.Dispatch<React.SetStateAction<string>>;
 	setFilterLocation: React.Dispatch<React.SetStateAction<string>>;
 	setFilterType: React.Dispatch<React.SetStateAction<string>>;
-	setIsChecked: React.Dispatch<React.SetStateAction<boolean>>;
+	handleChangeIsChecked: (event: any) => void;
 }
 
 function SearchSuppliersInput({
 	setFilterLocation,
 	setFilterName,
 	setFilterType,
-	setIsChecked,
+	handleChangeIsChecked,
 }: SearchInputProps) {
 	const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setFilterName(event.target.value);
@@ -34,10 +34,6 @@ function SearchSuppliersInput({
 
 	const handleChangeType = (event: any) => {
 		setFilterType(event.target.value);
-	};
-
-	const handleChangeIsChecked = (event: any) => {
-		setIsChecked(event.target.checked);
 	};
 
 	return (
@@ -79,7 +75,9 @@ function SearchSuppliersInput({
 			</FormControl>
 			<br />
 			<FormControlLabel
-				control={<Checkbox onChange={handleChangeIsChecked} />}
+				control={
+					<Checkbox onChange={(e) => handleChangeIsChecked(e)} />
+				}
 				label="Show on maps"
 			/>
 

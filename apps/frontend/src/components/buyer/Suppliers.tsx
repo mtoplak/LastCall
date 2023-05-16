@@ -1,12 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Hero from './HeroB';
 import Footer from 'components/homepage/Footer';
-import { Box, Container, Typography, styled } from '@mui/material';
+import {
+	Box,
+	Container,
+	LinearProgress,
+	Typography,
+	styled,
+} from '@mui/material';
 import { ISeller } from 'models/seller';
 import api from 'services/api';
 import SearchSuppliersInput from './SearchSuppliersInput';
 import { Link } from 'react-router-dom';
 import Supplier from './Supplier';
+
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css'; // Re-uses images from ~leaflet package
+import * as L from 'leaflet';
+import 'leaflet-defaulticon-compatibility';
+import 'leaflet.markercluster/dist/leaflet.markercluster';
+
+// Import the marker cluster CSS file
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+//import MarkerClusterGroup from 'react-leaflet-markercluster';
+//import MarkerClusterGroupProps from 'react-leaflet-markercluster';
+import 'leaflet/dist/leaflet.css';
+import 'react-leaflet-markercluster/dist/styles.min.css';
+L.Icon.Default.mergeOptions({
+	iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+	iconUrl: require('leaflet/dist/images/marker-icon.png'),
+	shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+});
 
 function Suppliers() {
 	const [sellers, setSellers] = useState<any[]>([]); //<ISeller[]>
@@ -14,6 +41,7 @@ function Suppliers() {
 	const [filterLocation, setFilterLocation] = useState('any');
 	const [filterType, setFilterType] = useState('any');
 	const [isChecked, setIsChecked] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const PropertiesBox = styled(Box)(({ theme }) => ({
 		display: 'flex',
@@ -72,11 +100,92 @@ function Suppliers() {
 		return nameMatch && typeMatch && locationMatch;
 	});
 
+	console.log(filteredSellers);
+
+	// Create a custom icon for the individual markers
+	const markerIcon = L.icon({
+		iconUrl: '/path/to/marker-icon.png',
+		iconSize: [25, 41],
+		iconAnchor: [12, 41],
+		popupAnchor: [1, -34],
+	});
+
+	const [mapSuppliersData, setMapSuppliersData] = useState<any>([]);
 	console.log(filterName);
 	console.log(filterLocation);
 	console.log(filterType);
 
-	console.log(filteredSellers);
+	const MapCenter = () => {
+		const map = useMap();
+		const bounds = L.latLngBounds(
+			mapSuppliersData.map((location: any) => location.coordinates)
+		);
+		map.fitBounds(bounds);
+		return null;
+	};
+
+	const handleChangeIsChecked = async (event: any) => {
+		event.preventDefault();
+		setIsChecked(event.target.checked);
+		if (event.target.checked) {
+			setIsLoading(true);
+			if (
+				filterName !== '' ||
+				filterLocation !== 'any' ||
+				filterType !== 'any'
+			) {
+				const data = await Promise.all(
+					filteredSellers.map(async (seller) => {
+						const response = await fetch(
+							`https://nominatim.openstreetmap.org/search?format=json&q=${seller.address}+${seller.city}+${seller.country}&addressdetails=1&limit=1&polygon_svg=1`
+						);
+						const responseData = await response.json();
+						return {
+							name: seller.title,
+							address:
+								seller.address +
+								', ' +
+								seller.city +
+								', ' +
+								seller.country,
+							coordinates: [
+								responseData[0]?.lat,
+								responseData[0]?.lon,
+							],
+						};
+					})
+				);
+				setMapSuppliersData(data);
+				console.log(data);
+			} else {
+				const data = await Promise.all(
+					sellers.map(async (seller) => {
+						const response = await fetch(
+							`https://nominatim.openstreetmap.org/search?format=json&q=${seller.address}+${seller.city}+${seller.country}&addressdetails=1&limit=1&polygon_svg=1`
+						);
+						const responseData = await response.json();
+						return {
+							name: seller.title,
+							address:
+								seller.address +
+								', ' +
+								seller.city +
+								', ' +
+								seller.country,
+							coordinates: [
+								responseData[0]?.lat,
+								responseData[0]?.lon,
+							],
+						};
+					})
+				);
+				setMapSuppliersData(data);
+				console.log(data);
+			}
+			setIsLoading(false);
+		}
+	};
+	console.log(mapSuppliersData);
 
 	return (
 		<>
@@ -88,7 +197,7 @@ function Suppliers() {
 							setFilterName={setFilterName}
 							setFilterLocation={setFilterLocation}
 							setFilterType={setFilterType}
-							setIsChecked={setIsChecked}
+							handleChangeIsChecked={handleChangeIsChecked}
 						/>
 					</Box>
 					<PropertiesTextBox>
@@ -102,7 +211,46 @@ function Suppliers() {
 							Suppliers
 						</Typography>
 					</PropertiesTextBox>
-					<PropertiesBox>{isChecked && 'Prikaži mapo'}</PropertiesBox>
+					{isChecked && !isLoading && (
+						<PropertiesBox>
+							<MapContainer
+								center={[46.056946, 14.505751]}
+								zoom={7.9}
+								style={{ height: '400px', width: '100%' }}
+								attributionControl={false}
+							>
+								<TileLayer
+									attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+									url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+								/>
+								<MapCenter />
+								{mapSuppliersData.map(
+									(location: any, index: any) => (
+										<Marker
+											key={index}
+											position={[
+												location.coordinates[0],
+												location.coordinates[1],
+											]}
+										>
+											<Popup>
+												<div>
+													<h3>{location.name}</h3>
+													<p>{location.address}</p>
+												</div>
+											</Popup>
+										</Marker>
+									)
+								)}
+							</MapContainer>
+						</PropertiesBox>
+					)}
+					{isChecked && isLoading && (
+						<Box sx={{ width: '100%' }}>
+							<LinearProgress />
+						</Box>
+					)}
+
 					<PropertiesBox>
 						{filteredSellers.length > 0 &&
 						(filterType !== 'any' ||

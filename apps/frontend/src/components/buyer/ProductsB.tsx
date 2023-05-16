@@ -58,7 +58,6 @@ const Products = () => {
 		const typeMatch =
 			filterType === 'any' ||
 			drink.drinkCategory.toLowerCase() === filterType.toLowerCase();
-		console.log(drink.seller.country.toLowerCase());
 		const locationMatch =
 			filterLocation === 'any' ||
 			drink.seller.country.toLowerCase() === filterLocation.toLowerCase();

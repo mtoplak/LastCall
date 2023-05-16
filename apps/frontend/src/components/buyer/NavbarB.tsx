@@ -138,26 +138,30 @@ function NavbarB() {
 								display: { xs: 'none', md: 'flex' },
 							}}
 						>
-							<Button
-								onClick={handleCloseNavMenu}
-								sx={{
-									my: 2,
-									color: 'white',
-									display: 'block',
-								}}
-							>
-								<Link to={'/buyer'}>Products</Link>
-							</Button>
-							<Button
-								onClick={handleCloseNavMenu}
-								sx={{
-									my: 2,
-									color: 'white',
-									display: 'block',
-								}}
-							>
-								<Link to="/suppliers">Suppliers</Link>
-							</Button>
+							<Link to={'/buyer'}>
+								<Button
+									onClick={handleCloseNavMenu}
+									sx={{
+										my: 2,
+										color: 'white',
+										display: 'block',
+									}}
+								>
+									Products
+								</Button>
+							</Link>
+							<Link to="/suppliers">
+								<Button
+									onClick={handleCloseNavMenu}
+									sx={{
+										my: 2,
+										color: 'white',
+										display: 'block',
+									}}
+								>
+									Suppliers
+								</Button>
+							</Link>
 							<Button
 								onClick={handleCloseNavMenu}
 								sx={{
