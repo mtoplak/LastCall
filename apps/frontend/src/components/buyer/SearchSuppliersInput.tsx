@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
 	Box,
 	Button,
@@ -15,14 +15,14 @@ interface SearchInputProps {
 	setFilterName: React.Dispatch<React.SetStateAction<string>>;
 	setFilterLocation: React.Dispatch<React.SetStateAction<string>>;
 	setFilterType: React.Dispatch<React.SetStateAction<string>>;
-	handleChangeIsChecked: (event: any) => void;
+	setIsChecked: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function SearchSuppliersInput({
 	setFilterLocation,
 	setFilterName,
 	setFilterType,
-	handleChangeIsChecked,
+	setIsChecked,
 }: SearchInputProps) {
 	const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setFilterName(event.target.value);
@@ -76,7 +76,9 @@ function SearchSuppliersInput({
 			<br />
 			<FormControlLabel
 				control={
-					<Checkbox onChange={(e) => handleChangeIsChecked(e)} />
+					<Checkbox
+						onChange={(event, checked) => setIsChecked(checked)}
+					/>
 				}
 				label="Show on maps"
 			/>

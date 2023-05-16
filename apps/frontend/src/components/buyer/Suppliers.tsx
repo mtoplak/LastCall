@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Hero from './HeroB';
 import Footer from 'components/homepage/Footer';
 import {
@@ -41,7 +41,8 @@ function Suppliers() {
 	const [filterLocation, setFilterLocation] = useState('any');
 	const [filterType, setFilterType] = useState('any');
 	const [isChecked, setIsChecked] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(false); // map
+	const [mapSuppliersData, setMapSuppliersData] = useState<any>([]);
 
 	const PropertiesBox = styled(Box)(({ theme }) => ({
 		display: 'flex',
@@ -100,8 +101,6 @@ function Suppliers() {
 		return nameMatch && typeMatch && locationMatch;
 	});
 
-	console.log(filteredSellers);
-
 	// Create a custom icon for the individual markers
 	const markerIcon = L.icon({
 		iconUrl: '/path/to/marker-icon.png',
@@ -110,24 +109,23 @@ function Suppliers() {
 		popupAnchor: [1, -34],
 	});
 
-	const [mapSuppliersData, setMapSuppliersData] = useState<any>([]);
-	console.log(filterName);
-	console.log(filterLocation);
-	console.log(filterType);
-
 	const MapCenter = () => {
 		const map = useMap();
-		const bounds = L.latLngBounds(
-			mapSuppliersData.map((location: any) => location.coordinates)
-		);
-		map.fitBounds(bounds);
+		useEffect(() => {
+			if (mapSuppliersData.length > 0) {
+				const bounds = L.latLngBounds(
+					mapSuppliersData.map(
+						(location: any) => location.coordinates
+					)
+				);
+				map.fitBounds(bounds);
+			}
+		}, [map]);
 		return null;
 	};
 
-	const handleChangeIsChecked = async (event: any) => {
-		event.preventDefault();
-		setIsChecked(event.target.checked);
-		if (event.target.checked) {
+	useEffect(() => {
+		const fetchData = async () => {
 			setIsLoading(true);
 			if (
 				filterName !== '' ||
@@ -183,8 +181,13 @@ function Suppliers() {
 				console.log(data);
 			}
 			setIsLoading(false);
+		};
+		if (isChecked) {
+			fetchData();
 		}
-	};
+	}, [isChecked, filterName, filterLocation, filterType, sellers]);
+
+	console.log(filteredSellers);
 	console.log(mapSuppliersData);
 
 	return (
@@ -197,7 +200,7 @@ function Suppliers() {
 							setFilterName={setFilterName}
 							setFilterLocation={setFilterLocation}
 							setFilterType={setFilterType}
-							handleChangeIsChecked={handleChangeIsChecked}
+							setIsChecked={setIsChecked}
 						/>
 					</Box>
 					<PropertiesTextBox>
@@ -211,7 +214,7 @@ function Suppliers() {
 							Suppliers
 						</Typography>
 					</PropertiesTextBox>
-					{isChecked && !isLoading && (
+					{isChecked && !isLoading && mapSuppliersData.length > 0 && (
 						<PropertiesBox>
 							<MapContainer
 								center={[46.056946, 14.505751]}
