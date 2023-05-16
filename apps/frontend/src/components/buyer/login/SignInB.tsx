@@ -14,9 +14,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import heroImg from '../../../assets/images/homepageDrink.png';
 import { useState } from 'react';
-import {
-	sendPasswordResetEmail,
-} from 'firebase/auth';
+import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../../../firebase';
 import { useUserAuth } from 'context/AuthContext';
 
@@ -26,6 +24,7 @@ const SignInB = () => {
 	const [error, setError] = useState('');
 	const [isShownForgot, setIsShownForgot] = useState(false);
 	const [resetMail, setResetMail] = useState('');
+	const [isShownResetAlert, setIsShownResetAlert] = useState(false);
 
 	const navigate = useNavigate();
 
@@ -38,23 +37,19 @@ const SignInB = () => {
 	const avatarStyle = { backgroundColor: 'lightblue' };
 	const btnstyle = { margin: '8px 0' };
 
-	const resetPassword = async (e: any) => {
+	//context
+	const { signIn, resetPassword } = useUserAuth();
+
+	const handleResetPassword = async (e: any) => {
 		e.preventDefault();
 		try {
-			const userCredentials = await sendPasswordResetEmail(
-				auth,
-				resetMail
-			);
-			console.log(userCredentials);
+			await resetPassword(resetMail);
 		} catch (error: any) {
 			setError(error.message);
 		}
 	};
 
-	//context
-	const { signIn } = useUserAuth();
-
-	const handleSubmit = async (e: any) => {
+	const handleSubmitSign = async (e: any) => {
 		setError('');
 		e.preventDefault();
 		try {
@@ -110,7 +105,7 @@ const SignInB = () => {
 										variant="contained"
 										style={btnstyle}
 										fullWidth
-										onClick={(e) => handleSubmit(e)} // Replace onSubmit with onClick
+										onClick={(e) => handleSubmitSign(e)} // Replace onSubmit with onClick
 									>
 										Sign in
 									</Button>
@@ -150,10 +145,17 @@ const SignInB = () => {
 											variant="contained"
 											style={btnstyle}
 											fullWidth
-											onClick={(e) => resetPassword(e)}
+											onClick={(e) =>
+												handleResetPassword(e)
+											}
 										>
 											Reset
 										</Button>
+										{isShownResetAlert && (
+											<Alert severity="info">
+												Reset email sent!
+											</Alert>
+										)}
 									</>
 								)}
 								{error && (

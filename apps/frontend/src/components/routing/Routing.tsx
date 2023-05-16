@@ -10,6 +10,7 @@ import SellerPage from 'components/seller/SellerPage';
 import SignUpPage from 'components/buyer/login/SignUpPage';
 import SignInPage from 'components/buyer/login/SignInPage';
 import { AuthContextProviver } from 'context/AuthContext';
+import Basket from 'components/buyer/Basket';
 
 const Routing = () => {
 	return (
@@ -20,6 +21,7 @@ const Routing = () => {
 					<Route path="/buyer" element={<Buyer />} />
 					<Route path="/seller" element={<Seller />} />
 					<Route path="/suppliers" element={<Suppliers />} />
+					<Route path="/basket" element={<Basket />} />
 					<Route path="/buy/signup" element={<SignUpPage />} />
 					<Route path="/buy/signin" element={<SignInPage />} />
 					<Route path="/product/:id" element={<Product />} />

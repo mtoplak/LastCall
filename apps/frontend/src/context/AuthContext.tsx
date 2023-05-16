@@ -13,6 +13,7 @@ const AuthContext = createContext({
 	signUp: async (email: string, password: string): Promise<any> => {},
 	signIn: async (email: string, password: string): Promise<any> => {},
 	logOut: async (): Promise<any> => {},
+	resetPassword: async (email: string): Promise<any> => {},
 	user: null as User | null,
 });
 
@@ -53,6 +54,15 @@ export function AuthContextProviver({ children }: { children: any }) {
 		}
 	}
 
+	async function resetPassword(email: string) {
+		try {
+			await sendPasswordResetEmail(auth, email);
+			return { success: true };
+		} catch (error) {
+			return { success: false, error };
+		}
+	}
+
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
 			console.log('Auth state changed');
@@ -64,7 +74,9 @@ export function AuthContextProviver({ children }: { children: any }) {
 	}, []);
 
 	return (
-		<AuthContext.Provider value={{ user, signUp, signIn, logOut }}>
+		<AuthContext.Provider
+			value={{ user, signUp, signIn, logOut, resetPassword }}
+		>
 			{children}
 		</AuthContext.Provider>
 	);
