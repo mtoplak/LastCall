@@ -6,8 +6,8 @@ import {
 import pino from 'pino';
 import pretty from 'pino-pretty';
 import { AppModule } from './app.module';
-import fmp = require('fastify-multipart');
-import fastifyMultipart from 'fastify-multipart';
+//import fmp = require('fastify-multipart');
+//import fastifyMultipart from 'fastify-multipart';
 
 async function bootstrap() {
 	const app = await NestFactory.create<NestFastifyApplication>(

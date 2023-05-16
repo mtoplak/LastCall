@@ -10,11 +10,71 @@ import {
 	Typography,
 } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import React, { ChangeEvent } from 'react';
 import { drinks } from '../data/data';
 import Drink from './DrinkS';
+import React, { ChangeEvent, useState, useEffect } from 'react';
+import api from 'services/api';
+import { IDrink } from 'models/drink';
+import drink1 from '../../assets/images/cocacola.jpg';
 
 const ProductsS = () => {
+	//post
+	const [formData, setFormData] = useState({
+		title: '',
+		drinkCategory: '',
+		packaging: '',
+		size: '',
+		price: 0,
+		stock: 0,
+		seller: '645d45c444ddfe8a7fef8986',
+	});
+
+	const handleFormSubmit = async () => {
+		try {
+			const response = await api.post('/products', formData);
+			console.log(response.data);
+			setFormData({
+				title: '',
+				drinkCategory: '',
+				packaging: '',
+				size: '',
+				price: 0,
+				stock: 0,
+				seller: '645d45c444ddfe8a7fef8986',
+			});
+		} catch (error) {
+			// Handle the error
+			console.error(error);
+		}
+	};
+
+	const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+		event.preventDefault();
+		const { name, value } = event.target;
+		setFormData((prevFormData) => ({
+			...prevFormData,
+			[name]: value,
+		}));
+	};
+	//...
+
+	//get
+	const [drinks2, setDrinks] = useState<IDrink[]>([]);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const response = await api.get('/products');
+				console.log(response.data);
+				setDrinks(response.data);
+			} catch (error) {
+				throw error;
+			}
+		};
+		fetchData();
+	}, []);
+	//...
+
 	const PropertiesBox = styled(Box)(({ theme }) => ({
 		display: 'flex',
 		justifyContent: 'space-between',
@@ -27,7 +87,7 @@ const ProductsS = () => {
 	}));
 
 	const DrinkContainer = styled(Box)(({ theme }) => ({
-		flex: '0 0 33.33%', // Set the width to one-third of the container
+		flex: '0 0 25.33%', // Set the width to one-third of the container
 		marginBottom: theme.spacing(4), // Add some margin between the products
 	}));
 
@@ -53,13 +113,6 @@ const ProductsS = () => {
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
 
-	const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-		event.preventDefault();
-		const file = event.target.files?.[0] || null;
-		
-		
-	};
-
 	return (
 		<Box sx={{ mt: 5, backgroundColor: 'white', py: 10 }}>
 			<Container>
@@ -72,11 +125,9 @@ const ProductsS = () => {
 						}}
 					>
 						My products
-						<Button onClick={handleOpen}>
-							<IconButton>
-								<AddCircleOutlineIcon />
-							</IconButton>
-						</Button>
+						<IconButton onClick={handleOpen}>
+							<AddCircleOutlineIcon />
+						</IconButton>
 						<Modal
 							open={open}
 							onClose={handleClose}
@@ -98,26 +149,46 @@ const ProductsS = () => {
 									<TextField
 										label="Title"
 										placeholder="Enter title"
+										type="text"
 										fullWidth
 										required
+										name="title"
+										value={formData.title}
+										onChange={handleInputChange}
+										sx={{ mb: 2 }}
 									/>
 									<TextField
-										label="Description"
-										placeholder="Enter description"
+										label="Drink category"
+										placeholder="Enter drink category"
+										type="text"
 										fullWidth
 										required
+										name="drinkCategory"
+										value={formData.drinkCategory}
+										onChange={handleInputChange}
+										sx={{ mb: 2 }}
 									/>
 									<TextField
 										label="Packaging"
 										placeholder="Enter packaging"
+										type="text"
 										fullWidth
 										required
+										name="packaging"
+										value={formData.packaging}
+										onChange={handleInputChange}
+										sx={{ mb: 2 }}
 									/>
 									<TextField
 										label="Size"
 										placeholder="Enter size"
+										type="text"
 										fullWidth
 										required
+										name="size"
+										value={formData.size}
+										onChange={handleInputChange}
+										sx={{ mb: 2 }}
 									/>
 									<TextField
 										label="Price"
@@ -125,6 +196,10 @@ const ProductsS = () => {
 										type="number"
 										fullWidth
 										required
+										name="price"
+										value={formData.price}
+										onChange={handleInputChange}
+										sx={{ mb: 2 }}
 									/>
 									<TextField
 										label="Stock"
@@ -132,14 +207,10 @@ const ProductsS = () => {
 										type="number"
 										fullWidth
 										required
-									/>
-								</Typography>
-								<Typography>
-									<input
-										id="file-input"
-										type="file"
-										accept="image/*"
+										name="stock"
+										value={formData.stock}
 										onChange={handleInputChange}
+										sx={{ mb: 2 }}
 									/>
 								</Typography>
 								<Typography sx={{ mt: 2 }}>
@@ -147,6 +218,7 @@ const ProductsS = () => {
 										color="primary"
 										variant="contained"
 										fullWidth
+										onClick={handleFormSubmit}
 									>
 										Add
 									</Button>
@@ -162,15 +234,17 @@ const ProductsS = () => {
 				</PropertiesTextBox>
 
 				<PropertiesBox>
-					{drinks.map((drink) => (
-						<DrinkContainer key={drink.id}>
-							<Drink
-								name={drink.name}
-								img={drink.img}
-								price={drink.price}
-							/>
-						</DrinkContainer>
-					))}
+					{drinks &&
+						drinks2.map((drink, index) => (
+							<DrinkContainer key={index}>
+								<Drink
+									id={drink.id}
+									name={drink.title}
+									img={drink1}
+									price={drink.price}
+								/>
+							</DrinkContainer>
+						))}
 				</PropertiesBox>
 			</Container>
 		</Box>

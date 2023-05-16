@@ -9,7 +9,6 @@ import {
 	List,
 	ListItem,
 	ListItemText,
-	Paper,
 	TextField,
 	Typography,
 	styled,
@@ -58,86 +57,100 @@ function Product() {
 						<img
 							src={productImage}
 							alt="heroImg"
-							style={{ maxWidth: '100%', marginTop: '10rem' }}
+							style={{ maxWidth: '100%', marginTop: '7rem' }}
 						/>
 					</Box>
 					<Box
 						sx={{
 							flex: '1',
-							marginTop: '10rem',
+							marginTop: '7rem',
 							minHeight: '52vh',
+							marginBottom: '10rem',
 						}}
 					>
 						<Card>
 							<CardContent>
 								<Typography
 									variant="h4"
-									component="h2"
+									component="span"
 									gutterBottom
 								>
-									Product title
+									{drink?.title}
 								</Typography>
 								<Typography color="textSecondary" gutterBottom>
-									Price: $number
+									Price: {drink?.price} €
 								</Typography>
 								<Divider />
 								<br />
 								<Typography
 									variant="h6"
-									component="h4"
+									component="span"
 									sx={{ flex: '1' }}
 								>
 									Description:
 									<List>
 										<ListItem>
-											<ListItemText primary="Size: size" />
+											<ListItemText
+												primary={
+													'Drink category: ' +
+													drink?.drinkCategory
+												}
+											/>
 										</ListItem>
 										<ListItem>
-											<ListItemText primary="Packaging: packaging" />
+											<ListItemText
+												primary={'Size: ' + drink?.size}
+											/>
 										</ListItem>
 										<ListItem>
-											<ListItemText primary="Drink category: category" />
+											<ListItemText
+												primary={
+													'Packaging: ' +
+													drink?.packaging
+												}
+											/>
 										</ListItem>
 									</List>
 								</Typography>
 								<Divider />
 								<br />
-								<Typography>
-									<Alert severity="info">
-										There is currently no discount for this
-										item!{' '}
-									</Alert>
-									<Alert severity="success">
-										There is currently a discountNumber%
-										discount for this item!{' '}
-									</Alert>
-								</Typography>
+								<Alert severity="info">
+									There is currently no discount for this
+									item!{' '}
+								</Alert>
+								<Alert severity="success">
+									There is currently a discountNumber%
+									discount for this item!{' '}
+								</Alert>
 								<br />
 								<Divider />
 								<br />
 								<Typography
 									variant="h6"
-									component="h4"
+									component="span"
 									sx={{ flex: '1' }}
 								>
-									Add to basket:
+									Add this product to basket:
 									<Box
 										display="flex"
 										alignItems="center"
-										gap={2}
+										gap={10}
 									>
 										<Box flex="1">
 											<TextField
-												label="Add number of wanted articles"
+												label="Quantity"
 												placeholder="1"
 												type="number"
 												fullWidth
 											/>
 										</Box>
 										<Box>
-											<Button>Add product</Button>
+											<Button>Add to basket</Button>
 										</Box>
 									</Box>
+									<p style={{ fontSize: '15px' }}>
+										In stock: {drink?.stock}
+									</p>
 								</Typography>
 							</CardContent>
 						</Card>
