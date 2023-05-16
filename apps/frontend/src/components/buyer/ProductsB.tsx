@@ -63,11 +63,11 @@ const Products = () => {
 			drink.seller.country.toLowerCase() === filterLocation.toLowerCase();
 		return nameMatch && typeMatch && locationMatch;
 	});
-
+/*
 	console.log(filterName);
 	console.log(filterLocation);
 	console.log(filterType);
-	console.log(filteredDrinks);
+	console.log(filteredDrinks);*/
 	return (
 		<Box sx={{ mt: 5, backgroundColor: 'white', py: 10 }}>
 			<Container>

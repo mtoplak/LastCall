@@ -9,31 +9,25 @@ import {
 	TextField,
 	Typography,
 	styled,
+	Alert,
 } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import heroImg from '../../../assets/images/homepageDrink.png';
 import { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import {
+	sendPasswordResetEmail,
+} from 'firebase/auth';
 import { auth } from '../../../firebase';
+import { useUserAuth } from 'context/AuthContext';
 
 const SignInB = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
+	const [isShownForgot, setIsShownForgot] = useState(false);
+	const [resetMail, setResetMail] = useState('');
 
-	const signIn = async (e: any) => {
-		e.preventDefault();
-		try {
-			const userCredentials = await signInWithEmailAndPassword(
-				auth,
-				email,
-				password
-			);
-			console.log(userCredentials);
-		} catch (error: any) {
-			setError(error.message);
-		}
-	};
+	const navigate = useNavigate();
 
 	const paperStyle = {
 		padding: 20,
@@ -44,14 +38,44 @@ const SignInB = () => {
 	const avatarStyle = { backgroundColor: 'lightblue' };
 	const btnstyle = { margin: '8px 0' };
 
+	const resetPassword = async (e: any) => {
+		e.preventDefault();
+		try {
+			const userCredentials = await sendPasswordResetEmail(
+				auth,
+				resetMail
+			);
+			console.log(userCredentials);
+		} catch (error: any) {
+			setError(error.message);
+		}
+	};
+
+	//context
+	const { signIn } = useUserAuth();
+
+	const handleSubmit = async (e: any) => {
+		setError('');
+		e.preventDefault();
+		try {
+			const signUpResponse = await signIn(email, password);
+			if (signUpResponse.success) {
+				// Signin was successful
+				// Access the response object if needed: signUpResponse.response
+				navigate('/buyer');
+			} else {
+				setError(signUpResponse.error.message);
+			}
+		} catch (error: any) {
+			setError(error.message);
+		}
+	};
+
 	return (
 		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '100vh' }}>
 			<Container>
 				<CustomBox>
-					<Box
-						component="form"
-						sx={{ flex: '1', marginTop: '10rem' }}
-					>
+					<Box component="form" sx={{ flex: '1', marginTop: '5rem' }}>
 						<Grid>
 							<Paper elevation={10} style={paperStyle}>
 								<Grid>
@@ -86,7 +110,7 @@ const SignInB = () => {
 										variant="contained"
 										style={btnstyle}
 										fullWidth
-										onClick={(e) => signIn(e)} // Replace onSubmit with onClick
+										onClick={(e) => handleSubmit(e)} // Replace onSubmit with onClick
 									>
 										Sign in
 									</Button>
@@ -99,7 +123,42 @@ const SignInB = () => {
 										</span>
 									</Link>
 								</Typography>
-								<span style={{ color: 'red' }}>{error}</span>
+								<Typography>
+									<span
+										onClick={(event) =>
+											setIsShownForgot(!isShownForgot)
+										}
+									>
+										Forgot password?
+									</span>
+								</Typography>
+								{isShownForgot && (
+									<>
+										<TextField
+											label="Enter email to reset password"
+											placeholder="Enter email"
+											type="email"
+											required
+											value={resetMail}
+											onChange={(e) =>
+												setResetMail(e.target.value)
+											}
+										/>
+										<Button
+											type="submit"
+											color="primary"
+											variant="contained"
+											style={btnstyle}
+											fullWidth
+											onClick={(e) => resetPassword(e)}
+										>
+											Reset
+										</Button>
+									</>
+								)}
+								{error && (
+									<Alert severity="error">{error}</Alert>
+								)}
 							</Paper>
 						</Grid>
 					</Box>

@@ -16,12 +16,12 @@ import {
 	OutlinedInput,
 	Select,
 	MenuItem,
+	Alert,
 } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import heroImg from '../../../assets/images/homepageDrink.png';
 import { useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../../firebase';
+import { useUserAuth } from 'context/AuthContext';
 
 const markets = ['Slovenia', 'Italy', 'France', 'Austria', 'United Kingdom'];
 
@@ -36,6 +36,8 @@ const SignUpB = () => {
 	const [error, setError] = useState('');
 	const [newUserData, setNewUserData] = useState(initialState);
 
+	const navigate = useNavigate();
+
 	const paperStyle = {
 		padding: 20,
 		height: '55vh',
@@ -49,21 +51,28 @@ const SignUpB = () => {
 		setNewUserData({ ...newUserData, [name]: value });
 	};
 
-	const signUp = async (e: any) => {
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
+
+	//context
+	const { signUp } = useUserAuth();
+
+	const handleSubmit = async (e: any) => {
+		setError('');
 		e.preventDefault();
-		if (newUserData.password !== newUserData.password2) {
-			setError('Passwords do not match');
-		} else {
-			try {
-				const userCredentials = await createUserWithEmailAndPassword(
-					auth,
-					newUserData.email,
-					newUserData.password
-				);
-				console.log(userCredentials);
-			} catch (error: any) {
-				setError(error.message);
+		try {
+			const signUpResponse = await signUp(email, password);
+			if (signUpResponse.success) {
+				// Signup was successful
+				// Access the response object if needed: signUpResponse.response
+				navigate('/buy/signin'); // Navigate to the dashboard
+			} else {
+				//console.log(signUpResponse.error);
+				//console.log(signUpResponse.error.message);
+				setError(signUpResponse.error.message);
 			}
+		} catch (error: any) {
+			setError(error.message);
 		}
 	};
 
@@ -71,8 +80,8 @@ const SignUpB = () => {
 		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '100vh' }}>
 			<Container>
 				<CustomBox>
-					<Box component="form" sx={{ flex: '1', marginTop: '5rem' }}>
-						<h1>Sign up</h1>
+					<Box component="form" sx={{ flex: '1', marginTop: '4rem' }}>
+						<h1 style={{ textAlign: 'center' }}>Sign up</h1>
 						<Grid>
 							<Paper elevation={10} style={paperStyle}>
 								<Grid container spacing={2}>
@@ -97,7 +106,10 @@ const SignUpB = () => {
 											name="email"
 											fullWidth
 											required
-											onChange={(e) => handleChange(e)}
+											onChange={(e) =>
+												setEmail(e.target.value)
+											}
+											//	onChange={(e) => handleChange(e)}
 										/>
 										<TextField
 											label="Password"
@@ -106,7 +118,10 @@ const SignUpB = () => {
 											name="password"
 											fullWidth
 											required
-											onChange={(e) => handleChange(e)}
+											onChange={(e) =>
+												setPassword(e.target.value)
+											}
+											//	onChange={(e) => handleChange(e)}
 										/>
 										<TextField
 											label="Confirm Password"
@@ -194,14 +209,16 @@ const SignUpB = () => {
 										</FormControl>
 									</Grid>
 								</Grid>
-								<span style={{ color: 'red' }}>{error}</span>
+								{error && (
+									<Alert severity="error">{error}</Alert>
+								)}
 								<Button
 									type="submit"
 									color="primary"
 									variant="contained"
 									style={btnstyle}
 									fullWidth
-									onClick={(e) => signUp(e)}
+									onClick={(e) => handleSubmit(e)}
 								>
 									Sign up
 								</Button>
