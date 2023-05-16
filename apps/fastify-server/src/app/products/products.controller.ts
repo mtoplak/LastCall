@@ -15,7 +15,8 @@ export class ProductsController {
         @Body('price') price: number,
         @Body('stock') stock: number,
         //@Body('orders') orders: string[],
-        @Body('seller') seller: string
+        @Body('seller') seller: string,
+        @Body('sale') sale: number,
     ) {
         const generatedID = await this.productService.insertProduct(
             title,
@@ -25,7 +26,8 @@ export class ProductsController {
             price,
             stock,
             //orders,
-            seller
+            seller,
+            sale
             );
         return { id: generatedID };
     }
@@ -52,7 +54,8 @@ export class ProductsController {
         @Body('price') price: number,
         @Body('stock') stock: number,
         //@Body('orders') orders: string[],
-        @Body('seller') seller: Seller
+        @Body('seller') seller: Seller,
+        @Body('sale') sale: number,
     ) {
         await this.productService.updateProduct(
             id,
@@ -63,7 +66,8 @@ export class ProductsController {
             price,
             stock,
             //orders,
-            seller
+            seller,
+            sale
             );
         return null;
     }

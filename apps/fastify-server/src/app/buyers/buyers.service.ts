@@ -82,7 +82,8 @@ export class BuyersService {
             phone: buyer.phone,
             email: buyer.email,
             password: buyer.password,
-            orders: buyer.orders
+            orders: buyer.orders,
+            basket: buyer.basket
         };
     }
 

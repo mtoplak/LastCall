@@ -22,7 +22,8 @@ export class ProductsService {
         price: number,
         stock: number,
         //orders: string[] | undefined, // Update the parameter name to 'orders'
-        sellerId: string
+        sellerId: string,
+        sale: number
       ) {
 
         const seller = await this.sellerModel.findById(sellerId);
@@ -38,7 +39,8 @@ export class ProductsService {
           price,
           stock,
           //orders: orders || [], // Assign the 'orders' parameter or an empty array if it's not provided
-          seller: seller._id
+          seller: seller._id,
+          sale
         });
       
         const result = await newProduct.save();
@@ -75,7 +77,8 @@ export class ProductsService {
             price: prod.price,
             stock: prod.stock,
             //orders: prod.orders,
-            seller: prod.seller
+            seller: prod.seller,
+            sale: prod.sale,
         }));
     }
 
@@ -93,7 +96,8 @@ export class ProductsService {
             price: product.price,
             stock: product.stock,
             //orders: product.orders,
-            seller: product.seller
+            seller: product.seller,
+            sale: product.sale
         };
     }
 
@@ -106,7 +110,8 @@ export class ProductsService {
         price: number,
         stock: number,
         //orders: string[],
-        seller: Seller
+        seller: Seller,
+        sale: number,
     ) {
         const updatedProduct = await this.findProduct(productId);
         const updatedFields = {
@@ -117,7 +122,8 @@ export class ProductsService {
             price,
             stock,
             //orders,
-            seller
+            seller,
+            sale
           };
           
           for (const [key, value] of Object.entries(updatedFields)) {
