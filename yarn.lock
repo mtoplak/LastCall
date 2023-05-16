@@ -1850,7 +1850,11 @@ __metadata:
   languageName: node
   linkType: hard
 
+<<<<<<< HEAD
 "@emotion/react@npm:^11.10.0":
+=======
+"@emotion/react@npm:^11.11.0":
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
   version: 11.11.0
   resolution: "@emotion/react@npm:11.11.0"
   dependencies:
@@ -1994,6 +1998,7 @@ __metadata:
   languageName: node
   linkType: hard
 
+<<<<<<< HEAD
 "@fastify/busboy@npm:^1.0.0":
   version: 1.2.1
   resolution: "@fastify/busboy@npm:1.2.1"
@@ -2003,6 +2008,8 @@ __metadata:
   languageName: node
   linkType: hard
 
+=======
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
 "@fastify/cors@npm:8.2.1":
   version: 8.2.1
   resolution: "@fastify/cors@npm:8.2.1"
@@ -3134,6 +3141,20 @@ __metadata:
   version: 2.11.7
   resolution: "@popperjs/core@npm:2.11.7"
   checksum: 5b6553747899683452a1d28898c1b39173a4efd780e74360bfcda8eb42f1c5e819602769c81a10920fc68c881d07fb40429604517d499567eac079cfa6470f19
+<<<<<<< HEAD
+=======
+  languageName: node
+  linkType: hard
+
+"@react-leaflet/core@npm:^1.0.2, @react-leaflet/core@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@react-leaflet/core@npm:1.1.1"
+  peerDependencies:
+    leaflet: ^1.7.1
+    react: ^17.0.1
+    react-dom: ^17.0.1
+  checksum: 2fc4a80e5524f9437ac6cef0f95e63388f2df6ecc5107fef85fd097eb2455436e796d41a4c43cdcbb983a4132403646823ba1dc0d953e866eb80808cbfaf0232
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
   languageName: node
   linkType: hard
 
@@ -3798,7 +3819,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/leaflet@npm:^1.9.3":
+"@types/leaflet.markercluster@npm:*":
+  version: 1.5.1
+  resolution: "@types/leaflet.markercluster@npm:1.5.1"
+  dependencies:
+    "@types/leaflet": "*"
+  checksum: 619e3e2a0a1de8cf4f34bec989828aa9c505cd2b234ed1d4494bb91dcf97f3e2ce0c532f141b1a3ff426a7518fbd0c6cfabb7ba617b4048352662c191c1f6b10
+  languageName: node
+  linkType: hard
+
+"@types/leaflet@npm:*, @types/leaflet@npm:^1.9.3":
   version: 1.9.3
   resolution: "@types/leaflet@npm:1.9.3"
   dependencies:
@@ -3821,6 +3851,7 @@ __metadata:
   languageName: node
   linkType: hard
 
+<<<<<<< HEAD
 "@types/multer@npm:^1.4.7":
   version: 1.4.7
   resolution: "@types/multer@npm:1.4.7"
@@ -3830,6 +3861,8 @@ __metadata:
   languageName: node
   linkType: hard
 
+=======
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
 "@types/node@npm:*":
   version: 20.1.4
   resolution: "@types/node@npm:20.1.4"
@@ -3901,6 +3934,31 @@ __metadata:
   dependencies:
     "@types/react": ^17
   checksum: 4c273945795b539f6ae0efdbd917e86edfbd9a9fad12cd6724fb2216bf47d724560b7b3cd07541c3f9e86dd085b386d7020119c5db0a289fbb069524b1242586
+<<<<<<< HEAD
+=======
+  languageName: node
+  linkType: hard
+
+"@types/react-leaflet-markercluster@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "@types/react-leaflet-markercluster@npm:3.0.1"
+  dependencies:
+    "@types/leaflet": "*"
+    "@types/leaflet.markercluster": "*"
+    "@types/react": "*"
+    "@types/react-leaflet": ^2.8.3
+  checksum: de53f06640ffbd26dac366997a0046c1798211ca3a06b6e329cc3cdcf4a2fa93e1021a4dbfef2f501f19a8949c312ab9bc39b6302a05d73dc9c2bdd1ec1e0e25
+  languageName: node
+  linkType: hard
+
+"@types/react-leaflet@npm:^2.8.3":
+  version: 2.8.3
+  resolution: "@types/react-leaflet@npm:2.8.3"
+  dependencies:
+    "@types/leaflet": "*"
+    "@types/react": "*"
+  checksum: b627e7ce583d5702292bfab8cca32c750599cdedd358946b03ef5b9248d8cc29846387360ea954e9bb57c11759b2267ebf6d62b95095e9f59ec4afcf5447510a
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
   languageName: node
   linkType: hard
 
@@ -4137,6 +4195,7 @@ __metadata:
   linkType: hard
 
 "@typescript-eslint/eslint-plugin@npm:^5.33.1, @typescript-eslint/eslint-plugin@npm:^5.5.0":
+<<<<<<< HEAD
   version: 5.59.5
   resolution: "@typescript-eslint/eslint-plugin@npm:5.59.5"
   dependencies:
@@ -4144,6 +4203,15 @@ __metadata:
     "@typescript-eslint/scope-manager": 5.59.5
     "@typescript-eslint/type-utils": 5.59.5
     "@typescript-eslint/utils": 5.59.5
+=======
+  version: 5.59.6
+  resolution: "@typescript-eslint/eslint-plugin@npm:5.59.6"
+  dependencies:
+    "@eslint-community/regexpp": ^4.4.0
+    "@typescript-eslint/scope-manager": 5.59.6
+    "@typescript-eslint/type-utils": 5.59.6
+    "@typescript-eslint/utils": 5.59.6
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
     debug: ^4.3.4
     grapheme-splitter: ^1.0.4
     ignore: ^5.2.0
@@ -4156,11 +4224,16 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
+<<<<<<< HEAD
   checksum: cc0e5ad8d70e140f0dada2fd1ad69d7c31d3f3dfe75939286fdc3950ff2e37033889acc7c9d92c074b67de3bbb6e46916d688e848fb98dde63b23c08a8b07884
+=======
+  checksum: fc495b5eadc70603f0d677921a70f151ac94453ebd76b77abbf7ed213c09daf05a3e2b2e2b16139b30dc6574d068d988e4e53c017759f3d3307fa394cfd4ae39
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
   languageName: node
   linkType: hard
 
 "@typescript-eslint/experimental-utils@npm:^5.0.0":
+<<<<<<< HEAD
   version: 5.59.5
   resolution: "@typescript-eslint/experimental-utils@npm:5.59.5"
   dependencies:
@@ -4168,22 +4241,41 @@ __metadata:
   peerDependencies:
     eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
   checksum: 38257173191d0a1fc13339229c6c727202420abc3e05522b93bed105c7f42e7470eadc38945385b4e06a5024f66e6021fa5117e1b3a34858ef736c4f9f57116f
+=======
+  version: 5.59.6
+  resolution: "@typescript-eslint/experimental-utils@npm:5.59.6"
+  dependencies:
+    "@typescript-eslint/utils": 5.59.6
+  peerDependencies:
+    eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
+  checksum: bc960c4d455cbc5b6a291e687064004fad56cc000f96e49398c2abd29d12a4cfb4e8e88f1fc643ef58989ff0fefb2f3ce288ec01ee1efb1616005fb21611e363
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
   languageName: node
   linkType: hard
 
 "@typescript-eslint/parser@npm:^5.33.1, @typescript-eslint/parser@npm:^5.5.0":
+<<<<<<< HEAD
   version: 5.59.5
   resolution: "@typescript-eslint/parser@npm:5.59.5"
   dependencies:
     "@typescript-eslint/scope-manager": 5.59.5
     "@typescript-eslint/types": 5.59.5
     "@typescript-eslint/typescript-estree": 5.59.5
+=======
+  version: 5.59.6
+  resolution: "@typescript-eslint/parser@npm:5.59.6"
+  dependencies:
+    "@typescript-eslint/scope-manager": 5.59.6
+    "@typescript-eslint/types": 5.59.6
+    "@typescript-eslint/typescript-estree": 5.59.6
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
     debug: ^4.3.4
   peerDependencies:
     eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
   peerDependenciesMeta:
     typescript:
       optional: true
+<<<<<<< HEAD
   checksum: ef4122074f2c00be1dabbb3fb5534280f81b45f8de6c1a696092af5175684fea65bc002814546d06f880ea5beff2006589e2633662e92d65035437c8e2d9134c
   languageName: node
   linkType: hard
@@ -4204,6 +4296,28 @@ __metadata:
   dependencies:
     "@typescript-eslint/typescript-estree": 5.59.5
     "@typescript-eslint/utils": 5.59.5
+=======
+  checksum: 1f6e259f501e3d13f9632bd71da2cf3d11150f1276079522e8d5c392a07c3aea867c855481981fca3bf32beb6bef046ef64cdfceba8ea4150f27099e44d9a92c
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/scope-manager@npm:5.59.6":
+  version: 5.59.6
+  resolution: "@typescript-eslint/scope-manager@npm:5.59.6"
+  dependencies:
+    "@typescript-eslint/types": 5.59.6
+    "@typescript-eslint/visitor-keys": 5.59.6
+  checksum: 65cce7b3fc320e264ef966da9a26bb7cba014ec5a0c9c5518cb08a624d67ac6eb67dd8e2df49b33eeaaaacaf42c73f291d56f93a9d1ec82c58bd1e7e872e530b
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/type-utils@npm:5.59.6":
+  version: 5.59.6
+  resolution: "@typescript-eslint/type-utils@npm:5.59.6"
+  dependencies:
+    "@typescript-eslint/typescript-estree": 5.59.6
+    "@typescript-eslint/utils": 5.59.6
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
     debug: ^4.3.4
     tsutils: ^3.21.0
   peerDependencies:
@@ -4211,6 +4325,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
+<<<<<<< HEAD
   checksum: 9ef2b219c71abe3d2ffa4c791ec3da8d120b6a202e7f9c7722d1e8193f8709d6ebec2abc2862b9fa78dffe6214d033898d21c925fc961feb4488070b66aab9f5
   languageName: node
   linkType: hard
@@ -4228,6 +4343,25 @@ __metadata:
   dependencies:
     "@typescript-eslint/types": 5.59.5
     "@typescript-eslint/visitor-keys": 5.59.5
+=======
+  checksum: f8e09dc16f413090ec464d48bd86e1b44a569e5a6ed78370f3e8132e80a464dfcdc1525f4f0706b79e397841b1865016cb38353475264beec49851d78a7fdd36
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/types@npm:5.59.6":
+  version: 5.59.6
+  resolution: "@typescript-eslint/types@npm:5.59.6"
+  checksum: e898ca629d95b69f5dbfb7c9a3d28f943e5a372d37bf7efaefb41341d2d7147372cd4956b35b637e9b3a1b8555d64a5b35776650b815c4227b114513247ec2b5
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/typescript-estree@npm:5.59.6":
+  version: 5.59.6
+  resolution: "@typescript-eslint/typescript-estree@npm:5.59.6"
+  dependencies:
+    "@typescript-eslint/types": 5.59.6
+    "@typescript-eslint/visitor-keys": 5.59.6
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
     debug: ^4.3.4
     globby: ^11.1.0
     is-glob: ^4.0.3
@@ -4236,6 +4370,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
+<<<<<<< HEAD
   checksum: 10a8c01ad53da115ca698668941dcb18c497035ba07faf08237bfa3ab92185bdfaf1df93562915a936b49e9f72a4cc6b10b1d9296b7cdc8c34ba0ca323c37677
   languageName: node
   linkType: hard
@@ -4243,17 +4378,33 @@ __metadata:
 "@typescript-eslint/utils@npm:5.59.5, @typescript-eslint/utils@npm:^5.58.0":
   version: 5.59.5
   resolution: "@typescript-eslint/utils@npm:5.59.5"
+=======
+  checksum: 65b7879e8cd4ccb987c1e1fa75cd84250cb46799ba0de6cdcaec70f6700b45ae4efcebb24163ca7946152e1b12595ee58e35bfb31ea6d35b3f39deaf973d4f1a
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/utils@npm:5.59.6, @typescript-eslint/utils@npm:^5.58.0":
+  version: 5.59.6
+  resolution: "@typescript-eslint/utils@npm:5.59.6"
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
   dependencies:
     "@eslint-community/eslint-utils": ^4.2.0
     "@types/json-schema": ^7.0.9
     "@types/semver": ^7.3.12
+<<<<<<< HEAD
     "@typescript-eslint/scope-manager": 5.59.5
     "@typescript-eslint/types": 5.59.5
     "@typescript-eslint/typescript-estree": 5.59.5
+=======
+    "@typescript-eslint/scope-manager": 5.59.6
+    "@typescript-eslint/types": 5.59.6
+    "@typescript-eslint/typescript-estree": 5.59.6
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
     eslint-scope: ^5.1.1
     semver: ^7.3.7
   peerDependencies:
     eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
+<<<<<<< HEAD
   checksum: 2703972653d3c6eab2423d9a2586908086afa3b89580969ed38e454bc372265d5ca9fadf7967e4ea639d482ad069f763981ef4a03a42d79df28f43f00ee9d43a
   languageName: node
   linkType: hard
@@ -4265,6 +4416,19 @@ __metadata:
     "@typescript-eslint/types": 5.59.5
     eslint-visitor-keys: ^3.3.0
   checksum: 94db281ec8ea3a7ede46763aaa0d3349e035b19334fd03e2e560f89c70faebcfa937d51b53d2eaad2506b60a5d901428cc8b5a65ad8e90ca1c12a133dbe977fc
+=======
+  checksum: 40ffe1d2f1fbf6c30aa05f4a68785fb1e77aa09772ea45b001daf4068e504830cf60a441a819b2c6ffe4a19216aba404869300b2ce6bc2a67d093f74ded504a7
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/visitor-keys@npm:5.59.6":
+  version: 5.59.6
+  resolution: "@typescript-eslint/visitor-keys@npm:5.59.6"
+  dependencies:
+    "@typescript-eslint/types": 5.59.6
+    eslint-visitor-keys: ^3.3.0
+  checksum: 8f216411344f5ed618ab838fa3fc4b04f3041f33e08d9b160df4db988f496c71f934c4b0362f686ce63ecf7f5d926c67190d5116c91945c1957544728449ec6b
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
   languageName: node
   linkType: hard
 
@@ -4976,9 +5140,15 @@ __metadata:
   linkType: hard
 
 "axe-core@npm:^4.6.2":
+<<<<<<< HEAD
   version: 4.7.0
   resolution: "axe-core@npm:4.7.0"
   checksum: f086bcab42be1761ba2b0b127dec350087f4c3a853bba8dd58f69d898cefaac31a1561da23146f6f3c07954c76171d1f2ce460e555e052d2b02cd79af628fa4a
+=======
+  version: 4.7.1
+  resolution: "axe-core@npm:4.7.1"
+  checksum: ff6fb92d6cadb749977af72b7d28009dec2b1842d4fdc4114a295ce973a39d0ac477e541be360eb9482a8d63f55840196813d7d892c0bd8437f52d9f7349c788
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
   languageName: node
   linkType: hard
 
@@ -6905,9 +7075,15 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.4.284":
+<<<<<<< HEAD
   version: 1.4.394
   resolution: "electron-to-chromium@npm:1.4.394"
   checksum: db511decf3436f7293602ee6f4c363a5ed8e69f9b7edeb541d31c60950fe0dffc719027e1191a2151e0478658c5debe7059f4ee0b2c4bf8e5476c945e726816d
+=======
+  version: 1.4.395
+  resolution: "electron-to-chromium@npm:1.4.395"
+  checksum: 9aa88ce28aa77ece5f839c02453292924680f4c647719871c72efd3faf139ac58784750a590f022efed62f3b8b5ca7969a1e89d8776806669ad75df8580bef5b
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
   languageName: node
   linkType: hard
 
@@ -7801,6 +7977,7 @@ __metadata:
   version: 2.2.0
   resolution: "fast-uri@npm:2.2.0"
   checksum: edac64d50628f21d562cdc19ea86f5af00902dbb09d2f96fff5974e5317157825e9aa163af9defd11a0818aac6ea2e9958597bed98dd041200a08a976809d08b
+<<<<<<< HEAD
   languageName: node
   linkType: hard
 
@@ -7841,6 +8018,8 @@ __metadata:
   version: 3.0.1
   resolution: "fastify-plugin@npm:3.0.1"
   checksum: 131ba0a388f777829c3fb0fd5b75cf057688ce6d0ca354fb1ebf829767a8c853b0825762b9185b5200097454df0ede2f3095da2efe1aa1b3736d07f194e6d374
+=======
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
   languageName: node
   linkType: hard
 
@@ -8214,10 +8393,11 @@ __metadata:
   resolution: "frontend@workspace:apps/frontend"
   dependencies:
     "@core/lib": "*"
-    "@emotion/react": ^11.10.0
+    "@emotion/react": ^11.11.0
     "@emotion/styled": ^11.10.0
     "@mui/icons-material": ^5.8.4
     "@mui/material": ^5.10.0
+    "@mui/types": ^7.2.4
     "@reduxjs/toolkit": ^1.8.4
     "@testing-library/jest-dom": ^5.16.5
     "@testing-library/react": ^13.3.0
@@ -8227,15 +8407,19 @@ __metadata:
     "@types/node": ^18.7.5
     "@types/react": ^18.0.17
     "@types/react-dom": ^18.0.6
+    "@types/react-leaflet-markercluster": ^3.0.1
     "@types/react-redux": ^7.1.24
     "@types/react-router-dom": ^5.3.3
     axios: ^0.27.2
     env-cmd: ^10.1.0
+    leaflet: ^1.9.3
+    leaflet-defaulticon-compatibility: ^0.1.1
     mobx: ^6.5.0
     mobx-react-lite: ^3.4.0
     react: ^18.2.0
     react-dom: ^18.2.0
     react-leaflet: ^4.2.1
+    react-leaflet-markercluster: ^3.0.0-rc1
     react-redux: ^8.0.2
     react-router-dom: ^6.3.0
     react-scripts: 5.0.1
@@ -10879,6 +11063,32 @@ __metadata:
   languageName: node
   linkType: hard
 
+<<<<<<< HEAD
+=======
+"leaflet-defaulticon-compatibility@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "leaflet-defaulticon-compatibility@npm:0.1.1"
+  checksum: c3ffcb1d583322694d75d0a303e85d803057ced5a021cbf6aba0670d2307fb5d6c182c5737f6345dfd571321cdc1340590745a631421782a52b28f53f9ec15a2
+  languageName: node
+  linkType: hard
+
+"leaflet.markercluster@npm:^1.4.1":
+  version: 1.5.3
+  resolution: "leaflet.markercluster@npm:1.5.3"
+  peerDependencies:
+    leaflet: ^1.3.1
+  checksum: abf0d0befbc78b7f178a330791554f0e4fd7170dbe2e6d59f387b627d914f4633b0541a9028fe5d11cf842c09c8dbb56ae6bd9d1d08c5ce35e32541c8f1eacd1
+  languageName: node
+  linkType: hard
+
+"leaflet@npm:^1.6.0, leaflet@npm:^1.9.3":
+  version: 1.9.3
+  resolution: "leaflet@npm:1.9.3"
+  checksum: f8bc33215e6aed8488cb3d32511b943ff093c1747bcda8a39116e24fe714e12525f1a6843b6a79940ece4cf8d2a86e2cb1d7b80fc550344b3182659b19231a04
+  languageName: node
+  linkType: hard
+
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
 "leven@npm:^3.1.0":
   version: 3.1.0
   resolution: "leven@npm:3.1.0"
@@ -13288,12 +13498,21 @@ __metadata:
   linkType: hard
 
 "postcss-selector-parser@npm:^6.0.10, postcss-selector-parser@npm:^6.0.11, postcss-selector-parser@npm:^6.0.2, postcss-selector-parser@npm:^6.0.4, postcss-selector-parser@npm:^6.0.5, postcss-selector-parser@npm:^6.0.9":
+<<<<<<< HEAD
   version: 6.0.12
   resolution: "postcss-selector-parser@npm:6.0.12"
   dependencies:
     cssesc: ^3.0.0
     util-deprecate: ^1.0.2
   checksum: f166ed4350511f6fb4a7e82aaaa6dfd81a1e648d4567ca15a3ca87b7ea2e55a8c136fb0ae9456b7b88a390c160f05d06bd1c69f47d7e331b53b70941e06e90fe
+=======
+  version: 6.0.13
+  resolution: "postcss-selector-parser@npm:6.0.13"
+  dependencies:
+    cssesc: ^3.0.0
+    util-deprecate: ^1.0.2
+  checksum: f89163338a1ce3b8ece8e9055cd5a3165e79a15e1c408e18de5ad8f87796b61ec2d48a2902d179ae0c4b5de10fccd3a325a4e660596549b040bc5ad1b465f096
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
   languageName: node
   linkType: hard
 
@@ -13555,11 +13774,19 @@ __metadata:
   linkType: hard
 
 "qs@npm:^6.11.0":
+<<<<<<< HEAD
   version: 6.11.1
   resolution: "qs@npm:6.11.1"
   dependencies:
     side-channel: ^1.0.4
   checksum: 82ee78ef12a16f3372fae5b64f76f8aedecb000feea882bbff1af146c147f6eb66b08f9c3f34d7e076f28563586956318b9b2ca41141846cdd6d5ad6f241d52f
+=======
+  version: 6.11.2
+  resolution: "qs@npm:6.11.2"
+  dependencies:
+    side-channel: ^1.0.4
+  checksum: e812f3c590b2262548647d62f1637b6989cc56656dc960b893fe2098d96e1bd633f36576f4cd7564dfbff9db42e17775884db96d846bebe4f37420d073ecdc0b
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
   languageName: node
   linkType: hard
 
@@ -13716,6 +13943,35 @@ __metadata:
   version: 18.2.0
   resolution: "react-is@npm:18.2.0"
   checksum: e72d0ba81b5922759e4aff17e0252bd29988f9642ed817f56b25a3e217e13eea8a7f2322af99a06edb779da12d5d636e9fda473d620df9a3da0df2a74141d53e
+  languageName: node
+  linkType: hard
+
+"react-leaflet-markercluster@npm:^3.0.0-rc1":
+  version: 3.0.0-rc1
+  resolution: "react-leaflet-markercluster@npm:3.0.0-rc1"
+  dependencies:
+    "@react-leaflet/core": ^1.0.2
+    leaflet: ^1.6.0
+    leaflet.markercluster: ^1.4.1
+    react-leaflet: ^3.0.0
+  peerDependencies:
+    leaflet: ^1.6.0
+    leaflet.markercluster: ^1.4.1
+    react-leaflet: ^3.0.0
+  checksum: 9eb0a9259efdcbe03fcdbd9e0db330c1e6c2901d58f2f75be73a795bfa9fd211fd5dc1e88b81cb9fe778db3d9e160ba9f93297f93e0182205847a00e71c3cbaf
+  languageName: node
+  linkType: hard
+
+"react-leaflet@npm:^3.0.0":
+  version: 3.2.5
+  resolution: "react-leaflet@npm:3.2.5"
+  dependencies:
+    "@react-leaflet/core": ^1.1.1
+  peerDependencies:
+    leaflet: ^1.7.1
+    react: ^17.0.1
+    react-dom: ^17.0.1
+  checksum: 503b7cee8acc12e0e2c5e7675432e7ef5742463e3e5420282ce60a9efd306430caefae3cb282c976e3df7665f19aef5b49cdce44a034979b4ea3ee968c2621d2
   languageName: node
   linkType: hard
 
@@ -15052,6 +15308,7 @@ __metadata:
   languageName: node
   linkType: hard
 
+<<<<<<< HEAD
 "stream-wormhole@npm:^1.1.0":
   version: 1.1.0
   resolution: "stream-wormhole@npm:1.1.0"
@@ -15059,6 +15316,8 @@ __metadata:
   languageName: node
   linkType: hard
 
+=======
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
 "streamsearch@npm:^1.1.0":
   version: 1.1.0
   resolution: "streamsearch@npm:1.1.0"
@@ -15904,49 +16163,86 @@ __metadata:
   languageName: node
   linkType: hard
 
+<<<<<<< HEAD
 "turbo-darwin-64@npm:1.9.4":
   version: 1.9.4
   resolution: "turbo-darwin-64@npm:1.9.4"
+=======
+"turbo-darwin-64@npm:1.9.5":
+  version: 1.9.5
+  resolution: "turbo-darwin-64@npm:1.9.5"
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
+<<<<<<< HEAD
 "turbo-darwin-arm64@npm:1.9.4":
   version: 1.9.4
   resolution: "turbo-darwin-arm64@npm:1.9.4"
+=======
+"turbo-darwin-arm64@npm:1.9.5":
+  version: 1.9.5
+  resolution: "turbo-darwin-arm64@npm:1.9.5"
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
+<<<<<<< HEAD
 "turbo-linux-64@npm:1.9.4":
   version: 1.9.4
   resolution: "turbo-linux-64@npm:1.9.4"
+=======
+"turbo-linux-64@npm:1.9.5":
+  version: 1.9.5
+  resolution: "turbo-linux-64@npm:1.9.5"
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
   conditions: os=linux & cpu=x64
   languageName: node
   linkType: hard
 
+<<<<<<< HEAD
 "turbo-linux-arm64@npm:1.9.4":
   version: 1.9.4
   resolution: "turbo-linux-arm64@npm:1.9.4"
+=======
+"turbo-linux-arm64@npm:1.9.5":
+  version: 1.9.5
+  resolution: "turbo-linux-arm64@npm:1.9.5"
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
   conditions: os=linux & cpu=arm64
   languageName: node
   linkType: hard
 
+<<<<<<< HEAD
 "turbo-windows-64@npm:1.9.4":
   version: 1.9.4
   resolution: "turbo-windows-64@npm:1.9.4"
+=======
+"turbo-windows-64@npm:1.9.5":
+  version: 1.9.5
+  resolution: "turbo-windows-64@npm:1.9.5"
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
+<<<<<<< HEAD
 "turbo-windows-arm64@npm:1.9.4":
   version: 1.9.4
   resolution: "turbo-windows-arm64@npm:1.9.4"
+=======
+"turbo-windows-arm64@npm:1.9.5":
+  version: 1.9.5
+  resolution: "turbo-windows-arm64@npm:1.9.5"
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
 "turbo@npm:^1.4.3":
+<<<<<<< HEAD
   version: 1.9.4
   resolution: "turbo@npm:1.9.4"
   dependencies:
@@ -15956,6 +16252,17 @@ __metadata:
     turbo-linux-arm64: 1.9.4
     turbo-windows-64: 1.9.4
     turbo-windows-arm64: 1.9.4
+=======
+  version: 1.9.5
+  resolution: "turbo@npm:1.9.5"
+  dependencies:
+    turbo-darwin-64: 1.9.5
+    turbo-darwin-arm64: 1.9.5
+    turbo-linux-64: 1.9.5
+    turbo-linux-arm64: 1.9.5
+    turbo-windows-64: 1.9.5
+    turbo-windows-arm64: 1.9.5
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
   dependenciesMeta:
     turbo-darwin-64:
       optional: true
@@ -15971,7 +16278,11 @@ __metadata:
       optional: true
   bin:
     turbo: bin/turbo
+<<<<<<< HEAD
   checksum: 178488e89e9d3f445dd8e3c1dd972d398aba4be801d6f42e76b7ff018b0be1fb7ce3b37da2c715205b62a56830308d14c67bf3c065dc79633e45beec98af7afa
+=======
+  checksum: f18fac80344bd26157cb5c66d564b97289f7ac7be07879cd09e13a164f10cfbd18101f92127bd251a21c2833863cf4f66153d50388741177027e1979f4acd462
+>>>>>>> f4eb0798164261280220049f0c2e49a0c445de55
   languageName: node
   linkType: hard
 

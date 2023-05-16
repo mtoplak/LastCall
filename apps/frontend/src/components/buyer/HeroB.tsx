@@ -5,7 +5,7 @@ import banner from '../../assets/images/drinks-banner.jpg';
 import NavbarB from './NavbarB';
 import CustomButton from '../homepage/CustomButton';
 import heroImg from '../../assets/images/homepageDrink.png';
-import SearchInput from './SearchInput';
+import SearchInput from './SearchProductsInput';
 
 const Hero = () => {
 	const CustomBox = styled(Box)(({ theme }) => ({
@@ -48,8 +48,9 @@ const Hero = () => {
 							Welcome to LastCall
 						</Typography>
 						<Title variant="h1">
-							Bridging the Gap Between Drink {" "} 
-							<span style={{ color: "#24336e" }}>Buyers</span> and Sellers
+							Bridging the Gap Between Drink{' '}
+							<span style={{ color: '#24336e' }}>Buyers</span> and
+							Sellers
 						</Title>
 						<Typography
 							variant="body2"
