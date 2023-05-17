@@ -40,6 +40,8 @@ function NavbarB() {
 	const { user, logOut } = useUserAuth();
 	console.log(user);
 	console.log(user?.email);
+	console.log(user?.accessToken);
+	console.log(user?.stsTokenManager?.accessToken);
 
 	const darkTheme = createTheme({
 		palette: {
@@ -192,7 +194,7 @@ function NavbarB() {
 										sx={{ p: 0 }}
 									>
 										<Avatar
-											alt="A"
+											alt={user?.email.toUpperCase()}
 											src="/static/images/avatar/2.jpg"
 										/>
 									</IconButton>

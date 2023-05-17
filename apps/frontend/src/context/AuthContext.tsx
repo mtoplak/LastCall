@@ -14,7 +14,7 @@ const AuthContext = createContext({
 	signIn: async (email: string, password: string): Promise<any> => {},
 	logOut: async (): Promise<any> => {},
 	resetPassword: async (email: string): Promise<any> => {},
-	user: null as User | null,
+	user: null as any,
 });
 
 export function AuthContextProviver({ children }: { children: any }) {
@@ -64,11 +64,22 @@ export function AuthContextProviver({ children }: { children: any }) {
 	}
 
 	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+		const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
 			console.log('Auth state changed');
 			console.log('Current user: ');
 			console.log(currentUser);
 			setUser(currentUser);
+
+			// Refresh the ID token when the user changes
+			if (currentUser) {
+				try {
+					const refreshedToken = await currentUser.getIdToken(true);
+					console.log('Token refreshed');
+					// You can use the refreshedToken if needed
+				} catch (error) {
+					console.error('Error refreshing token:', error);
+				}
+			}
 		});
 		return () => unsubscribe();
 	}, []);

@@ -25,6 +25,7 @@
 		"@nestjs/mongoose": "^9.2.2",
 		"@nestjs/platform-express": "^9.0.9",
 		"@nestjs/platform-fastify": "^9.0.9",
+		"firebase-admin": "^11.8.0",
 		"mongoose": "^7.1.1",
 		"reflect-metadata": "^0.1.13",
 		"rimraf": "^3.0.2",

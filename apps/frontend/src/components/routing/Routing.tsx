@@ -41,3 +41,11 @@ const Routing = () => {
 	);
 };
 export default Routing;
+
+/*
+
+					<Route element={<ProtectedRoute />}>
+						<Route path="basket" element={<Basket />}></Route>
+					</Route>
+
+					*/

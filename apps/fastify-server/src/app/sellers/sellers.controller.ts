@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Post, Param, Patch, Delete } from "@nestjs/common";
+import { Body, Controller, Get, Post, Param, Patch, Delete, UseGuards } from "@nestjs/common";
 import { SellersService } from "./sellers.service";
+import { FirebaseAuthMiddleware } from "src/firebase-auth.middleware";
 
 @Controller('sellers')
 export class SellersController {
@@ -35,7 +36,7 @@ export class SellersController {
             website,
             email,
             password,
-            );
+        );
         return { id: generatedID };
     }
 
@@ -83,11 +84,12 @@ export class SellersController {
             website,
             email,
             password,
-            );
+        );
         return null;
     }
 
     @Delete(':id')
+    @UseGuards(FirebaseAuthMiddleware) // ne dela ???
     async removeSeller(@Param('id') id: string) {
         await this.sellersService.removeSeller(id);
         return null;

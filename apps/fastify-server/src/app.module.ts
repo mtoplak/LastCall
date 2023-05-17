@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { HomeModule } from './app/home/home.module';
 import { AppService } from './app.service';
@@ -8,6 +8,7 @@ import { ProductsModule } from './app/products/products.module';
 import { BuyersModule } from './app/buyers/buyers.module';
 import { SellersModule } from './app/sellers/sellers.module';
 import { OrdersModule } from './app/orders/orders.module';
+import { FirebaseAuthMiddleware } from './firebase-auth.middleware';
 
 const databaseHost = require("../constants").databaseHost;
 
@@ -26,4 +27,16 @@ const databaseHost = require("../constants").databaseHost;
 	controllers: [AppController],
 	providers: [AppService],
 })
-export class AppModule { }
+export class AppModule implements NestModule {
+	configure(consumer: MiddlewareConsumer) {
+		consumer
+			.apply(FirebaseAuthMiddleware)
+			.forRoutes('/orders'); // Apply the middleware to these routes
+		consumer
+			.apply(FirebaseAuthMiddleware)
+			.exclude(
+				{ path: 'seller', method: RequestMethod.ALL }, // Exclude all routes that start with 'seller'
+			)
+			.forRoutes({ path: 'sellers', method: RequestMethod.POST }); // Apply the middleware only to the POST method of /buyers route
+	}
+}
