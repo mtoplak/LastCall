@@ -13,7 +13,7 @@ export const ProductSchema = new mongoose.Schema({
     //orders: [{type: schema.Types.ObjectId, ref: "Order"}],
     seller: {type: schema.Types.ObjectId, ref: "Seller"},
     sale: { type: Number },
-    picture: { type: String, required: true },
+    picture: { type: String },
 });
 
 export interface Product extends mongoose.Document {
