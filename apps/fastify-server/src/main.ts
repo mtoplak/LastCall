@@ -6,6 +6,8 @@ import {
 import pino from 'pino';
 import pretty from 'pino-pretty';
 import { AppModule } from './app.module';
+import fmp = require('fastify-multipart');
+import fastifyMultipart from 'fastify-multipart';
 
 async function bootstrap() {
 	const app = await NestFactory.create<NestFastifyApplication>(
@@ -18,8 +20,10 @@ async function bootstrap() {
 		}),
 		{
 			logger: ['error', 'warn'],
-		}
+		},
 	);
+	//app.register(fmp);
+	//app.register(fastifyMultipart);
 	app.enableCors();
 
 	/**
