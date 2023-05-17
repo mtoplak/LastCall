@@ -1,19 +1,9 @@
-<<<<<<< HEAD
+
 import { Controller, Get, Post, Req, Res, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { AppService } from './app.service';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import fastify = require('fastify');
 import { ApiFileBody, MulterFile } from '@webundsoehne/nest-fastify-file-upload';
-=======
-import { Controller, Get, Post, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
-import { AppService } from './app.service';
-import { extname } from 'path';
-import multer from 'multer';
-import { diskStorage } from 'multer';
-import { FileInterceptor } from '@nestjs/platform-express';
-//import { FilesInterceptor } from '@nestjs/platform-express';
-
->>>>>>> 195a6bde2a3fc5ff3fa348f3eaff4475bd5ac162
 
 @Controller('files')
 export class AppController {
@@ -23,7 +13,6 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
-<<<<<<< HEAD
 /*
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
@@ -47,7 +36,7 @@ export class AppController {
     console.log(file);
   }
 
-=======
+
 
   /*
   @Post('/upload')
@@ -124,5 +113,5 @@ function diskStorage(arg0: {
   throw new Error('Function not implemented.');
 }
 */
->>>>>>> 195a6bde2a3fc5ff3fa348f3eaff4475bd5ac162
+
 }
