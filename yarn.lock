@@ -36,30 +36,48 @@ __metadata:
     ajv: 8.12.0
     ajv-formats: 2.1.1
     jsonc-parser: 3.2.0
-    rxjs: 7.8.1
+    rxjs: 6.6.7
     source-map: 0.7.4
   peerDependencies:
     chokidar: ^3.5.2
   peerDependenciesMeta:
     chokidar:
       optional: true
-  checksum: a0a6932abc25b917bf0482ded4089151b72bfacb97206eacbd4924d7c9fef35a93fd5ed248b1f41bd3473dd7e8d95143f0a95c2b04452c88ff2a87cf6164ce28
+  checksum: f0ce18f6f916ef49f57eafa8e5884e683dda4478487329fc2d8bdff7ad0d705e842de2cdcf45048d049b4792155bfec8e180081e75d9f04519b0a10dc7752f3a
   languageName: node
   linkType: hard
 
-"@angular-devkit/schematics-cli@npm:16.0.1":
-  version: 16.0.1
-  resolution: "@angular-devkit/schematics-cli@npm:16.0.1"
+"@angular-devkit/core@npm:15.2.6":
+  version: 15.2.6
+  resolution: "@angular-devkit/core@npm:15.2.6"
   dependencies:
-    "@angular-devkit/core": 16.0.1
-    "@angular-devkit/schematics": 16.0.1
+    ajv: 8.12.0
+    ajv-formats: 2.1.1
+    jsonc-parser: 3.2.0
+    rxjs: 6.6.7
+    source-map: 0.7.4
+  peerDependencies:
+    chokidar: ^3.5.2
+  peerDependenciesMeta:
+    chokidar:
+      optional: true
+  checksum: ec1456cd6ac94f35c73bbb91b3f7511c023286690259e37abc66fea2b26fafa86e75e7b4754e2c8a747bd196e7bb3b80622cd59b52fd394c124e7cbb01d70598
+  languageName: node
+  linkType: hard
+
+"@angular-devkit/schematics-cli@npm:15.2.6":
+  version: 15.2.6
+  resolution: "@angular-devkit/schematics-cli@npm:15.2.6"
+  dependencies:
+    "@angular-devkit/core": 15.2.6
+    "@angular-devkit/schematics": 15.2.6
     ansi-colors: 4.1.3
     inquirer: 8.2.4
     symbol-observable: 4.0.0
     yargs-parser: 21.1.1
   bin:
     schematics: bin/schematics.js
-  checksum: fced944bd8948e256e706382a6748371a46a6ae235af14f26d3af7f255080f58f6bbf2ee792359ec00c36a351076252351d904a2ba125e77dba3ef250d0009f1
+  checksum: ba7aabe86b04d03ba4d3429fc27a485094ef6f317b07a77f9d2e758cc224c2cd164180622a37c73c7acf137b3cff5242dc85ca83a4516affccdc8b1858a9218d
   languageName: node
   linkType: hard
 
@@ -90,6 +108,7 @@ __metadata:
   linkType: hard
 
 "@babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.10.4, @babel/code-frame@npm:^7.12.13, @babel/code-frame@npm:^7.16.0, @babel/code-frame@npm:^7.16.7, @babel/code-frame@npm:^7.18.6, @babel/code-frame@npm:^7.21.4, @babel/code-frame@npm:^7.8.3":
+"@babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.10.4, @babel/code-frame@npm:^7.12.13, @babel/code-frame@npm:^7.16.0, @babel/code-frame@npm:^7.16.7, @babel/code-frame@npm:^7.18.6, @babel/code-frame@npm:^7.21.4, @babel/code-frame@npm:^7.8.3":
   version: 7.21.4
   resolution: "@babel/code-frame@npm:7.21.4"
   dependencies:
@@ -102,13 +121,29 @@ __metadata:
   version: 7.21.7
   resolution: "@babel/compat-data@npm:7.21.7"
   checksum: 28747eb3fc084d088ba2db0336f52118cfa730a57bdbac81630cae1f38ad0336605b95b3390325937802f344e0b7fa25e2f1b67e3ee2d7383b877f88dee0e51c
+"@babel/compat-data@npm:^7.17.7, @babel/compat-data@npm:^7.20.5, @babel/compat-data@npm:^7.21.5":
+  version: 7.21.7
+  resolution: "@babel/compat-data@npm:7.21.7"
+  checksum: 28747eb3fc084d088ba2db0336f52118cfa730a57bdbac81630cae1f38ad0336605b95b3390325937802f344e0b7fa25e2f1b67e3ee2d7383b877f88dee0e51c
   languageName: node
   linkType: hard
 
 "@babel/core@npm:^7.1.0, @babel/core@npm:^7.11.1, @babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.16.0, @babel/core@npm:^7.7.2, @babel/core@npm:^7.8.0":
   version: 7.21.8
   resolution: "@babel/core@npm:7.21.8"
+  version: 7.21.8
+  resolution: "@babel/core@npm:7.21.8"
   dependencies:
+    "@ampproject/remapping": ^2.2.0
+    "@babel/code-frame": ^7.21.4
+    "@babel/generator": ^7.21.5
+    "@babel/helper-compilation-targets": ^7.21.5
+    "@babel/helper-module-transforms": ^7.21.5
+    "@babel/helpers": ^7.21.5
+    "@babel/parser": ^7.21.8
+    "@babel/template": ^7.20.7
+    "@babel/traverse": ^7.21.5
+    "@babel/types": ^7.21.5
     "@ampproject/remapping": ^2.2.0
     "@babel/code-frame": ^7.21.4
     "@babel/generator": ^7.21.5
@@ -123,7 +158,9 @@ __metadata:
     debug: ^4.1.0
     gensync: ^1.0.0-beta.2
     json5: ^2.2.2
+    json5: ^2.2.2
     semver: ^6.3.0
+  checksum: f28118447355af2a90bd340e2e60699f94c8020517eba9b71bf8ebff62fa9e00d63f076e033f9dfb97548053ad62ada45fafb0d96584b1a90e8aef5a3b8241b1
   checksum: f28118447355af2a90bd340e2e60699f94c8020517eba9b71bf8ebff62fa9e00d63f076e033f9dfb97548053ad62ada45fafb0d96584b1a90e8aef5a3b8241b1
   languageName: node
   linkType: hard
@@ -131,7 +168,10 @@ __metadata:
 "@babel/eslint-parser@npm:^7.16.3":
   version: 7.21.8
   resolution: "@babel/eslint-parser@npm:7.21.8"
+  version: 7.21.8
+  resolution: "@babel/eslint-parser@npm:7.21.8"
   dependencies:
+    "@nicolo-ribaudo/eslint-scope-5-internals": 5.1.1-v1
     "@nicolo-ribaudo/eslint-scope-5-internals": 5.1.1-v1
     eslint-visitor-keys: ^2.1.0
     semver: ^6.3.0
