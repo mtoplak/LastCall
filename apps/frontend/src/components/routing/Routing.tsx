@@ -7,6 +7,7 @@ import Seller from '../seller/Seller';
 import Product from 'components/buyer/Product';
 import Suppliers from 'components/buyer/Suppliers';
 import SellerPage from 'components/seller/SellerPage';
+import Cart from 'components/buyer/Cart';
 
 const Routing = () => {
 	return (
@@ -18,6 +19,7 @@ const Routing = () => {
 				<Route path="/suppliers" element={<Suppliers />} />
 				<Route path="/product/:id" element={<Product />} />
 				<Route path="/supplier/:id" element={<SellerPage />} />
+				<Route path="/cart" element={<Cart />} />
 				<Route path="*" element={<Page404 />} />
 			</Routes>
 		</>

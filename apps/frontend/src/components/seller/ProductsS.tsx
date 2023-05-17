@@ -114,7 +114,7 @@ const ProductsS = () => {
 	const handleClose = () => setOpen(false);
 
 	return (
-		<Box sx={{ mt: 5, backgroundColor: 'white', py: 10 }}>
+		<Box sx={{ backgroundColor: '#f2f2f2', py: 10 }}>
 			<Container>
 				<PropertiesTextBox>
 					<Typography

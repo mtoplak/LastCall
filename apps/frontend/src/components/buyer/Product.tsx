@@ -49,7 +49,7 @@ function Product() {
 	}));
 
 	return (
-		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '100vh' }}>
+		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
 			<NavbarB />
 			<Container>
 				<CustomBox>

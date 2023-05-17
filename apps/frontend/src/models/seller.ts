@@ -10,4 +10,5 @@ export interface ISeller {
     registerNumber: number;
     tip: string;
     phoneNumber: string;
+    website: string;
 }
