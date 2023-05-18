@@ -29,6 +29,9 @@ import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 //import MarkerClusterGroupProps from 'react-leaflet-markercluster';
 import 'leaflet/dist/leaflet.css';
 import 'react-leaflet-markercluster/dist/styles.min.css';
+import PropertiesBox from 'components/ui/PropertiesBox';
+import PropertiesTextBox from 'components/ui/PropertiesTextBox';
+import SellerContainer from 'components/ui/SellerContainer';
 L.Icon.Default.mergeOptions({
 	iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
 	iconUrl: require('leaflet/dist/images/marker-icon.png'),
@@ -44,31 +47,9 @@ function Suppliers() {
 	const [isLoading, setIsLoading] = useState(false); // map
 	const [mapSuppliersData, setMapSuppliersData] = useState<any>([]);
 
-	const PropertiesBox = styled(Box)(({ theme }) => ({
-		display: 'flex',
-		justifyContent: 'space-between',
-		flexWrap: 'wrap', // Allow products to wrap to the next line
-		marginTop: theme.spacing(5),
-		[theme.breakpoints.down('md')]: {
-			flexDirection: 'column',
-			alignItems: 'center',
-		},
-	}));
-
 	useEffect(() => {
 		document.title = 'Suppliers';
 	}, []);
-
-	const SellerContainer = styled(Box)(({ theme }) => ({
-		flex: '0 0 25.33%', // Set the width to one-third of the container
-		marginBottom: theme.spacing(4), // Add some margin between the products
-	}));
-
-	const PropertiesTextBox = styled(Box)(({ theme }) => ({
-		[theme.breakpoints.down('md')]: {
-			textAlign: 'center',
-		},
-	}));
 
 	useEffect(() => {
 		const fetchData = async () => {

@@ -25,6 +25,9 @@ import api from 'services/api';
 import sellerProfile from '../../assets/images/sellerProfile.png';
 import NavbarB from 'components/buyer/NavbarB';
 import Footer from 'components/homepage/Footer';
+import Title from 'components/ui/Title';
+import PropertiesTextBox from 'components/ui/PropertiesTextBox';
+import CustomBox from 'components/ui/CustomBox';
 
 function SellerPage() {
 	const [seller, setSller] = useState<ISeller>();
@@ -43,32 +46,6 @@ function SellerPage() {
 		fetchData();
 	}, [id]);
 
-	const CustomBox = styled(Box)(({ theme }) => ({
-		display: 'flex',
-		justifyContent: 'center',
-		gap: theme.spacing(7),
-		[theme.breakpoints.down('md')]: {
-			flexDirection: 'column',
-			alignItems: 'center',
-			textAlign: 'center',
-		},
-	}));
-	const Title = styled(Typography)(({ theme }) => ({
-		fontSize: '64px',
-		color: '#262626',
-		fontWeight: 'bold',
-		margin: theme.spacing(4, 0, 4, 0),
-		[theme.breakpoints.down('sm')]: {
-			fontSize: '40px',
-		},
-	}));
-	
-	const PropertiesTextBox = styled(Box)(({ theme }) => ({
-		[theme.breakpoints.down('md')]: {
-			textAlign: 'center',
-		},
-	}));
-
 	const [open, setOpen] = React.useState(false);
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -80,105 +57,108 @@ function SellerPage() {
 
 	return (
 		<>
-		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '100vh' }}>
-			<NavbarB />
-			<Container>
-				<CustomBox>
-					<Box sx={{ flex: '1', marginTop: '5rem' }}>
-						<Typography
-							variant="body2"
-							sx={{
-								fontSize: '18px',
-								color: '#687690',
-								fontWeight: '500',
-								mt: 10,
-								mb: 4,
-							}}
-						>
-							Hi There!
-						</Typography>
-						<Title variant="h1">
-							We are{' '}
-							<span style={{ color: '#24336e' }}>
-								{seller?.title}
-							</span>
-						</Title>
-						<Typography
-							variant="body2"
-							sx={{ fontSize: '18px', color: '#5A6473', my: 4 }}
-						>
-							{seller?.title} is a {seller?.tip} located in{' '}
-							{seller?.country} in {seller?.city} on{' '}
-							{seller?.address}. For any further information
-							please contact us!
-						</Typography>
-						<Button
-							variant="outlined"
-							onClick={handleClickOpen}
-							sx={{
-								backgroundColor: '#0F1B4C',
-								color: '#FFFFFF',
-								border: '2px solid #0F1B4C',
-								'&:hover': {
-									backgroundColor: '#FFFFFF',
-									color: '#0F1B4C',
-								},
-							}}
-						>
-							Contact us
-						</Button>
-						<Dialog
-							open={open}
-							onClose={handleClose}
-							aria-labelledby="alert-dialog-title"
-							aria-describedby="alert-dialog-description"
-						>
-							<DialogTitle id="alert-dialog-title">
-								{'Contact us via:'}
-							</DialogTitle>
-							<DialogContent>
-								<DialogContentText id="alert-dialog-description">
-									Email: {seller?.email}
-									<br />
-									Phone: {seller?.phoneNumber}
-									<br />
-									Website: {seller?.website}
-								</DialogContentText>
-							</DialogContent>
-							<DialogActions>
-								<Button onClick={handleClose}>Close</Button>
-							</DialogActions>
-						</Dialog>
-					</Box>
+			<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '100vh' }}>
+				<NavbarB />
+				<Container>
+					<CustomBox>
+						<Box sx={{ flex: '1', marginTop: '5rem' }}>
+							<Typography
+								variant="body2"
+								sx={{
+									fontSize: '18px',
+									color: '#687690',
+									fontWeight: '500',
+									mt: 10,
+									mb: 4,
+								}}
+							>
+								Hi There!
+							</Typography>
+							<Title variant="h1">
+								We are{' '}
+								<span style={{ color: '#24336e' }}>
+									{seller?.title}
+								</span>
+							</Title>
+							<Typography
+								variant="body2"
+								sx={{
+									fontSize: '18px',
+									color: '#5A6473',
+									my: 4,
+								}}
+							>
+								{seller?.title} is a {seller?.tip} located in{' '}
+								{seller?.country} in {seller?.city} on{' '}
+								{seller?.address}. For any further information
+								please contact us!
+							</Typography>
+							<Button
+								variant="outlined"
+								onClick={handleClickOpen}
+								sx={{
+									backgroundColor: '#0F1B4C',
+									color: '#FFFFFF',
+									border: '2px solid #0F1B4C',
+									'&:hover': {
+										backgroundColor: '#FFFFFF',
+										color: '#0F1B4C',
+									},
+								}}
+							>
+								Contact us
+							</Button>
+							<Dialog
+								open={open}
+								onClose={handleClose}
+								aria-labelledby="alert-dialog-title"
+								aria-describedby="alert-dialog-description"
+							>
+								<DialogTitle id="alert-dialog-title">
+									{'Contact us via:'}
+								</DialogTitle>
+								<DialogContent>
+									<DialogContentText id="alert-dialog-description">
+										Email: {seller?.email}
+										<br />
+										Phone: {seller?.phoneNumber}
+										<br />
+										Website: {seller?.website}
+									</DialogContentText>
+								</DialogContent>
+								<DialogActions>
+									<Button onClick={handleClose}>Close</Button>
+								</DialogActions>
+							</Dialog>
+						</Box>
 
-					<Box sx={{ flex: '1.25' }}>
-						<img
-							src={sellerProfile}
-							alt="sellerProfile"
-							style={{ maxWidth: '100%', marginTop: '7rem' }}
-						/>
-					</Box>
-				</CustomBox>
-			</Container>
-		</Box>
-		<Box sx={{ backgroundColor: '#f2f2f2', py: 3 }}>
-			<Container>
-				<PropertiesTextBox>
-					<Typography
-						sx={{
-							color: '#000339',
-							fontSize: '35px',
-							fontWeight: 'bold',
-						}}
-					>
-						Our products
-					</Typography>
+						<Box sx={{ flex: '1.25' }}>
+							<img
+								src={sellerProfile}
+								alt="sellerProfile"
+								style={{ maxWidth: '100%', marginTop: '7rem' }}
+							/>
+						</Box>
+					</CustomBox>
+				</Container>
+			</Box>
+			<Box sx={{ backgroundColor: '#f2f2f2', py: 3 }}>
+				<Container>
+					<PropertiesTextBox>
+						<Typography
+							sx={{
+								color: '#000339',
+								fontSize: '35px',
+								fontWeight: 'bold',
+							}}
+						>
+							Our products
+						</Typography>
 					</PropertiesTextBox>
-			</Container>
-		</Box>
-		<Footer />
+				</Container>
+			</Box>
+			<Footer />
 		</>
-		
 	);
 }
 

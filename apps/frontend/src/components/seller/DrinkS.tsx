@@ -8,6 +8,10 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import api from '../../services/api';
+import InfoBox from 'components/ui/InfoBox';
+import ImgContainer from 'components/ui/ImgContainer';
+import HouseBox from 'components/ui/HouseBox';
+import Image from 'components/ui/Image';
 
 interface DrinkProps {
 	id: string;
@@ -15,41 +19,6 @@ interface DrinkProps {
 	img: string;
 	price: number;
 }
-
-const HouseBox = styled(Box)(({ theme }) => ({
-	borderRadius: theme.spacing(1),
-	maxWidth: 350,
-	backgroundColor: '#E6F0FF',
-	color: 'black',
-	boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-	transition: 'transform 0.3s ease-in-out',
-	margin: theme.spacing(2),
-	'&:hover': {
-		transform: 'scale(1.05)',
-	},
-	[theme.breakpoints.down('md')]: {
-		margin: theme.spacing(2, 0),
-	},
-}));
-
-const InfoBox = styled(Box)(({ theme }) => ({
-	display: 'flex',
-	flexDirection: 'column',
-	alignItems: 'center',
-	padding: theme.spacing(2),
-}));
-
-const ImgContainer = styled(Box)(({ theme }) => ({
-	width: '100%',
-	borderTopLeftRadius: theme.spacing(1),
-	borderTopRightRadius: theme.spacing(1),
-	overflow: 'hidden',
-}));
-
-const Image = styled('img')({
-	width: '100%',
-	height: 'auto',
-});
 
 const DrinkS: React.FC<DrinkProps> = ({ id, name, img, price }) => {
 	const style = {

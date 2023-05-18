@@ -19,6 +19,7 @@ import { useParams } from 'react-router-dom';
 import api from 'services/api';
 import NavbarB from './NavbarB';
 import productImage from '../../assets/images/fanta.jpg';
+import CustomBox from 'components/ui/CustomBox';
 
 function Product() {
 	const [drink, setDrink] = useState<IDrink>();
@@ -36,17 +37,6 @@ function Product() {
 		};
 		fetchData();
 	}, [id]);
-
-	const CustomBox = styled(Box)(({ theme }) => ({
-		display: 'flex',
-		justifyContent: 'center',
-		gap: theme.spacing(5),
-		[theme.breakpoints.down('md')]: {
-			flexDirection: 'column',
-			alignItems: 'center',
-			textAlign: 'center',
-		},
-	}));
 
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>

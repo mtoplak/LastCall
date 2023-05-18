@@ -16,18 +16,23 @@ import React, { ChangeEvent, useState, useEffect } from 'react';
 import api from 'services/api';
 import { IDrink } from 'models/drink';
 import drink1 from '../../assets/images/cocacola.jpg';
+import PropertiesTextBox from 'components/ui/PropertiesTextBox';
+import DrinkContainer from 'components/ui/DrinkContainer';
+import PropertiesBox from 'components/ui/PropertiesBox';
+
+const initialState = {
+	title: '',
+	drinkCategory: '',
+	packaging: '',
+	size: '',
+	price: 0,
+	stock: 0,
+	seller: '645d45c444ddfe8a7fef8986',
+};
 
 const ProductsS = () => {
 	//post
-	const [formData, setFormData] = useState({
-		title: '',
-		drinkCategory: '',
-		packaging: '',
-		size: '',
-		price: 0,
-		stock: 0,
-		seller: '645d45c444ddfe8a7fef8986',
-	});
+	const [formData, setFormData] = useState(initialState);
 
 	const handleFormSubmit = async () => {
 		try {
@@ -75,22 +80,6 @@ const ProductsS = () => {
 	}, []);
 	//...
 
-	const PropertiesBox = styled(Box)(({ theme }) => ({
-		display: 'flex',
-		justifyContent: 'space-between',
-		flexWrap: 'wrap', // Allow products to wrap to the next line
-		marginTop: theme.spacing(5),
-		[theme.breakpoints.down('md')]: {
-			flexDirection: 'column',
-			alignItems: 'center',
-		},
-	}));
-
-	const DrinkContainer = styled(Box)(({ theme }) => ({
-		flex: '0 0 25.33%', // Set the width to one-third of the container
-		marginBottom: theme.spacing(4), // Add some margin between the products
-	}));
-
 	const style = {
 		position: 'absolute' as 'absolute',
 		top: '50%',
@@ -102,12 +91,6 @@ const ProductsS = () => {
 		boxShadow: 24,
 		p: 4,
 	};
-
-	const PropertiesTextBox = styled(Box)(({ theme }) => ({
-		[theme.breakpoints.down('md')]: {
-			textAlign: 'center',
-		},
-	}));
 
 	const [open, setOpen] = React.useState(false);
 	const handleOpen = () => setOpen(true);
