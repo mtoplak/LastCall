@@ -13,7 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { ThemeProvider, createTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-const pages = ['Products', 'Suppliers', 'Contact'];
+const pages = ['Suppliers', 'Contact'];
 //const settings = ['Profile', 'Shopping cart', 'My Orders', 'Logout'];
 
 function NavbarB() {
@@ -136,18 +136,6 @@ function NavbarB() {
 								display: { xs: 'none', md: 'flex' },
 							}}
 						>
-							<Link to={'/buyer'}>
-								<Button
-									onClick={handleCloseNavMenu}
-									sx={{
-										my: 2,
-										color: 'white',
-										display: 'block',
-									}}
-								>
-									Products
-								</Button>
-							</Link>
 							<Link to="/suppliers">
 								<Button
 									onClick={handleCloseNavMenu}

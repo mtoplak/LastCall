@@ -1,6 +1,7 @@
 import { Typography, Box } from '@mui/material';
 import CustomContainer from 'components/ui/CustomContainer';
 import FooterLink from 'components/ui/FooterLink';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
 	return (
@@ -19,13 +20,13 @@ const Footer = () => {
 							Products
 						</Typography>
 
-						<FooterLink>Listing</FooterLink>
+						<FooterLink>All</FooterLink>
 						<br />
-						<FooterLink>Properties</FooterLink>
+						<FooterLink>Alcohol</FooterLink>
 						<br />
-						<FooterLink>Agents</FooterLink>
+						<FooterLink>Carbonated</FooterLink>
 						<br />
-						<FooterLink>Blog</FooterLink>
+						<FooterLink>Non-carbonated</FooterLink>
 					</Box>
 
 					<Box>
@@ -37,16 +38,14 @@ const Footer = () => {
 								mb: 2,
 							}}
 						>
-							Resources
+							Account
 						</Typography>
 
-						<FooterLink>Our Homes</FooterLink>
+						<FooterLink>My account</FooterLink>
 						<br />
-						<FooterLink>Stories</FooterLink>
+						<FooterLink>Sign in</FooterLink>
 						<br />
-						<FooterLink>Video</FooterLink>
-						<br />
-						<FooterLink>Free Trial</FooterLink>
+						<FooterLink>Register</FooterLink>
 					</Box>
 
 					<Box>
@@ -79,19 +78,24 @@ const Footer = () => {
 								mb: 2,
 							}}
 						>
-							Get in touch
+							Become a seller
 						</Typography>
 
-						<Typography
-							sx={{
-								fontSize: '16px',
-								color: '#7A7A7E',
-								fontWeight: '500',
-								mb: 2,
-							}}
-						>
-							You’ll find your next home, in any style you prefer.
-						</Typography>
+						<Link to={'/seller'}>
+							<Typography
+								sx={{
+									fontSize: '16px',
+									color: '#7A7A7E',
+									fontWeight: '500',
+									cursor: 'pointer',
+									'&:hover': {
+										color: '#000',
+									},
+								}}
+							>
+								Click here to become a seller.
+							</Typography>
+						</Link>
 					</Box>
 				</CustomContainer>
 			</CustomContainer>

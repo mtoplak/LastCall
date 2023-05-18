@@ -12,7 +12,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { ThemeProvider, createTheme } from '@mui/material';
 
-const pages = ['Products', 'Inventory', 'Contact'];
+const pages = [ 'Inventory', 'Contact'];
 const settings = ['Profile', 'Shopping cart', 'My Orders', 'Logout'];
 
 function NavbarS() {

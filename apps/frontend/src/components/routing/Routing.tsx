@@ -13,8 +13,7 @@ const Routing = () => {
 	return (
 		<>
 			<Routes>
-				<Route path="/" element={<Homepage />} />
-				<Route path="/buyer" element={<Buyer />} />
+				<Route path="/" element={<Buyer />} />
 				<Route path="/seller" element={<Seller />} />
 				<Route path="/suppliers" element={<Suppliers />} />
 				<Route path="/product/:id" element={<Product />} />

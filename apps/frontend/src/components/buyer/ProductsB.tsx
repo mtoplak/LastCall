@@ -51,18 +51,8 @@ const Products = () => {
 	console.log(filterType);
 	console.log(filteredDrinks);*/
 	return (
-		<Box sx={{ mt: 5, backgroundColor: '#f2f2f2', py: 10 }}>
+		<Box sx={{ backgroundColor: '#f2f2f2', py: 10 }}>
 			<Container>
-				<Box>
-					<SearchProductsInput
-						setFilterName={setFilterName}
-						setFilterLocation={setFilterLocation}
-						setFilterType={setFilterType}
-						filterLocation={filterLocation}
-						filterName={filterName}
-						filterType={filterType}
-					/>
-				</Box>
 				<PropertiesTextBox>
 					<Typography
 						sx={{
@@ -74,11 +64,21 @@ const Products = () => {
 						Products
 					</Typography>
 					<Typography
-						sx={{ color: '#5A6473', fontSize: '16px', mt: 1 }}
+						sx={{ color: '#5A6473', fontSize: '16px', mt: 1, mb: 2 }}
 					>
 						Everything that you're looking for!
 					</Typography>
 				</PropertiesTextBox>
+				<Box>
+					<SearchProductsInput
+						setFilterName={setFilterName}
+						setFilterLocation={setFilterLocation}
+						setFilterType={setFilterType}
+						filterLocation={filterLocation}
+						filterName={filterName}
+						filterType={filterType}
+					/>
+				</Box>
 				<PropertiesBox>
 					{filteredDrinks.length > 0 &&
 					(filterType !== 'any' ||

@@ -14,7 +14,7 @@ const Supplier: React.FC<DrinkProps> = ({ title, city, country, tip }) => {
 	return (
 		<HouseBox>
 			<InfoBox>
-				<Typography variant="h6" sx={{ fontWeight: '700' }}>
+				<Typography variant="h6" sx={{ fontWeight: '700'}}>
 					{title}
 				</Typography>
 				<Typography variant="body1" sx={{ my: 1 }}>

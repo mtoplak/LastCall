@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Hero from './HeroB';
 import Footer from 'components/homepage/Footer';
-import { Box, Container, LinearProgress, Typography } from '@mui/material';
+import {
+	Box,
+	Container,
+	Grid,
+	LinearProgress,
+	Typography,
+} from '@mui/material';
 import { ISeller } from 'models/seller';
 import api from 'services/api';
 import SearchSuppliersInput from './SearchSuppliersInput';
@@ -27,6 +33,7 @@ import PropertiesBox from 'components/ui/PropertiesBox';
 import PropertiesTextBox from 'components/ui/PropertiesTextBox';
 import SellerContainer from 'components/ui/SellerContainer';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
+import NavbarB from './NavbarB';
 L.Icon.Default.mergeOptions({
 	iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
 	iconUrl: require('leaflet/dist/images/marker-icon.png'),
@@ -169,9 +176,21 @@ function Suppliers() {
 
 	return (
 		<>
-			<Hero />
+			<NavbarB />
 			<Box sx={{ backgroundColor: '#f2f2f2', py: 10 }}>
 				<Container>
+					<PropertiesTextBox>
+						<Typography
+							sx={{
+								color: '#000339',
+								fontSize: '35px',
+								fontWeight: 'bold',
+								mb: 2,
+							}}
+						>
+							Suppliers
+						</Typography>
+					</PropertiesTextBox>
 					<Box>
 						<SearchSuppliersInput
 							setFilterName={setFilterName}
@@ -180,17 +199,6 @@ function Suppliers() {
 							setIsChecked={setIsChecked}
 						/>
 					</Box>
-					<PropertiesTextBox>
-						<Typography
-							sx={{
-								color: '#000339',
-								fontSize: '35px',
-								fontWeight: 'bold',
-							}}
-						>
-							Suppliers
-						</Typography>
-					</PropertiesTextBox>
 					{isChecked && !isLoading && mapSuppliersData.length > 0 && (
 						<PropertiesBox>
 							<MapContainer
@@ -231,49 +239,65 @@ function Suppliers() {
 						</Box>
 					)}
 
-					<PropertiesBox>
+					<Grid container spacing={2}>
 						{filteredSellers.length > 0 &&
 						(filterType !== 'any' ||
 							filterName !== '' ||
 							filterLocation !== 'any') ? (
 							filteredSellers.map((seller) => (
-								<Link
-									to={`/supplier/${seller._id}`}
+								<Grid
+									item
+									xs={12}
+									sm={6}
+									md={4}
 									key={seller._id}
 								>
-									<SellerContainer>
+									<Link
+										to={`/supplier/${seller._id}`}
+										key={seller._id}
+									>
 										<Supplier
 											title={seller.title}
 											tip={seller.tip}
 											city={seller.city}
 											country={seller.country}
 										/>
-									</SellerContainer>
-								</Link>
+									</Link>
+								</Grid>
 							))
 						) : (filterType !== 'any' ||
 								filterName !== '' ||
 								filterLocation !== 'any') &&
 						  filteredSellers.length === 0 ? (
-							<>Nothing found &#128549;</>
+							<Grid item xs={12}>
+								<Typography variant="body1">
+									Nothing found &#128549;
+								</Typography>
+							</Grid>
 						) : (
 							sellers.map((seller) => (
-								<Link
-									to={`/supplier/${seller.id}`}
+								<Grid
+									item
+									xs={12}
+									sm={6}
+									md={4}
 									key={seller.id}
 								>
-									<SellerContainer>
+									<Link
+										to={`/supplier/${seller.id}`}
+										key={seller._id}
+									>
 										<Supplier
 											title={seller.title}
 											tip={seller.tip}
 											city={seller.city}
 											country={seller.country}
 										/>
-									</SellerContainer>
-								</Link>
+									</Link>
+								</Grid>
 							))
 						)}
-					</PropertiesBox>
+					</Grid>
 				</Container>
 			</Box>
 			<Footer />

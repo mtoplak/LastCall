@@ -45,7 +45,7 @@ function PastOrders() {
 					pastOrders.map((order, index) => (
                     <Grid item xs={8} key={index}>
                         <Order
-                                id={order.id}
+                                _id={order._id}
                                 total={order.total}
                                 dateOfPurchase={order.dateOfPurchase}
                                 dateOfDelivery={order.dateOfDelivery}

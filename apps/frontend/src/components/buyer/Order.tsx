@@ -20,7 +20,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import picture from '../../assets/images/cocacola.jpg';
 
 interface OrderProps {
-	id: string;
+	_id: string;
 	products: IOrder[];
 	total: number;
 	dateOfPurchase: Date;
@@ -32,7 +32,7 @@ interface OrderProps {
 }
 
 const Order: React.FC<OrderProps> = ({
-	id,
+	_id,
 	products,
 	total,
 	dateOfPurchase,
@@ -56,7 +56,7 @@ const Order: React.FC<OrderProps> = ({
 			<AccordionDetails>
                 <Typography color={'#333333'}>
 					<b>ORDER ID:</b>
-					{id}
+					{_id}
 				</Typography>
 			</AccordionDetails>
 		</Accordion>
