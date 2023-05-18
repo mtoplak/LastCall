@@ -1,86 +1,62 @@
-import { Body, Controller, Get, Post, Param, Patch, Delete } from "@nestjs/common";
-import { OrdersService } from "./orders.service";
-import { Buyer } from "../buyers/buyers.model";
-import { Product } from "../products/product.model";
-import { Seller } from "../sellers/sellers.model";
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Param,
+  Patch,
+  Delete,
+} from '@nestjs/common';
+import { OrdersService } from './orders.service';
+import { Order } from './order.model';
 
 @Controller('orders')
 export class OrdersController {
-    constructor(private readonly ordersService: OrdersService) { }
+  constructor(private readonly ordersService: OrdersService) {}
 
-    @Post()
-    async addOrder(
-      @Body('products') products: { productId: string, quantity: number }[],
-      @Body('buyer') buyer: string,
-      @Body('seller') seller: string,
-      @Body('totalPrice') totalPrice: number,
-      @Body('lastDateOfDelivery') lastDateOfDelivery: Date,
-      @Body('address') address: string,
-      @Body('city') city: string,
-      @Body('country') country: string,
-    ) {
-      const productIds = products.map((product) => product.productId);
-      const quantities = products.map((product) => product.quantity);
-    
-      const generatedID = await this.ordersService.addOrder(
-        productIds,
-        buyer,
-        seller,
-        totalPrice,
-        lastDateOfDelivery,
-        address,
-        city,
-        country,
-        quantities
-      );
-    
-      return { id: generatedID };
-    }
-    
-    
+  @Post()
+  async addOrder(
+    @Body() orderData: Partial<Order>,
+    @Body('products') products: { productId: string; quantity: number }[],
+    @Body('seller') seller: string,
+    @Body('buyer') buyer: string,
+  ): Promise<{ id: string }> {
+    const productData = products || [];
 
-    @Get()
-    async getAllOrders() {
-        const orders = await this.ordersService.getAllOrders();
-        return orders;
-    }
+    const generatedID = await this.ordersService.addOrder(
+      orderData,
+      productData,
+      seller,
+      buyer,
+    );
 
-    @Get(':id')
-    async getSingleOrder(@Param('id') id: string) {
-        const order = await this.ordersService.getSingleOrder(id);
-        return order;
-    }
+    return { id: generatedID };
+  }
 
-    @Patch(':id')
-    async updateOrder(
-        @Param('id') id: string,
-        //@Body('products') products: string[],
-        @Body('buyer') buyer: Buyer,
-        @Body('seller') seller: Seller,
-        @Body('totalPrice') totalPrice: number,
-        @Body('lastDateOfDelivery') lastDateOfDelivery: Date,
-        @Body('address') address: string,
-        @Body('city') city: string,
-        @Body('country') country: string,
-    ) {
-        await this.ordersService.updateOrder(
-            id,
-            //products,
-            buyer,
-            seller,
-            totalPrice,
-            lastDateOfDelivery,
-            address,
-            city,
-            country,
-            );
-        return null;
-    }
+  @Get()
+  async getAllOrders(): Promise<Order[]> {
+    const orders = await this.ordersService.getAllOrders();
+    return orders;
+  }
 
-    @Delete(':id')
-    async removeOrder(@Param('id') id: string) {
-        await this.ordersService.removeOrder(id);
-        return null;
-    }
+  @Get(':id')
+  async getSingleOrder(@Param('id') id: string): Promise<Order> {
+    const order = await this.ordersService.getSingleOrder(id);
+    return order;
+  }
 
+  @Patch(':id')
+  async updateOrder(
+    @Param('id') orderId: string,
+    @Body() updatedOrderData: Partial<Order>,
+  ): Promise<{ success: boolean }> {
+    await this.ordersService.updateOrder(orderId, updatedOrderData);
+    return { success: true };
+  }
+
+  @Delete(':id')
+  async removeOrder(@Param('id') id: string): Promise<{ success: boolean }> {
+    await this.ordersService.removeOrder(id);
+    return { success: true };
+  }
 }

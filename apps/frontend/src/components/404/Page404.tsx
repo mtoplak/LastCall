@@ -2,30 +2,11 @@ import { Box, Container, Typography, styled } from '@mui/material';
 import { FC } from 'react';
 import heroImg from '../../assets/images/homepageDrink.png';
 import { Link } from 'react-router-dom';
-import CustomButton from 'components/homepage/CustomButton';
+import CustomButton from 'components/ui/CustomButton';
+import CustomBox from 'components/ui/CustomBox';
+import Title from 'components/ui/Title';
 
 const Page404: FC = () => {
-	const CustomBox = styled(Box)(({ theme }) => ({
-		display: 'flex',
-		justifyContent: 'center',
-		gap: theme.spacing(5),
-		[theme.breakpoints.down('md')]: {
-			flexDirection: 'column',
-			alignItems: 'center',
-			textAlign: 'center',
-		},
-	}));
-
-	const Title = styled(Typography)(({ theme }) => ({
-		fontSize: '64px',
-		color: '#000336',
-		fontWeight: 'bold',
-		margin: theme.spacing(4, 0, 4, 0),
-		[theme.breakpoints.down('sm')]: {
-			fontSize: '40px',
-		},
-	}));
-
 	return (
 		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '100vh' }}>
 			<Container>

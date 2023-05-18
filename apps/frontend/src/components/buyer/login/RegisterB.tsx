@@ -14,19 +14,9 @@ import {
 import { Link } from 'react-router-dom';
 import heroImg from '../../../assets/images/homepageDrink.png';
 import React from 'react';
+import CustomBox from 'components/ui/CustomBox';
 
 const RegisterB = () => {
-	const CustomBox = styled(Box)(({ theme }) => ({
-		display: 'flex',
-		justifyContent: 'center',
-		gap: theme.spacing(5),
-		[theme.breakpoints.down('md')]: {
-			flexDirection: 'column',
-			alignItems: 'center',
-			textAlign: 'center',
-		},
-	}));
-
 	const paperStyle = {
 		padding: 20,
 		height: '55vh',
@@ -40,15 +30,16 @@ const RegisterB = () => {
 		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '100vh' }}>
 			<Container>
 				<CustomBox>
-					<Box 
-					 component="form"
-					sx={{ flex: '1', marginTop: '10rem' }}>
+					<Box
+						component="form"
+						sx={{ flex: '1', marginTop: '10rem' }}
+					>
 						<Grid>
 							<Paper elevation={10} style={paperStyle}>
 								<Grid container spacing={2}>
 									<Grid item xs={6}>
 										<h2>Register</h2>
-                                        <TextField
+										<TextField
 											label="First Name"
 											placeholder="Enter your first name"
 											fullWidth
@@ -72,7 +63,7 @@ const RegisterB = () => {
 											fullWidth
 											required
 										/>
-                                        <TextField
+										<TextField
 											label="Email"
 											placeholder="Enter email"
 											fullWidth
@@ -88,13 +79,13 @@ const RegisterB = () => {
 									</Grid>
 									<Grid item xs={6}>
 										<h2>Additional Information</h2>
-                                        <TextField                                       
+										<TextField
 											label="Title"
 											placeholder="Enter title"
 											fullWidth
 											required
 										/>
-                                        <TextField
+										<TextField
 											label="Country"
 											placeholder="Enter country"
 											fullWidth
@@ -106,21 +97,24 @@ const RegisterB = () => {
 											fullWidth
 											required
 										/>
-                                        <TextField
+										<TextField
 											label="City"
 											placeholder="Enter city"
 											fullWidth
 											required
 										/>
-                                        <TextField
+										<TextField
 											label="Phone Number"
 											placeholder="Enter phone number"
 											fullWidth
 											required
 										/>
-                                        <br/>
-                                        <br/>
-                                        <FormControlLabel control={<Checkbox  />} label="Legal Person" />
+										<br />
+										<br />
+										<FormControlLabel
+											control={<Checkbox />}
+											label="Legal Person"
+										/>
 									</Grid>
 								</Grid>
 
@@ -133,7 +127,9 @@ const RegisterB = () => {
 								>
 									Sign up
 								</Button>
-								<Typography>Already have an account?</Typography>
+								<Typography>
+									Already have an account?
+								</Typography>
 							</Paper>
 						</Grid>
 					</Box>

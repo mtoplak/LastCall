@@ -1,17 +1,15 @@
-import * as mongoose from 'mongoose';
+import { Schema, Document, Model, model } from 'mongoose';
 import { Buyer } from '../buyers/buyers.model';
 import { Product } from '../products/product.model';
 import { Seller } from '../sellers/sellers.model';
 
-const schema = mongoose.Schema;
-
-export const OrderSchema = new schema({
+export const OrderSchema = new Schema({
   products: [{
-    productId: { type: schema.Types.ObjectId, ref: "Product", required: false },
+    productId: { type: Schema.Types.ObjectId, ref: "Product", required: false },
     quantity: { type: Number, required: true, default: 1 }
   }],
-  buyer: { type: schema.Types.ObjectId, ref: "Buyer", required: false },
-  seller: { type: schema.Types.ObjectId, ref: "Seller", required: false },
+  buyer: { type: Schema.Types.ObjectId, ref: "Buyer", required: false },
+  seller: { type: Schema.Types.ObjectId, ref: "Seller", required: false },
   totalPrice: { type: Number, required: true },
   dateOfPurchase: { type: Date, immutable: true, default: () => Date.now() },
   lastDateOfDelivery: { type: Date, required: true },
@@ -20,7 +18,7 @@ export const OrderSchema = new schema({
   country: { type: String, required: true },
 });
 
-export interface Order extends mongoose.Document {
+export interface Order extends Document {
   id: string;
   products: { productId: Product, quantity: number; }[];
   buyer: Buyer;
@@ -33,4 +31,4 @@ export interface Order extends mongoose.Document {
   country: string;
 }
 
-export const OrderModel: mongoose.Model<Order> = mongoose.model<Order>("Order", OrderSchema);
+export const OrderModel: Model<Order> = model<Order>("Order", OrderSchema);

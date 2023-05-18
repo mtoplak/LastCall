@@ -38,17 +38,6 @@ const cartItems = [
 	},
 ];
 
-const CustomBox = styled(Box)(({ theme }) => ({
-	display: 'flex',
-	justifyContent: 'center',
-	gap: theme.spacing(7),
-	[theme.breakpoints.down('md')]: {
-		flexDirection: 'column',
-		alignItems: 'center',
-		textAlign: 'center',
-	},
-}));
-
 function Cart() {
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>

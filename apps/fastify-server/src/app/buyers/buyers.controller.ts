@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post, Param, Patch, Delete } from "@nestjs/common";
 import { BuyersService } from "./buyers.service";
+import { Buyer } from "./buyers.model";
 
 @Controller('buyers')
 export class BuyersController {
@@ -7,86 +8,43 @@ export class BuyersController {
 
     @Post()
     async addBuyer(
-        @Body('name') name: string,
-        @Body('surname') surname: string,
-        @Body('legalPerson') legalPerson: boolean,
-        @Body('title') title: string,
-        @Body('registerNumber') registerNumber: number,
-        @Body('targetedMarket') targetedMarket: string,
-        @Body('address') address: string,
-        @Body('city') city: string,
-        @Body('country') country: string,
-        @Body('phone') phone: string,
-        @Body('email') email: string,
-        @Body('password') password: string,
-    ) {
-        const generatedID = await this.buyersService.addBuyer(
-            name,
-            surname,
-            legalPerson,
-            title,
-            registerNumber,
-            targetedMarket,
-            address, //array
-            city,
-            country,
-            phone,
-            email,
-            password,
-            );
-        return { id: generatedID };
+      @Body() buyerData: Partial<Buyer>,
+      @Body('basket') basket: { productId: string, quantity: number }[]
+    ): Promise<{ id: string }> {
+      const productData = basket || [];
+    
+      const generatedID = await this.buyersService.addBuyer(
+        buyerData,
+        productData
+      );
+    
+      return { id: generatedID };
     }
+    
 
     @Get()
-    async getAllBuyers() {
+    async getAllBuyers(): Promise<Buyer[]> {
         const buyers = await this.buyersService.getAllBuyers();
         return buyers;
     }
 
     @Get(':id')
-    getSingleBuyer(@Param('id') id: string) {
-        const buyer = this.buyersService.getSingleBuyer(id);
+    async getSingleBuyer(@Param('id') id: string): Promise<Buyer> {
+        const buyer = await this.buyersService.getSingleBuyer(id);
         return buyer;
     }
 
     @Patch(':id')
-    async updateBuyer(
-        @Param('id') id: string,
-        @Body('name') name: string,
-        @Body('surname') surname: string,
-        @Body('legalPerson') legalPerson: boolean,
-        @Body('title') title: string,
-        @Body('registerNumber') registerNumber: number,
-        @Body('targetedMarket') targetedMarket: string,
-        @Body('address') address: string,
-        @Body('city') city: string,
-        @Body('country') country: string,
-        @Body('phone') phone: string,
-        @Body('email') email: string,
-        @Body('password') password: string,
-    ) {
-        await this.buyersService.updateBuyer(
-            id,
-            name,
-            surname,
-            legalPerson,
-            title,
-            registerNumber,
-            targetedMarket,
-            address,
-            city,
-            country,
-            phone,
-            email,
-            password
-            );
-        return null;
+    async updateBuyer(@Param('id') buyerId: string, @Body() updatedBuyerData: Partial<Buyer>): Promise<{ success: boolean }> {
+      await this.buyersService.updateBuyer(buyerId, updatedBuyerData);
+      return { success: true };
     }
+    
 
     @Delete(':id')
-    async removeBuyer(@Param('id') id: string) {
+    async removeBuyer(@Param('id') id: string): Promise<{ success: boolean }> {
         await this.buyersService.removeBuyer(id);
-        return null;
+        return { success: true };
     }
 
 }

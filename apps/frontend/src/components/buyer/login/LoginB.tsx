@@ -8,25 +8,13 @@ import {
 	Paper,
 	TextField,
 	Typography,
-    styled,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import heroImg from '../../../assets/images/homepageDrink.png';
 import React from 'react';
+import CustomBox from 'components/ui/CustomBox';
 
 const LoginB = () => {
-	const CustomBox = styled(Box)(({ theme }) => ({
-		display: 'flex',
-		justifyContent: 'center',
-		gap: theme.spacing(5),
-		marginTop: theme.spacing(3),
-		[theme.breakpoints.down('md')]: {
-			flexDirection: 'column',
-			alignItems: 'center',
-			textAlign: 'center',
-		},
-	}));
-
 	const paperStyle = {
 		padding: 20,
 		height: '50vh',
@@ -40,9 +28,10 @@ const LoginB = () => {
 		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '100vh' }}>
 			<Container>
 				<CustomBox>
-					<Box 
-					 component="form"
-					sx={{ flex: '1',  marginTop: '10rem' }}>
+					<Box
+						component="form"
+						sx={{ flex: '1', marginTop: '10rem' }}
+					>
 						<Grid>
 							<Paper elevation={10} style={paperStyle}>
 								<Grid>

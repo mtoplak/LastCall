@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post, Param, Patch, Delete } from "@nestjs/common";
 import { SellersService } from "./sellers.service";
+import { Seller } from "./sellers.model";
 
 @Controller('sellers')
 export class SellersController {
@@ -7,90 +8,36 @@ export class SellersController {
 
     @Post()
     async addSeller(
-        @Body('name') name: string,
-        @Body('surname') surname: string,
-        @Body('title') title: string,
-        @Body('address') address: string,
-        @Body('city') city: string,
-        @Body('country') country: string,
-        @Body('registerNumber') registerNumber: number,
-        @Body('tip') tip: string,
-        @Body('targetedMarket') targetedMarket: string,
-        @Body('phone') phone: string,
-        @Body('website') website: string,
-        @Body('email') email: string,
-        @Body('password') password: string,
-    ) {
+        @Body() sellerData: Partial<Seller>,
+    ): Promise<{ id: string }>  {
         const generatedID = await this.sellersService.addSeller(
-            name,
-            surname,
-            title,
-            address,
-            city,
-            country,
-            registerNumber,
-            tip,
-            targetedMarket,
-            phone,
-            website,
-            email,
-            password,
+            sellerData,
             );
         return { id: generatedID };
     }
 
     @Get()
-    async getAllSellers() {
+    async getAllSellers(): Promise<Seller[]> {
         const sellers = await this.sellersService.getAllSellers();
         return sellers;
     }
 
     @Get(':id')
-    getSingleSeller(@Param('id') id: string) {
-        const seller = this.sellersService.getSingleSeller(id);
+    async getSingleSeller(@Param('id') id: string): Promise<Seller> {
+        const seller = await this.sellersService.getSingleSeller(id);
         return seller;
     }
 
     @Patch(':id')
-    async updateSeller(
-        @Param('id') id: string,
-        @Body('name') name: string,
-        @Body('surname') surname: string,
-        @Body('title') title: string,
-        @Body('address') address: string,
-        @Body('city') city: string,
-        @Body('country') country: string,
-        @Body('registerNumber') registerNumber: number,
-        @Body('tip') tip: string,
-        @Body('targetedMarket') targetedMarket: string,
-        @Body('phone') phone: string,
-        @Body('website') website: string,
-        @Body('email') email: string,
-        @Body('password') password: string,
-    ) {
-        await this.sellersService.updateSeller(
-            id,
-            name,
-            surname,
-            title,
-            address,
-            city,
-            country,
-            registerNumber,
-            tip,
-            targetedMarket,
-            phone,
-            website,
-            email,
-            password,
-            );
-        return null;
+    async updateSeller(@Param('id') sellerId: string, @Body() updatedSellerData: Partial<Seller>): Promise<{ success: boolean }> {
+      await this.sellersService.updateSeller(sellerId, updatedSellerData);
+      return { success: true };
     }
 
     @Delete(':id')
-    async removeSeller(@Param('id') id: string) {
+    async removeSeller(@Param('id') id: string): Promise<{ success: boolean }> {
         await this.sellersService.removeSeller(id);
-        return null;
+        return { success: true };
     }
 
 }

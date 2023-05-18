@@ -4,10 +4,8 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import { store, persistor } from 'redux-store';
 import { Loading } from 'shared';*/
-import Cart from 'components/buyer/Cart';
 import Routing from 'components/routing/Routing';
 import { BrowserRouter } from 'react-router-dom';
-
 
 /*
 <Suspense fallback={<Loading />}>

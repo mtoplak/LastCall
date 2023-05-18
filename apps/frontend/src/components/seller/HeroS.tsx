@@ -1,32 +1,11 @@
-import { Box, Button, styled, TextField, Typography, Container } from '@mui/material';
+import { Box, Button, styled, Typography, Container } from '@mui/material';
 import React from 'react';
-import banner from '../../assets/images/drinks-banner.jpg';
 import NavbarS from './NavbarS';
-import CustomButton from '../homepage/CustomButton';
 import heroImg from '../../assets/images/homepageDrink.png';
+import Title from 'components/ui/Title';
+import CustomBox from 'components/ui/CustomBox';
 
 const HeroS = () => {
-	const CustomBox = styled(Box)(({ theme }) => ({
-		display: 'flex',
-		justifyContent: 'center',
-		gap: theme.spacing(5),
-		[theme.breakpoints.down('md')]: {
-			flexDirection: 'column',
-			alignItems: 'center',
-			textAlign: 'center',
-		},
-	}));
-
-	const Title = styled(Typography)(({ theme }) => ({
-		fontSize: '64px',
-		color: '#262626',
-		fontWeight: 'bold',
-		margin: theme.spacing(4, 0, 4, 0),
-		[theme.breakpoints.down('sm')]: {
-			fontSize: '40px',
-		},
-	}));
-
 	return (
 		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '100vh' }}>
 			<NavbarS />
@@ -46,8 +25,9 @@ const HeroS = () => {
 							Welcome to LastCall
 						</Typography>
 						<Title variant="h1">
-							Bridging the Gap Between Drink {" "} 
-							<span style={{ color: "#24336e" }}>Sellers</span> and Buyers
+							Bridging the Gap Between Drink{' '}
+							<span style={{ color: '#24336e' }}>Sellers</span>{' '}
+							and Buyers
 						</Title>
 						<Typography
 							variant="body2"

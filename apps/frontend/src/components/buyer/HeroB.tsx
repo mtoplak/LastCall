@@ -1,23 +1,18 @@
-import { Box, Button, styled, TextField, Typography, Container } from '@mui/material';
+import {
+	Box,
+	Button,
+	styled,
+	TextField,
+	Typography,
+	Container,
+} from '@mui/material';
 import React from 'react';
 import banner from '../../assets/images/drinks-banner.jpg';
 import NavbarB from './NavbarB';
-import CustomButton from '../homepage/CustomButton';
 import heroImg from '../../assets/images/homepageDrink.png';
-import SearchInput from './SearchProductsInput';
+import CustomBox from 'components/ui/CustomBox';
 
 const Hero = () => {
-	const CustomBox = styled(Box)(({ theme }) => ({
-		display: 'flex',
-		justifyContent: 'center',
-		gap: theme.spacing(5),
-		[theme.breakpoints.down('md')]: {
-			flexDirection: 'column',
-			alignItems: 'center',
-			textAlign: 'center',
-		},
-	}));
-
 	const Title = styled(Typography)(({ theme }) => ({
 		fontSize: '64px',
 		color: '#262626',

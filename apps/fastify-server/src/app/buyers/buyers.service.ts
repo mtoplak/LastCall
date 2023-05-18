@@ -1,150 +1,116 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose/dist';
-import { Model } from 'mongoose';
-import { Buyer } from "./buyers.model";
+import { Model, Types } from 'mongoose';
+import { Buyer } from './buyers.model';
+import { Product } from '../products/product.model';
 
 @Injectable()
 export class BuyersService {
+  constructor(
+    @InjectModel('Buyer') private readonly buyerModel: Model<Buyer>,
+    @InjectModel('Product') private readonly productModel: Model<Product>,
+  ) {}
 
-    constructor(@InjectModel('Buyer') private readonly buyerModel: Model<Buyer>,
-    ) {}
+  async addBuyer(
+    buyerData: Partial<Buyer>,
+    productData: { productId: string; quantity: number }[],
+  ): Promise<string> {
+    const productIds = productData.map((item) => item.productId);
+    const quantities = productData.map((item) => item.quantity);
+    const { ...restBuyerData } = buyerData;
 
-    async addBuyer(
-        name: string,
-        surname: string,
-        legalPerson: boolean,
-        title: string,
-        registerNumber: number,
-        targetedMarket: string,
-        address: string, //array
-        city: string,
-        country: string,
-        phone: string,
-        email: string,
-        password: string,
-        ) {
-        const newBuyer = new this.buyerModel({
-            name,
-            surname,
-            legalPerson,
-            title,
-            registerNumber,
-            targetedMarket,
-            address, //array
-            city,
-            country,
-            phone,
-            email,
-            password,
-        });
-        const result = await newBuyer.save();
-        await result.populate('order');
-        console.log(result);
-        return result.id as string;
+    if (!productIds || productIds.length === 0) {
+      throw new NotFoundException('There are no products in this basket');
     }
 
-    async getAllBuyers() {
-        const buyers = await this.buyerModel.find().populate('orders').exec();
-        return buyers.map((buyer) => ({
-            id: buyer.id,
-            name: buyer.name,
-            surname: buyer.surname,
-            legalPerson: buyer.legalPerson,
-            title: buyer.title,
-            registerNumber: buyer.registerNumber,
-            targetedMarket: buyer.targetedMarket,
-            address: buyer.address, //array
-            city: buyer.city,
-            country: buyer.country, //? caches.getCountry(buyer.country,
-            phone: buyer.phone,
-            email: buyer.email,
-            password: buyer.password,
-            orders: buyer.orders
-        }));
+    const products = await this.productModel.find({ _id: { $in: productIds } });
+    console.log(products);
+    if (products.length !== productIds.length) {
+      throw new NotFoundException('Products for this basket not found');
     }
 
-    async getSingleBuyer(productId: string) {
-        const buyer = await this.findBuyer(productId);
+    const productsInBasket = products.map((product, index) => ({
+      productId: product._id,
+      quantity: quantities[index],
+    }));
+
+    const newBuyer = new this.buyerModel({
+      ...restBuyerData,
+      basket: productsInBasket,
+    });
+
+    const result = await newBuyer.save();
+    return result.id as string;
+  }
+
+  async getAllBuyers(): Promise<Buyer[]> {
+    const buyers = await this.buyerModel
+      .find()
+      .populate('orders')
+      .populate('basket')
+      .exec();
+    return buyers as Buyer[];
+  }
+
+  async getSingleBuyer(productId: string): Promise<Buyer> {
+    const buyer = await this.findBuyer(productId);
+    if (!buyer) {
+      throw new NotFoundException(
+        'Could not get the buyer with id: ' + productId,
+      );
+    }
+    return buyer as Buyer;
+  }
+
+  async updateBuyer(
+    buyerId: string,
+    updatedBuyerData: Partial<Buyer>,
+  ): Promise<void> {
+    if (!Types.ObjectId.isValid(buyerId)) {
+      throw new NotFoundException('Invalid buyerId');
+    }
+    const updatedBuyer = await this.findBuyer(buyerId);
+    if (!updatedBuyer) {
+      throw new NotFoundException('Buyer with id ' + buyerId + ' not found');
+    }
+    const updatedBuyerFields: Partial<Buyer> = { ...updatedBuyerData };
+    try {
+      await this.buyerModel
+        .updateOne({ _id: buyerId }, { $set: updatedBuyerFields })
+        .exec();
+    } catch (error) {
+      throw new Error('Failed to update buyer with id ' + buyerId);
+    }
+  }
+
+  async removeBuyer(buyerId: string): Promise<void> {
+    const buyer = await this.buyerModel.findById(buyerId).exec();
+    if (!buyer) {
+      throw new NotFoundException(
+        'Could not remove the buyer with id ' + buyerId,
+      );
+    }
+    await this.buyerModel.deleteOne({ _id: buyerId }).exec();
+  }
+
+  private async findBuyer(buyerId: string): Promise<Buyer> {
+    let buyer;
+    try {
+      buyer = await this.buyerModel
+        .findById(buyerId)
+        .populate('orders')
+        .populate('basket')
+        .exec();
+    } catch (error) {
+      throw new NotFoundException(
+        'Could not find the buyer with id: ' + buyerId,
+      );
+    }
+    /*
         if (!buyer) {
             throw new NotFoundException('Could not find the buyer.');
         }
-        return {
-            id: buyer.id,
-            name: buyer.name,
-            surname: buyer.surname,
-            legalPerson: buyer.legalPerson,
-            title: buyer.title,
-            registerNumber: buyer.registerNumber,
-            targetedMarket: buyer.targetedMarket,
-            address: buyer.address, //array
-            city: buyer.city,
-            country: buyer.country, //? caches.getCountry(buyer.country,
-            phone: buyer.phone,
-            email: buyer.email,
-            password: buyer.password,
-            orders: buyer.orders,
-            basket: buyer.basket
-        };
-    }
-
-    async updateBuyer(
-        buyerId: string,
-        name: string,
-        surname: string,
-        legalPerson: boolean,
-        title: string,
-        registerNumber: number,
-        targetedMarket: string,
-        address: string, //array
-        city: string,
-        country: string,
-        phone: string,
-        email: string,
-        password: string,
-    ) {
-        const updatedBuyer = await this.findBuyer(buyerId);
-
-        const updatedFields = {
-          name,
-          surname,
-          legalPerson,
-          title,
-          registerNumber,
-          targetedMarket,
-          address,
-          city,
-          country,
-          phone,
-          email,
-          password,
-        };
-        
-        for (const [key, value] of Object.entries(updatedFields)) {
-          if (value) {
-            updatedBuyer[key] = value;
-          }
-        }
-        updatedBuyer.save();
-    }
-
-    async removeBuyer(buyerId: string) {
-        const result = await this.buyerModel.deleteOne({_id: buyerId}).exec(); //v bazi je id shranjen kot _id
-        console.log(result);
-        if(result.deletedCount === 0){
-            throw new NotFoundException('Could not find the buyer.');
-        }
-    }
-
-    private async findBuyer(buyerId: string): Promise<Buyer> {
-        let buyer;
-        try{
-            buyer = await this.buyerModel.findById(buyerId).populate('orders').exec();
-        } catch (error) {
-            throw new NotFoundException('Could not find the buyer.');
-        }
-        if (!buyer) {
-            throw new NotFoundException('Could not find the buyer.');
-        }
-        return buyer;
-    }
+        */
+    return buyer;
+  }
 }
