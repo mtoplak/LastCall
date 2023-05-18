@@ -4,6 +4,7 @@ import { BuyerSchema } from "./buyers.model";
 import { BuyersController } from "./buyers.controller";
 import { BuyersService } from "./buyers.service";
 import { ProductSchema } from "../products/product.model";
+import { BuyersRepository } from "./buyers.repository";
 
 @Module({
     imports: [
@@ -11,7 +12,7 @@ import { ProductSchema } from "../products/product.model";
         MongooseModule.forFeature([{ name: 'Product', schema: ProductSchema}])
     ], //injectalo bo module v katerikoli file ki ga rabi
     controllers: [BuyersController],
-    providers: [BuyersService]
+    providers: [BuyersService, BuyersRepository]
 })
 export class BuyersModule {
 }

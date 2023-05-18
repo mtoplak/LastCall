@@ -14,7 +14,6 @@ export const ProductSchema = new Schema({
 });
 
 export interface Product extends Document {
-    id: string;
     title: string;
     drinkCategory: string;
     packaging: string; 
@@ -27,3 +26,4 @@ export interface Product extends Document {
 }
 
 export const ProductModel: Model<Product> = model<Product>("Product", ProductSchema);
+export type ProductDocument = Product & Document;

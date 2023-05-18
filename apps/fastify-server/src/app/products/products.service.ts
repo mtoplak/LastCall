@@ -1,109 +1,59 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Product } from './product.model';
-import { InjectModel } from '@nestjs/mongoose/dist';
-import { Model, Types } from 'mongoose';
-import { Order } from '../orders/order.model';
+import { ProductsRepository } from './products.repository';
+import { CreateUpdateProductDto } from './createUpdateProduct.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { Seller } from '../sellers/sellers.model';
 
 @Injectable()
 export class ProductsService {
   constructor(
-    @InjectModel('Product') private readonly productModel: Model<Product>,
-    @InjectModel('Order') private readonly orderModel: Model<Order>,
-    @InjectModel('Seller') private readonly sellerModel: Model<Seller>,
+    private readonly productsRepository: ProductsRepository,
   ) {}
 
-  async insertProduct(
-    productData: Partial<Product>,
+  async createProduct(
+    productData: CreateUpdateProductDto,
     sellerId: string,
-  ): Promise<string> {
-    const { ...restProductData } = productData;
+  ): Promise<Product> {
 
-    const seller = await this.sellerModel.findById(sellerId);
-    if (!seller) {
-      throw new NotFoundException(
-        'Seller with id ' + sellerId + ' not found for this product',
-      );
+    const product = await this.productsRepository.create(productData, sellerId);
+    if (!product) {
+      throw new NotFoundException('Could not create a product');
     }
-
-    const newProduct = new this.productModel({
-      ...restProductData,
-      seller: seller._id,
-    });
-
-    const result = await newProduct.save();
-
-    seller.products.push(result._id);
-    await seller.save();
-
-    return result.id as string;
+    return product;
   }
 
   async getAllProducts(): Promise<Product[]> {
-    const products = await this.productModel.find().populate('seller').exec();
-    return products as Product[];
+    try {
+      return await this.productsRepository.find({});
+    } catch (err) {
+      throw new NotFoundException('Could not find the products');
+    }
   }
 
   async getSingleProduct(productId: string): Promise<Product> {
-    const product = await this.findProduct(productId);
-    if (!product) {
-      throw new NotFoundException(
-        'Could not get the product with id ' + productId,
-      );
-    }
-    return product as Product;
+      const product = await this.productsRepository.findOne({ _id: productId });
+      if (!product) {
+        throw new NotFoundException('Could not get the product with id ' + productId);
+      }
+      return product;
   }
 
   async updateProduct(
     productId: string,
-    updatedProductData: Partial<Product>,
-  ): Promise<void> {
-    if (!Types.ObjectId.isValid(productId)) {
-      throw new NotFoundException('Invalid productId');
-    }
-    const updatedProduct = await this.findProduct(productId);
-    if (!updatedProduct) {
-      throw new NotFoundException(
-        'Product with id ' + productId + ' not found',
+    productUpdates: CreateUpdateProductDto,
+  ): Promise<Product> {
+      return await this.productsRepository.findOneAndUpdate(
+        { _id: productId },
+        productUpdates,
       );
-    }
-    const updatedProductFields: Partial<Product> = { ...updatedProductData };
-    try {
-      await this.productModel
-        .updateOne({ _id: productId }, { $set: updatedProductFields })
-        .exec();
-    } catch (error) {
-      throw new Error('Failed to update product with id ' + productId);
-    }
   }
 
-  async deleteProduct(productId: string): Promise<void> {
-    const product = await this.productModel.findById(productId).exec();
-    if (!product) {
-      throw new NotFoundException(
-        'Could not remove the product with id ' + productId,
-      );
-    }
-    await this.productModel.deleteOne({ _id: productId }).exec();
-  }
-
-  private async findProduct(productId: string): Promise<Product> {
-    let product;
-    try {
-      product = await this.productModel
-        .findById(productId)
-        .populate('seller')
-        .exec();
-    } catch (error) {
-      throw new NotFoundException(
-        'Could not find the product with id: ' + productId,
-      );
-    }
-    /*
-        if (!product) {
-          throw new NotFoundException("Could not find the product with id: " + productId);
-        }
-        */
-    return product;
+  async removeProduct(productId: string): Promise<{ success: boolean }> {
+    await this.productsRepository.deleteOne({
+      _id: productId,
+    });
+    return { success: true };
   }
 }

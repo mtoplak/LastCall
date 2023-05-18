@@ -22,7 +22,6 @@ export const BuyerSchema = new Schema({
 });
 
 export interface Buyer extends Document {
-    id: string;
     name: string;
     surname: string;
     legalPerson: boolean;

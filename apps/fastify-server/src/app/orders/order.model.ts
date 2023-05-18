@@ -19,7 +19,6 @@ export const OrderSchema = new Schema({
 });
 
 export interface Order extends Document {
-  id: string;
   products: { productId: Product, quantity: number; }[];
   buyer: Buyer;
   seller: Seller;

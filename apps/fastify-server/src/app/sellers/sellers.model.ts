@@ -1,5 +1,4 @@
 import { Schema, Document, Model, model } from 'mongoose';
-import { Order } from '../orders/order.model';
 
 export const SellerSchema = new Schema({
     name: { type: String, required: true },
@@ -19,7 +18,6 @@ export const SellerSchema = new Schema({
 });
 
 export interface Seller extends Document {
-    id: string;
     name: string;
     surname: string;
     title: string;

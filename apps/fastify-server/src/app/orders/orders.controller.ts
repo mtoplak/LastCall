@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { Order } from './order.model';
+import { CreateUpdateOrderDto } from './createUpdateOrder.dto';
 
 @Controller('orders')
 export class OrdersController {
@@ -16,33 +17,22 @@ export class OrdersController {
 
   @Post()
   async addOrder(
-    @Body() orderData: Partial<Order>,
+    @Body() createOrderDto: CreateUpdateOrderDto,
     @Body('products') products: { productId: string; quantity: number }[],
     @Body('seller') seller: string,
     @Body('buyer') buyer: string,
-  ): Promise<{ id: string }> {
-    const productData = products || [];
-
-    const generatedID = await this.ordersService.addOrder(
-      orderData,
-      productData,
-      seller,
-      buyer,
-    );
-
-    return { id: generatedID };
+  ): Promise<Order> {
+    return this.ordersService.addOrder(createOrderDto, products, seller, buyer);
   }
 
   @Get()
   async getAllOrders(): Promise<Order[]> {
-    const orders = await this.ordersService.getAllOrders();
-    return orders;
+    return await this.ordersService.getAllOrders();
   }
 
   @Get(':id')
   async getSingleOrder(@Param('id') id: string): Promise<Order> {
-    const order = await this.ordersService.getSingleOrder(id);
-    return order;
+    return await this.ordersService.getSingleOrder(id);
   }
 
   @Patch(':id')

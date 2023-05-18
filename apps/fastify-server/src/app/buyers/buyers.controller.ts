@@ -1,41 +1,35 @@
 import { Body, Controller, Get, Post, Param, Patch, Delete } from "@nestjs/common";
 import { BuyersService } from "./buyers.service";
 import { Buyer } from "./buyers.model";
+import { CreateUpdateBuyerDto } from "./createUpdateBuyer.dto";
 
 @Controller('buyers')
 export class BuyersController {
-    constructor(private buyersService: BuyersService) { }
+    constructor(private readonly buyersService: BuyersService) { }
 
     @Post()
     async addBuyer(
-      @Body() buyerData: Partial<Buyer>,
+      @Body() createBuyerDto: CreateUpdateBuyerDto,
       @Body('basket') basket: { productId: string, quantity: number }[]
-    ): Promise<{ id: string }> {
-      const productData = basket || [];
-    
-      const generatedID = await this.buyersService.addBuyer(
-        buyerData,
-        productData
-      );
-    
-      return { id: generatedID };
+    ): Promise<Buyer> {
+      return this.buyersService.addBuyer(createBuyerDto, basket);
     }
-    
 
     @Get()
     async getAllBuyers(): Promise<Buyer[]> {
-        const buyers = await this.buyersService.getAllBuyers();
-        return buyers;
+      return await this.buyersService.getAllBuyers();
     }
 
     @Get(':id')
     async getSingleBuyer(@Param('id') id: string): Promise<Buyer> {
-        const buyer = await this.buyersService.getSingleBuyer(id);
-        return buyer;
+        return await this.buyersService.getSingleBuyer(id);
     }
 
     @Patch(':id')
-    async updateBuyer(@Param('id') buyerId: string, @Body() updatedBuyerData: Partial<Buyer>): Promise<{ success: boolean }> {
+    async updateBuyer(
+      @Param('id') buyerId: string,
+      @Body() updatedBuyerData: Partial<Buyer>
+      ): Promise<{ success: boolean }> {
       await this.buyersService.updateBuyer(buyerId, updatedBuyerData);
       return { success: true };
     }
