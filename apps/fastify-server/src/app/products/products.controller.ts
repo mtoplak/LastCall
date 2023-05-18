@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post, Param, Patch, Delete } from "@nestjs/common";
 import { ProductsService } from "./products.service";
 import { Seller } from "../sellers/sellers.model";
+import { Product } from "./product.model";
 
 @Controller('products')
 export class ProductsController {
@@ -8,74 +9,38 @@ export class ProductsController {
 
     @Post()
     async addProduct(
-        @Body('title') title: string,
-        @Body('drinkCategory') drinkCategory: string,
-        @Body('packaging') packaging: string,
-        @Body('size') size: string,
-        @Body('price') price: number,
-        @Body('stock') stock: number,
-        //@Body('orders') orders: string[],
+        @Body() productData: Partial<Product>,
         @Body('seller') seller: string,
-        @Body('sale') sale: number,
-    ) {
+    ): Promise<{ id: string }> {
         const generatedID = await this.productService.insertProduct(
-            title,
-            drinkCategory,
-            packaging,
-            size,
-            price,
-            stock,
-            //orders,
+            productData,
             seller,
-            sale
             );
         return { id: generatedID };
     }
 
     @Get()
-    async getAllProducts() {
+    async getAllProducts(): Promise<Product[]> {
         const products = await this.productService.getAllProducts();
         return products;
     }
 
     @Get(':id')
-    getSingleProduct(@Param('id') id: string) {
-        const product = this.productService.getSingleProduct(id);
+    async getSingleProduct(@Param('id') id: string): Promise<Product> {
+        const product = await this.productService.getSingleProduct(id);
         return product;
     }
 
     @Patch(':id')
-    async updateProduct(
-        @Param('id') id: string,
-        @Body('title') title: string,
-        @Body('drinkCategory') drinkCategory: string,
-        @Body('packaging') packaging: string,
-        @Body('size') size: string,
-        @Body('price') price: number,
-        @Body('stock') stock: number,
-        //@Body('orders') orders: string[],
-        @Body('seller') seller: Seller,
-        @Body('sale') sale: number,
-    ) {
-        await this.productService.updateProduct(
-            id,
-            title,
-            drinkCategory,
-            packaging,
-            size,
-            price,
-            stock,
-            //orders,
-            seller,
-            sale
-            );
-        return null;
+    async updateProduct(@Param('id') productId: string, @Body() updatedProductData: Partial<Product>): Promise<{ success: boolean }> {
+      await this.productService.updateProduct(productId, updatedProductData);
+        return { success: true };
     }
 
     @Delete(':id')
-    async removeProduct(@Param('id') id: string) {
+    async removeProduct(@Param('id') id: string): Promise<{ success: boolean }> {
         await this.productService.deleteProduct(id);
-        return null;
+        return { success: true };
     }
 
 }

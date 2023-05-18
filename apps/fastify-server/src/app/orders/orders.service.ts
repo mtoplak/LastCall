@@ -1,159 +1,146 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose/dist';
 import mongoose, { Model, Types } from 'mongoose';
-import { Order, OrderModel } from "./order.model";
-import { title } from "process";
-import { Product } from "../products/product.model";
-import { Seller } from "../sellers/sellers.model";
-import { Buyer } from "../buyers/buyers.model";
+import { Order, OrderModel } from './order.model';
+import { title } from 'process';
+import { Product } from '../products/product.model';
+import { Seller } from '../sellers/sellers.model';
+import { Buyer } from '../buyers/buyers.model';
 
 @Injectable()
 export class OrdersService {
+  constructor(
+    @InjectModel('Order') private readonly orderModel: Model<Order>,
+    @InjectModel('Seller') private readonly sellerModel: Model<Seller>,
+    @InjectModel('Buyer') private readonly buyerModel: Model<Buyer>,
+    @InjectModel('Product') private readonly productModel: Model<Product>,
+  ) {}
 
-    constructor(
-        @InjectModel('Order') private readonly orderModel: Model<Order>,
-        @InjectModel('Seller') private readonly sellerModel: Model<Seller>,
-        @InjectModel('Buyer') private readonly buyerModel: Model<Buyer>,
-        @InjectModel('Product') private readonly productModel: Model<Product>,
-    ) {}
+  async addOrder(
+    orderData: Partial<Order>,
+    productData: { productId: string; quantity: number }[],
+    sellerId: string,
+    buyerId: string
+  ): Promise<string> {
+    const productIds = productData.map((item) => item.productId);
+    const quantities = productData.map((item) => item.quantity);
+    const { ...restOrderData } = orderData;
 
-    async addOrder(
-      productIds: string[],
-      buyerId: string,
-      sellerId: string,
-      totalPrice: number,
-      lastDateOfDelivery: Date,
-      address: string,
-      city: string,
-      country: string,
-      quantities: number[]
-    ) {
-      if (!productIds || productIds.length === 0) {
-        throw new NotFoundException('Products not found');
-      }
-    
-      const products = await this.productModel.find({ _id: { $in: productIds } });
-      if (products.length !== productIds.length) {
-        throw new NotFoundException('Products not found');
-      }
-    
-      const seller = await this.sellerModel.findById(sellerId);
-      if (!seller) {
-        throw new NotFoundException('Seller not found');
-      }
-    
-      const buyer = await this.buyerModel.findById(buyerId);
-      if (!buyer) {
-        throw new NotFoundException('Buyer not found');
-      }
-    
-      const orderedProducts = products.map((product, index) => ({
-        productId: product._id,
-        quantity: quantities[index],
-      }));
-    
-      const newOrder = new this.orderModel({
-        products: orderedProducts,
-        buyer: buyer._id,
-        seller: seller._id,
-        totalPrice,
-        lastDateOfDelivery,
-        address,
-        city,
-        country,
-      });
-
-      const result = await newOrder.save();
-
-      seller.orders.push(result._id);
-      await seller.save();
-
-      buyer.orders.push(result._id);
-      await buyer.save();
-
-      console.log(result);
-      return result.id as string;
+    if (!productIds || productIds.length === 0) {
+      throw new NotFoundException('There are no products in this order');
     }
-    
-
-    async getAllOrders() {
-        const orders = await this.orderModel.find().populate('seller').populate('buyer').populate({ path: 'products.productId', model: 'Product' }).exec();
-        return orders.map((order) => ({
-            id: order.id,
-            products: order.products,
-            buyer: order.buyer,
-            seller: order.seller,
-            totalPrice: order.totalPrice,
-            dateOfPurchase: order.dateOfPurchase,
-            lastDateOfDelivery: order.lastDateOfDelivery,
-            address: order.address,
-            city: order.city,
-            country: order.country,
-        }));
+    const products = await this.productModel.find({ _id: { $in: productIds } });
+    if (products.length !== productIds.length) {
+      throw new NotFoundException('Products for this order not found');
+    }
+    const seller = await this.sellerModel.findById(sellerId);
+    if (!seller) {
+      throw new NotFoundException(
+        'Could not find the seller with id ' +
+          sellerId +
+          ' assigned to this order.',
+      );
+    }
+    const buyer = await this.buyerModel.findById(buyerId);
+    if (!buyer) {
+      throw new NotFoundException(
+        'Could not find the buyer with id ' +
+          buyerId +
+          ' assigned to this order.',
+      );
     }
 
-    async getSingleOrder(productId: string) {
-        const order = await this.findOrder(productId);
+    const orderedProducts = products.map((product, index) => ({
+      productId: product._id,
+      quantity: quantities[index],
+    }));
+
+    const newOrder = new this.orderModel({
+      ...restOrderData,
+      products: orderedProducts,
+      buyer: buyer._id,
+      seller: seller._id,
+    });
+
+    const result = await newOrder.save();
+
+    seller.orders.push(result._id);
+    await seller.save();
+
+    buyer.orders.push(result._id);
+    await buyer.save();
+
+    return result.id as string;
+  }
+
+  async getAllOrders(): Promise<Order[]> {
+    const orders = await this.orderModel
+      .find()
+      .populate('seller')
+      .populate('buyer')
+      .populate({ path: 'products.productId', model: 'Product' })
+      .exec();
+    return orders as Order[];
+  }
+
+  async getSingleOrder(orderId: string): Promise<Order> {
+    const order = await this.findOrder(orderId);
+    if (!order) {
+      throw new NotFoundException('Could not get the order with id ' + orderId);
+    }
+    return order as Order;
+  }
+
+  async updateOrder(
+    orderId: string,
+    updatedOrderData: Partial<Order>,
+  ): Promise<void> {
+    if (!Types.ObjectId.isValid(orderId)) {
+      throw new NotFoundException('Invalid orderId');
+    }
+    const updatedOrder = await this.findOrder(orderId);
+    if (!updatedOrder) {
+      throw new NotFoundException('Order with id ' + orderId + ' not found');
+    }
+    const updatedOrderFields: Partial<Order> = { ...updatedOrderData };
+    try {
+      await this.orderModel
+        .updateOne({ _id: orderId }, { $set: updatedOrderFields })
+        .exec();
+    } catch (error) {
+      throw new Error('Failed to update order with id ' + orderId);
+    }
+  }
+
+  async removeOrder(orderId: string): Promise<void> {
+    const order = await this.orderModel.findById(orderId).exec();
+    if (!order) {
+      throw new NotFoundException(
+        'Could not remove the order with id ' + orderId,
+      );
+    }
+    await this.orderModel.deleteOne({ _id: orderId }).exec();
+  }
+
+  private async findOrder(orderId: string): Promise<Order> {
+    let order;
+    try {
+      order = await this.orderModel
+        .findById(orderId)
+        .populate('seller')
+        .populate('buyer')
+        .populate({ path: 'products.productId', model: 'Product' })
+        .exec();
+    } catch (error) {
+      throw new NotFoundException(
+        'Could not find the order with id ' + orderId,
+      );
+    }
+    /*
         if (!order) {
             throw new NotFoundException('Could not find the order.');
         }
-        return {
-            id: order.id,
-            products: order.products,
-            buyer: order.buyer,
-            seller: order.seller,
-            totalPrice: order.totalPrice,
-            dateOfPurchase: order.dateOfPurchase,
-            lastDateOfDelivery: order.lastDateOfDelivery,
-            address: order.address,
-            city: order.city,
-            country: order.country,
-        };
-    }
-
-    async updateOrder(
-        orderId: string,
-        //products: string[],
-        buyer: Buyer,
-        seller: Seller,
-        totalPrice: number,
-        lastDateOfDelivery: Date,
-        address: string,
-        city: string,
-        country: string,
-    ) {
-        const updatedOrder = await this.findOrder(orderId);
-        
-        //updatedOrder.products = products || updatedOrder.products;
-        updatedOrder.buyer = buyer || updatedOrder.buyer;
-        updatedOrder.seller = seller || updatedOrder.seller;
-        updatedOrder.totalPrice = totalPrice || updatedOrder.totalPrice;
-        updatedOrder.lastDateOfDelivery = lastDateOfDelivery || updatedOrder.lastDateOfDelivery;
-        updatedOrder.address = address || updatedOrder.address;
-        updatedOrder.city = city || updatedOrder.city;
-        updatedOrder.country = country || updatedOrder.country;
-
-        updatedOrder.save();
-    }
-
-    async removeOrder(orderId: string) {
-        const result = await this.orderModel.deleteOne({_id: orderId}).exec(); //v bazi je id shranjen kot _id
-        console.log(result);
-        if(result.deletedCount === 0){
-            throw new NotFoundException('Could not find the order.');
-        }
-    }
-
-    private async findOrder(orderId: string): Promise<Order> {
-        let order;
-        try{
-            order = await this.orderModel.findById(orderId).populate('seller').populate('buyer').populate({ path: 'products.productId', model: 'Product' }).exec();
-        } catch (error) {
-            throw new NotFoundException('Could not find the order.');
-        }
-        if (!order) {
-            throw new NotFoundException('Could not find the order.');
-        }
-        return order;
-    }
+        */
+    return order;
+  }
 }
