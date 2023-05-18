@@ -1,15 +1,20 @@
 import {
+	Alert,
 	Box,
 	Button,
 	Container,
+	FormControl,
 	IconButton,
+	InputLabel,
+	MenuItem,
 	Modal,
+	Select,
 	TextField,
 	Typography,
 } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Drink from './DrinkS';
-import { ChangeEvent, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import api from 'services/api';
 import { IDrink } from 'models/drink';
 import drink1 from '../../assets/images/cocacola.jpg';
@@ -28,22 +33,55 @@ const initialState = {
 	seller: '645d45c444ddfe8a7fef8986',
 };
 
+interface Product {
+	title: string;
+	drinkCategory: string;
+	packaging: string;
+	size: string;
+	price: number;
+	stock: number;
+	seller: string;
+}
+
+const requiredFields: (keyof Product)[] = [
+	'title',
+	'drinkCategory',
+	'packaging',
+	'size',
+	'price',
+	'stock',
+];
+
 const ProductsS = () => {
 	const [newProduct, setNewProduct] = useState(initialState);
 	const [drinks, setDrinks] = useState<IDrink[]>([]);
-	const [isOpen, setIsOpen] = useState(false);
+	const [isOpenAdd, setIsOpenAdd] = useState(false);
+	const [error, setError] = useState('');
 
 	const handleFormSubmit = async () => {
+		setError('');
+		for (const field of requiredFields) {
+			if (!newProduct[field]) {
+				setError(
+					`${
+						field.charAt(0).toUpperCase() + field.slice(1)
+					} is required`
+				);
+				return;
+			}
+		}
 		try {
 			const response = await api.post('/products', newProduct);
 			console.log(response.data);
 			setNewProduct(initialState);
+			setIsOpenAdd(false);
 		} catch (error) {
+			setError('Error adding product');
 			console.error(error);
 		}
 	};
 
-	const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+	const handleInputChange = (event: any) => {
 		event.preventDefault();
 		const { name, value } = event.target;
 		setNewProduct((prevnewProduct) => ({
@@ -56,7 +94,7 @@ const ProductsS = () => {
 		const fetchData = async () => {
 			try {
 				const response = await api.get('/products');
-				console.log(response.data);
+				//console.log(response.data);
 				setDrinks(response.data);
 			} catch (error) {
 				throw error;
@@ -77,12 +115,12 @@ const ProductsS = () => {
 						}}
 					>
 						My products
-						<IconButton onClick={() => setIsOpen(!isOpen)}>
+						<IconButton onClick={() => setIsOpenAdd(!isOpenAdd)}>
 							<AddCircleOutlineIcon />
 						</IconButton>
 						<Modal
-							open={isOpen}
-							onClose={() => setIsOpen(false)}
+							open={isOpenAdd}
+							onClose={() => setIsOpenAdd(false)}
 							aria-labelledby="modal-modal-title"
 							aria-describedby="modal-modal-description"
 						>
@@ -94,77 +132,95 @@ const ProductsS = () => {
 								>
 									Add product
 								</Typography>
-								<Typography
-									id="modal-modal-description"
-									sx={{ mt: 2 }}
-								>
-									<TextField
-										label="Title"
-										placeholder="Enter title"
-										type="text"
-										fullWidth
-										required
-										name="title"
-										value={newProduct.title}
-										onChange={handleInputChange}
-										sx={{ mb: 2 }}
-									/>
-									<TextField
-										label="Drink category"
-										placeholder="Enter drink category"
-										type="text"
-										fullWidth
-										required
+								<br />
+								<TextField
+									label="Title"
+									placeholder="Enter title"
+									type="text"
+									fullWidth
+									required
+									name="title"
+									value={newProduct.title}
+									onChange={handleInputChange}
+									sx={{ mb: 2 }}
+								/>
+								<FormControl fullWidth required sx={{ mb: 2 }}>
+									<InputLabel
+										id="drink-category-select"
+										shrink
+									>
+										Drink category
+									</InputLabel>
+									<Select
+										labelId="drink-category-select"
+										id="drink-category-select"
 										name="drinkCategory"
 										value={newProduct.drinkCategory}
 										onChange={handleInputChange}
-										sx={{ mb: 2 }}
-									/>
-									<TextField
-										label="Packaging"
-										placeholder="Enter packaging"
-										type="text"
-										fullWidth
-										required
-										name="packaging"
-										value={newProduct.packaging}
-										onChange={handleInputChange}
-										sx={{ mb: 2 }}
-									/>
-									<TextField
-										label="Size"
-										placeholder="Enter size"
-										type="text"
-										fullWidth
-										required
-										name="size"
-										value={newProduct.size}
-										onChange={handleInputChange}
-										sx={{ mb: 2 }}
-									/>
-									<TextField
-										label="Price"
-										placeholder="Enter price"
-										type="number"
-										fullWidth
-										required
-										name="price"
-										value={newProduct.price}
-										onChange={handleInputChange}
-										sx={{ mb: 2 }}
-									/>
-									<TextField
-										label="Stock"
-										placeholder="Enter stock"
-										type="number"
-										fullWidth
-										required
-										name="stock"
-										value={newProduct.stock}
-										onChange={handleInputChange}
-										sx={{ mb: 2 }}
-									/>
-								</Typography>
+									>
+										<MenuItem value="">
+											Select drink category
+										</MenuItem>
+										<MenuItem value="Alcohol">
+											Alcohol
+										</MenuItem>
+										<MenuItem value="Carbonated">
+											Carbonated
+										</MenuItem>
+										<MenuItem value="Non Carbonated">
+											Non Carbonated
+										</MenuItem>
+									</Select>
+								</FormControl>
+								<TextField
+									label="Packaging"
+									placeholder="Enter packaging"
+									type="text"
+									fullWidth
+									required
+									name="packaging"
+									value={newProduct.packaging}
+									onChange={handleInputChange}
+									sx={{ mb: 2 }}
+								/>
+								<TextField
+									label="Size"
+									placeholder="Enter size"
+									type="text"
+									fullWidth
+									required
+									name="size"
+									value={newProduct.size}
+									onChange={handleInputChange}
+									sx={{ mb: 2 }}
+								/>
+								<TextField
+									label="Price"
+									placeholder="Enter price"
+									type="number"
+									fullWidth
+									required
+									name="price"
+									value={newProduct.price}
+									onChange={handleInputChange}
+									sx={{ mb: 2 }}
+								/>
+								<TextField
+									label="Stock"
+									placeholder="Enter stock"
+									type="number"
+									fullWidth
+									required
+									name="stock"
+									value={newProduct.stock}
+									onChange={handleInputChange}
+									sx={{ mb: 2 }}
+								/>
+								{error && (
+									<Alert severity="error">
+										<b>{error}</b>
+									</Alert>
+								)}
 								<Typography sx={{ mt: 2 }}>
 									<Button
 										color="primary"
@@ -194,6 +250,8 @@ const ProductsS = () => {
 									name={drink.title}
 									img={drink1}
 									price={drink.price}
+									setDrinks={setDrinks}
+									drinks={drinks}
 								/>
 							</DrinkContainer>
 						))}

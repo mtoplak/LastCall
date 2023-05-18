@@ -104,13 +104,10 @@ function Product() {
 								</Typography>
 								<Divider />
 								<br />
-								<Alert severity="info">
-									There is currently no discount for this
-									item!{' '}
-								</Alert>
+
 								<Alert severity="success">
-									There is currently a discountNumber%
-									discount for this item!{' '}
+									There is currently a 25% discount for this
+									item!{' '}
 								</Alert>
 								<br />
 								<Divider />
