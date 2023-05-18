@@ -77,7 +77,7 @@ function Cart() {
 													variant="body2"
 													color="text.secondary"
 												>
-													Price: $
+													Price: €
 													{item.price.toFixed(2)}
 												</Typography>
 												{item.discount > 0 ? (
