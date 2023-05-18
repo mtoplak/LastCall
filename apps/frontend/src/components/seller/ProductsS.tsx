@@ -22,6 +22,10 @@ import PropertiesTextBox from 'components/ui/PropertiesTextBox';
 import DrinkContainer from 'components/ui/DrinkContainer';
 import PropertiesBox from 'components/ui/PropertiesBox';
 import { style } from 'assets/styles/styles';
+import { MuiFileInput } from 'mui-file-input';
+import { storage } from '../../firebase';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { v4 } from 'uuid';
 
 const initialState = {
 	title: '',
@@ -31,6 +35,7 @@ const initialState = {
 	price: 0,
 	stock: 0,
 	seller: '645d45c444ddfe8a7fef8986',
+	image: '',
 };
 
 interface Product {
@@ -41,6 +46,7 @@ interface Product {
 	price: number;
 	stock: number;
 	seller: string;
+	image: string;
 }
 
 const requiredFields: (keyof Product)[] = [
@@ -54,11 +60,12 @@ const requiredFields: (keyof Product)[] = [
 
 const ProductsS = () => {
 	const [newProduct, setNewProduct] = useState(initialState);
-	const [drinks, setDrinks] = useState<IDrink[]>([]);
+	const [drinks, setDrinks] = useState<any>([]); // <IDrink[]> // dodaj to nazaj not, ko boš dobil v responsu nazaj novi drink
 	const [isOpenAdd, setIsOpenAdd] = useState(false);
 	const [error, setError] = useState('');
+	const [productImage, setProductImage] = useState<File | null>(null);
 
-	const handleFormSubmit = async () => {
+	const handleFormSubmit = async (imageURL: string) => {
 		setError('');
 		for (const field of requiredFields) {
 			if (!newProduct[field]) {
@@ -71,9 +78,13 @@ const ProductsS = () => {
 			}
 		}
 		try {
-			const response = await api.post('/products', newProduct);
-			console.log(response.data);
+			const updatedProduct = { ...newProduct, picture: imageURL };
+			//console.log(updatedProduct);
+			const response = await api.post('/products', updatedProduct);
+			//console.log(response.data);
 			setNewProduct(initialState);
+
+			setDrinks((prev: any) => [...prev, updatedProduct]);
 			setIsOpenAdd(false);
 		} catch (error) {
 			setError('Error adding product');
@@ -102,6 +113,30 @@ const ProductsS = () => {
 		};
 		fetchData();
 	}, []);
+
+	const handleChange = (newFile: any) => {
+		setProductImage(newFile);
+	};
+
+	const uploadImage = async () => {
+		if (!productImage) return;
+		const storageRef = ref(storage, `images/${productImage.name + v4()}`);
+		try {
+			const uploadTask = uploadBytes(storageRef, productImage);
+			const response = await uploadTask;
+			const downloadURL = await getDownloadURL(response.ref);
+			setNewProduct((prevNewProduct) => {
+				const updatedProduct = {
+					...prevNewProduct,
+					image: downloadURL,
+				};
+				handleFormSubmit(downloadURL); // Call handleFormSubmit immediately after the state update
+				return updatedProduct;
+			});
+		} catch (error: any) {
+			setError(error);
+		}
+	};
 
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', py: 10 }}>
@@ -216,6 +251,11 @@ const ProductsS = () => {
 									onChange={handleInputChange}
 									sx={{ mb: 2 }}
 								/>
+								<MuiFileInput
+									value={productImage}
+									onChange={handleChange}
+									style={{ cursor: 'pointer' }}
+								/>
 								{error && (
 									<Alert severity="error">
 										<b>{error}</b>
@@ -226,7 +266,7 @@ const ProductsS = () => {
 										color="primary"
 										variant="contained"
 										fullWidth
-										onClick={handleFormSubmit}
+										onClick={uploadImage}
 									>
 										Add
 									</Button>
@@ -243,18 +283,23 @@ const ProductsS = () => {
 
 				<PropertiesBox>
 					{drinks &&
-						drinks.map((drink, index) => (
-							<DrinkContainer key={index}>
-								<Drink
-									id={drink._id}
-									name={drink.title}
-									img={drink1}
-									price={drink.price}
-									setDrinks={setDrinks}
-									drinks={drinks}
-								/>
-							</DrinkContainer>
-						))}
+						drinks.map(
+							(
+								drink: any,
+								index: any // TODO: remove any
+							) => (
+								<DrinkContainer key={index}>
+									<Drink
+										id={drink._id}
+										name={drink.title}
+										img={drink1}
+										price={drink.price}
+										setDrinks={setDrinks}
+										drinks={drinks}
+									/>
+								</DrinkContainer>
+							)
+						)}
 				</PropertiesBox>
 			</Container>
 		</Box>
