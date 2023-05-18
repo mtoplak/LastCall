@@ -39,13 +39,11 @@ const DrinkS: React.FC<DrinkProps> = ({ id, name, img, price }) => {
 	};
 
 	const handleFormSubmit = async () => {
-		console.log(productId);
 		try {
 			const response = await api.patch(`/products/${productId}`, drink);
 			console.log(response.data);
 			setIsOpenEdit(!isOpenEdit);
 		} catch (error) {
-			console.error('Error updating drink:', error);
 		}
 	};
 
@@ -54,7 +52,7 @@ const DrinkS: React.FC<DrinkProps> = ({ id, name, img, price }) => {
 			await api.delete(`/products/${productId}`);
 			console.log('Drink deleted successfully');
 		} catch (error) {
-			console.error('Error deleting drink:', error);
+			throw error;
 		}
 	};
 
