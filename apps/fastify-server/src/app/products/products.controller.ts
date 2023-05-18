@@ -1,6 +1,9 @@
-import { Body, Controller, Get, Post, Param, Patch, Delete } from "@nestjs/common";
+import { Body, Controller, Get, Post, Param, Patch, Delete, UseInterceptors, UploadedFile, ParseFilePipeBuilder, HttpStatus } from "@nestjs/common";
 import { ProductsService } from "./products.service";
 import { Seller } from "../sellers/sellers.model";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { Express } from 'express';
+import { Multer } from "multer";
 
 @Controller('products')
 export class ProductsController {
@@ -26,7 +29,7 @@ export class ProductsController {
             stock,
             //orders,
             seller
-            );
+        );
         return { id: generatedID };
     }
 
@@ -64,7 +67,7 @@ export class ProductsController {
             stock,
             //orders,
             seller
-            );
+        );
         return null;
     }
 
@@ -72,6 +75,20 @@ export class ProductsController {
     async removeProduct(@Param('id') id: string) {
         await this.productService.deleteProduct(id);
         return null;
+    }
+
+    @Post('upload')
+    @UseInterceptors(FileInterceptor('image'))
+    uploadFile(@UploadedFile(new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+            fileType: 'png',
+        }).addMaxSizeValidator({
+            maxSize: 1000000,
+        })
+        .build({
+            errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
+        }),) file: Express.Multer.File) {
+        console.log(file);
     }
 
 }
