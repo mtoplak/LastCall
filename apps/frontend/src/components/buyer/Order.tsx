@@ -54,11 +54,9 @@ const Order: React.FC<OrderProps> = ({
                 </Grid>
 			</AccordionSummary>
 			<AccordionDetails>
-				<Typography>
                 <Typography color={'#333333'}>
 					<b>ORDER ID:</b>
 					{id}
-				</Typography>
 				</Typography>
 			</AccordionDetails>
 		</Accordion>
