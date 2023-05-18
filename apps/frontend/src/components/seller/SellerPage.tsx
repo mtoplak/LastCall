@@ -1,22 +1,13 @@
 import {
-	Alert,
 	Box,
 	Button,
-	Card,
-	CardContent,
 	Container,
 	Dialog,
 	DialogActions,
 	DialogContent,
 	DialogContentText,
 	DialogTitle,
-	Divider,
-	List,
-	ListItem,
-	ListItemText,
-	TextField,
 	Typography,
-	styled,
 } from '@mui/material';
 import { ISeller } from 'models/seller';
 import React, { useEffect, useState } from 'react';
@@ -30,6 +21,7 @@ import PropertiesTextBox from 'components/ui/PropertiesTextBox';
 import CustomBox from 'components/ui/CustomBox';
 
 function SellerPage() {
+	const [isOpen, setIsOpen] = React.useState(false);
 	const [seller, setSller] = useState<ISeller>();
 	const { id } = useParams<{ id: string }>();
 
@@ -45,15 +37,6 @@ function SellerPage() {
 		};
 		fetchData();
 	}, [id]);
-
-	const [open, setOpen] = React.useState(false);
-	const handleClickOpen = () => {
-		setOpen(true);
-	};
-
-	const handleClose = () => {
-		setOpen(false);
-	};
 
 	return (
 		<>
@@ -95,7 +78,7 @@ function SellerPage() {
 							</Typography>
 							<Button
 								variant="outlined"
-								onClick={handleClickOpen}
+								onClick={() => setIsOpen(true)}
 								sx={{
 									backgroundColor: '#0F1B4C',
 									color: '#FFFFFF',
@@ -109,8 +92,8 @@ function SellerPage() {
 								Contact us
 							</Button>
 							<Dialog
-								open={open}
-								onClose={handleClose}
+								open={isOpen}
+								onClose={() => setIsOpen(false)}
 								aria-labelledby="alert-dialog-title"
 								aria-describedby="alert-dialog-description"
 							>
@@ -127,7 +110,9 @@ function SellerPage() {
 									</DialogContentText>
 								</DialogContent>
 								<DialogActions>
-									<Button onClick={handleClose}>Close</Button>
+									<Button onClick={() => setIsOpen(true)}>
+										Close
+									</Button>
 								</DialogActions>
 							</Dialog>
 						</Box>

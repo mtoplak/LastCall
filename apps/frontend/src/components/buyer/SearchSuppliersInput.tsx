@@ -24,18 +24,6 @@ function SearchSuppliersInput({
 	setFilterType,
 	setIsChecked,
 }: SearchInputProps) {
-	const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setFilterName(event.target.value);
-	};
-
-	const handleChangeLocation = (event: any) => {
-		setFilterLocation(event.target.value);
-	};
-
-	const handleChangeType = (event: any) => {
-		setFilterType(event.target.value);
-	};
-
 	return (
 		<Box sx={{ backgroundColor: '#F5F5F5', p: 2, textAlign: 'center' }}>
 			<FormControl sx={{ display: 'inline-block', alignItems: 'center' }}>
@@ -44,7 +32,7 @@ function SearchSuppliersInput({
 					label="Supplier Name"
 					variant="outlined"
 					sx={{ mr: 3, mb: 2, mt: 2 }}
-					onChange={handleChangeName}
+					onChange={(event) => setFilterName(event.target.value)}
 				/>
 			</FormControl>
 			<FormControl sx={{ display: 'inline-block', alignItems: 'center' }}>
@@ -54,7 +42,7 @@ function SearchSuppliersInput({
 					label="Supplier Location"
 					variant="outlined"
 					sx={{ mr: 3, mb: 2, mt: 2 }}
-					onChange={handleChangeLocation}
+					onChange={(event) => setFilterLocation(event.target.value)}
 				/>
 			</FormControl>
 
@@ -65,7 +53,7 @@ function SearchSuppliersInput({
 					sx={{ mr: 3, mb: 2, mt: 2, width: '150px' }}
 					label="Location"
 					defaultValue="any"
-					onChange={handleChangeType}
+					onChange={(event) => setFilterType(event.target.value)}
 				>
 					<MenuItem value="any">Any</MenuItem>
 					<MenuItem value="winery">Winery</MenuItem>

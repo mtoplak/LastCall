@@ -1,4 +1,4 @@
-import { Box, styled, Typography, IconButton } from '@mui/material';
+import { Typography, IconButton } from '@mui/material';
 import React from 'react';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import InfoBox from 'components/ui/InfoBox';

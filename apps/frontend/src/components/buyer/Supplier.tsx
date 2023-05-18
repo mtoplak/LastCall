@@ -1,4 +1,4 @@
-import { Box, styled, Typography, IconButton } from '@mui/material';
+import { Typography } from '@mui/material';
 import HouseBox from 'components/ui/HouseBox';
 import InfoBox from 'components/ui/InfoBox';
 import React from 'react';

@@ -3,7 +3,6 @@ import {
 	Box,
 	Button,
 	Container,
-	FormControlLabel,
 	Grid,
 	Paper,
 	TextField,
@@ -11,19 +10,10 @@ import {
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import heroImg from '../../../assets/images/homepageDrink.png';
-import React from 'react';
 import CustomBox from 'components/ui/CustomBox';
+import { avatarStyle, btnstyle, paperStyle } from 'assets/styles/styles';
 
 const LoginB = () => {
-	const paperStyle = {
-		padding: 20,
-		height: '50vh',
-		width: 280,
-		margin: '20px auto',
-	};
-	const avatarStyle = { backgroundColor: '#1bbd7e' };
-	const btnstyle = { margin: '8px 0' };
-
 	return (
 		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '100vh' }}>
 			<Container>

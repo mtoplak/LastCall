@@ -1,4 +1,3 @@
-import React from 'react';
 import {
 	Box,
 	Button,
@@ -9,11 +8,7 @@ import {
 	CardMedia,
 	CardContent,
 	CardActions,
-	List,
-	ListItem,
 	Divider,
-	ListItemText,
-	styled,
 	Alert,
 } from '@mui/material';
 import drink from '../../assets/images/cocacola.jpg';

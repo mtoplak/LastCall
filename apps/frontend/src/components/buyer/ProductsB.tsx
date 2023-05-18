@@ -1,4 +1,4 @@
-import { Box, Container, styled, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import Drink from './DrinkB';
 import SearchProductsInput from './SearchProductsInput';
@@ -7,31 +7,17 @@ import { IDrink } from 'models/drink';
 import drink1 from '../../assets/images/cocacola.jpg';
 import { Link } from 'react-router-dom';
 import DrinkContainer from 'components/ui/DrinkContainer';
+import PropertiesBox from 'components/ui/PropertiesBox';
+import PropertiesTextBox from 'components/ui/PropertiesTextBox';
 
 const Products = () => {
 	const [drinks, setDrinks] = useState<IDrink[]>([]);
+	console.log(drinks);
 
 	// filtering
 	const [filterName, setFilterName] = useState<string>('');
 	const [filterLocation, setFilterLocation] = useState<string>('any');
 	const [filterType, setFilterType] = useState<string>('any');
-
-	const PropertiesBox = styled(Box)(({ theme }) => ({
-		display: 'flex',
-		justifyContent: 'space-between',
-		flexWrap: 'wrap', // Allow products to wrap to the next line
-		marginTop: theme.spacing(5),
-		[theme.breakpoints.down('md')]: {
-			flexDirection: 'column',
-			alignItems: 'center',
-		},
-	}));
-
-	const PropertiesTextBox = styled(Box)(({ theme }) => ({
-		[theme.breakpoints.down('md')]: {
-			textAlign: 'center',
-		},
-	}));
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -59,11 +45,11 @@ const Products = () => {
 			drink.seller.country.toLowerCase() === filterLocation.toLowerCase();
 		return nameMatch && typeMatch && locationMatch;
 	});
-
+	/*
 	console.log(filterName);
 	console.log(filterLocation);
 	console.log(filterType);
-	console.log(filteredDrinks);
+	console.log(filteredDrinks);*/
 	return (
 		<Box sx={{ mt: 5, backgroundColor: '#f2f2f2', py: 10 }}>
 			<Container>
@@ -99,7 +85,7 @@ const Products = () => {
 						filterName !== '' ||
 						filterLocation !== 'any') ? (
 						filteredDrinks.map((drink) => (
-							<Link to={`/product/${drink.id}`} key={drink.id}>
+							<Link to={`/product/${drink._id}`} key={drink._id}>
 								<DrinkContainer>
 									<Drink
 										name={drink.title}
@@ -116,7 +102,7 @@ const Products = () => {
 						<>Nothing found &#128549;</>
 					) : (
 						drinks.map((drink) => (
-							<Link to={`/product/${drink.id}`} key={drink.id}>
+							<Link to={`/product/${drink._id}`} key={drink._id}>
 								<DrinkContainer>
 									<Drink
 										name={drink.title}

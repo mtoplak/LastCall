@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Hero from './HeroB';
 import Footer from 'components/homepage/Footer';
-import {
-	Box,
-	Container,
-	LinearProgress,
-	Typography,
-	styled,
-} from '@mui/material';
+import { Box, Container, LinearProgress, Typography } from '@mui/material';
 import { ISeller } from 'models/seller';
 import api from 'services/api';
 import SearchSuppliersInput from './SearchSuppliersInput';
@@ -32,6 +26,7 @@ import 'react-leaflet-markercluster/dist/styles.min.css';
 import PropertiesBox from 'components/ui/PropertiesBox';
 import PropertiesTextBox from 'components/ui/PropertiesTextBox';
 import SellerContainer from 'components/ui/SellerContainer';
+import { OpenStreetMapProvider } from 'leaflet-geosearch';
 L.Icon.Default.mergeOptions({
 	iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
 	iconUrl: require('leaflet/dist/images/marker-icon.png'),
@@ -83,12 +78,12 @@ function Suppliers() {
 	});
 
 	// Create a custom icon for the individual markers
-	const markerIcon = L.icon({
+	/*const markerIcon = L.icon({
 		iconUrl: '/path/to/marker-icon.png',
 		iconSize: [25, 41],
 		iconAnchor: [12, 41],
 		popupAnchor: [1, -34],
-	});
+	});*/
 
 	const MapCenter = () => {
 		const map = useMap();
@@ -107,6 +102,7 @@ function Suppliers() {
 
 	useEffect(() => {
 		const fetchData = async () => {
+			console.log('Fetching data...');
 			setIsLoading(true);
 			if (
 				filterName !== '' ||
@@ -242,8 +238,8 @@ function Suppliers() {
 							filterLocation !== 'any') ? (
 							filteredSellers.map((seller) => (
 								<Link
-									to={`/supplier/${seller.id}`}
-									key={seller.id}
+									to={`/supplier/${seller._id}`}
+									key={seller._id}
 								>
 									<SellerContainer>
 										<Supplier

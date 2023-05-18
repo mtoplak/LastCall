@@ -1,4 +1,3 @@
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Homepage from '../homepage/Homepage';
 import Buyer from 'components/buyer/Buyer';

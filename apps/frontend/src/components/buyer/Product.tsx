@@ -11,10 +11,9 @@ import {
 	ListItemText,
 	TextField,
 	Typography,
-	styled,
 } from '@mui/material';
 import { IDrink } from 'models/drink';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import api from 'services/api';
 import NavbarB from './NavbarB';
@@ -24,6 +23,7 @@ import CustomBox from 'components/ui/CustomBox';
 function Product() {
 	const [drink, setDrink] = useState<IDrink>();
 	const { id } = useParams<{ id: string }>();
+	console.log(id);
 
 	useEffect(() => {
 		const fetchData = async () => {
