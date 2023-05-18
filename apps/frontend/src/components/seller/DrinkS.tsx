@@ -93,16 +93,13 @@ const DrinkS: React.FC<DrinkProps> = ({ id, name, img, price }) => {
 	};
 
 	const handleFormSubmit = async () => {
-		console.log(productId);
 		try {
 			const response = await api.patch(
 				`/products/${productId}`,
 				formData
 			);
-			console.log('Drink updated successfully:', response.data);
 			handleClose();
 		} catch (error) {
-			console.error('Error updating drink:', error);
 		}
 	};
 
@@ -119,10 +116,9 @@ const DrinkS: React.FC<DrinkProps> = ({ id, name, img, price }) => {
 	const handleDeleteClick = async () => {
 		try {
 			await api.delete(`/products/${productId}`);
-			console.log('Drink deleted successfully');
 			// Perform any necessary actions after deleting the product, such as updating the UI or fetching updated data
 		} catch (error) {
-			console.error('Error deleting drink:', error);
+			throw error;
 		}
 	};
 

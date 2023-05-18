@@ -8,6 +8,7 @@ import Product from 'components/buyer/Product';
 import Suppliers from 'components/buyer/Suppliers';
 import SellerPage from 'components/seller/SellerPage';
 import Cart from 'components/buyer/Cart';
+import PastOrders from 'components/buyer/PastOrders';
 
 const Routing = () => {
 	return (
@@ -20,6 +21,7 @@ const Routing = () => {
 				<Route path="/product/:id" element={<Product />} />
 				<Route path="/supplier/:id" element={<SellerPage />} />
 				<Route path="/cart" element={<Cart />} />
+				<Route path="/orders" element={<PastOrders />} />
 				<Route path="*" element={<Page404 />} />
 			</Routes>
 		</>
