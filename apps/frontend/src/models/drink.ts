@@ -1,5 +1,5 @@
 export interface IDrink {
-    id: string;
+    _id: string;
     title: string;
     price: number;
     image: string;

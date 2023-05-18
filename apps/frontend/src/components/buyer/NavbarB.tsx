@@ -14,7 +14,7 @@ import { ThemeProvider, createTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 const pages = ['Products', 'Suppliers', 'Contact'];
-const settings = ['Profile', 'Shopping cart', 'My Orders', 'Logout'];
+//const settings = ['Profile', 'Shopping cart', 'My Orders', 'Logout'];
 
 function NavbarB() {
 	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -171,7 +171,9 @@ function NavbarB() {
 								Contact
 							</Button>
 						</Box>
-						<Link to={"/cart"}><Button>Cart</Button></Link>
+						<Link to={'/cart'}>
+							<Button>Cart</Button>
+						</Link>
 						{isLoggedIn ? (
 							<Box sx={{ flexGrow: 0 }}>
 								<Tooltip title="Open settings">
@@ -180,7 +182,7 @@ function NavbarB() {
 										sx={{ p: 0 }}
 									>
 										<Avatar
-											alt={"a"}
+											alt={'a'}
 											src="/static/images/avatar/2.jpg"
 										/>
 									</IconButton>

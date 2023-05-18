@@ -1,17 +1,11 @@
-import {
-	Box,
-	styled,
-	Typography,
-	Button,
-	Modal,
-	TextField,
-} from '@mui/material';
+import { Box, Typography, Button, Modal, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import api from '../../services/api';
 import InfoBox from 'components/ui/InfoBox';
 import ImgContainer from 'components/ui/ImgContainer';
 import HouseBox from 'components/ui/HouseBox';
 import Image from 'components/ui/Image';
+import { style } from 'assets/styles/styles';
 
 interface DrinkProps {
 	id: string;
@@ -20,72 +14,43 @@ interface DrinkProps {
 	price: number;
 }
 
+const initialState = {
+	title: '',
+	drinkCategory: '',
+	packaging: '',
+	size: '',
+	price: 0,
+	stock: 0,
+	seller: '645d45c444ddfe8a7fef8986',
+};
+
 const DrinkS: React.FC<DrinkProps> = ({ id, name, img, price }) => {
-	const style = {
-		position: 'absolute' as 'absolute',
-		top: '50%',
-		left: '50%',
-		transform: 'translate(-50%, -50%)',
-		width: 400,
-		bgcolor: 'background.paper',
-		border: '2px solid #000',
-		boxShadow: 24,
-		p: 4,
-	};
-
-	const [open, setOpen] = React.useState(false);
-	const handleOpen = () => setOpen(true);
-	const handleClose = () => setOpen(false);
 	const [productId, setProductId] = useState('');
-
-	//patch
-	const [formData, setFormData] = useState({
-		title: '',
-		drinkCategory: '',
-		packaging: '',
-		size: '',
-		price: 0,
-		stock: 0,
-	});
+	const [isOpenEdit, setIsOpenEdit] = useState(false);
+	const [isOpenDelete, setIsOpenDelete] = useState(false);
+	const [drink, setDrink] = useState(initialState);
 
 	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
-		setFormData((prevData) => ({
+		setDrink((prevData) => ({
 			...prevData,
 			[name]: value,
 		}));
 	};
 
-	const handleEditClick = (id: string) => {
-		setProductId(id);
-		handleOpen();
-	};
-
 	const handleFormSubmit = async () => {
 		try {
-			const response = await api.patch(
-				`/products/${productId}`,
-				formData
-			);
-			handleClose();
+			const response = await api.patch(`/products/${productId}`, drink);
+			console.log(response.data);
+			setIsOpenEdit(!isOpenEdit);
 		} catch (error) {
 		}
-	};
-
-	//delete
-	const [openDelete, setOpenDelete] = React.useState(false);
-	const handleOpenDelete = () => setOpenDelete(true);
-	const handleCloseDelete = () => setOpenDelete(false);
-
-	const handleRemoveClick = (id: string) => {
-		setProductId(id);
-		handleOpenDelete();
 	};
 
 	const handleDeleteClick = async () => {
 		try {
 			await api.delete(`/products/${productId}`);
-			// Perform any necessary actions after deleting the product, such as updating the UI or fetching updated data
+			console.log('Drink deleted successfully');
 		} catch (error) {
 			throw error;
 		}
@@ -114,13 +79,16 @@ const DrinkS: React.FC<DrinkProps> = ({ id, name, img, price }) => {
 					<Button
 						variant="contained"
 						color="primary"
-						onClick={(event) => handleEditClick(id)}
+						onClick={(event) => {
+							setProductId(id);
+							setIsOpenEdit(!isOpenEdit);
+						}}
 					>
 						Edit
 					</Button>
 					<Modal
-						open={open}
-						onClose={handleClose}
+						open={isOpenEdit}
+						onClose={() => setIsOpenEdit(false)}
 						aria-labelledby="modal-modal-title"
 						aria-describedby="modal-modal-description"
 					>
@@ -130,68 +98,79 @@ const DrinkS: React.FC<DrinkProps> = ({ id, name, img, price }) => {
 								variant="h6"
 								component="h2"
 							>
-								Add product
+								Edit product
 							</Typography>
-							<TextField
-								label="Title"
-								placeholder="Enter title"
-								type="text"
-								fullWidth
-								required
-								name="title"
-								value={formData.title}
-								onChange={handleInputChange}
-							/>
-							<TextField
-								label="Drink category"
-								placeholder="Enter drink category"
-								type="text"
-								fullWidth
-								required
-								name="drinkCategory"
-								value={formData.drinkCategory}
-								onChange={handleInputChange}
-							/>
-							<TextField
-								label="Packaging"
-								placeholder="Enter packaging"
-								type="text"
-								fullWidth
-								required
-								name="packaging"
-								value={formData.packaging}
-								onChange={handleInputChange}
-							/>
-							<TextField
-								label="Size"
-								placeholder="Enter size"
-								type="text"
-								fullWidth
-								required
-								name="size"
-								value={formData.size}
-								onChange={handleInputChange}
-							/>
-							<TextField
-								label="Price"
-								placeholder="Enter price"
-								type="number"
-								fullWidth
-								required
-								name="price"
-								value={formData.price}
-								onChange={handleInputChange}
-							/>
-							<TextField
-								label="Stock"
-								placeholder="Enter stock"
-								type="number"
-								fullWidth
-								required
-								name="stock"
-								value={formData.stock}
-								onChange={handleInputChange}
-							/>
+							<Typography
+								id="modal-modal-description"
+								sx={{ mt: 2 }}
+							>
+								<TextField
+									label="Title"
+									placeholder="Enter title"
+									type="text"
+									fullWidth
+									required
+									name="title"
+									value={drink.title}
+									onChange={handleInputChange}
+									sx={{ mb: 2 }}
+								/>
+								<TextField
+									label="Drink category"
+									placeholder="Enter drink category"
+									type="text"
+									fullWidth
+									required
+									name="drinkCategory"
+									value={drink.drinkCategory}
+									onChange={handleInputChange}
+									sx={{ mb: 2 }}
+								/>
+								<TextField
+									label="Packaging"
+									placeholder="Enter packaging"
+									type="text"
+									fullWidth
+									required
+									name="packaging"
+									value={drink.packaging}
+									onChange={handleInputChange}
+									sx={{ mb: 2 }}
+								/>
+								<TextField
+									label="Size"
+									placeholder="Enter size"
+									type="text"
+									fullWidth
+									required
+									name="size"
+									value={drink.size}
+									onChange={handleInputChange}
+									sx={{ mb: 2 }}
+								/>
+								<TextField
+									label="Price"
+									placeholder="Enter price"
+									type="number"
+									fullWidth
+									required
+									name="price"
+									value={drink.price}
+									onChange={handleInputChange}
+									sx={{ mb: 2 }}
+								/>
+								<TextField
+									label="Stock"
+									placeholder="Enter stock"
+									type="number"
+									fullWidth
+									required
+									name="stock"
+									value={drink.stock}
+									onChange={handleInputChange}
+									sx={{ mb: 2 }}
+								/>
+							</Typography>
 							<Typography sx={{ mt: 2 }}>
 								<Button
 									color="primary"
@@ -199,7 +178,7 @@ const DrinkS: React.FC<DrinkProps> = ({ id, name, img, price }) => {
 									fullWidth
 									onClick={handleFormSubmit}
 								>
-									Add
+									Submit changes
 								</Button>
 							</Typography>
 						</Box>
@@ -207,13 +186,16 @@ const DrinkS: React.FC<DrinkProps> = ({ id, name, img, price }) => {
 					<Button
 						variant="contained"
 						color="error"
-						onClick={(event) => handleRemoveClick(id)}
+						onClick={(event) => {
+							setProductId(id);
+							setIsOpenDelete(!isOpenDelete);
+						}}
 					>
 						Delete
 					</Button>
 					<Modal
-						open={openDelete}
-						onClose={handleCloseDelete}
+						open={isOpenDelete}
+						onClose={() => setIsOpenDelete(!isOpenDelete)}
 						aria-labelledby="modal-modal-title"
 						aria-describedby="modal-modal-description"
 					>

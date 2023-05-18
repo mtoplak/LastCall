@@ -2,23 +2,21 @@ import {
 	Box,
 	Button,
 	Container,
-	Icon,
 	IconButton,
 	Modal,
-	styled,
 	TextField,
 	Typography,
 } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { drinks } from '../data/data';
 import Drink from './DrinkS';
-import React, { ChangeEvent, useState, useEffect } from 'react';
+import { ChangeEvent, useState, useEffect } from 'react';
 import api from 'services/api';
 import { IDrink } from 'models/drink';
 import drink1 from '../../assets/images/cocacola.jpg';
 import PropertiesTextBox from 'components/ui/PropertiesTextBox';
 import DrinkContainer from 'components/ui/DrinkContainer';
 import PropertiesBox from 'components/ui/PropertiesBox';
+import { style } from 'assets/styles/styles';
 
 const initialState = {
 	title: '',
@@ -31,24 +29,16 @@ const initialState = {
 };
 
 const ProductsS = () => {
-	//post
-	const [formData, setFormData] = useState(initialState);
+	const [newProduct, setNewProduct] = useState(initialState);
+	const [drinks, setDrinks] = useState<IDrink[]>([]);
+	const [isOpen, setIsOpen] = useState(false);
 
 	const handleFormSubmit = async () => {
 		try {
-			const response = await api.post('/products', formData);
+			const response = await api.post('/products', newProduct);
 			console.log(response.data);
-			setFormData({
-				title: '',
-				drinkCategory: '',
-				packaging: '',
-				size: '',
-				price: 0,
-				stock: 0,
-				seller: '645d45c444ddfe8a7fef8986',
-			});
+			setNewProduct(initialState);
 		} catch (error) {
-			// Handle the error
 			console.error(error);
 		}
 	};
@@ -56,15 +46,11 @@ const ProductsS = () => {
 	const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
 		event.preventDefault();
 		const { name, value } = event.target;
-		setFormData((prevFormData) => ({
-			...prevFormData,
+		setNewProduct((prevnewProduct) => ({
+			...prevnewProduct,
 			[name]: value,
 		}));
 	};
-	//...
-
-	//get
-	const [drinks2, setDrinks] = useState<IDrink[]>([]);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -78,23 +64,6 @@ const ProductsS = () => {
 		};
 		fetchData();
 	}, []);
-	//...
-
-	const style = {
-		position: 'absolute' as 'absolute',
-		top: '50%',
-		left: '50%',
-		transform: 'translate(-50%, -50%)',
-		width: 400,
-		bgcolor: 'background.paper',
-		border: '2px solid #000',
-		boxShadow: 24,
-		p: 4,
-	};
-
-	const [open, setOpen] = React.useState(false);
-	const handleOpen = () => setOpen(true);
-	const handleClose = () => setOpen(false);
 
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', py: 10 }}>
@@ -108,12 +77,12 @@ const ProductsS = () => {
 						}}
 					>
 						My products
-						<IconButton onClick={handleOpen}>
+						<IconButton onClick={() => setIsOpen(!isOpen)}>
 							<AddCircleOutlineIcon />
 						</IconButton>
 						<Modal
-							open={open}
-							onClose={handleClose}
+							open={isOpen}
+							onClose={() => setIsOpen(false)}
 							aria-labelledby="modal-modal-title"
 							aria-describedby="modal-modal-description"
 						>
@@ -136,7 +105,7 @@ const ProductsS = () => {
 										fullWidth
 										required
 										name="title"
-										value={formData.title}
+										value={newProduct.title}
 										onChange={handleInputChange}
 										sx={{ mb: 2 }}
 									/>
@@ -147,7 +116,7 @@ const ProductsS = () => {
 										fullWidth
 										required
 										name="drinkCategory"
-										value={formData.drinkCategory}
+										value={newProduct.drinkCategory}
 										onChange={handleInputChange}
 										sx={{ mb: 2 }}
 									/>
@@ -158,7 +127,7 @@ const ProductsS = () => {
 										fullWidth
 										required
 										name="packaging"
-										value={formData.packaging}
+										value={newProduct.packaging}
 										onChange={handleInputChange}
 										sx={{ mb: 2 }}
 									/>
@@ -169,7 +138,7 @@ const ProductsS = () => {
 										fullWidth
 										required
 										name="size"
-										value={formData.size}
+										value={newProduct.size}
 										onChange={handleInputChange}
 										sx={{ mb: 2 }}
 									/>
@@ -180,7 +149,7 @@ const ProductsS = () => {
 										fullWidth
 										required
 										name="price"
-										value={formData.price}
+										value={newProduct.price}
 										onChange={handleInputChange}
 										sx={{ mb: 2 }}
 									/>
@@ -191,7 +160,7 @@ const ProductsS = () => {
 										fullWidth
 										required
 										name="stock"
-										value={formData.stock}
+										value={newProduct.stock}
 										onChange={handleInputChange}
 										sx={{ mb: 2 }}
 									/>
@@ -218,10 +187,10 @@ const ProductsS = () => {
 
 				<PropertiesBox>
 					{drinks &&
-						drinks2.map((drink, index) => (
+						drinks.map((drink, index) => (
 							<DrinkContainer key={index}>
 								<Drink
-									id={drink.id}
+									id={drink._id}
 									name={drink.title}
 									img={drink1}
 									price={drink.price}

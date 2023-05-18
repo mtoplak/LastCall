@@ -1,5 +1,4 @@
-import { Box, Button, styled, Typography, Container } from '@mui/material';
-import React from 'react';
+import { Box, Typography, Container } from '@mui/material';
 import NavbarS from './NavbarS';
 import heroImg from '../../assets/images/homepageDrink.png';
 import Title from 'components/ui/Title';

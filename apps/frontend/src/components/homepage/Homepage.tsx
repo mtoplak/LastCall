@@ -1,6 +1,4 @@
-import { Box, Button, styled, Typography, Container } from '@mui/material';
-import React from 'react';
-
+import { Box, Typography, Container } from '@mui/material';
 import heroImg from '../../assets/images/homepageDrink.png';
 import CustomButton from '../ui/CustomButton';
 import { Link } from 'react-router-dom';

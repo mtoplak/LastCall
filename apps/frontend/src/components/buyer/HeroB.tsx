@@ -1,28 +1,10 @@
-import {
-	Box,
-	Button,
-	styled,
-	TextField,
-	Typography,
-	Container,
-} from '@mui/material';
-import React from 'react';
-import banner from '../../assets/images/drinks-banner.jpg';
+import { Box, Typography, Container } from '@mui/material';
 import NavbarB from './NavbarB';
 import heroImg from '../../assets/images/homepageDrink.png';
 import CustomBox from 'components/ui/CustomBox';
+import Title from 'components/ui/Title';
 
 const Hero = () => {
-	const Title = styled(Typography)(({ theme }) => ({
-		fontSize: '64px',
-		color: '#262626',
-		fontWeight: 'bold',
-		margin: theme.spacing(4, 0, 4, 0),
-		[theme.breakpoints.down('sm')]: {
-			fontSize: '40px',
-		},
-	}));
-
 	return (
 		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '100vh' }}>
 			<NavbarB />

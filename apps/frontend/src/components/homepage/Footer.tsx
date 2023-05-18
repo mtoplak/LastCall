@@ -1,7 +1,6 @@
-import { styled, Typography, Box, Container } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import CustomContainer from 'components/ui/CustomContainer';
 import FooterLink from 'components/ui/FooterLink';
-import React from 'react';
 
 const Footer = () => {
 	return (

@@ -1,4 +1,4 @@
-import { Box, Container, Typography, styled } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import { FC } from 'react';
 import heroImg from '../../assets/images/homepageDrink.png';
 import { Link } from 'react-router-dom';
