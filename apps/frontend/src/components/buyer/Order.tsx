@@ -49,16 +49,18 @@ const Order: React.FC<OrderProps> = ({
 				aria-controls="panel1a-content"
 				id="panel1a-header"
 			>
-                <Grid>
-                <CardMedia component="img" image={picture} sx={{ width: '20%', height: 'auto' }}/>
-                </Grid>
+				<Grid>
+					<CardMedia
+						component="img"
+						image={picture}
+						sx={{ width: '20%', height: 'auto' }}
+					/>
+				</Grid>
 			</AccordionSummary>
 			<AccordionDetails>
-				<Typography>
-                <Typography color={'#333333'}>
+				<Typography color={'#333333'}>
 					<b>ORDER ID:</b>
 					{id}
-				</Typography>
 				</Typography>
 			</AccordionDetails>
 		</Accordion>

@@ -43,22 +43,22 @@ function PastOrders() {
 					</Typography>
 				) : (
 					pastOrders.map((order, index) => (
-                    <Grid item xs={8} key={index}>
-                        <Order
-                                id={order.id}
-                                total={order.total}
-                                dateOfPurchase={order.dateOfPurchase}
-                                dateOfDelivery={order.dateOfDelivery}
-                                address={order.address}
-                                city={order.city}
-                                country={order.country}
-                                seller={order.seller} 
-                                products={[]} 
-                                />
-                    <Divider sx={{mt: 2, mb: 2}} />
-                    </Grid>
-                    )
-				))}
+						<Grid item xs={8} key={index}>
+							<Order
+								id={order._id}
+								total={order.total}
+								dateOfPurchase={order.dateOfPurchase}
+								dateOfDelivery={order.dateOfDelivery}
+								address={order.address}
+								city={order.city}
+								country={order.country}
+								seller={order.seller}
+								products={[]}
+							/>
+							<Divider sx={{ mt: 2, mb: 2 }} />
+						</Grid>
+					))
+				)}
 			</Container>
 		</Box>
 	);

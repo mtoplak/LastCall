@@ -26,7 +26,7 @@ import 'react-leaflet-markercluster/dist/styles.min.css';
 import PropertiesBox from 'components/ui/PropertiesBox';
 import PropertiesTextBox from 'components/ui/PropertiesTextBox';
 import SellerContainer from 'components/ui/SellerContainer';
-import { OpenStreetMapProvider } from 'leaflet-geosearch';
+//import { OpenStreetMapProvider } from 'leaflet-geosearch';
 L.Icon.Default.mergeOptions({
 	iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
 	iconUrl: require('leaflet/dist/images/marker-icon.png'),
@@ -259,8 +259,8 @@ function Suppliers() {
 						) : (
 							sellers.map((seller) => (
 								<Link
-									to={`/supplier/${seller.id}`}
-									key={seller.id}
+									to={`/supplier/${seller._id}`}
+									key={seller._id}
 								>
 									<SellerContainer>
 										<Supplier
