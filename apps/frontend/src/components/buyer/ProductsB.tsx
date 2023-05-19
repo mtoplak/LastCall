@@ -64,7 +64,12 @@ const Products = () => {
 						Products
 					</Typography>
 					<Typography
-						sx={{ color: '#5A6473', fontSize: '16px', mt: 1, mb: 2 }}
+						sx={{
+							color: '#5A6473',
+							fontSize: '16px',
+							mt: 1,
+							mb: 2,
+						}}
 					>
 						Everything that you're looking for!
 					</Typography>
@@ -106,7 +111,7 @@ const Products = () => {
 								<DrinkContainer>
 									<Drink
 										name={drink.title}
-										img={drink1}
+										img={drink.picture}
 										price={drink.price}
 									/>
 								</DrinkContainer>

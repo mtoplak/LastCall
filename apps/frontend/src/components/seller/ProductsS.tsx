@@ -17,7 +17,6 @@ import Drink from './DrinkS';
 import { useState, useEffect } from 'react';
 import api from 'services/api';
 import { IDrink } from 'models/drink';
-import drink1 from '../../assets/images/cocacola.jpg';
 import PropertiesTextBox from 'components/ui/PropertiesTextBox';
 import DrinkContainer from 'components/ui/DrinkContainer';
 import PropertiesBox from 'components/ui/PropertiesBox';
@@ -137,6 +136,8 @@ const ProductsS = () => {
 			setError(error);
 		}
 	};
+
+	console.log(drinks);
 
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', py: 10 }}>
@@ -290,10 +291,7 @@ const ProductsS = () => {
 							) => (
 								<DrinkContainer key={index}>
 									<Drink
-										id={drink._id}
-										name={drink.title}
-										img={drink1}
-										price={drink.price}
+										drink={drink}
 										setDrinks={setDrinks}
 										drinks={drinks}
 									/>

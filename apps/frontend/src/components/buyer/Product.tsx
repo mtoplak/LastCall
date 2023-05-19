@@ -17,7 +17,6 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import api from 'services/api';
 import NavbarB from './NavbarB';
-import productImage from '../../assets/images/fanta.jpg';
 import CustomBox from 'components/ui/CustomBox';
 
 function Product() {
@@ -45,7 +44,7 @@ function Product() {
 				<CustomBox>
 					<Box sx={{ flex: '1.25' }}>
 						<img
-							src={productImage}
+							src={drink?.picture}
 							alt="heroImg"
 							style={{ maxWidth: '100%', marginTop: '7rem' }}
 						/>

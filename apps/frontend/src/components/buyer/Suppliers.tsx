@@ -281,10 +281,10 @@ function Suppliers() {
 									xs={12}
 									sm={6}
 									md={4}
-									key={seller.id}
+									key={seller._id}
 								>
 									<Link
-										to={`/supplier/${seller.id}`}
+										to={`/supplier/${seller._id}`}
 										key={seller._id}
 									>
 										<Supplier
