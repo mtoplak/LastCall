@@ -12,7 +12,7 @@ export class BuyersController {
       @Body() createBuyerDto: CreateUpdateBuyerDto,
       @Body('basket') basket: { productId: string, quantity: number }[]
     ): Promise<Buyer> {
-      return this.buyersService.addBuyer(createBuyerDto, basket);
+      return await this.buyersService.addBuyer(createBuyerDto, basket);
     }
 
     @Get()

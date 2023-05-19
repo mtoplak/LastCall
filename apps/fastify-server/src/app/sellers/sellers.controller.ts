@@ -20,7 +20,7 @@ export class SellersController {
   async addSeller(
     @Body() createSellerDto: CreateUpdateSellerDto,
   ): Promise<Seller> {
-    return this.sellersService.createSeller(createSellerDto);
+    return await this.sellersService.createSeller(createSellerDto);
   }
 
   @Get()

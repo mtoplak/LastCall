@@ -13,7 +13,7 @@ export class SellersService {
   async createSeller(
     sellerData: CreateUpdateSellerDto,
   ): Promise<Seller>  {
-    return this.sellersRepository.create(sellerData);
+    return await this.sellersRepository.create(sellerData);
   }
 
   async getAllSellers(): Promise<Seller[]> {

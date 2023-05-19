@@ -3,7 +3,6 @@ import { InjectModel } from "@nestjs/mongoose";
 import { FilterQuery, Model } from "mongoose";
 import { Product } from "../products/product.model";
 import { Buyer } from "./buyers.model";
-import { Order } from "../orders/order.model";
 
 @Injectable()
 export class BuyersRepository {
