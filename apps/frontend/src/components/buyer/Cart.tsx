@@ -127,7 +127,7 @@ function Cart() {
 										sx={{ mt: 2, mb: 2 }}
 									>
 										{/* Calculate and display the total amount */}
-										Total: $
+										Total: €
 										{cartItems
 											.reduce(
 												(total, item) =>

@@ -89,7 +89,7 @@ const Products = () => {
 								<DrinkContainer>
 									<Drink
 										name={drink.title}
-										img={drink1}
+										img={drink.picture}
 										price={drink.price}
 									/>
 								</DrinkContainer>
@@ -106,7 +106,7 @@ const Products = () => {
 								<DrinkContainer>
 									<Drink
 										name={drink.title}
-										img={drink1}
+										img={drink.picture}
 										price={drink.price}
 									/>
 								</DrinkContainer>

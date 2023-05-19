@@ -34,7 +34,7 @@ const initialState = {
 	size: '',
 	price: 0,
 	stock: 0,
-	seller: '645d45c444ddfe8a7fef8986',
+	seller: '64634dd2aca92a0d83eedd44',
 	image: '',
 };
 
@@ -292,7 +292,7 @@ const ProductsS = () => {
 									<Drink
 										id={drink._id}
 										name={drink.title}
-										img={drink1}
+										img={drink.picture}
 										price={drink.price}
 										setDrinks={setDrinks}
 										drinks={drinks}
