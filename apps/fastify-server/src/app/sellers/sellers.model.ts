@@ -15,6 +15,7 @@ export const SellerSchema = new Schema({
     email: { type: String, required: true, lowercase: true },
     orders: [{type: Schema.Types.ObjectId, ref: "Order"}],
     products: [{type: Schema.Types.ObjectId, ref: "Product"}],
+    coordinates: [{ type: Number }]
 });
 
 export interface Seller extends Document {
@@ -32,6 +33,7 @@ export interface Seller extends Document {
     email: string;
     orders: string[];
     products: string[];
+    coordinates: number[];
 }
 
 export const SellerModel: Model<Seller> = model<Seller>("Seller", SellerSchema);

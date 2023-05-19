@@ -22,7 +22,7 @@ export class OrdersController {
     @Body('seller') seller: string,
     @Body('buyer') buyer: string,
   ): Promise<Order> {
-    return this.ordersService.addOrder(createOrderDto, products, seller, buyer);
+    return await this.ordersService.addOrder(createOrderDto, products, seller, buyer);
   }
 
   @Get()

@@ -17,12 +17,10 @@ import ImgContainer from 'components/ui/ImgContainer';
 import HouseBox from 'components/ui/HouseBox';
 import Image from 'components/ui/Image';
 import { style } from 'assets/styles/styles';
+import { Link } from 'react-router-dom';
 
 interface DrinkProps {
-	id: string;
-	name: string;
-	img: string;
-	price: number;
+	drink: any;
 	setDrinks: React.Dispatch<React.SetStateAction<any>>;
 	drinks: any;
 }
@@ -57,10 +55,7 @@ const requiredFields: (keyof Product)[] = [
 ];
 
 const DrinkS: React.FC<DrinkProps> = ({
-	id,
-	name,
-	img,
-	price,
+	drink,
 	setDrinks,
 	drinks,
 }: DrinkProps) => {
@@ -103,6 +98,7 @@ const DrinkS: React.FC<DrinkProps> = ({
 				return drink;
 			}); //to do  ko bo iz backenda prišo pravi odgovor
 			//setDrinks(updatedDrinks);
+			setProductId('');
 			setIsOpenEdit(false);
 		} catch (error) {
 			setError("Couldn't edit product");
@@ -120,6 +116,7 @@ const DrinkS: React.FC<DrinkProps> = ({
 			console.log(updatedDrinks);
 			setDrinks(updatedDrinks);
 			setIsOpenDelete(!isOpenDelete);
+			setProductId('');
 		} catch (error) {
 			setError("Couldn't delete product");
 			throw error;
@@ -145,226 +142,222 @@ const DrinkS: React.FC<DrinkProps> = ({
 	};
 
 	return (
-		<HouseBox>
-			<ImgContainer>
-				<Image src={img} alt="housePhoto" />
-			</ImgContainer>
-
-			<InfoBox>
-				<Typography variant="h6" sx={{ fontWeight: '700' }}>
-					{name}
-				</Typography>
-				<Typography variant="body1" sx={{ my: 1 }}>
-					Cena: {price}€
-				</Typography>
-				<Box
-					sx={{
-						display: 'flex',
-						justifyContent: 'space-between',
-						width: '100%',
-					}}
-				>
-					<Button
-						variant="contained"
-						color="primary"
-						onClick={(event) => {
-							setProductId(id);
-							setIsOpenEdit(!isOpenEdit);
+		<>
+			<HouseBox>
+				<Link to={`/product/${drink._id}`}>
+					<ImgContainer>
+						<Image src={drink.picture} alt="housePhoto" />
+					</ImgContainer>
+				</Link>
+				<InfoBox>
+					<Link to={`/product/${drink._id}`}>
+						<Typography variant="h6" sx={{ fontWeight: '700' }}>
+							{drink.name}
+						</Typography>
+					</Link>
+					<Typography variant="body1" sx={{ my: 1 }}>
+						Cena: {drink.price}€
+					</Typography>
+					<Box
+						sx={{
+							display: 'flex',
+							justifyContent: 'space-between',
+							width: '100%',
 						}}
 					>
-						Edit
-					</Button>
-					<Modal
-						open={isOpenEdit}
-						onClose={() => setIsOpenEdit(false)}
-						aria-labelledby="modal-modal-title"
-						aria-describedby="modal-modal-description"
-					>
-						<Box component="form" sx={style}>
-							<Typography
-								id="modal-modal-title"
-								variant="h6"
-								component="h2"
-							>
-								Edit product details of{' '}
-								<b>{selectedDrink && selectedDrink.title}</b>
-							</Typography>
-							<br />
-							<TextField
-								label="Title"
-								placeholder="Enter title"
-								type="text"
-								fullWidth
-								required
-								name="title"
-								value={selectedDrink.title || ''}
-								onChange={handleInputChange}
-								sx={{ mb: 2 }}
-							/>
-							<FormControl fullWidth required sx={{ mb: 2 }}>
-								<InputLabel id="drink-category-select" shrink>
-									Drink category
-								</InputLabel>
-								<Select
-									labelId="drink-category-select"
-									id="drink-category-select"
-									name="drinkCategory"
-									value={selectedDrink.drinkCategory || ''}
-									onChange={handleInputChange}
-								>
-									<MenuItem value="">
-										Select drink category
-									</MenuItem>
-									<MenuItem value="Alcohol">Alcohol</MenuItem>
-									<MenuItem value="Carbonated">
-										Carbonated
-									</MenuItem>
-									<MenuItem value="Non Carbonated">
-										Non Carbonated
-									</MenuItem>
-								</Select>
-							</FormControl>
-							<TextField
-								label="Packaging"
-								placeholder="Enter packaging"
-								type="text"
-								fullWidth
-								required
-								name="packaging"
-								value={selectedDrink.packaging || ''}
-								onChange={handleInputChange}
-								sx={{ mb: 2 }}
-							/>
-							<TextField
-								label="Size"
-								placeholder="Enter size"
-								type="text"
-								fullWidth
-								required
-								name="size"
-								value={selectedDrink.size || ''}
-								onChange={handleInputChange}
-								sx={{ mb: 2 }}
-							/>
-							<TextField
-								label="Price"
-								placeholder="Enter price"
-								type="number"
-								fullWidth
-								required
-								name="price"
-								value={selectedDrink.price || 0}
-								onChange={handleInputChange}
-								sx={{ mb: 2 }}
-							/>
-							<TextField
-								label="Stock"
-								placeholder="Enter stock"
-								type="number"
-								fullWidth
-								required
-								name="stock"
-								value={selectedDrink.stock || 0}
-								onChange={handleInputChange}
-								sx={{ mb: 2 }}
-							/>
-							{error && (
-								<div>
-									<Alert severity="error">{error}</Alert>
-								</div>
-							)}
-							<br />
-							<Typography>
-								<Button
-									variant="contained"
-									fullWidth
-									onClick={handleCloseModal}
-									style={{ marginBottom: '1rem' }}
-								>
-									Cancel changes
-								</Button>
-								<Button
-									color="primary"
-									variant="contained"
-									fullWidth
-									onClick={handleEditClick}
-								>
-									Submit changes
-								</Button>
-							</Typography>
-						</Box>
-					</Modal>
-					<Button
-						variant="contained"
-						color="error"
-						onClick={(event) => {
-							setProductId(id);
-							setIsOpenDelete(!isOpenDelete);
-						}}
-					>
-						Delete
-					</Button>
-					<Modal
-						open={isOpenDelete}
-						onClose={() => setIsOpenDelete(!isOpenDelete)}
-						aria-labelledby="modal-modal-title"
-						aria-describedby="modal-modal-description"
-					>
-						<Box
-							sx={{
-								position: 'absolute',
-								top: '50%',
-								left: '50%',
-								transform: 'translate(-50%, -50%)',
-								width: 400,
-								bgcolor: 'background.paper',
-								border: '2px solid #000',
-								boxShadow: 24,
-								p: 4,
-								textAlign: 'center',
+						<Button
+							variant="contained"
+							color="primary"
+							onClick={(event) => {
+								setProductId(drink._id);
+								setIsOpenEdit(!isOpenEdit);
 							}}
 						>
-							<Typography
-								variant="h6"
-								id="modal-modal-title"
-								component="h2"
-							>
-								Are you sure you want to delete the product{' '}
-								<b>{selectedDrink.title}</b>?
-							</Typography>
-							<Typography
-								variant="body1"
-								id="modal-modal-description"
-							>
-								{error && (
-									<div>
-										<br />
-										<Alert severity="error">{error}</Alert>
-									</div>
-								)}
+							Edit
+						</Button>
+						<Button
+							variant="contained"
+							color="error"
+							onClick={(event) => {
+								setProductId(drink._id);
+								setIsOpenDelete(!isOpenDelete);
+							}}
+						>
+							Delete
+						</Button>
+					</Box>
+				</InfoBox>
+			</HouseBox>
+			<Modal
+				open={isOpenDelete}
+				onClose={() => setIsOpenDelete(!isOpenDelete)}
+				aria-labelledby="modal-modal-title"
+				aria-describedby="modal-modal-description"
+			>
+				<Box
+					sx={{
+						position: 'absolute',
+						top: '50%',
+						left: '50%',
+						transform: 'translate(-50%, -50%)',
+						width: 400,
+						bgcolor: 'background.paper',
+						border: '2px solid #000',
+						boxShadow: 24,
+						p: 4,
+						textAlign: 'center',
+					}}
+				>
+					<Typography
+						variant="h6"
+						id="modal-modal-title"
+						component="h2"
+					>
+						Are you sure you want to delete the product{' '}
+						<b>{selectedDrink.title}</b>?
+					</Typography>
+					<Typography variant="body1" id="modal-modal-description">
+						{error && (
+							<div>
 								<br />
-								<Button
-									variant="contained"
-									onClick={() =>
-										setIsOpenDelete(!isOpenDelete)
-									}
-								>
-									No
-								</Button>
-								<Button
-									variant="contained"
-									color="error"
-									onClick={handleDeleteClick}
-									sx={{ ml: 2 }}
-								>
-									Yes
-								</Button>
-							</Typography>
-						</Box>
-					</Modal>
+								<Alert severity="error">{error}</Alert>
+							</div>
+						)}
+						<br />
+						<Button
+							variant="contained"
+							onClick={() => setIsOpenDelete(!isOpenDelete)}
+						>
+							No
+						</Button>
+						<Button
+							variant="contained"
+							color="error"
+							onClick={handleDeleteClick}
+							sx={{ ml: 2 }}
+						>
+							Yes
+						</Button>
+					</Typography>
 				</Box>
-			</InfoBox>
-		</HouseBox>
+			</Modal>
+			<Modal
+				open={isOpenEdit}
+				onClose={() => setIsOpenEdit(false)}
+				aria-labelledby="modal-modal-title"
+				aria-describedby="modal-modal-description"
+			>
+				<Box component="form" sx={style}>
+					<Typography
+						id="modal-modal-title"
+						variant="h6"
+						component="h2"
+					>
+						Edit product details of{' '}
+						<b>{selectedDrink && selectedDrink.title}</b>
+					</Typography>
+					<br />
+					<TextField
+						label="Title"
+						placeholder="Enter title"
+						type="text"
+						fullWidth
+						required
+						name="title"
+						value={selectedDrink.title || ''}
+						onChange={handleInputChange}
+						sx={{ mb: 2 }}
+					/>
+					<FormControl fullWidth required sx={{ mb: 2 }}>
+						<InputLabel id="drink-category-select" shrink>
+							Drink category
+						</InputLabel>
+						<Select
+							labelId="drink-category-select"
+							id="drink-category-select"
+							name="drinkCategory"
+							value={selectedDrink.drinkCategory || ''}
+							onChange={handleInputChange}
+						>
+							<MenuItem value="">Select drink category</MenuItem>
+							<MenuItem value="Alcohol">Alcohol</MenuItem>
+							<MenuItem value="Carbonated">Carbonated</MenuItem>
+							<MenuItem value="Non Carbonated">
+								Non Carbonated
+							</MenuItem>
+						</Select>
+					</FormControl>
+					<TextField
+						label="Packaging"
+						placeholder="Enter packaging"
+						type="text"
+						fullWidth
+						required
+						name="packaging"
+						value={selectedDrink.packaging || ''}
+						onChange={handleInputChange}
+						sx={{ mb: 2 }}
+					/>
+					<TextField
+						label="Size"
+						placeholder="Enter size"
+						type="text"
+						fullWidth
+						required
+						name="size"
+						value={selectedDrink.size || ''}
+						onChange={handleInputChange}
+						sx={{ mb: 2 }}
+					/>
+					<TextField
+						label="Price"
+						placeholder="Enter price"
+						type="number"
+						fullWidth
+						required
+						name="price"
+						value={selectedDrink.price || 0}
+						onChange={handleInputChange}
+						sx={{ mb: 2 }}
+					/>
+					<TextField
+						label="Stock"
+						placeholder="Enter stock"
+						type="number"
+						fullWidth
+						required
+						name="stock"
+						value={selectedDrink.stock || 0}
+						onChange={handleInputChange}
+						sx={{ mb: 2 }}
+					/>
+					{error && (
+						<div>
+							<Alert severity="error">{error}</Alert>
+						</div>
+					)}
+					<br />
+					<Typography>
+						<Button
+							variant="contained"
+							fullWidth
+							onClick={handleCloseModal}
+							style={{ marginBottom: '1rem' }}
+						>
+							Cancel changes
+						</Button>
+						<Button
+							color="primary"
+							variant="contained"
+							fullWidth
+							onClick={handleEditClick}
+						>
+							Submit changes
+						</Button>
+					</Typography>
+				</Box>
+			</Modal>
+		</>
 	);
 };
 

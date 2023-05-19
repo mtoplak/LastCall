@@ -18,7 +18,7 @@ export class OrdersService {
     sellerId: string,
     buyerId: string
   ): Promise<Order> {
-    return this.ordersRepository.create(orderData, productData, sellerId, buyerId);
+    return await  this.ordersRepository.create(orderData, productData, sellerId, buyerId);
   }
 
   async getAllOrders(): Promise<Order[]> {

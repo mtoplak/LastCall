@@ -81,16 +81,13 @@ function Cart() {
 													{item.price.toFixed(2)}
 												</Typography>
 												{item.discount > 0 ? (
-													<Alert severity="info">
+													<Alert severity="success">
 														There is currently a{' '}
 														{item.discount}%
 														discount for this item!{' '}
 													</Alert>
 												) : (
-													<Alert severity="success">
-														There is currently no
-														discount for this item!{' '}
-													</Alert>
+													''
 												)}
 											</CardContent>
 										</Grid>
@@ -127,14 +124,15 @@ function Cart() {
 										sx={{ mt: 2, mb: 2 }}
 									>
 										{/* Calculate and display the total amount */}
-										Total: €
+										Total:{' '}
 										{cartItems
 											.reduce(
 												(total, item) =>
 													total + item.price,
 												0
 											)
-											.toFixed(2)}
+											.toFixed(2)}{' '}
+										€
 										<br />
 										Delivery & Handling: Free
 									</Typography>

@@ -18,7 +18,7 @@ export class BuyersService {
     buyerData: CreateUpdateBuyerDto,
     productData: { productId: string; quantity: number }[],
   ): Promise<Buyer> {
-    return this.buyersRepository.create(buyerData, productData);
+    return await this.buyersRepository.create(buyerData, productData);
   }
 
   async getAllBuyers(): Promise<Buyer[]> {
