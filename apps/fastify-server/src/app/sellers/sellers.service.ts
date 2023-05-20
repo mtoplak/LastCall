@@ -3,6 +3,7 @@ import { Model, Types } from 'mongoose';
 import { Seller } from './sellers.model';
 import { SellersRepository } from './sellers.repository';
 import { CreateUpdateSellerDto } from './createUpdateSeller.dto';
+import { Product } from '../products/product.model';
 
 @Injectable()
 export class SellersService {
@@ -56,6 +57,10 @@ export class SellersService {
       _id: sellerId,
     });
     return { success: true };
+  }
+
+  async getAllProductsBySellerId(sellerId: string): Promise<Product[]> {
+    return this.sellersRepository.getAllProductsBySellerId(sellerId);
   }
 
 }

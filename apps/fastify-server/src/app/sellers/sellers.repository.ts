@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { FilterQuery, Model } from "mongoose";
 import { Seller } from "./sellers.model";
+import { Product } from "../products/product.model";
 
 @Injectable()
 export class SellersRepository {
@@ -34,4 +35,8 @@ export class SellersRepository {
             return { success: true };
         }
 
+        async getAllProductsBySellerId(sellerId: string): Promise<Product[]> {
+            const seller = await this.sellersModel.findById(sellerId).populate('products').exec();
+            return seller.products as unknown as Product[];
+          }
 }
