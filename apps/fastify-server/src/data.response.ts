@@ -29,7 +29,7 @@ export interface BuyerResponse {
   phone: string;
   email: string;
   orders: string[];
-  basket: { productId: Product; quantity: number }[];
+  cart: { productId: Product; quantity: number }[];
 }
 
 export interface OrderResponse {

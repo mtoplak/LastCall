@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Model, Types } from 'mongoose';
 import { Seller } from './sellers.model';
 import { SellersRepository } from './sellers.repository';
 import { CreateUpdateSellerDto } from './createUpdateSeller.dto';
@@ -7,13 +6,9 @@ import { Product } from '../products/product.model';
 
 @Injectable()
 export class SellersService {
-  constructor(
-    private readonly sellersRepository: SellersRepository,
-  ) {}
+  constructor(private readonly sellersRepository: SellersRepository) {}
 
-  async createSeller(
-    sellerData: CreateUpdateSellerDto,
-  ): Promise<Seller>  {
+  async createSeller(sellerData: CreateUpdateSellerDto): Promise<Seller> {
     return await this.sellersRepository.create(sellerData);
   }
 
@@ -51,7 +46,6 @@ export class SellersService {
     }
   }
 
-
   async removeSeller(sellerId: string): Promise<{ success: boolean }> {
     await this.sellersRepository.deleteOne({
       _id: sellerId,
@@ -62,5 +56,4 @@ export class SellersService {
   async getAllProductsBySellerId(sellerId: string): Promise<Product[]> {
     return this.sellersRepository.getAllProductsBySellerId(sellerId);
   }
-
 }

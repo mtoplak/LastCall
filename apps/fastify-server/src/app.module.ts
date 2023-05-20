@@ -7,26 +7,23 @@ import { ProductsModule } from './app/products/products.module';
 import { BuyersModule } from './app/buyers/buyers.module';
 import { SellersModule } from './app/sellers/sellers.module';
 import { OrdersModule } from './app/orders/orders.module';
-import { MulterModule } from '@nestjs/platform-express';
+import { EmailModule } from './app/authentication/email.module';
 
-const databaseHost = require("../constants").databaseHost;
-
+const databaseHost = require('../constants').databaseHost;
 
 @Module({
-	imports: [
-		BuyersModule,
-		ProductsModule,
-		SellersModule,
-		OrdersModule,
-		MulterModule.register({
-			dest: './uploads',
-		}),
-		MongooseModule.forRoot(databaseHost),
-		ConfigModule.forRoot({
-			cache: true,
-		}),
-	],
-	controllers: [AppController],
-	providers: [AppService],
+  imports: [
+    BuyersModule,
+    ProductsModule,
+    SellersModule,
+    OrdersModule,
+    EmailModule,
+    MongooseModule.forRoot(databaseHost),
+    ConfigModule.forRoot({
+      cache: true,
+    }),
+  ],
+  controllers: [AppController],
+  providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

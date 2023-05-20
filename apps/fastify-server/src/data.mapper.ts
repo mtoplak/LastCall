@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Product } from './app/products/product.model';
-import { BuyerResponse, OrderResponse, ProductResponse, SellerResponse } from './data.response';
+import {
+  BuyerResponse,
+  OrderResponse,
+  ProductResponse,
+  SellerResponse,
+} from './data.response';
 import { Buyer } from './app/buyers/buyers.model';
 import { Order } from './app/orders/order.model';
 import { Seller } from './app/sellers/sellers.model';
@@ -18,7 +23,7 @@ export class ProductMapper {
       stock: product.stock,
       seller: product.seller,
       sale: product.sale,
-      picture: product.picture
+      picture: product.picture,
     };
     return response;
   }
@@ -41,7 +46,7 @@ export class BuyerMapper {
       phone: buyer.phone,
       email: buyer.email,
       orders: buyer.orders,
-      basket: buyer.basket,
+      cart: buyer.cart,
     };
     return response;
   }
@@ -85,7 +90,7 @@ export class SellerMapper {
       email: seller.email,
       orders: seller.orders,
       products: seller.products,
-      coordinates: seller.coordinates
+      coordinates: seller.coordinates,
     };
     return response;
   }
