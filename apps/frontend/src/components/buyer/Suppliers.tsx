@@ -1,13 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import Hero from './HeroB';
+import { useEffect, useState } from 'react';
 import Footer from 'components/homepage/Footer';
-import {
-	Box,
-	Container,
-	Grid,
-	LinearProgress,
-	Typography,
-} from '@mui/material';
+import { Box, Container, Grid, Typography } from '@mui/material';
 import { ISeller } from 'models/seller';
 import api from 'services/api';
 import SearchSuppliersInput from './SearchSuppliersInput';
@@ -29,11 +22,9 @@ import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 //import MarkerClusterGroupProps from 'react-leaflet-markercluster';
 import 'leaflet/dist/leaflet.css';
 import 'react-leaflet-markercluster/dist/styles.min.css';
-import PropertiesBox from 'components/ui/PropertiesBox';
 import PropertiesTextBox from 'components/ui/PropertiesTextBox';
-import SellerContainer from 'components/ui/SellerContainer';
-import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import NavbarB from './NavbarB';
+
 L.Icon.Default.mergeOptions({
 	iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
 	iconUrl: require('leaflet/dist/images/marker-icon.png'),
@@ -46,8 +37,6 @@ function Suppliers() {
 	const [filterLocation, setFilterLocation] = useState('any');
 	const [filterType, setFilterType] = useState('any');
 	const [isChecked, setIsChecked] = useState(false);
-	const [isLoading, setIsLoading] = useState(false); // map
-	const [mapSuppliersData, setMapSuppliersData] = useState<any>([]);
 
 	useEffect(() => {
 		document.title = 'Suppliers';
@@ -57,7 +46,7 @@ function Suppliers() {
 		const fetchData = async () => {
 			try {
 				const response = await api.get('/sellers');
-				console.log(response.data);
+				//console.log(response.data);
 				setSellers(response.data);
 			} catch (error) {
 				throw error;
@@ -84,99 +73,30 @@ function Suppliers() {
 		return nameMatch && typeMatch && locationMatch;
 	});
 
-	// Create a custom icon for the individual markers
-	/*const markerIcon = L.icon({
-		iconUrl: '/path/to/marker-icon.png',
-		iconSize: [25, 41],
-		iconAnchor: [12, 41],
-		popupAnchor: [1, -34],
-	});*/
-
 	const MapCenter = () => {
 		const map = useMap();
 		useEffect(() => {
-			if (mapSuppliersData.length > 0) {
+			if (filteredSellers.length > 0) {
 				const bounds = L.latLngBounds(
-					mapSuppliersData.map(
-						(location: any) => location.coordinates
-					)
+					filteredSellers.map((location: any) => location.coordinates)
 				);
 				map.fitBounds(bounds);
-			}
+			} /* else {
+				const bounds = L.latLngBounds(
+					sellers.map((location: any) => location.coordinates)
+				);
+				//map.fitBounds(bounds);
+			}*/
 		}, [map]);
 		return null;
 	};
 
-	useEffect(() => {
-		const fetchData = async () => {
-			console.log('Fetching data...');
-			setIsLoading(true);
-			if (
-				filterName !== '' ||
-				filterLocation !== 'any' ||
-				filterType !== 'any'
-			) {
-				const data = await Promise.all(
-					filteredSellers.map(async (seller) => {
-						const response = await fetch(
-							`https://nominatim.openstreetmap.org/search?format=json&q=${seller.address}+${seller.city}+${seller.country}&addressdetails=1&limit=1&polygon_svg=1`
-						);
-						const responseData = await response.json();
-						return {
-							name: seller.title,
-							address:
-								seller.address +
-								', ' +
-								seller.city +
-								', ' +
-								seller.country,
-							coordinates: [
-								responseData[0]?.lat,
-								responseData[0]?.lon,
-							],
-						};
-					})
-				);
-				setMapSuppliersData(data);
-				console.log(data);
-			} else {
-				const data = await Promise.all(
-					sellers.map(async (seller) => {
-						const response = await fetch(
-							`https://nominatim.openstreetmap.org/search?format=json&q=${seller.address}+${seller.city}+${seller.country}&addressdetails=1&limit=1&polygon_svg=1`
-						);
-						const responseData = await response.json();
-						return {
-							name: seller.title,
-							address:
-								seller.address +
-								', ' +
-								seller.city +
-								', ' +
-								seller.country,
-							coordinates: [
-								responseData[0]?.lat,
-								responseData[0]?.lon,
-							],
-						};
-					})
-				);
-				setMapSuppliersData(data);
-				console.log(data);
-			}
-			setIsLoading(false);
-		};
-		if (isChecked) {
-			fetchData();
-		}
-	}, [isChecked, filterName, filterLocation, filterType, sellers]);
-
 	console.log(filteredSellers);
-	console.log(mapSuppliersData);
 
 	return (
 		<>
 			<NavbarB />
+
 			<Box sx={{ backgroundColor: '#f2f2f2', py: 10 }}>
 				<Container>
 					<PropertiesTextBox>
@@ -199,44 +119,76 @@ function Suppliers() {
 							setIsChecked={setIsChecked}
 						/>
 					</Box>
-					{isChecked && !isLoading && mapSuppliersData.length > 0 && (
-						<PropertiesBox>
-							<MapContainer
-								center={[46.056946, 14.505751]}
-								zoom={7.9}
-								style={{ height: '400px', width: '100%' }}
-								attributionControl={false}
-							>
-								<TileLayer
-									attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-									url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-								/>
-								<MapCenter />
-								{mapSuppliersData.map(
-									(location: any, index: any) => (
-										<Marker
-											key={index}
-											position={[
-												location.coordinates[0],
-												location.coordinates[1],
-											]}
-										>
-											<Popup>
-												<div>
-													<h3>{location.name}</h3>
-													<p>{location.address}</p>
-												</div>
-											</Popup>
-										</Marker>
-									)
-								)}
-							</MapContainer>
-						</PropertiesBox>
-					)}
-					{isChecked && isLoading && (
-						<Box sx={{ width: '100%' }}>
-							<LinearProgress />
-						</Box>
+					{isChecked &&
+					filteredSellers.length > 0 &&
+					(filterType !== 'any' ||
+						filterName !== '' ||
+						filterLocation !== 'any') ? (
+						<MapContainer
+							center={[46.056946, 14.505751]}
+							zoom={7.9}
+							style={{ height: '400px', width: '100%' }}
+							attributionControl={false}
+						>
+							<TileLayer
+								attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+								url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+							/>
+							<MapCenter />
+							{filteredSellers.map((seller: any, index: any) => (
+								<Marker
+									key={index}
+									position={[
+										seller.coordinates[0],
+										seller.coordinates[1],
+									]}
+								>
+									<Popup>
+										<div>
+											<h3>{seller.title}</h3>
+											<p>{seller.address}</p>
+										</div>
+									</Popup>
+								</Marker>
+							))}
+						</MapContainer>
+					) : isChecked &&
+					  (filterType !== 'any' ||
+							filterName !== '' ||
+							filterLocation !== 'any') &&
+					  filteredSellers.length === 0 ? (
+						''
+					) : isChecked ? (
+						<MapContainer
+							center={[46.056946, 14.505751]}
+							zoom={7.9}
+							style={{ height: '400px', width: '100%' }}
+							attributionControl={false}
+						>
+							<TileLayer
+								attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+								url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+							/>
+							<MapCenter />
+							{sellers.map((seller: any, index: any) => (
+								<Marker
+									key={index}
+									position={[
+										seller.coordinates[0],
+										seller.coordinates[1],
+									]}
+								>
+									<Popup>
+										<div>
+											<h3>{seller.title}</h3>
+											<p>{seller.address}</p>
+										</div>
+									</Popup>
+								</Marker>
+							))}
+						</MapContainer>
+					) : (
+						''
 					)}
 
 					<Grid container spacing={2}>
