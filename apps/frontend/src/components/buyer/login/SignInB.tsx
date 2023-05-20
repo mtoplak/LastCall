@@ -14,8 +14,6 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import heroImg from '../../../assets/images/homepageDrink.png';
 import { useState } from 'react';
-import { sendPasswordResetEmail } from 'firebase/auth';
-import { auth } from '../../../firebase';
 import { useUserAuth } from 'context/AuthContext';
 
 const SignInB = () => {
@@ -54,6 +52,7 @@ const SignInB = () => {
 		e.preventDefault();
 		try {
 			const signUpResponse = await signIn(email, password);
+			console.log(signUpResponse);
 			if (signUpResponse.success) {
 				// Signin was successful
 				// Access the response object if needed: signUpResponse.response
@@ -80,7 +79,7 @@ const SignInB = () => {
 								<FormControl>
 									<TextField
 										label="Email"
-										placeholder="Enter emial"
+										placeholder="Enter email"
 										fullWidth
 										required
 										value={email}

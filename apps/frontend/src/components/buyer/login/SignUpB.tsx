@@ -55,7 +55,6 @@ const SignUpB = () => {
 
 	//context
 	const { signUp, user } = useUserAuth();
-	console.log(user);
 
 	const handleSubmit = async (e: any) => {
 		setError('');
@@ -65,7 +64,7 @@ const SignUpB = () => {
 			if (signUpResponse.success) {
 				// Signup was successful
 				// Access the response object if needed: signUpResponse.response
-				navigate('/buy/signin'); // Navigate to the dashboard
+				navigate('/buy/signin'); // Navigate to the sign in
 			} else {
 				//console.log(signUpResponse.error);
 				//console.log(signUpResponse.error.message);

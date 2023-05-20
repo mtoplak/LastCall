@@ -40,7 +40,7 @@ function NavbarB() {
 	const { user, logOut } = useUserAuth();
 	console.log(user);
 	console.log(user?.email);
-	console.log(user?.accessToken);
+	//console.log(user?.accessToken);
 	console.log(user?.stsTokenManager?.accessToken);
 
 	const darkTheme = createTheme({

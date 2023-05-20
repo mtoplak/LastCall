@@ -8,7 +8,7 @@ import {
 	Paper,
 	TextField,
 	Typography,
-    styled,
+	styled,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import heroImg from '../../../assets/images/homepageDrink.png';
@@ -39,9 +39,10 @@ const LoginS = () => {
 		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '100vh' }}>
 			<Container>
 				<CustomBox>
-					<Box 
-					 component="form"
-					sx={{ flex: '1',  marginTop: '10rem' }}>
+					<Box
+						component="form"
+						sx={{ flex: '1', marginTop: '10rem' }}
+					>
 						<Grid>
 							<Paper elevation={10} style={paperStyle}>
 								<Grid>
