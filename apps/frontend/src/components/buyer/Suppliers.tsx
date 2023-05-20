@@ -32,7 +32,7 @@ L.Icon.Default.mergeOptions({
 });
 
 function Suppliers() {
-	const [sellers, setSellers] = useState<any[]>([]); //<ISeller[]>
+	const [sellers, setSellers] = useState<ISeller[]>([]);
 	const [filterName, setFilterName] = useState('');
 	const [filterLocation, setFilterLocation] = useState('any');
 	const [filterType, setFilterType] = useState('any');
@@ -43,7 +43,7 @@ function Suppliers() {
 	}, []);
 
 	useEffect(() => {
-		const fetchData = async () => {
+		const fetchSellers = async () => {
 			try {
 				const response = await api.get('/sellers');
 				//console.log(response.data);
@@ -52,7 +52,7 @@ function Suppliers() {
 				throw error;
 			}
 		};
-		fetchData();
+		fetchSellers();
 	}, []);
 
 	// filtering
@@ -91,7 +91,7 @@ function Suppliers() {
 		return null;
 	};
 
-	console.log(filteredSellers);
+	//console.log(filteredSellers);
 
 	return (
 		<>
@@ -126,7 +126,7 @@ function Suppliers() {
 						filterLocation !== 'any') ? (
 						<MapContainer
 							center={[46.056946, 14.505751]}
-							zoom={7.9}
+							zoom={7.5}
 							style={{ height: '400px', width: '100%' }}
 							attributionControl={false}
 						>
@@ -135,9 +135,9 @@ function Suppliers() {
 								url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 							/>
 							<MapCenter />
-							{filteredSellers.map((seller: any, index: any) => (
+							{filteredSellers.map((seller: ISeller) => (
 								<Marker
-									key={index}
+									key={seller._id}
 									position={[
 										seller.coordinates[0],
 										seller.coordinates[1],
@@ -161,7 +161,7 @@ function Suppliers() {
 					) : isChecked ? (
 						<MapContainer
 							center={[46.056946, 14.505751]}
-							zoom={7.9}
+							zoom={7.5}
 							style={{ height: '400px', width: '100%' }}
 							attributionControl={false}
 						>
@@ -170,9 +170,9 @@ function Suppliers() {
 								url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 							/>
 							<MapCenter />
-							{sellers.map((seller: any, index: any) => (
+							{sellers.map((seller: ISeller) => (
 								<Marker
-									key={index}
+									key={seller._id}
 									position={[
 										seller.coordinates[0],
 										seller.coordinates[1],

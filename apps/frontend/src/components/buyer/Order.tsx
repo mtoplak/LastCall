@@ -20,28 +20,11 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import picture from '../../assets/images/cocacola.jpg';
 
 interface OrderProps {
-	_id: string;
 	products: IOrder[];
-	total: number;
-	dateOfPurchase: Date;
-	dateOfDelivery: Date;
-	address: string;
-	city: string;
-	country: string;
-	seller: ISeller;
+	order: IOrder;
 }
 
-const Order: React.FC<OrderProps> = ({
-	_id,
-	products,
-	total,
-	dateOfPurchase,
-	dateOfDelivery,
-	address,
-	city,
-	country,
-	seller,
-}) => {
+const Order: React.FC<OrderProps> = ({ order, products }: OrderProps) => {
 	return (
 		<Accordion>
 			<AccordionSummary
@@ -58,9 +41,9 @@ const Order: React.FC<OrderProps> = ({
 				</Grid>
 			</AccordionSummary>
 			<AccordionDetails>
-                <Typography color={'#333333'}>
+				<Typography color={'#333333'}>
 					<b>ORDER ID:</b>
-					{_id}
+					{order._id}
 				</Typography>
 			</AccordionDetails>
 		</Accordion>

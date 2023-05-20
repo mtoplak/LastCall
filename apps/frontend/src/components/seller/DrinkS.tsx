@@ -18,6 +18,7 @@ import HouseBox from 'components/ui/HouseBox';
 import Image from 'components/ui/Image';
 import { style } from 'assets/styles/styles';
 import { Link } from 'react-router-dom';
+import { IDrink } from 'models/drink';
 
 interface DrinkProps {
 	drink: any;
@@ -96,8 +97,8 @@ const DrinkS: React.FC<DrinkProps> = ({
 					return response.data;
 				}
 				return drink;
-			}); //to do  ko bo iz backenda prišo pravi odgovor
-			//setDrinks(updatedDrinks);
+			});
+			setDrinks(updatedDrinks);
 			setProductId('');
 			setIsOpenEdit(false);
 		} catch (error) {
@@ -111,7 +112,7 @@ const DrinkS: React.FC<DrinkProps> = ({
 			await api.delete(`/products/${productId}`);
 			console.log('Drink deleted successfully');
 			const updatedDrinks = drinks.filter(
-				(drink: any) => drink._id !== productId
+				(drink: IDrink) => drink._id !== productId
 			);
 			console.log(updatedDrinks);
 			setDrinks(updatedDrinks);
@@ -151,12 +152,16 @@ const DrinkS: React.FC<DrinkProps> = ({
 				</Link>
 				<InfoBox>
 					<Link to={`/product/${drink._id}`}>
-						<Typography variant="h6" sx={{ fontWeight: '700' }}>
-							{drink.name}
+						<Typography
+							variant="h6"
+							sx={{ fontWeight: '700' }}
+							style={{ color: 'black' }}
+						>
+							{drink.title}
 						</Typography>
 					</Link>
 					<Typography variant="body1" sx={{ my: 1 }}>
-						Cena: {drink.price}€
+						Price: {drink.price}€
 					</Typography>
 					<Box
 						sx={{

@@ -17,7 +17,6 @@ function PastOrders() {
 	const [pastOrders, setPastOrders] = useState<IOrder[]>([]);
 
 	useEffect(() => {
-		// Fetch past orders from the API
 		const fetchPastOrders = async () => {
 			try {
 				const response = await api.get('/orders');
@@ -42,23 +41,13 @@ function PastOrders() {
 						You have no past orders.
 					</Typography>
 				) : (
-					pastOrders.map((order, index) => (
-                    <Grid item xs={8} key={index}>
-                        <Order
-                                _id={order._id}
-                                total={order.total}
-                                dateOfPurchase={order.dateOfPurchase}
-                                dateOfDelivery={order.dateOfDelivery}
-                                address={order.address}
-                                city={order.city}
-                                country={order.country}
-                                seller={order.seller} 
-                                products={[]} 
-                                />
-                    <Divider sx={{mt: 2, mb: 2}} />
-                    </Grid>
-                    )
-				))}
+					pastOrders.map((order) => (
+						<Grid item xs={8} key={order._id}>
+							<Order order={order} products={[]} />
+							<Divider sx={{ mt: 2, mb: 2 }} />
+						</Grid>
+					))
+				)}
 			</Container>
 		</Box>
 	);
