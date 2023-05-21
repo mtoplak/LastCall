@@ -12,13 +12,14 @@ export class BuyersService {
     private readonly buyersRepository: BuyersRepository,
     @InjectModel('Buyer') private readonly buyerModel: Model<Buyer>,
     @InjectModel('Product') private readonly productModel: Model<Product>,
-  ) {}
+  ) { }
 
   async addBuyer(
     buyerData: CreateUpdateBuyerDto,
-    productData: { productId: string; quantity: number }[],
+    //productData: { productId: string; quantity: number }[],
   ): Promise<Buyer> {
-    return await this.buyersRepository.create(buyerData, productData);
+    //return await this.buyersRepository.create(buyerData, productData);
+    return await this.buyersRepository.create(buyerData);
   }
 
   async getAllBuyers(): Promise<Buyer[]> {
@@ -51,7 +52,7 @@ export class BuyersService {
     }
   }
 
-  async removeBuyer(buyerId: string): Promise<{ success: boolean }> {
+  async removeBuyer(buyerId: string): Promise<{ success: boolean; }> {
     await this.buyersRepository.deleteOne({
       _id: buyerId,
     });

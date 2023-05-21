@@ -9,7 +9,7 @@ export class BuyersRepository {
   constructor(
     @InjectModel('Buyer') private readonly buyerModel: Model<Buyer>,
     @InjectModel('Product') private readonly productModel: Model<Product>,
-  ) {}
+  ) { }
 
   async findOne(buyerFilterQuery: FilterQuery<Buyer>): Promise<Buyer> {
     return await this.buyerModel
@@ -29,9 +29,10 @@ export class BuyersRepository {
 
   async create(
     buyerData: Partial<Buyer>,
-    productData: { productId: string; quantity: number }[],
+    //productData: { productId: string; quantity: number }[],
   ): Promise<Buyer> {
     const { ...restBuyerData } = buyerData;
+    /*
     const productIds = productData.map((item) => item.productId);
     const quantities = productData.map((item) => item.quantity);
     if (!productIds || productIds.length === 0) {
@@ -45,10 +46,10 @@ export class BuyersRepository {
       productId: product._id,
       quantity: quantities[index],
     }));
-
+    */
     const newBuyer = new this.buyerModel({
       ...restBuyerData,
-      cart: productsInCart,
+      //cart: productsInCart,
     });
 
     return await newBuyer.save();
@@ -63,7 +64,7 @@ export class BuyersRepository {
 
   async deleteOne(
     buyerFilterQuery: FilterQuery<Buyer>,
-  ): Promise<{ success: boolean }> {
+  ): Promise<{ success: boolean; }> {
     await this.buyerModel.deleteOne(buyerFilterQuery);
     return { success: true };
   }

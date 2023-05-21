@@ -12,14 +12,14 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { ThemeProvider, createTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useUserAuth } from 'context/AuthContext';
+import { darkTheme } from 'assets/styles/styles';
 
-const pages = ['Suppliers', 'Contact'];
-//const settings = ['Profile', 'Shopping cart', 'My Orders', 'Logout'];
+const pages = ['Products', 'Suppliers', 'Contact'];
 
 function NavbarB() {
 	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 	const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-	const [isLoggedIn, setIsLoggedIn] = useState(true);
 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);
@@ -36,37 +36,44 @@ function NavbarB() {
 		setAnchorElUser(null);
 	};
 
-	const darkTheme = createTheme({
-		palette: {
-			mode: 'dark',
-			primary: {
-				main: '#1976d2',
-			},
-		},
-	});
+	// context
+	const { user, logOut } = useUserAuth();
+	console.log(user);
+	console.log(user?.email);
+	//console.log(user?.accessToken);
+	console.log(user?.stsTokenManager?.accessToken);
+
+	const handleLogOut = async () => {
+		try {
+			await logOut();
+		} catch (error: any) {
+			console.log(error.message);
+		}
+	};
 
 	return (
 		<ThemeProvider theme={darkTheme}>
 			<AppBar position="static">
 				<Container maxWidth="xl">
 					<Toolbar disableGutters>
-						<Typography
-							variant="h6"
-							noWrap
-							component="a"
-							href="/"
-							sx={{
-								mr: 2,
-								display: { xs: 'none', md: 'flex' },
-								fontFamily: 'monospace',
-								fontWeight: 700,
-								letterSpacing: '.3rem',
-								color: 'inherit',
-								textDecoration: 'none',
-							}}
-						>
-							LastCall
-						</Typography>
+						<Link to="/">
+							<Typography
+								variant="h6"
+								noWrap
+								component="span"
+								sx={{
+									mr: 2,
+									display: { xs: 'none', md: 'flex' },
+									fontFamily: 'monospace',
+									fontWeight: 700,
+									letterSpacing: '.3rem',
+									color: 'inherit',
+									textDecoration: 'none',
+								}}
+							>
+								LastCall
+							</Typography>
+						</Link>
 
 						<Box
 							sx={{
@@ -136,6 +143,18 @@ function NavbarB() {
 								display: { xs: 'none', md: 'flex' },
 							}}
 						>
+							<Link to={'/'}>
+								<Button
+									onClick={handleCloseNavMenu}
+									sx={{
+										my: 2,
+										color: 'white',
+										display: 'block',
+									}}
+								>
+									Products
+								</Button>
+							</Link>
 							<Link to="/suppliers">
 								<Button
 									onClick={handleCloseNavMenu}
@@ -159,10 +178,21 @@ function NavbarB() {
 								Contact
 							</Button>
 						</Box>
-						<Link to={'/cart'}>
-							<Button>Cart</Button>
-						</Link>
-						{isLoggedIn ? (
+						{user && (
+							<Link to={'/cart'}>
+								<Button
+									onClick={handleCloseNavMenu}
+									sx={{
+										my: 2,
+										color: 'white',
+										display: 'block',
+									}}
+								>
+									Cart (5)
+								</Button>
+							</Link>
+						)}
+						{user ? (
 							<Box sx={{ flexGrow: 0 }}>
 								<Tooltip title="Open settings">
 									<IconButton
@@ -170,7 +200,7 @@ function NavbarB() {
 										sx={{ p: 0 }}
 									>
 										<Avatar
-											alt={'a'}
+											alt={user?.email.toUpperCase()}
 											src="/static/images/avatar/2.jpg"
 										/>
 									</IconButton>
@@ -201,7 +231,7 @@ function NavbarB() {
 											My orders
 										</Typography>
 									</MenuItem>
-									<MenuItem>
+									<MenuItem onClick={handleLogOut}>
 										<Typography textAlign="center">
 											Log out
 										</Typography>
@@ -209,7 +239,7 @@ function NavbarB() {
 								</Menu>
 							</Box>
 						) : (
-							<Link to={'/buy/signup'}>
+							<Link to={'/buy/signin'}>
 								<Button
 									sx={{
 										my: 2,
@@ -217,7 +247,7 @@ function NavbarB() {
 										display: 'block',
 									}}
 								>
-									Sign up
+									Sign in
 								</Button>
 							</Link>
 						)}
