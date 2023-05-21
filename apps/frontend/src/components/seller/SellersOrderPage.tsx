@@ -102,7 +102,7 @@ function SellerOrdersPage() {
 											</Grid>
 											<Grid item xs={3}>
 												<CardContent>
-													Current status: {order.status}
+													Current status: 
 												</CardContent>
 											</Grid>
 										</Grid>

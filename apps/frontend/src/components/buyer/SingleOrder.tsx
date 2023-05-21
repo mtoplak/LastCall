@@ -63,7 +63,7 @@ function SingleOrder() {
 									<Typography
 										sx={{ mb: 2, color: 'text.secondary' }}
 									>
-										<b>ORDER STATUS:</b> {order.status}
+										<b>ORDER STATUS:</b> 
 									</Typography>
 									<Typography variant="h6" sx={{ mb: 4 }}>
 										<b>Order ID:</b> {order._id}
