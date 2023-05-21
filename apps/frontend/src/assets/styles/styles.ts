@@ -1,3 +1,5 @@
+import { createTheme } from "@mui/material";
+
 export const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -21,3 +23,12 @@ export const avatarStyle = { backgroundColor: '#1bbd7e' };
 
 export const btnstyle = { margin: '8px 0' };
 
+
+export const darkTheme = createTheme({
+    palette: {
+        mode: 'dark',
+        primary: {
+            main: '#1976d2',
+        },
+    },
+});

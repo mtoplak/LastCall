@@ -48,7 +48,7 @@ export class BuyersService {
     }
   }
 
-  async removeBuyer(buyerId: string): Promise<{ success: boolean }> {
+  async removeBuyer(buyerId: string): Promise<{ success: boolean; }> {
     await this.buyersRepository.deleteOne({
       _id: buyerId,
     });

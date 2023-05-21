@@ -9,7 +9,7 @@ export class BuyersRepository {
   constructor(
     @InjectModel('Buyer') private readonly buyerModel: Model<Buyer>,
     @InjectModel('Product') private readonly productModel: Model<Product>,
-  ) {}
+  ) { }
 
   async findOne(buyerFilterQuery: FilterQuery<Buyer>): Promise<Buyer> {
     return await this.buyerModel

@@ -14,7 +14,7 @@ import { Product } from '../products/product.model';
 
 @Controller('buyers')
 export class BuyersController {
-  constructor(private readonly buyersService: BuyersService) {}
+  constructor(private readonly buyersService: BuyersService) { }
 
   @Post()
   async addBuyer(@Body() createBuyerDto: CreateUpdateBuyerDto): Promise<Buyer> {
@@ -35,13 +35,13 @@ export class BuyersController {
   async updateBuyer(
     @Param('id') buyerId: string,
     @Body() updatedBuyerData: Partial<Buyer>,
-  ): Promise<{ success: boolean }> {
+  ): Promise<{ success: boolean; }> {
     await this.buyersService.updateBuyer(buyerId, updatedBuyerData);
     return { success: true };
   }
 
   @Delete(':id')
-  async removeBuyer(@Param('id') id: string): Promise<{ success: boolean }> {
+  async removeBuyer(@Param('id') id: string): Promise<{ success: boolean; }> {
     await this.buyersService.removeBuyer(id);
     return { success: true };
   }

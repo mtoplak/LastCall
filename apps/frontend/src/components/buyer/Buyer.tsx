@@ -8,7 +8,7 @@ import '../../assets/styles/buyer.css';
 
 const Buyer = () => {
 	useEffect(() => {
-		document.title = 'All products';
+		document.title = 'Last Call';
 	}, []);
 
 	return (
