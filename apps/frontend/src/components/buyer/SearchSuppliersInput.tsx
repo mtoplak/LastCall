@@ -65,7 +65,7 @@ function SearchSuppliersInput({
 			<FormControlLabel
 				control={
 					<Checkbox
-						onChange={(event, checked) => setIsChecked(checked)}
+						onChange={(event) => setIsChecked(event.target.checked)}
 					/>
 				}
 				label="Show on maps"

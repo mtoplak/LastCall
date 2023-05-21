@@ -6,11 +6,11 @@ import {
   Param,
   Patch,
   Delete,
-  NotFoundException,
 } from '@nestjs/common';
 import { SellersService } from './sellers.service';
 import { Seller } from './sellers.model';
 import { CreateUpdateSellerDto } from './createUpdateSeller.dto';
+import { Product } from '../products/product.model';
 
 @Controller('sellers')
 export class SellersController {
@@ -46,5 +46,12 @@ export class SellersController {
   async removeSeller(@Param('id') id: string): Promise<{ success: boolean }> {
     await this.sellersService.removeSeller(id);
     return { success: true };
+  }
+
+  @Get(':id/products')
+  async getAllProductsBySellerId(
+    @Param('id') sellerId: string,
+  ): Promise<Product[]> {
+    return this.sellersService.getAllProductsBySellerId(sellerId);
   }
 }

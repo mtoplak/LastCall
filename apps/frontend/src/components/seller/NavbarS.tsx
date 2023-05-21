@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,18 +10,17 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { ThemeProvider, createTheme } from '@mui/material';
+import { ThemeProvider } from '@mui/material';
+import { darkTheme } from 'assets/styles/styles';
+import { useUserAuth } from 'context/AuthContext';
+import { Link } from 'react-router-dom';
 
-const pages = [ 'Inventory', 'Contact'];
-const settings = ['Profile', 'Shopping cart', 'My Orders', 'Logout'];
+const pages = ['Inventory', 'Contact'];
+//const settings = ['Profile', 'Shopping cart', 'My Orders', 'Logout'];
 
 function NavbarS() {
-	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-		null
-	);
-	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-		null
-	);
+	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+	const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);
 	};
@@ -37,14 +36,20 @@ function NavbarS() {
 		setAnchorElUser(null);
 	};
 
-	const darkTheme = createTheme({
-		palette: {
-			mode: 'dark',
-			primary: {
-				main: '#1976d2',
-			},
-		},
-	});
+	const { user, logOut } = useUserAuth();
+	//console.log(user);
+	//console.log(user?.email);
+	//console.log(user?.accessToken);
+	//console.log(user?.stsTokenManager?.accessToken);
+
+	const handleLogOut = async () => {
+		try {
+			await logOut();
+		} catch (error: any) {
+			console.log(error.message);
+		}
+	};
+
 	return (
 		<ThemeProvider theme={darkTheme}>
 			<AppBar position="static">
@@ -100,6 +105,11 @@ function NavbarS() {
 									display: { xs: 'block', md: 'none' },
 								}}
 							>
+								<MenuItem onClick={handleCloseNavMenu}>
+									<Typography textAlign="center">
+										Orders
+									</Typography>
+								</MenuItem>
 								{pages.map((page) => (
 									<MenuItem
 										key={page}
@@ -110,7 +120,28 @@ function NavbarS() {
 										</Typography>
 									</MenuItem>
 								))}
+								<Typography textAlign="center">bla </Typography>
+								<Button
+									onClick={handleCloseNavMenu}
+									sx={{
+										my: 2,
+										color: 'white',
+										display: 'block',
+									}}
+								>
+									Orders
+								</Button>
 							</Menu>
+							<Button
+								onClick={handleCloseNavMenu}
+								sx={{
+									my: 2,
+									color: 'white',
+									display: 'block',
+								}}
+							>
+								Orders
+							</Button>
 						</Box>
 						<Typography
 							variant="h5"
@@ -151,46 +182,65 @@ function NavbarS() {
 							))}
 						</Box>
 
-						<Box sx={{ flexGrow: 0 }}>
-							<Tooltip title="Open settings">
-								<IconButton
-									onClick={handleOpenUserMenu}
-									sx={{ p: 0 }}
-								>
-									<Avatar
-										alt="Remy Sharp"
-										src="/static/images/avatar/2.jpg"
-									/>
-								</IconButton>
-							</Tooltip>
-							<Menu
-								sx={{ mt: '45px' }}
-								id="menu-appbar"
-								anchorEl={anchorElUser}
-								anchorOrigin={{
-									vertical: 'top',
-									horizontal: 'right',
-								}}
-								keepMounted
-								transformOrigin={{
-									vertical: 'top',
-									horizontal: 'right',
-								}}
-								open={Boolean(anchorElUser)}
-								onClose={handleCloseUserMenu}
-							>
-								{settings.map((setting) => (
-									<MenuItem
-										key={setting}
-										onClick={handleCloseUserMenu}
+						{user ? (
+							<Box sx={{ flexGrow: 0 }}>
+								<Tooltip title="Open settings">
+									<IconButton
+										onClick={handleOpenUserMenu}
+										sx={{ p: 0 }}
 									>
+										<Avatar
+											alt={user?.email.toUpperCase()}
+											src="/static/images/avatar/2.jpg"
+										/>
+									</IconButton>
+								</Tooltip>
+								<Menu
+									sx={{ mt: '45px' }}
+									id="menu-appbar"
+									anchorEl={anchorElUser}
+									anchorOrigin={{
+										vertical: 'top',
+										horizontal: 'right',
+									}}
+									keepMounted
+									transformOrigin={{
+										vertical: 'top',
+										horizontal: 'right',
+									}}
+									open={Boolean(anchorElUser)}
+									onClose={handleCloseUserMenu}
+								>
+									<MenuItem onClick={handleCloseUserMenu}>
 										<Typography textAlign="center">
-											{setting}
+											Profile
 										</Typography>
 									</MenuItem>
-								))}
-							</Menu>
-						</Box>
+									<MenuItem onClick={handleCloseUserMenu}>
+										<Typography textAlign="center">
+											My orders
+										</Typography>
+									</MenuItem>
+									<MenuItem onClick={handleLogOut}>
+										<Typography textAlign="center">
+											Log out
+										</Typography>
+									</MenuItem>
+								</Menu>
+							</Box>
+						) : (
+							<Link to={'/signin'}>
+								<Button
+									sx={{
+										my: 2,
+										color: 'white',
+										display: 'block',
+									}}
+								>
+									Sign in
+								</Button>
+							</Link>
+						)}
 					</Toolbar>
 				</Container>
 			</AppBar>

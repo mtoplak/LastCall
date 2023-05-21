@@ -45,11 +45,19 @@ export class ProductsService {
     productId: string,
     productUpdates: CreateUpdateProductDto,
   ): Promise<Product> {
-      return await this.productsRepository.findOneAndUpdate(
-        { _id: productId },
-        productUpdates,
-      );
+    const updatedProduct = await this.productsRepository.findOneAndUpdate(
+      { _id: productId },
+      productUpdates,
+      { new: true } // Set the `new` option to true to return the updated document
+    );
+  
+    if (!updatedProduct) {
+      throw new NotFoundException(`Product with id ${productId} not found`);
+    }
+  
+    return updatedProduct;
   }
+  
 
   async removeProduct(productId: string): Promise<{ success: boolean }> {
     await this.productsRepository.deleteOne({
@@ -57,4 +65,5 @@ export class ProductsService {
     });
     return { success: true };
   }
+
 }

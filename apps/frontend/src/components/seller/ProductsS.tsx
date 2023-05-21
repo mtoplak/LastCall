@@ -59,7 +59,7 @@ const requiredFields: (keyof Product)[] = [
 
 const ProductsS = () => {
 	const [newProduct, setNewProduct] = useState(initialState);
-	const [drinks, setDrinks] = useState<any>([]); // <IDrink[]> // dodaj to nazaj not, ko boš dobil v responsu nazaj novi drink
+	const [drinks, setDrinks] = useState<IDrink[]>([]);
 	const [isOpenAdd, setIsOpenAdd] = useState(false);
 	const [error, setError] = useState('');
 	const [productImage, setProductImage] = useState<File | null>(null);
@@ -82,9 +82,9 @@ const ProductsS = () => {
 			const response = await api.post('/products', updatedProduct);
 			//console.log(response.data);
 			setNewProduct(initialState);
-
-			setDrinks((prev: any) => [...prev, updatedProduct]);
+			setDrinks((prev: any) => [...prev, response.data]);
 			setIsOpenAdd(false);
+			setProductImage(null);
 		} catch (error) {
 			setError('Error adding product');
 			console.error(error);
@@ -114,11 +114,28 @@ const ProductsS = () => {
 	}, []);
 
 	const handleChange = (newFile: any) => {
-		setProductImage(newFile);
+		console.log(newFile);
+		if (newFile) {
+			if (newFile.type.startsWith('image/')) {
+				// The uploaded file is an image
+				setError('');
+				console.log(newFile.type);
+				setProductImage(newFile);
+			} else {
+				// The uploaded file is not an image
+				setError('File is not an image');
+				console.log(newFile.type);
+			}
+		} else {
+			setError('No file uploaded');
+		}
 	};
 
 	const uploadImage = async () => {
-		if (!productImage) return;
+		if (!productImage) {
+			setError('Image is required');
+			return;
+		}
 		const storageRef = ref(storage, `images/${productImage.name + v4()}`);
 		try {
 			const uploadTask = uploadBytes(storageRef, productImage);
@@ -137,7 +154,7 @@ const ProductsS = () => {
 		}
 	};
 
-	console.log(drinks);
+	//console.log(drinks);
 
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', py: 10 }}>
@@ -257,6 +274,8 @@ const ProductsS = () => {
 									onChange={handleChange}
 									style={{ cursor: 'pointer' }}
 								/>
+								<br />
+								<br />
 								{error && (
 									<Alert severity="error">
 										<b>{error}</b>
@@ -281,23 +300,17 @@ const ProductsS = () => {
 						All the items in my inventory.
 					</Typography>
 				</PropertiesTextBox>
-
 				<PropertiesBox>
 					{drinks &&
-						drinks.map(
-							(
-								drink: any,
-								index: any // TODO: remove any
-							) => (
-								<DrinkContainer key={index}>
-									<Drink
-										drink={drink}
-										setDrinks={setDrinks}
-										drinks={drinks}
-									/>
-								</DrinkContainer>
-							)
-						)}
+						drinks.map((drink: IDrink) => (
+							<DrinkContainer key={drink._id}>
+								<Drink
+									drink={drink}
+									setDrinks={setDrinks}
+									drinks={drinks}
+								/>
+							</DrinkContainer>
+						))}
 				</PropertiesBox>
 			</Container>
 		</Box>

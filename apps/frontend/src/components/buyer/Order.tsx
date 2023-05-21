@@ -34,8 +34,7 @@ interface OrderProps {
 	seller: ISeller;
 }
 
-const Order: React.FC<OrderProps> = ({
-	_id,
+const Order: React.FC<OrderProps> = ({ _id,
 	products,
 	total,
 	dateOfPurchase,
@@ -43,8 +42,7 @@ const Order: React.FC<OrderProps> = ({
 	address,
 	city,
 	country,
-	seller,
-}) => {
+	seller, }: OrderProps) => {
 	return (
 		<Accordion>
 			<AccordionSummary

@@ -10,7 +10,7 @@ import {
 	Typography,
 } from '@mui/material';
 import { ISeller } from 'models/seller';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import api from 'services/api';
 import sellerProfile from '../../assets/images/sellerProfile.png';
@@ -21,8 +21,9 @@ import PropertiesTextBox from 'components/ui/PropertiesTextBox';
 import CustomBox from 'components/ui/CustomBox';
 
 function SellerPage() {
-	const [isOpen, setIsOpen] = React.useState(false);
+	const [isOpen, setIsOpen] = useState(false);
 	const [seller, setSller] = useState<ISeller>();
+	const [fetchError, setFetchError] = useState(false);
 	const { id } = useParams<{ id: string }>();
 
 	useEffect(() => {
@@ -32,11 +33,24 @@ function SellerPage() {
 				console.log(response.data);
 				setSller(response.data);
 			} catch (error) {
+				setFetchError(true);
 				throw error;
 			}
 		};
 		fetchData();
 	}, [id]);
+
+	useEffect(() => {
+		document.title = seller?.title || '';
+	}, [seller]);
+
+	if (fetchError) {
+		return <>Seller Not found</>;
+	}
+
+	if (!seller) {
+		return null; // Render a loader or placeholder here if desired
+	}
 
 	return (
 		<>

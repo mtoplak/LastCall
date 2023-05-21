@@ -4,11 +4,11 @@ import Products from './ProductsB';
 import { Box } from '@mui/material';
 import Footer from '../homepage/Footer';
 //import { useAppDispatch } from 'redux-store';
-import './buyer.css';
+import '../../assets/styles/buyer.css';
 
 const Buyer = () => {
 	useEffect(() => {
-		document.title = 'All products';
+		document.title = 'Last Call';
 	}, []);
 
 	return (

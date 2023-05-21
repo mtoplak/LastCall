@@ -17,7 +17,6 @@ function PastOrders() {
 	const [pastOrders, setPastOrders] = useState<IOrder[]>([]);
 
 	useEffect(() => {
-		// Fetch past orders from the API
 		const fetchPastOrders = async () => {
 			try {
 				const response = await api.get('/orders');
@@ -48,7 +47,7 @@ function PastOrders() {
                                 _id={order._id}
                                 total={order.totalPrice}
                                 dateOfPurchase={order.dateOfPurchase}
-                                dateOfDelivery={order.dateOfDelivery}
+                                dateOfDelivery={order.lastDateOfDelivery}
                                 address={order.address}
                                 city={order.city}
                                 country={order.country}

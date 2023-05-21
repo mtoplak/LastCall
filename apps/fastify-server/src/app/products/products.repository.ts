@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Product, ProductModel } from './product.model';
-import { FilterQuery, Model } from 'mongoose';
+import { Product } from './product.model';
+import { FilterQuery, Model, QueryOptions, UpdateQuery } from 'mongoose';
 import { Seller } from '../sellers/sellers.model';
 
 @Injectable()
@@ -51,13 +51,17 @@ export class ProductsRepository {
 
   async findOneAndUpdate(
     productFilterQuery: FilterQuery<Product>,
-    product: Partial<Product>,
+    productUpdates: UpdateQuery<Product>,
+    options?: QueryOptions,
   ): Promise<Product> {
     return await this.productsModel.findOneAndUpdate(
       productFilterQuery,
-      product,
+      productUpdates,
+      options,
     );
   }
+  
+  
 
   async deleteOne(
     productFilterQuery: FilterQuery<Product>,
@@ -65,4 +69,5 @@ export class ProductsRepository {
     await this.productsModel.deleteOne(productFilterQuery);
     return { success: true };
   }
+
 }

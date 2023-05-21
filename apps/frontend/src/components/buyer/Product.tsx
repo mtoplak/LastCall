@@ -21,6 +21,7 @@ import CustomBox from 'components/ui/CustomBox';
 
 function Product() {
 	const [drink, setDrink] = useState<IDrink>();
+	const [fetchError, setFetchError] = useState(false);
 	const { id } = useParams<{ id: string }>();
 	console.log(id);
 
@@ -31,11 +32,20 @@ function Product() {
 				console.log(response.data);
 				setDrink(response.data);
 			} catch (error) {
+				setFetchError(true);
 				throw error;
 			}
 		};
 		fetchData();
 	}, [id]);
+
+	if (fetchError) {
+		return <>Product Not found</>;
+	}
+
+	if (!drink) {
+		return null; // Render a loader or placeholder here if desired
+	}
 
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>

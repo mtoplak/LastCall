@@ -22,14 +22,14 @@ export interface BuyerResponse {
   legalPerson: boolean;
   title: string;
   registerNumber: number;
-  targetedMarket: string;
+  targetedMarkets: string[];
   address: string; //array
   city: string;
   country: string;
   phone: string;
   email: string;
   orders: string[];
-  basket: { productId: Product; quantity: number }[];
+  cart: { productId: Product; quantity: number }[];
 }
 
 export interface OrderResponse {
@@ -55,7 +55,7 @@ export interface SellerResponse {
   country: string; //array naredi
   registerNumber: number;
   tip: string;
-  targetedMarket: string;
+  targetedMarkets: string[];
   phone: string;
   website: string;
   email: string;

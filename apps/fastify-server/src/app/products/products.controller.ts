@@ -48,4 +48,5 @@ export class ProductsController {
     await this.productService.removeProduct(id);
     return { success: true };
   }
+
 }

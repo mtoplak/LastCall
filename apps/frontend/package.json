@@ -1,6 +1,6 @@
 {
 	"name": "frontend",
-	"author": "Nishant Kohli",
+	"author": "",
 	"version": "1.0.0",
 	"private": true,
 	"scripts": {
@@ -31,7 +31,6 @@
 		"firebase": "^9.22.0",
 		"leaflet": "^1.9.3",
 		"leaflet-defaulticon-compatibility": "^0.1.1",
-		"leaflet-geosearch": "^3.8.0",
 		"mobx": "^6.5.0",
 		"mobx-react-lite": "^3.4.0",
 		"mui-file-input": "^2.0.0",

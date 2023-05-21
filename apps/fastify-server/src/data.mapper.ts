@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Product } from './app/products/product.model';
-import { BuyerResponse, OrderResponse, ProductResponse, SellerResponse } from './data.response';
+import {
+  BuyerResponse,
+  OrderResponse,
+  ProductResponse,
+  SellerResponse,
+} from './data.response';
 import { Buyer } from './app/buyers/buyers.model';
 import { Order } from './app/orders/order.model';
 import { Seller } from './app/sellers/sellers.model';
@@ -18,7 +23,7 @@ export class ProductMapper {
       stock: product.stock,
       seller: product.seller,
       sale: product.sale,
-      picture: product.picture
+      picture: product.picture,
     };
     return response;
   }
@@ -34,14 +39,14 @@ export class BuyerMapper {
       legalPerson: buyer.legalPerson,
       title: buyer.title,
       registerNumber: buyer.registerNumber,
-      targetedMarket: buyer.targetedMarket,
+      targetedMarkets: buyer.targetedMarkets,
       address: buyer.address,
       city: buyer.city,
       country: buyer.country,
       phone: buyer.phone,
       email: buyer.email,
       orders: buyer.orders,
-      basket: buyer.basket,
+      cart: buyer.cart,
     };
     return response;
   }
@@ -79,13 +84,13 @@ export class SellerMapper {
       country: seller.country, //array naredi
       registerNumber: seller.registerNumber,
       tip: seller.tip,
-      targetedMarket: seller.targetedMarket,
+      targetedMarkets: seller.targetedMarkets,
       phone: seller.phone,
       website: seller.website,
       email: seller.email,
       orders: seller.orders,
       products: seller.products,
-      coordinates: seller.coordinates
+      coordinates: seller.coordinates,
     };
     return response;
   }
