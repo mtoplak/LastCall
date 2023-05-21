@@ -13,6 +13,8 @@ import SignUpPage from 'components/buyer/login/SignUpPage';
 import SignInPage from 'components/buyer/login/SignInPage';
 import SignUpS from 'components/seller/login/SignUpS';
 import SignInS from 'components/seller/login/SignInS';
+import SellersOrderPage from 'components/seller/SellersOrderPage';
+import SingleOrder from 'components/buyer/SingleOrder';
 
 const Routing = () => {
 
@@ -44,6 +46,8 @@ const Routing = () => {
 					<Route path="/sell/signup" element={<SignUpS />} />
 					<Route path="/sell/signin/*" element={<SignInS />} />
 					<Route path="/buy/signin/*" element={<SignInPage />} />
+					<Route path="/order/:id" element={<SingleOrder />} />
+				<Route path="/seller/orders" element={<SellersOrderPage />} />
 					<Route path="/orders" element={<PastOrders />} />
 					<Route path="*" element={<Page404 />} />
 				</Routes>
