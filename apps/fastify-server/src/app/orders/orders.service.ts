@@ -9,7 +9,6 @@ import { CreateUpdateOrderDto } from './createUpdateOrder.dto';
 export class OrdersService {
   constructor(
     private readonly ordersRepository: OrdersRepository,
-    @InjectModel('Order') private readonly orderModel: Model<Order>,
   ) {}
 
   async addOrder(

@@ -10,17 +10,15 @@ import {
 import { BuyersService } from './buyers.service';
 import { Buyer } from './buyers.model';
 import { CreateUpdateBuyerDto } from './createUpdateBuyer.dto';
+import { Product } from '../products/product.model';
 
 @Controller('buyers')
 export class BuyersController {
   constructor(private readonly buyersService: BuyersService) {}
 
   @Post()
-  async addBuyer(
-    @Body() createBuyerDto: CreateUpdateBuyerDto,
-    @Body('cart') cart: { productId: string; quantity: number }[],
-  ): Promise<Buyer> {
-    return await this.buyersService.addBuyer(createBuyerDto, cart);
+  async addBuyer(@Body() createBuyerDto: CreateUpdateBuyerDto): Promise<Buyer> {
+    return await this.buyersService.addBuyer(createBuyerDto);
   }
 
   @Get()
@@ -46,5 +44,25 @@ export class BuyersController {
   async removeBuyer(@Param('id') id: string): Promise<{ success: boolean }> {
     await this.buyersService.removeBuyer(id);
     return { success: true };
+  }
+
+  @Post(':buyerId/cart')
+  async addToCart(
+    @Param('buyerId') buyerId: string,
+    @Body('cart') cart: { productId: string; quantity: number }[],
+  ): Promise<{ cart: { productId: Product; quantity: number }[] } | null> {
+    const result = await this.buyersService.addToCart(buyerId, cart);
+    if (result && result.cart) {
+      return { cart: result.cart };
+    }
+    return null;
+  }
+
+  @Get(':buyerId/cart')
+  async getCart(
+    @Param('buyerId') buyerId: string,
+  ): Promise<{ cart: { product: Product; quantity: number }[] } | null> {
+    const result = await this.buyersService.getCart(buyerId);
+    return result;
   }
 }

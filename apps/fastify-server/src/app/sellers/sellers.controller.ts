@@ -49,8 +49,9 @@ export class SellersController {
   }
 
   @Get(':id/products')
-  async getAllProductsBySellerId(@Param('id') sellerId: string): Promise<Product[]> {
+  async getAllProductsBySellerId(
+    @Param('id') sellerId: string,
+  ): Promise<Product[]> {
     return this.sellersService.getAllProductsBySellerId(sellerId);
   }
-
 }

@@ -5,8 +5,8 @@ import { EmailService } from './email.service';
 export class EmailController {
   constructor(private readonly emailService: EmailService) {}
 
-  @Post(':email')
-  async findEmail(@Param('email') email: string): Promise<string> {
+  @Post()
+  async findEmail(@Body('email') email: string): Promise<string> {
     const result = await this.emailService.findRole(email);
     return result;
   }

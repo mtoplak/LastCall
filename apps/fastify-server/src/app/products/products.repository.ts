@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Product, ProductModel } from './product.model';
+import { Product } from './product.model';
 import { FilterQuery, Model, QueryOptions, UpdateQuery } from 'mongoose';
 import { Seller } from '../sellers/sellers.model';
 

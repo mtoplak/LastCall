@@ -16,7 +16,7 @@ export class SellersRepository {
   }
 
   async find(sellersFilterQuery: FilterQuery<Seller>): Promise<Seller[]> {
-    return await this.sellersModel.find(sellersFilterQuery);
+    return await this.sellersModel.find(sellersFilterQuery).populate('products');
   }
 
   async create(seller: Seller): Promise<Seller> {

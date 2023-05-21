@@ -15,7 +15,10 @@ export class BuyersRepository {
     return await this.buyerModel
       .findOne(buyerFilterQuery)
       .populate('orders')
-      .populate({ path: 'cart.productId', model: 'Product' })
+      .populate({
+        path: 'cart',
+        populate: { path: 'productId', model: 'Product' },
+      })
       .exec();
   }
 
@@ -23,35 +26,15 @@ export class BuyersRepository {
     return await this.buyerModel
       .find(buyersFilterQuery)
       .populate('orders')
-      .populate({ path: 'cart.productId', model: 'Product' })
+      .populate({
+        path: 'cart',
+        populate: { path: 'productId', model: 'Product' },
+      })
       .exec();
   }
 
-  async create(
-    buyerData: Partial<Buyer>,
-    productData: { productId: string; quantity: number }[],
-  ): Promise<Buyer> {
-    const { ...restBuyerData } = buyerData;
-    const productIds = productData.map((item) => item.productId);
-    const quantities = productData.map((item) => item.quantity);
-    if (!productIds || productIds.length === 0) {
-      throw new NotFoundException('There are no products in this cart');
-    }
-    const products = await this.productModel.find({ _id: { $in: productIds } });
-    if (products.length !== productIds.length) {
-      throw new NotFoundException('Products for this cart not found');
-    }
-    const productsInCart = products.map((product, index) => ({
-      productId: product._id,
-      quantity: quantities[index],
-    }));
-
-    const newBuyer = new this.buyerModel({
-      ...restBuyerData,
-      cart: productsInCart,
-    });
-
-    return await newBuyer.save();
+  async create(buyer: Buyer): Promise<Buyer> {
+    return await new this.buyerModel(buyer).save();
   }
 
   async findOneAndUpdate(
@@ -66,5 +49,50 @@ export class BuyersRepository {
   ): Promise<{ success: boolean }> {
     await this.buyerModel.deleteOne(buyerFilterQuery);
     return { success: true };
+  }
+
+  async addToCart(
+    buyerId: string,
+    productData: { productId: string; quantity: number }[],
+  ): Promise<{ cart: { productId: Product; quantity: number }[] } | null> {
+    const buyer = await this.buyerModel.findById(buyerId);
+    if (!buyer) {
+      return null;
+    }
+    const productIds = productData.map((item) => item.productId);
+    const quantities = productData.map((item) => item.quantity);
+    if (!productIds || productIds.length === 0) {
+      throw new NotFoundException('There are no products in this cart');
+    }
+    const products = await this.productModel.find({ _id: { $in: productIds } });
+    if (products.length !== productIds.length) {
+      throw new NotFoundException('Products for this cart not found');
+    }
+    const productsInCart = products.map((product, index) => ({
+      productId: product._id,
+      quantity: quantities[index],
+    }));
+
+    buyer.cart = productsInCart;
+    await buyer.save();
+    return { cart: buyer.cart };
+  }
+
+  async getCart(
+    buyerId: string,
+  ): Promise<{ cart: { product: Product; quantity: number }[] } | null> {
+    const buyer = await this.buyerModel
+      .findById(buyerId)
+      .populate('cart.productId');
+    if (!buyer) {
+      return null;
+    }
+
+    const populatedCart = buyer.cart.map((item) => ({
+      product: item.productId,
+      quantity: item.quantity,
+    }));
+
+    return { cart: populatedCart };
   }
 }

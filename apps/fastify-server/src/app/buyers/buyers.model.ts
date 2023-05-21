@@ -7,7 +7,7 @@ export const BuyerSchema = new Schema({
   legalPerson: { type: Boolean, required: true },
   title: { type: String },
   registerNumber: { type: Number },
-  targetedMarket: { type: String },
+  targetedMarkets: [{ type: String }],
   address: { type: String, required: true }, //array naredi
   city: { type: String, required: true },
   country: { type: String, required: true },
@@ -28,7 +28,7 @@ export interface Buyer extends Document {
   legalPerson: boolean;
   title: string;
   registerNumber: number;
-  targetedMarket: string;
+  targetedMarkets: string[];
   address: string; //array
   city: string;
   country: string;

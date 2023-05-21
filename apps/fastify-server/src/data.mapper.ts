@@ -39,7 +39,7 @@ export class BuyerMapper {
       legalPerson: buyer.legalPerson,
       title: buyer.title,
       registerNumber: buyer.registerNumber,
-      targetedMarket: buyer.targetedMarket,
+      targetedMarkets: buyer.targetedMarkets,
       address: buyer.address,
       city: buyer.city,
       country: buyer.country,
@@ -84,7 +84,7 @@ export class SellerMapper {
       country: seller.country, //array naredi
       registerNumber: seller.registerNumber,
       tip: seller.tip,
-      targetedMarket: seller.targetedMarket,
+      targetedMarkets: seller.targetedMarkets,
       phone: seller.phone,
       website: seller.website,
       email: seller.email,
