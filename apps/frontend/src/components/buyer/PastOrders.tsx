@@ -46,7 +46,7 @@ function PastOrders() {
                     <Grid item xs={8} key={index}>
                         <Order
                                 _id={order._id}
-                                total={order.total}
+                                total={order.totalPrice}
                                 dateOfPurchase={order.dateOfPurchase}
                                 dateOfDelivery={order.dateOfDelivery}
                                 address={order.address}

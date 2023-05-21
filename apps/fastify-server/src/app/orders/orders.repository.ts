@@ -20,7 +20,7 @@ export class OrdersRepository {
       .findOne(orderFilterQuery)
       .populate('seller')
       .populate('buyer')
-      .populate({ path: 'products.productId', model: 'Product' })
+      .populate({ path: 'products', populate: { path: 'productId', model: 'Product' } })
       .exec();
   }
 
@@ -29,7 +29,7 @@ export class OrdersRepository {
       .find(ordersFilterQuery)
       .populate('seller')
       .populate('buyer')
-      .populate({ path: 'products.productId', model: 'Product' })
+      .populate({ path: 'products', populate: { path: 'productId', model: 'Product' } })
       .exec();
   }
 

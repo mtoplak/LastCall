@@ -5,7 +5,8 @@ import { ISeller } from "./seller";
 export interface IOrder {
     _id: string;
     products: IDrink[];
-    total: number;
+    status: string;
+    totalPrice: number;
     dateOfPurchase: Date;
     dateOfDelivery: Date;
     address: string;

@@ -8,8 +8,13 @@ import Suppliers from 'components/buyer/Suppliers';
 import SellerPage from 'components/seller/SellerPage';
 import Cart from 'components/buyer/Cart';
 import PastOrders from 'components/buyer/PastOrders';
+import SingleOrder from 'components/buyer/SingleOrder';
+import { useState } from 'react';
+import { IOrder } from 'models/order';
+import SellersOrderPage from 'components/seller/SellersOrderPage';
 
 const Routing = () => {
+
 	return (
 		<>
 			<Routes>
@@ -20,6 +25,8 @@ const Routing = () => {
 				<Route path="/supplier/:id" element={<SellerPage />} />
 				<Route path="/cart" element={<Cart />} />
 				<Route path="/orders" element={<PastOrders />} />
+				<Route path="/order/:id" element={<SingleOrder />} />
+				<Route path="/seller/orders" element={<SellersOrderPage />} />
 				<Route path="*" element={<Page404 />} />
 			</Routes>
 		</>
