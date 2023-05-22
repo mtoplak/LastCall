@@ -34,16 +34,17 @@ export class SellersService {
     sellerId: string,
     sellerUpdates: CreateUpdateSellerDto,
   ): Promise<Seller> {
-    try {
-      return await this.sellersRepository.findOneAndUpdate(
-        { _id: sellerId },
-        sellerUpdates,
-      );
-    } catch (err) {
+    const updatedSeller = await this.sellersRepository.findOneAndUpdate(
+      { _id: sellerId },
+      sellerUpdates,
+      { new: true },
+    );
+    if (!updatedSeller) {
       throw new NotFoundException(
         'Failed to update the seller with id: ' + sellerId,
       );
     }
+    return updatedSeller;
   }
 
   async removeSeller(sellerId: string): Promise<{ success: boolean }> {

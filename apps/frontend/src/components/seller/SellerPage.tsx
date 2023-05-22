@@ -22,6 +22,7 @@ import Footer from 'components/homepage/Footer';
 import Title from 'components/ui/Title';
 import PropertiesTextBox from 'components/ui/PropertiesTextBox';
 import CustomBox from 'components/ui/CustomBox';
+import SellerProducts from './SellerProducts';
 
 function SellerPage() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -142,6 +143,7 @@ function SellerPage() {
 							}}
 						>
 							Our products
+							<SellerProducts sellerId={id || ''} />
 						</Typography>
 					</PropertiesTextBox>
 				</Container>

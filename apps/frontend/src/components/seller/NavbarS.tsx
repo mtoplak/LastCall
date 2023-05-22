@@ -36,7 +36,7 @@ function NavbarS() {
 		setAnchorElUser(null);
 	};
 
-	const { user, logOut } = useUserAuth();
+	const { user, logOut, role } = useUserAuth();
 	//console.log(user);
 	//console.log(user?.email);
 	//console.log(user?.accessToken);
@@ -120,6 +120,11 @@ function NavbarS() {
 										</Typography>
 									</MenuItem>
 								))}
+								<MenuItem onClick={handleCloseNavMenu}>
+									<Typography textAlign="center">
+										neki
+									</Typography>
+								</MenuItem>
 								<Typography textAlign="center">bla </Typography>
 								<Button
 									onClick={handleCloseNavMenu}
@@ -182,7 +187,7 @@ function NavbarS() {
 							))}
 						</Box>
 
-						{user ? (
+						{user && role === 'seller' ? (
 							<Box sx={{ flexGrow: 0 }}>
 								<Tooltip title="Open settings">
 									<IconButton

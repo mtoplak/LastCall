@@ -9,6 +9,7 @@ import {
 	sendPasswordResetEmail,
 	sendEmailVerification,
 } from 'firebase/auth';
+import api from 'services/api';
 
 const AuthContext = createContext({
 	signUp: async (email: string, password: string): Promise<any> => {},
@@ -18,12 +19,14 @@ const AuthContext = createContext({
 	verifyEmail: async (): Promise<any> => {},
 	user: null as any,
 	isLoading: true,
+	role: '',
 }); // initial values
 
 export function AuthContextProvider({ children }: { children: any }) {
-	const [user, setUser] = useState<User | null>(null);
+	const [user, setUser] = useState<any>(null); // User | null
 	const [isLoggedIn, setIsLoggedIn] = useState(false); // even useful?
 	const [isLoading, setIsLoading] = useState(true);
+	const [role, setRole] = useState('');
 
 	async function signUp(email: string, password: string) {
 		try {
@@ -34,8 +37,8 @@ export function AuthContextProvider({ children }: { children: any }) {
 			);
 			const currentUser = auth.currentUser;
 			if (currentUser) {
-				const response2 = await sendEmailVerification(currentUser); // Send email verification
-				console.log(response2);
+				const response = await sendEmailVerification(currentUser); // Send email verification
+				console.log(response);
 				return { success: true, response };
 			} else {
 				throw new Error('User is null');
@@ -71,6 +74,18 @@ export function AuthContextProvider({ children }: { children: any }) {
 			if (currentUser && currentUser.emailVerified) {
 				// User is signed in and email is verified
 				setUser(currentUser);
+				const userEmail = currentUser.email;
+				// check if user is a buyer or a seller
+				try {
+					const response = await api.post('/email', {
+						email: userEmail,
+					});
+					console.log(response.data);
+					setRole(response.data);
+					setUser({ ...currentUser, role: response.data });
+				} catch (error: any) {
+					throw new Error(error.message);
+				}
 				setIsLoggedIn(true);
 				return { success: true, response };
 			} else if (currentUser && !currentUser.emailVerified) {
@@ -110,11 +125,27 @@ export function AuthContextProvider({ children }: { children: any }) {
 			console.log(currentUser);
 
 			if (currentUser?.emailVerified) {
+				setIsLoading(true);
 				try {
 					const refreshedToken = await currentUser.getIdToken(true);
 					console.log(refreshedToken);
-					console.log('Token refreshed');
+					//console.log('Token refreshed');
 					setUser(currentUser);
+					//console.log(role);
+					const userEmail = currentUser.email;
+					//console.log(userEmail);
+					// check if user is a buyer or a seller
+					try {
+						const response = await api.post('/email', {
+							email: userEmail,
+						});
+						///console.log(response.data);
+						setRole(response.data);
+						//setUser({ ...currentUser, role: response.data });
+					} catch (error: any) {
+						throw new Error(error.message);
+					}
+					setUser({ ...currentUser, role: role });
 					setIsLoggedIn(true);
 					// use the refreshedToken if needed
 				} catch (error) {
@@ -128,7 +159,7 @@ export function AuthContextProvider({ children }: { children: any }) {
 		});
 
 		return () => unsubscribe();
-	}, []);
+	}, [role]);
 
 	return (
 		<AuthContext.Provider
@@ -140,6 +171,7 @@ export function AuthContextProvider({ children }: { children: any }) {
 				resetPassword,
 				verifyEmail,
 				isLoading,
+				role,
 			}}
 		>
 			{children}

@@ -12,7 +12,7 @@ import PropertiesTextBox from 'components/ui/PropertiesTextBox';
 
 const Products = () => {
 	const [drinks, setDrinks] = useState<IDrink[]>([]);
-	console.log(drinks);
+	//console.log(drinks);
 
 	// filtering
 	const [filterName, setFilterName] = useState<string>('');

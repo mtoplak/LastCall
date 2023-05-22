@@ -15,7 +15,6 @@ import {
 	Select,
 	MenuItem,
 	Alert,
-	styled,
 } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import heroImg from '../../../assets/images/homepageDrink.png';
@@ -41,11 +40,10 @@ const initialState = {
 	city: '',
 	country: '',
 	registerNumber: 0,
-	targetedMarket: 'Italy', // []
+	targetedMarkets: [],
 };
 
 const SignUpB = () => {
-	const [targetedMarkets, setTargetedMarkets] = useState<string[]>([]);
 	const [error, setError] = useState('');
 	const [newUserData, setNewUserData] = useState(initialState);
 
@@ -58,9 +56,7 @@ const SignUpB = () => {
 				...newUserData,
 				[name]: !newUserData.legalPerson,
 			});
-		} /*else if (name === 'targetedMarket') {
-			setTargetedMarkets(value);
-		}*/ else {
+		} else {
 			setNewUserData({ ...newUserData, [name]: value });
 		}
 	};
@@ -271,9 +267,11 @@ const SignUpB = () => {
 												input={
 													<OutlinedInput label="Tag" />
 												}
-												name="targetedMarket"
+												name="targetedMarkets"
 												onChange={handleChange}
-												value={targetedMarkets} // Add the value prop with an array of selected values
+												value={
+													newUserData.targetedMarkets
+												}
 												renderValue={(
 													selected: string[]
 												) => selected.join(', ')}

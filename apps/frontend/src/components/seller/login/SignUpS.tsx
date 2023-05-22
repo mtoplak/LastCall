@@ -40,11 +40,10 @@ const initialState = {
 	tip: '', // TODO -> type
 	country: '',
 	registerNumber: 0,
-	targetedMarket: 'Italy', // TODO -> []
+	targetedMarkets: [],
 };
 
 const SignUpS = () => {
-	const [targetedMarkets, setTargetedMarkets] = useState<string[]>([]);
 	const [error, setError] = useState('');
 	const [newUserData, setNewUserData] = useState(initialState);
 
@@ -75,9 +74,7 @@ const SignUpS = () => {
 				newUserData.password
 			);
 			if (signUpResponse.success) {
-				// Signup was successful
 				// Access the response object if needed: signUpResponse.response
-
 				// fetch the coordinates
 				try {
 					const response = await fetch(
@@ -101,10 +98,9 @@ const SignUpS = () => {
 								coordinates: [data[0].lat, data[0].lon],
 								// targetedMarket: targetedMarkets,
 							});
-							//console.log(response);
 							console.log(response.data);
 							console.log(response.data.seller);
-							navigate('/sell/signin'); // Navigate to the sign in
+							navigate('/sell/signin');
 						} catch (error: any) {
 							setError(error.message);
 						}
@@ -121,7 +117,6 @@ const SignUpS = () => {
 			setError(error.message);
 		}
 	};
-	console.log(newUserData);
 
 	return (
 		<>
@@ -295,10 +290,12 @@ const SignUpS = () => {
 													input={
 														<OutlinedInput label="Tag" />
 													}
-													name="targetedMarket"
+													name="targetedMarkets"
 													sx={{ mb: 2 }}
 													onChange={handleChange}
-													value={targetedMarkets} // Add the value prop with an array of selected values
+													value={
+														newUserData.targetedMarkets
+													}
 													renderValue={(
 														selected: string[]
 													) => selected.join(', ')}

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model } from 'mongoose';
+import { FilterQuery, Model, QueryOptions } from 'mongoose';
 import { Seller } from './sellers.model';
 import { Product } from '../products/product.model';
 
@@ -16,7 +16,9 @@ export class SellersRepository {
   }
 
   async find(sellersFilterQuery: FilterQuery<Seller>): Promise<Seller[]> {
-    return await this.sellersModel.find(sellersFilterQuery).populate('products');
+    return await this.sellersModel
+      .find(sellersFilterQuery)
+      .populate('products');
   }
 
   async create(seller: Seller): Promise<Seller> {
@@ -27,8 +29,13 @@ export class SellersRepository {
   async findOneAndUpdate(
     sellerFilterQuery: FilterQuery<Seller>,
     seller: Partial<Seller>,
+    options?: QueryOptions,
   ): Promise<Seller> {
-    return await this.sellersModel.findOneAndUpdate(sellerFilterQuery, seller);
+    return await this.sellersModel.findOneAndUpdate(
+      sellerFilterQuery,
+      seller,
+      options,
+    );
   }
 
   async deleteOne(
