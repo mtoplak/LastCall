@@ -49,6 +49,7 @@ const Routing = () => {
 					<Route path="/sell/signin/*" element={<SignInS />} />
 					<Route path="/buy/signin/*" element={<SignInPage />} />
 					<Route path="/order/:id" element={<SingleOrder />} />
+					<Route path="/orders" element={<PastOrders />} />
 					<Route
 						path="/seller/orders"
 						element={

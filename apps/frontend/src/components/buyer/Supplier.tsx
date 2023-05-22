@@ -1,26 +1,24 @@
 import { Typography } from '@mui/material';
 import HouseBox from 'components/ui/HouseBox';
 import InfoBox from 'components/ui/InfoBox';
+import { ISeller } from 'models/seller';
 import React from 'react';
 
-interface DrinkProps {
-	title: string;
-	city: string;
-	country: string;
-	tip: string;
+interface SupplierProps {
+	seller: ISeller;
 }
 
-const Supplier: React.FC<DrinkProps> = ({ title, city, country, tip }) => {
+const Supplier: React.FC<SupplierProps> = ({ seller }) => {
 	return (
 		<HouseBox>
 			<InfoBox>
 				<Typography variant="h6" sx={{ fontWeight: '700' }}>
-					{title}
+					{seller.title}
 				</Typography>
 				<Typography variant="body1" sx={{ my: 1 }}>
-					Location: {city + ', ' + country}
+					Location: {seller.city + ', ' + seller.country}
 				</Typography>
-				{tip}
+				{seller.tip}
 			</InfoBox>
 		</HouseBox>
 	);

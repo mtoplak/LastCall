@@ -6,7 +6,7 @@ import CustomBox from 'components/ui/CustomBox';
 
 const HeroS = () => {
 	return (
-		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '100vh' }}>
+		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '65vh' }}>
 			<NavbarS />
 			<Container>
 				<CustomBox>

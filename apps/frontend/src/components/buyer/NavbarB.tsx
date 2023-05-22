@@ -38,8 +38,8 @@ function NavbarB() {
 
 	// context
 	const { user, logOut, role } = useUserAuth();
-	console.log(user);
-	console.log(user?.email);
+	//console.log(user);
+	//console.log(user?.email);
 	//console.log(user?.accessToken);
 	console.log(user?.stsTokenManager?.accessToken);
 

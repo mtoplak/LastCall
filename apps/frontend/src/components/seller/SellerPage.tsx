@@ -7,6 +7,9 @@ import {
 	DialogContent,
 	DialogContentText,
 	DialogTitle,
+	Divider,
+	Grid,
+	TextField,
 	Typography,
 } from '@mui/material';
 import { ISeller } from 'models/seller';
@@ -19,6 +22,7 @@ import Footer from 'components/homepage/Footer';
 import Title from 'components/ui/Title';
 import PropertiesTextBox from 'components/ui/PropertiesTextBox';
 import CustomBox from 'components/ui/CustomBox';
+import SellerProducts from './SellerProducts';
 
 function SellerPage() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -54,18 +58,18 @@ function SellerPage() {
 
 	return (
 		<>
-			<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '100vh' }}>
+			<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '65vh' }}>
 				<NavbarB />
 				<Container>
 					<CustomBox>
-						<Box sx={{ flex: '1', marginTop: '5rem' }}>
+						<Box sx={{ flex: '1', marginTop: '3rem' }}>
 							<Typography
 								variant="body2"
 								sx={{
 									fontSize: '18px',
 									color: '#687690',
 									fontWeight: '500',
-									mt: 10,
+									mt: 5,
 									mb: 4,
 								}}
 							>
@@ -90,52 +94,39 @@ function SellerPage() {
 								{seller?.address}. For any further information
 								please contact us!
 							</Typography>
-							<Button
-								variant="outlined"
-								onClick={() => setIsOpen(true)}
+							<Typography
+								variant="body2"
 								sx={{
-									backgroundColor: '#0F1B4C',
-									color: '#FFFFFF',
-									border: '2px solid #0F1B4C',
-									'&:hover': {
-										backgroundColor: '#FFFFFF',
-										color: '#0F1B4C',
-									},
+									fontSize: '18px',
+									color: '#5A6473',
+									mt: 4,
 								}}
 							>
-								Contact us
-							</Button>
-							<Dialog
-								open={isOpen}
-								onClose={() => setIsOpen(false)}
-								aria-labelledby="alert-dialog-title"
-								aria-describedby="alert-dialog-description"
-							>
-								<DialogTitle id="alert-dialog-title">
-									{'Contact us via:'}
-								</DialogTitle>
-								<DialogContent>
-									<DialogContentText id="alert-dialog-description">
-										Email: {seller?.email}
-										<br />
-										Phone: {seller?.phoneNumber}
-										<br />
-										Website: {seller?.website}
-									</DialogContentText>
-								</DialogContent>
-								<DialogActions>
-									<Button onClick={() => setIsOpen(true)}>
-										Close
-									</Button>
-								</DialogActions>
-							</Dialog>
+								Email: {seller?.email} 
+							</Typography>
+							<Typography
+							variant="body2"
+							sx={{
+								fontSize: '18px',
+								color: '#5A6473',
+							}}>
+								Phone: {seller?.phone}
+                            </Typography>
+							<Typography
+							variant="body2"
+							sx={{
+								fontSize: '18px',
+								color: '#5A6473',
+								mb: 4,
+							}}>
+								Website: {seller?.website}
+                            </Typography>
 						</Box>
-
 						<Box sx={{ flex: '1.25' }}>
 							<img
 								src={sellerProfile}
 								alt="sellerProfile"
-								style={{ maxWidth: '100%', marginTop: '7rem' }}
+								style={{ maxWidth: '100%', marginTop: '1rem' }}
 							/>
 						</Box>
 					</CustomBox>
@@ -152,6 +143,7 @@ function SellerPage() {
 							}}
 						>
 							Our products
+							<SellerProducts sellerId={id || ''} />
 						</Typography>
 					</PropertiesTextBox>
 				</Container>

@@ -159,7 +159,7 @@ export function AuthContextProvider({ children }: { children: any }) {
 		});
 
 		return () => unsubscribe();
-	}, []);
+	}, [role]);
 
 	return (
 		<AuthContext.Provider

@@ -23,6 +23,21 @@ function SingleOrder() {
 		fetchData();
 	}, [id]);
 
+	const getStatusColor = (status: string) => {
+		switch (status) {
+			case 'Order placed':
+				return 'primary';
+			case 'In-Transit':
+				return 'orange';
+			case 'Delivered':
+				return 'green';
+			case 'Cancel':
+				return 'error';
+			default:
+				return 'inherit';
+		}
+	};
+
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
 			<NavbarB />
@@ -61,9 +76,15 @@ function SingleOrder() {
 									}}
 								>
 									<Typography
-										sx={{ mb: 2, color: 'text.secondary' }}
+										sx={{ color: 'text.secondary' }}
 									>
-										<b>ORDER STATUS:</b> 
+										<b>ORDER STATUS:</b>
+									</Typography>
+									<Typography
+										color={getStatusColor(order.status)}
+										sx={{ mb: 2}}
+									>
+										<b>{order.status}</b>
 									</Typography>
 									<Typography variant="h6" sx={{ mb: 4 }}>
 										<b>Order ID:</b> {order._id}
