@@ -9,7 +9,7 @@ export interface ISeller {
 	address: string;
 	registerNumber: number;
 	tip: string; // spremeni v type
-	phoneNumber: string;
+	phone: string;
 	website: string;
 	targetedMarket: string;
 	coordinates: number[];

@@ -13,4 +13,5 @@ export interface IOrder {
 	country: string;
 	seller: ISeller;
 	buyer: IBuyer;
+    status: string;
 }
