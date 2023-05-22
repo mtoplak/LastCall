@@ -37,9 +37,8 @@ export class SellersController {
   async updateSeller(
     @Param('id') sellerId: string,
     @Body() updateSellerDto: CreateUpdateSellerDto,
-  ): Promise<{ success: boolean }> {
-    await this.sellersService.updateSeller(sellerId, updateSellerDto);
-    return { success: true };
+  ): Promise<Seller> {
+    return await this.sellersService.updateSeller(sellerId, updateSellerDto);
   }
 
   @Delete(':id')

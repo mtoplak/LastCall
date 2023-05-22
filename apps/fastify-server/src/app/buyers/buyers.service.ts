@@ -6,6 +6,7 @@ import { Product } from '../products/product.model';
 import { CreateUpdateBuyerDto } from './createUpdateBuyer.dto';
 import { BuyersRepository } from './buyers.repository';
 import { ProductsRepository } from '../products/products.repository';
+import { Order } from '../orders/order.model';
 
 @Injectable()
 export class BuyersService {
@@ -14,9 +15,7 @@ export class BuyersService {
     private readonly productsRepository: ProductsRepository,
   ) {}
 
-  async addBuyer(
-    buyerData: CreateUpdateBuyerDto,
-  ): Promise<Buyer> {
+  async addBuyer(buyerData: CreateUpdateBuyerDto): Promise<Buyer> {
     return await this.buyersRepository.create(buyerData);
   }
 
@@ -38,17 +37,19 @@ export class BuyersService {
     buyerId: string,
     updatedBuyerData: Partial<Buyer>,
   ): Promise<Buyer> {
-    try {
-      return await this.buyersRepository.findOneAndUpdate(
-        { _id: buyerId },
-        updatedBuyerData,
-      );
-    } catch (err) {
-      throw new NotFoundException('Failed to update buyer with id: ' + buyerId);
+    const updatedBuyer = await this.buyersRepository.findOneAndUpdate(
+      { _id: buyerId },
+      updatedBuyerData,
+      { new: true },
+    );
+    if (!updatedBuyer) {
+      throw new NotFoundException(`Buyer with id ${buyerId} not found`);
     }
+
+    return updatedBuyer;
   }
 
-  async removeBuyer(buyerId: string): Promise<{ success: boolean; }> {
+  async removeBuyer(buyerId: string): Promise<{ success: boolean }> {
     await this.buyersRepository.deleteOne({
       _id: buyerId,
     });
@@ -56,10 +57,10 @@ export class BuyersService {
   }
 
   async addToCart(
-    buyerId: string,
+    email: string,
     productData: { productId: string; quantity: number }[],
   ): Promise<{ cart: { productId: Product; quantity: number }[] } | null> {
-    const buyer = await this.buyersRepository.findOne({ _id: buyerId });
+    const buyer = await this.buyersRepository.findOne({ email });
     if (!buyer) {
       return null;
     }
@@ -89,8 +90,22 @@ export class BuyersService {
   }
 
   async getCart(
-    buyerId: string,
+    email: string,
   ): Promise<{ cart: { product: Product; quantity: number }[] } | null> {
-    return this.buyersRepository.getCart(buyerId);
+    const buyer = await this.buyersRepository.getCart(email);
+    if (!buyer) {
+      throw new NotFoundException('Buyer of this cart not found');
+    }
+
+    const populatedCart = buyer.cart.map((item) => ({
+      product: item.product,
+      quantity: item.quantity,
+    }));
+
+    return { cart: populatedCart };
+  }
+
+  async getOrdersByBuyer(email: string): Promise<Order[]> {
+    return this.buyersRepository.getOrdersByBuyer(email);
   }
 }

@@ -1,15 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model } from 'mongoose';
+import { FilterQuery, Model, QueryOptions } from 'mongoose';
 import { Product } from '../products/product.model';
 import { Buyer } from './buyers.model';
+import { Order } from '../orders/order.model';
 
 @Injectable()
 export class BuyersRepository {
   constructor(
     @InjectModel('Buyer') private readonly buyerModel: Model<Buyer>,
     @InjectModel('Product') private readonly productModel: Model<Product>,
-  ) { }
+  ) {}
 
   async findOne(buyerFilterQuery: FilterQuery<Buyer>): Promise<Buyer> {
     return await this.buyerModel
@@ -20,6 +21,10 @@ export class BuyersRepository {
         populate: { path: 'productId', model: 'Product' },
       })
       .exec();
+  }
+
+  async getBuyerByEmail(email: string): Promise<Buyer | null> {
+    return this.buyerModel.findOne({ email }).exec();
   }
 
   async find(buyersFilterQuery: FilterQuery<Buyer>): Promise<Buyer[]> {
@@ -40,8 +45,13 @@ export class BuyersRepository {
   async findOneAndUpdate(
     buyerFilterQuery: FilterQuery<Buyer>,
     buyer: Partial<Buyer>,
+    options?: QueryOptions,
   ): Promise<Buyer> {
-    return await this.buyerModel.findOneAndUpdate(buyerFilterQuery, buyer);
+    return await this.buyerModel.findOneAndUpdate(
+      buyerFilterQuery,
+      buyer,
+      options,
+    );
   }
 
   async deleteOne(
@@ -52,10 +62,10 @@ export class BuyersRepository {
   }
 
   async addToCart(
-    buyerId: string,
+    email: string,
     productData: { productId: string; quantity: number }[],
   ): Promise<{ cart: { productId: Product; quantity: number }[] } | null> {
-    const buyer = await this.buyerModel.findById(buyerId);
+    const buyer = await this.buyerModel.findById(email);
     if (!buyer) {
       return null;
     }
@@ -79,13 +89,14 @@ export class BuyersRepository {
   }
 
   async getCart(
-    buyerId: string,
+    email: string,
   ): Promise<{ cart: { product: Product; quantity: number }[] } | null> {
     const buyer = await this.buyerModel
-      .findById(buyerId)
-      .populate('cart.productId');
+      .findOne({ email })
+      .populate('cart.productId')
+      .exec();
     if (!buyer) {
-      return null;
+      throw new NotFoundException('Buyer of this cart not found');
     }
 
     const populatedCart = buyer.cart.map((item) => ({
@@ -94,5 +105,20 @@ export class BuyersRepository {
     }));
 
     return { cart: populatedCart };
+  }
+
+  async getOrdersByBuyer(email: string): Promise<Order[]> {
+    const buyer = await this.buyerModel
+      .findOne({ email })
+      .lean()
+      .populate({
+        path: 'orders',
+        populate: {
+          path: 'products',
+          populate: { path: 'productId', model: 'Product' },
+        },
+      })
+      .exec();
+    return buyer.orders as unknown as Order[];
   }
 }

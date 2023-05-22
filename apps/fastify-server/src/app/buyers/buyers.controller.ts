@@ -11,10 +11,11 @@ import { BuyersService } from './buyers.service';
 import { Buyer } from './buyers.model';
 import { CreateUpdateBuyerDto } from './createUpdateBuyer.dto';
 import { Product } from '../products/product.model';
+import { Order } from '../orders/order.model';
 
 @Controller('buyers')
 export class BuyersController {
-  constructor(private readonly buyersService: BuyersService) { }
+  constructor(private readonly buyersService: BuyersService) {}
 
   @Post()
   async addBuyer(@Body() createBuyerDto: CreateUpdateBuyerDto): Promise<Buyer> {
@@ -35,34 +36,40 @@ export class BuyersController {
   async updateBuyer(
     @Param('id') buyerId: string,
     @Body() updatedBuyerData: Partial<Buyer>,
-  ): Promise<{ success: boolean; }> {
-    await this.buyersService.updateBuyer(buyerId, updatedBuyerData);
-    return { success: true };
+  ): Promise<Buyer> {
+    return await this.buyersService.updateBuyer(buyerId, updatedBuyerData);
   }
 
   @Delete(':id')
-  async removeBuyer(@Param('id') id: string): Promise<{ success: boolean; }> {
+  async removeBuyer(@Param('id') id: string): Promise<{ success: boolean }> {
     await this.buyersService.removeBuyer(id);
     return { success: true };
   }
 
-  @Post(':buyerId/cart')
+  @Post('/addcart')
   async addToCart(
-    @Param('buyerId') buyerId: string,
+    @Body('email') email: string,
     @Body('cart') cart: { productId: string; quantity: number }[],
   ): Promise<{ cart: { productId: Product; quantity: number }[] } | null> {
-    const result = await this.buyersService.addToCart(buyerId, cart);
+    const result = await this.buyersService.addToCart(email, cart);
     if (result && result.cart) {
       return { cart: result.cart };
     }
     return null;
   }
 
-  @Get(':buyerId/cart')
+  @Post('/getcart')
   async getCart(
-    @Param('buyerId') buyerId: string,
+    @Body('email') email: string,
   ): Promise<{ cart: { product: Product; quantity: number }[] } | null> {
-    const result = await this.buyersService.getCart(buyerId);
+    const result = await this.buyersService.getCart(email);
     return result;
+  }
+
+  @Post('orders')
+  async getAllProductsBySellerId(
+    @Body('email') email: string,
+  ): Promise<Order[]> {
+    return this.buyersService.getOrdersByBuyer(email);
   }
 }
