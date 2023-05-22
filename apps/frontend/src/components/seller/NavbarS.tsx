@@ -120,6 +120,11 @@ function NavbarS() {
 										</Typography>
 									</MenuItem>
 								))}
+								<MenuItem onClick={handleCloseNavMenu}>
+									<Typography textAlign="center">
+										neki
+									</Typography>
+								</MenuItem>
 								<Typography textAlign="center">bla </Typography>
 								<Button
 									onClick={handleCloseNavMenu}

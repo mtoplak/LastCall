@@ -10,7 +10,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { ThemeProvider, createTheme } from '@mui/material';
+import { ThemeProvider } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useUserAuth } from 'context/AuthContext';
 import { darkTheme } from 'assets/styles/styles';
@@ -117,6 +117,11 @@ function NavbarB() {
 										</Typography>
 									</MenuItem>
 								))}
+								<MenuItem onClick={handleCloseNavMenu}>
+									<Typography textAlign="center">
+										Not showing ???
+									</Typography>
+								</MenuItem>
 							</Menu>
 						</Box>
 						<Typography
@@ -188,7 +193,7 @@ function NavbarB() {
 										display: 'block',
 									}}
 								>
-									Cart (5)
+									Cart (2)
 								</Button>
 							</Link>
 						)}
@@ -226,11 +231,13 @@ function NavbarB() {
 											Profile
 										</Typography>
 									</MenuItem>
-									<MenuItem onClick={handleCloseUserMenu}>
-										<Typography textAlign="center">
-											My orders
-										</Typography>
-									</MenuItem>
+									<Link to="/orders">
+										<MenuItem onClick={handleCloseUserMenu}>
+											<Typography textAlign="center">
+												My orders
+											</Typography>
+										</MenuItem>
+									</Link>
 									<MenuItem onClick={handleLogOut}>
 										<Typography textAlign="center">
 											Log out

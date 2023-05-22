@@ -16,6 +16,7 @@ import { useState } from 'react';
 import { useUserAuth } from 'context/AuthContext';
 import CustomBox from 'components/ui/CustomBox';
 import { btnstyle, paperStyle } from 'assets/styles/styles';
+import api from 'services/api';
 
 const SignInB = () => {
 	const [email, setEmail] = useState('');
@@ -47,9 +48,19 @@ const SignInB = () => {
 			const signUpResponse = await signIn(email, password);
 			console.log(signUpResponse);
 			if (signUpResponse.success) {
-				// Signin was successful
 				// Access the response object if needed: signUpResponse.response
 				//navigate('/');
+				try {
+					const response = await api.post('/email', {
+						email: email,
+					});
+					console.log(response);
+					console.log(response.data);
+				} catch (error: any) {
+					setError(error.message);
+				}
+
+		
 				const redirectPath = location.search
 					? decodeURIComponent(location.search.split('=')[1])
 					: '/';
