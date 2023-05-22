@@ -10,30 +10,45 @@ import {
 	CardActions,
 	Divider,
 	Alert,
+	Select,
+	MenuItem,
 } from '@mui/material';
-import drink from '../../assets/images/cocacola.jpg';
 import NavbarB from './NavbarB';
-
-const cartItems = [
-	{
-		id: 1,
-		name: 'Product 1',
-		price: 29.99,
-		image: drink,
-		quantity: 1,
-		discount: 10,
-	},
-	{
-		id: 2,
-		name: 'Product 2',
-		price: 39.99,
-		image: drink,
-		quantity: 1,
-		discount: 0,
-	},
-];
+import { useUserAuth } from 'context/AuthContext';
+import { useEffect, useState } from 'react';
+import api from 'services/api';
+import { ICartItem } from 'models/cartItem';
+import { Link } from 'react-router-dom';
 
 function Cart() {
+	const { user } = useUserAuth();
+	const [cartItems, setCartItems] = useState<ICartItem[] | null>(null);
+
+	useEffect(() => {
+		if (!user) return;
+		const fetchCart = async () => {
+			const response = await api.post('/buyers/getcart', {
+				email: user.email,
+			});
+			setCartItems(response.data.cart);
+		};
+		fetchCart();
+	}, [user]);
+	console.log(cartItems);
+
+	useEffect(() => {
+		document.title = 'Shopping Cart';
+	}, []);
+
+	const handleRemoveFromCart = async (id: string) => {
+		/* TODO
+		const response = await api.post('/buyers/removefromcart', {
+			email: user?.email,
+			productId: id,
+		});
+		setCartItems(response.data.cart);*/
+	};
+
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
 			<NavbarB />
@@ -41,16 +56,12 @@ function Cart() {
 				<Typography variant="h4" component="h1" mt={4} mb={2}>
 					Shopping Cart
 				</Typography>
-				{cartItems.length === 0 ? (
-					<Typography variant="body1" mb={4}>
-						Your cart is empty.
-					</Typography>
-				) : (
+				{cartItems && cartItems.length > 0 ? (
 					<Grid container spacing={2}>
 						<Grid item xs={8}>
-							{cartItems.map((item) => (
+							{cartItems?.map((item: ICartItem) => (
 								<Card
-									key={item.id}
+									key={item.product._id}
 									sx={{
 										py: 2,
 										alignItems: 'flex-start',
@@ -59,11 +70,15 @@ function Cart() {
 								>
 									<Grid container spacing={2}>
 										<Grid item xs={3}>
-											<CardMedia
-												component="img"
-												alt={item.name}
-												image={item.image}
-											/>
+											<Link
+												to={`/product/${item.product._id}`}
+											>
+												<CardMedia
+													component="img"
+													alt={item.product.title}
+													image={item.product.picture}
+												/>
+											</Link>
 										</Grid>
 										<Grid item xs={6}>
 											<CardContent>
@@ -71,34 +86,63 @@ function Cart() {
 													variant="subtitle1"
 													component="h2"
 												>
-													{item.name}
+													{item.product.title}
 												</Typography>
 												<Typography
 													variant="body2"
 													color="text.secondary"
 												>
-													Price: €
-													{item.price.toFixed(2)}
+													Price:{' '}
+													{item.product.price.toFixed(
+														2
+													)}{' '}
+													€
 												</Typography>
-												{item.discount > 0 ? (
-													<Alert severity="success">
-														There is currently a{' '}
-														{item.discount}%
-														discount for this item!{' '}
-													</Alert>
-												) : (
-													''
-												)}
+												{/* item.product.discount > 0 ? (
+										<Alert severity="success">
+										  There is currently a {item.product.discount}% discount for this item!{' '}
+										</Alert>
+									  ) : (
+										''
+									  ) */}
+												<Alert severity="success">
+													There is currently a 10%
+													discount for this item!{' '}
+												</Alert>
 											</CardContent>
 										</Grid>
 										<Grid item xs={3}>
 											<CardActions>
+												<Select
+													value={item.quantity}
+													variant="outlined"
+													size="small"
+												>
+													{Array.from(
+														{ length: 100 },
+														(_, index) => (
+															<MenuItem
+																key={index + 1}
+																value={
+																	index + 1
+																}
+															>
+																{index + 1}
+															</MenuItem>
+														)
+													)}
+												</Select>
 												<Button
 													variant="text"
-													size="small"
+													size="large"
 													color="error"
+													onClick={() =>
+														handleRemoveFromCart(
+															item.product._id
+														)
+													}
 												>
-													x
+													X
 												</Button>
 											</CardActions>
 										</Grid>
@@ -123,11 +167,10 @@ function Cart() {
 										mb={2}
 										sx={{ mt: 2, mb: 2 }}
 									>
-										{/* Calculate and display the total amount */}
-										Total:{' '}
+										Subtotal:{' '}
 										{cartItems
-											.reduce(
-												(total, item) =>
+											?.reduce(
+												(total: number, item: any) =>
 													total + item.price,
 												0
 											)
@@ -135,6 +178,8 @@ function Cart() {
 										€
 										<br />
 										Delivery & Handling: Free
+										<hr />
+										Total: 7€
 									</Typography>
 									<Divider />
 									<Button
@@ -157,6 +202,10 @@ function Cart() {
 							</Card>
 						</Grid>
 					</Grid>
+				) : (
+					<Typography variant="body1" mb={4}>
+						Your cart is empty. &#128549;
+					</Typography>
 				)}
 			</Container>
 		</Box>

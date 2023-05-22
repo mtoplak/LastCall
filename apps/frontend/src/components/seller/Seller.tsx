@@ -6,9 +6,9 @@ import ProductsS from './ProductsS';
 function Seller() {
 	return (
 		<>
-		<HeroS />
-		<ProductsS />
-      	<Footer />
+			<HeroS />
+			<ProductsS />
+			<Footer />
 		</>
 	);
 }

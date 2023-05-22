@@ -208,12 +208,7 @@ function Suppliers() {
 										to={`/supplier/${seller._id}`}
 										key={seller._id}
 									>
-										<Supplier
-											title={seller.title}
-											tip={seller.tip}
-											city={seller.city}
-											country={seller.country}
-										/>
+										<Supplier seller={seller} />
 									</Link>
 								</Grid>
 							))
@@ -239,12 +234,7 @@ function Suppliers() {
 										to={`/supplier/${seller._id}`}
 										key={seller._id}
 									>
-										<Supplier
-											title={seller.title}
-											tip={seller.tip}
-											city={seller.city}
-											country={seller.country}
-										/>
+										<Supplier seller={seller} />
 									</Link>
 								</Grid>
 							))

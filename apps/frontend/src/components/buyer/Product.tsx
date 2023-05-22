@@ -1,29 +1,38 @@
 import {
 	Alert,
+	AlertTitle,
 	Box,
 	Button,
 	Card,
 	CardContent,
 	Container,
 	Divider,
+	IconButton,
 	List,
 	ListItem,
 	ListItemText,
 	TextField,
 	Typography,
 } from '@mui/material';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+
 import { IDrink } from 'models/drink';
 import { MouseEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import api from 'services/api';
 import NavbarB from './NavbarB';
 import CustomBox from 'components/ui/CustomBox';
+import { Link } from 'react-router-dom';
+import { useUserAuth } from 'context/AuthContext';
 
 function Product() {
 	const [drink, setDrink] = useState<IDrink>();
 	const [fetchError, setFetchError] = useState(false);
 	const [quantity, setQuantity] = useState(1);
+	const [showAlert, setShowAlert] = useState(false);
+	const [showWarning, setShowWarning] = useState(false);
 	const { id } = useParams<{ id: string }>();
+	const { user, role } = useUserAuth();
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -39,20 +48,31 @@ function Product() {
 		fetchData();
 	}, [id]);
 
+	useEffect(() => {
+		if (drink) {
+			document.title = `Last Call | ${drink.title}`;
+		}
+	}, [drink]);
+
 	if (fetchError) {
 		return <>Product Not found</>;
 	}
 
 	if (!drink) {
-		return null; // Render a loader or placeholder here if desired
+		return null; // Render a loader or placeholder here
 	}
 
 	const addToCart = async (event: MouseEvent<HTMLElement>) => {
 		event.preventDefault();
+		if (!user || role !== 'buyer' || !user.emailVerified) {
+			setShowWarning(true);
+			return;
+		}
 		try {
 			const response = await api.post(
-				'/buyers/' + '646b8b1be037f416c093266f' + '/cart', //TODO: get user id
+				`/buyers/addcart`, //TODO: get user id
 				{
+					email: user.email,
 					cart: [
 						{
 							productId: id,
@@ -63,16 +83,71 @@ function Product() {
 			);
 			console.log(response);
 			console.log(response.data);
+			setShowAlert(true);
 		} catch (error: any) {
 			console.error(error);
 			throw error;
 		}
 	};
 
+	const handleCloseAlert = () => {
+		setShowAlert(false);
+	};
+
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
 			<NavbarB />
 			<Container>
+				{showAlert && (
+					<Alert
+						severity="success"
+						style={{ marginTop: '1rem' }}
+						action={
+							<IconButton
+								aria-label="close"
+								color="inherit"
+								size="small"
+								onClick={handleCloseAlert}
+							>
+								<CloseOutlinedIcon fontSize="inherit" />
+							</IconButton>
+						}
+					>
+						<AlertTitle>Product added to cart</AlertTitle>
+						Go to{' '}
+						<Link to="/cart">
+							<span className="blackLink">cart</span>
+						</Link>{' '}
+						to checkout.
+					</Alert>
+				)}
+				{showWarning && (
+					<Alert
+						severity="error"
+						style={{ marginTop: '1rem' }}
+						action={
+							<IconButton
+								aria-label="close"
+								color="inherit"
+								size="small"
+								onClick={() => {
+									setShowWarning(false);
+								}}
+							>
+								<CloseOutlinedIcon fontSize="inherit" />
+							</IconButton>
+						}
+					>
+						<AlertTitle>
+							You must be logged in to add items to cart.
+						</AlertTitle>
+						Go to{' '}
+						<Link to="/buy/signin">
+							<span className="blackLink">sign in</span>
+						</Link>
+						.
+					</Alert>
+				)}
 				<CustomBox>
 					<Box sx={{ flex: '1.25' }}>
 						<img
@@ -81,6 +156,7 @@ function Product() {
 							style={{ maxWidth: '100%', marginTop: '7rem' }}
 						/>
 					</Box>
+
 					<Box
 						sx={{
 							flex: '1',
