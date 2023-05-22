@@ -37,7 +37,7 @@ function NavbarB() {
 	};
 
 	// context
-	const { user, logOut } = useUserAuth();
+	const { user, logOut, role } = useUserAuth();
 	console.log(user);
 	console.log(user?.email);
 	//console.log(user?.accessToken);
@@ -183,7 +183,7 @@ function NavbarB() {
 								Contact
 							</Button>
 						</Box>
-						{user && (
+						{user && role === 'buyer' && (
 							<Link to={'/cart'}>
 								<Button
 									onClick={handleCloseNavMenu}
@@ -197,7 +197,7 @@ function NavbarB() {
 								</Button>
 							</Link>
 						)}
-						{user ? (
+						{user && role === 'buyer' ? (
 							<Box sx={{ flexGrow: 0 }}>
 								<Tooltip title="Open settings">
 									<IconButton

@@ -13,7 +13,7 @@ import {
 	Typography,
 } from '@mui/material';
 import { IDrink } from 'models/drink';
-import { useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import api from 'services/api';
 import NavbarB from './NavbarB';
@@ -22,14 +22,14 @@ import CustomBox from 'components/ui/CustomBox';
 function Product() {
 	const [drink, setDrink] = useState<IDrink>();
 	const [fetchError, setFetchError] = useState(false);
+	const [quantity, setQuantity] = useState(1);
 	const { id } = useParams<{ id: string }>();
-	console.log(id);
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
 				const response = await api.get('/products/' + id);
-				console.log(response.data);
+				//console.log(response.data);
 				setDrink(response.data);
 			} catch (error) {
 				setFetchError(true);
@@ -46,6 +46,28 @@ function Product() {
 	if (!drink) {
 		return null; // Render a loader or placeholder here if desired
 	}
+
+	const addToCart = async (event: MouseEvent<HTMLElement>) => {
+		event.preventDefault();
+		try {
+			const response = await api.post(
+				'/buyers/' + '646b8b1be037f416c093266f' + '/cart', //TODO: get user id
+				{
+					cart: [
+						{
+							productId: id,
+							quantity: quantity,
+						},
+					],
+				}
+			);
+			console.log(response);
+			console.log(response.data);
+		} catch (error: any) {
+			console.error(error);
+			throw error;
+		}
+	};
 
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
@@ -134,6 +156,12 @@ function Product() {
 									>
 										<Box flex="1">
 											<TextField
+												value={quantity}
+												onChange={(e) =>
+													setQuantity(
+														Number(e.target.value)
+													)
+												}
 												label="Quantity"
 												placeholder="1"
 												type="number"
@@ -141,7 +169,9 @@ function Product() {
 											/>
 										</Box>
 										<Box>
-											<Button>Add to basket</Button>
+											<Button onClick={addToCart}>
+												Add to basket
+											</Button>
 										</Box>
 									</Box>
 									<p style={{ fontSize: '15px' }}>

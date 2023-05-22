@@ -35,7 +35,7 @@ export interface Buyer extends Document {
   phone: string;
   email: string;
   orders: string[];
-  cart: { productId: Product; quantity: number }[];
+  cart: { productId: Product; quantity: number; }[];
 }
 
 export const BuyerModel: Model<Buyer> = model<Buyer>('Buyer', BuyerSchema);

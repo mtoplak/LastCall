@@ -1,3 +1,3 @@
 import { BuyerModel } from "./buyers.model";
 
-export class CreateUpdateBuyerDto extends BuyerModel {}
+export class CreateUpdateBuyerDto extends BuyerModel { }
