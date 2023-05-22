@@ -107,6 +107,22 @@ export class BuyersRepository {
     return { cart: populatedCart };
   }
 
+  async deleteProductFromCart(email: string, productId: string): Promise<Buyer> {
+    const buyer = await this.findOne({ email });
+    if (!buyer) {
+      throw new NotFoundException('Buyer not found');
+    }
+
+    const existingProductIndex = buyer.cart.findIndex(item => item.productId._id.toString() === productId);
+    if (existingProductIndex === -1) {
+      throw new NotFoundException('Product not found in the cart');
+    }
+
+    buyer.cart.splice(existingProductIndex, 1);
+
+    return buyer;
+  }
+
   async getOrdersByBuyer(email: string): Promise<Order[]> {
     const buyer = await this.buyerModel
       .findOne({ email })

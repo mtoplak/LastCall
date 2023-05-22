@@ -1,6 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose/dist';
-import { Model, Types } from 'mongoose';
 import { Buyer } from './buyers.model';
 import { Product } from '../products/product.model';
 import { CreateUpdateBuyerDto } from './createUpdateBuyer.dto';
@@ -13,7 +11,7 @@ export class BuyersService {
   constructor(
     private readonly buyersRepository: BuyersRepository,
     private readonly productsRepository: ProductsRepository,
-  ) { }
+  ) {}
 
   async addBuyer(buyerData: CreateUpdateBuyerDto): Promise<Buyer> {
     return await this.buyersRepository.create(buyerData);
@@ -85,25 +83,36 @@ export class BuyersService {
       quantity: quantities[index],
     }));
 
-    // Check if each product is already in the cart
+    // Create a map of existing products in the cart
+    const existingProductsMap = new Map<string, number>();
+    buyer.cart.forEach((item) => {
+      existingProductsMap.set(item.productId._id.toString(), item.quantity);
+    });
 
-    /*
     for (const productInCart of productsInCart) {
-      const existingProduct = buyer.cart.find(
-        (item) => item.productId.toString() === productInCart.productId.toString(),
-      );
-      if (existingProduct) {
-        console.log("product found in cart already");
-        // Product already exists in the cart, you can handle this case accordingly
-        // For example, you can update the quantity or skip adding it again
-        throw new Error('Product already exists in the cart');
+      const productId = productInCart.productId._id.toString();
+      const existingQuantity = existingProductsMap.get(productId);
+
+      if (existingQuantity !== undefined) {
+        console.log('Product already exists in the cart');
+        const updatedQuantity = existingQuantity + productInCart.quantity;
+        existingProductsMap.set(productId, updatedQuantity);
       } else {
-        console.log("product not found in cart");
+        console.log('Adding the product');
+        existingProductsMap.set(productId, productInCart.quantity);
       }
-    }*/
-    buyer.cart = buyer.cart.concat(productsInCart);
+    }
+
+    // Update the buyer's cart with the updated quantities
+    buyer.cart = Array.from(existingProductsMap, ([productId, quantity]) => ({
+      productId: products.find(
+        (product) => product._id.toString() === productId,
+      ),
+      quantity,
+    }));
 
     await buyer.save();
+
     return { cart: buyer.cart };
   }
 
@@ -122,6 +131,24 @@ export class BuyersService {
 
     return { cart: populatedCart };
   }
+
+  async deleteProductFromCart(email: string, productId: string): Promise<{ cart: { productId: Product; quantity: number }[] }> {
+    const buyer = await this.buyersRepository.findOne({ email });
+    if (!buyer) {
+      throw new NotFoundException('Buyer not found');
+    }
+  
+    const existingProductIndex = buyer.cart.findIndex(item => item.productId._id.toString() === productId);
+    if (existingProductIndex === -1) {
+      throw new NotFoundException('Product not found in the cart');
+    }
+  
+    buyer.cart.splice(existingProductIndex, 1);
+    await buyer.save();
+  
+    return { cart: buyer.cart };
+  }
+  
 
   async getOrdersByBuyer(email: string): Promise<Order[]> {
     return this.buyersRepository.getOrdersByBuyer(email);
