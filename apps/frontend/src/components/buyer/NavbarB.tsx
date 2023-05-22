@@ -10,7 +10,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { ThemeProvider, createTheme } from '@mui/material';
+import { ThemeProvider } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useUserAuth } from 'context/AuthContext';
 import { darkTheme } from 'assets/styles/styles';
@@ -37,7 +37,7 @@ function NavbarB() {
 	};
 
 	// context
-	const { user, logOut } = useUserAuth();
+	const { user, logOut, role } = useUserAuth();
 	console.log(user);
 	console.log(user?.email);
 	//console.log(user?.accessToken);
@@ -117,6 +117,11 @@ function NavbarB() {
 										</Typography>
 									</MenuItem>
 								))}
+								<MenuItem onClick={handleCloseNavMenu}>
+									<Typography textAlign="center">
+										Not showing ???
+									</Typography>
+								</MenuItem>
 							</Menu>
 						</Box>
 						<Typography
@@ -178,7 +183,7 @@ function NavbarB() {
 								Contact
 							</Button>
 						</Box>
-						{user && (
+						{user && role === 'buyer' && (
 							<Link to={'/cart'}>
 								<Button
 									onClick={handleCloseNavMenu}
@@ -188,11 +193,11 @@ function NavbarB() {
 										display: 'block',
 									}}
 								>
-									Cart (5)
+									Cart (2)
 								</Button>
 							</Link>
 						)}
-						{user ? (
+						{user && role === 'buyer' ? (
 							<Box sx={{ flexGrow: 0 }}>
 								<Tooltip title="Open settings">
 									<IconButton
@@ -226,11 +231,13 @@ function NavbarB() {
 											Profile
 										</Typography>
 									</MenuItem>
-									<MenuItem onClick={handleCloseUserMenu}>
-										<Typography textAlign="center">
-											My orders
-										</Typography>
-									</MenuItem>
+									<Link to="/orders">
+										<MenuItem onClick={handleCloseUserMenu}>
+											<Typography textAlign="center">
+												My orders
+											</Typography>
+										</MenuItem>
+									</Link>
 									<MenuItem onClick={handleLogOut}>
 										<Typography textAlign="center">
 											Log out

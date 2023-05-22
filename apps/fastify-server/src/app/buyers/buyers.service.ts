@@ -13,7 +13,7 @@ export class BuyersService {
   constructor(
     private readonly buyersRepository: BuyersRepository,
     private readonly productsRepository: ProductsRepository,
-  ) {}
+  ) { }
 
   async addBuyer(buyerData: CreateUpdateBuyerDto): Promise<Buyer> {
     return await this.buyersRepository.create(buyerData);
@@ -75,6 +75,7 @@ export class BuyersService {
     const products = await this.productsRepository.find({
       _id: { $in: productIds },
     });
+
     if (products.length !== productIds.length) {
       throw new NotFoundException('Products for this cart not found');
     }
@@ -84,7 +85,24 @@ export class BuyersService {
       quantity: quantities[index],
     }));
 
-    buyer.cart = productsInCart;
+    // Check if each product is already in the cart
+
+    /*
+    for (const productInCart of productsInCart) {
+      const existingProduct = buyer.cart.find(
+        (item) => item.productId.toString() === productInCart.productId.toString(),
+      );
+      if (existingProduct) {
+        console.log("product found in cart already");
+        // Product already exists in the cart, you can handle this case accordingly
+        // For example, you can update the quantity or skip adding it again
+        throw new Error('Product already exists in the cart');
+      } else {
+        console.log("product not found in cart");
+      }
+    }*/
+    buyer.cart = buyer.cart.concat(productsInCart);
+
     await buyer.save();
     return { cart: buyer.cart };
   }

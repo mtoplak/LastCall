@@ -1,10 +1,15 @@
 import { useUserAuth } from 'context/AuthContext';
 import { Navigate, useLocation } from 'react-router-dom';
 
-const ProtectedRoute = ({ children }: { children: any }) => {
-	const { user, isLoading } = useUserAuth();
+// seller must be logged in to access this route
+const SellerProtectedRoute = ({ children }: { children: any }) => {
+	const { user, isLoading, role } = useUserAuth();
 	const location = useLocation();
 	//console.log(location.pathname);
+
+	if (role !== 'seller' && !isLoading) {
+		return <Navigate to={`/unauthorized`} replace />;
+	}
 
 	if (!user && !isLoading) {
 		return (
@@ -20,4 +25,4 @@ const ProtectedRoute = ({ children }: { children: any }) => {
 	return children;
 };
 
-export default ProtectedRoute;
+export default SellerProtectedRoute;
