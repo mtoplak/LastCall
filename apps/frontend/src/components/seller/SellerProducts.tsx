@@ -1,7 +1,20 @@
 import { IDrink } from 'models/drink';
 import React, { useEffect, useState } from 'react';
 import api from 'services/api';
-import { Grid, Typography, Card, CardMedia, CardContent } from '@mui/material';
+import {
+	Grid,
+	Typography,
+	Card,
+	CardMedia,
+	CardContent,
+	Box,
+} from '@mui/material';
+import { Link } from 'react-router-dom';
+import DrinkContainer from 'components/ui/DrinkContainer';
+import HouseBox from 'components/ui/HouseBox';
+import ImgContainer from 'components/ui/ImgContainer';
+import InfoBox from 'components/ui/InfoBox';
+import Image from 'components/ui/Image';
 
 interface SellerProductsProps {
 	sellerId: string;
@@ -13,7 +26,7 @@ const SellerProducts: React.FC<SellerProductsProps> = ({ sellerId }) => {
 	useEffect(() => {
 		const fetchSellerProducts = async () => {
 			const response = await api.get(`/sellers/${sellerId}/products`);
-			//console.log(response.data);
+			console.log(response.data);
 			setProducts(response.data);
 		};
 
@@ -23,26 +36,40 @@ const SellerProducts: React.FC<SellerProductsProps> = ({ sellerId }) => {
 	return (
 		<Grid container spacing={2}>
 			{products.length > 0 ? (
-				products.map((product) => (
-					<Grid item xs={12} sm={6} md={4} key={product._id}>
-						<Card>
-							<CardMedia
-								component="img"
-								height="250"
-								image={product.picture}
-								alt={product.title}
-								style={{ objectFit: 'cover' }}
-							/>
-							<CardContent style={{ textAlign: 'center' }}>
-								<Typography variant="h6">
-									{product.title}
+				products.map((drink) => (
+					<DrinkContainer key={drink._id}>
+						<HouseBox>
+							<Link to={`/product/${drink._id}`}>
+								<ImgContainer>
+									<Image
+										src={drink.picture}
+										alt={drink.title}
+									/>
+								</ImgContainer>
+							</Link>
+							<InfoBox>
+								<Link to={`/product/${drink._id}`}>
+									<Typography
+										variant="h6"
+										sx={{ fontWeight: '700' }}
+										style={{ color: 'black' }}
+									>
+										{drink.title}
+									</Typography>
+								</Link>
+								<Typography variant="body1" sx={{ my: 1 }}>
+									Price: {drink.price}€
 								</Typography>
-								<Typography variant="h6">
-									{product.price} €
-								</Typography>
-							</CardContent>
-						</Card>
-					</Grid>
+								<Box
+									sx={{
+										display: 'flex',
+										justifyContent: 'space-between',
+										width: '100%',
+									}}
+								></Box>
+							</InfoBox>
+						</HouseBox>
+					</DrinkContainer>
 				))
 			) : (
 				<div>

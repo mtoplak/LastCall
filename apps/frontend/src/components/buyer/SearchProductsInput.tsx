@@ -60,9 +60,10 @@ const SearchProductsInput = ({
 					onChange={(event) => setFilterType(event.target.value)}
 				>
 					<MenuItem value="any">Any</MenuItem>
-					<MenuItem value="Alcohol">Alcohol</MenuItem>
-					<MenuItem value="Carbonated">Carbonated</MenuItem>
-					<MenuItem value="Not carbonated">Not carbonated</MenuItem>
+					<MenuItem value="Beer">Beer</MenuItem>
+					<MenuItem value="Wine">Wine</MenuItem>
+					<MenuItem value="Champagne">Champagne</MenuItem>
+					<MenuItem value="Other">Other</MenuItem>
 				</Select>
 				{/*<Button
 					variant="contained"

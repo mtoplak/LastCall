@@ -18,7 +18,7 @@ const Supplier: React.FC<SupplierProps> = ({ seller }) => {
 				<Typography variant="body1" sx={{ my: 1 }}>
 					Location: {seller.city + ', ' + seller.country}
 				</Typography>
-				{seller.tip}
+				{seller.companyType}
 			</InfoBox>
 		</HouseBox>
 	);

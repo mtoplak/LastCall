@@ -15,7 +15,7 @@ import { Order } from '../orders/order.model';
 
 @Controller('buyers')
 export class BuyersController {
-  constructor(private readonly buyersService: BuyersService) {}
+  constructor(private readonly buyersService: BuyersService) { }
 
   @Post()
   async addBuyer(@Body() createBuyerDto: CreateUpdateBuyerDto): Promise<Buyer> {
@@ -54,7 +54,7 @@ export class BuyersController {
   }
 
   @Delete(':id')
-  async removeBuyer(@Param('id') id: string): Promise<{ success: boolean }> {
+  async removeBuyer(@Param('id') id: string): Promise<{ success: boolean; }> {
     await this.buyersService.removeBuyer(id);
     return { success: true };
   }
@@ -77,22 +77,10 @@ export class BuyersController {
     return null;
   }
 
-  @Patch('/updatecart')
-  async updateCart(
-    @Body('email') email: string,
-    @Body('cart') cart: { productId: string; quantity: number }[],
-  ): Promise<{ cart: { productId: Product; quantity: number }[] } | null> {
-    const result = await this.buyersService.updateCart(email, cart);
-    if (result && result.cart) {
-      return { cart: result.cart };
-    }
-    return null;
-  }
-
   @Post('/getcart')
   async getCart(
     @Body('email') email: string,
-  ): Promise<{ cart: { product: Product; quantity: number }[] } | null> {
+  ): Promise<{ cart: { product: Product; quantity: number; }[]; } | null> {
     const result = await this.buyersService.getCart(email);
     return result;
   }
@@ -101,7 +89,7 @@ export class BuyersController {
   async deleteProductFromCart(
     @Param('email') email: string,
     @Param('productId') productId: string,
-  ): Promise<{ cart: { productId: Product; quantity: number }[] }> {
+  ): Promise<{ cart: { product: Product; quantity: number; }[]; }> {
     return this.buyersService.deleteProductFromCart(email, productId);
   }
 
@@ -111,4 +99,5 @@ export class BuyersController {
   ): Promise<Order[]> {
     return await this.buyersService.getOrdersByBuyer(email);
   }
+
 }

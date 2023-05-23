@@ -9,7 +9,7 @@ export class ProductsRepository {
   constructor(
     @InjectModel('Product') private productsModel: Model<Product>,
     @InjectModel('Seller') private readonly sellerModel: Model<Seller>,
-  ) {}
+  ) { }
 
   async findOne(productFilterQuery: FilterQuery<Product>): Promise<Product> {
     try {
@@ -41,9 +41,10 @@ export class ProductsRepository {
     }
     const newProduct = new this.productsModel({
       ...restProductdata,
-      seller: seller._id,
+      seller: seller._id
     });
     const result = await newProduct.save();
+    seller.products.push(result._id);
     seller.products.push(result._id);
     await seller.save();
     return result;
@@ -63,7 +64,7 @@ export class ProductsRepository {
 
   async deleteOne(
     productFilterQuery: FilterQuery<Product>,
-  ): Promise<{ success: boolean }> {
+  ): Promise<{ success: boolean; }> {
     await this.productsModel.deleteOne(productFilterQuery);
     return { success: true };
   }

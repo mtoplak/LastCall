@@ -53,7 +53,7 @@ const SignInS = () => {
 				//navigate('/');
 				const redirectPath = location.search
 					? decodeURIComponent(location.search.split('=')[1])
-					: '/';
+					: '/seller';
 				navigate(redirectPath);
 			} else {
 				setError(signUpResponse.error.message);
@@ -81,7 +81,7 @@ const SignInS = () => {
 												backgroundColor: 'lightblue',
 											}}
 										></Avatar>
-										<h2>Sign In</h2>
+										<h2>Sign In As Seller</h2>
 									</Grid>
 									<FormControl>
 										<TextField

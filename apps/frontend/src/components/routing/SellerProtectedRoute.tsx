@@ -8,7 +8,7 @@ const SellerProtectedRoute = ({ children }: { children: any }) => {
 	//console.log(location.pathname);
 
 	if (role !== 'seller' && !isLoading) {
-		return <Navigate to={`/unauthorized`} replace />;
+		return <Navigate to={`/sell/signin`} replace />;
 	}
 
 	if (!user && !isLoading) {

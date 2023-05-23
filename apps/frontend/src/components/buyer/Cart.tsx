@@ -41,12 +41,11 @@ function Cart() {
 	}, []);
 
 	const handleRemoveFromCart = async (id: string) => {
-		const response = await api.post('/buyers/removefromcart', {
-			email: user?.email,
-			productId: id,
-		});
+		const response = await api.delete(`/buyers/${user.email}/cart/${id}`);
+		console.log(response.data);
 		setCartItems(response.data.cart);
 	};
+	console.log(cartItems);
 
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
@@ -182,7 +181,7 @@ function Cart() {
 										€
 										<br />
 										Delivery & Handling: Free
-										<hr />
+										<Divider />
 										Total: 7€
 									</Typography>
 									<Divider />

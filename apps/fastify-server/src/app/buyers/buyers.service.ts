@@ -11,7 +11,7 @@ export class BuyersService {
   constructor(
     private readonly buyersRepository: BuyersRepository,
     private readonly productsRepository: ProductsRepository,
-  ) {}
+  ) { }
 
   async addBuyer(buyerData: CreateUpdateBuyerDto): Promise<Buyer> {
     return await this.buyersRepository.create(buyerData);
@@ -83,8 +83,8 @@ export class BuyersService {
 
   async addToCart(
     email: string,
-    productData: { productId: string; quantity: number }[],
-  ): Promise<{ cart: { productId: Product; quantity: number }[] } | null> {
+    productData: { productId: string; quantity: number; }[],
+  ): Promise<{ cart: { productId: Product; quantity: number; }[]; } | null> {
     const buyer = await this.buyersRepository.findOne({ email });
     if (!buyer) {
       return null;
@@ -97,109 +97,29 @@ export class BuyersService {
       throw new NotFoundException('There are no products in this cart');
     }
 
-    const products = await this.productsRepository.find({
-      _id: { $in: productIds },
-    });
+    const products = await this.productsRepository.find({ _id: { $in: productIds } });
+    //console.log(products);
 
     if (products.length !== productIds.length) {
       throw new NotFoundException('Products for this cart not found');
     }
 
-    const productsInCart = products.map((product, index) => ({
-      productId: product,
-      quantity: quantities[index],
-    }));
-
-    // Create a map of existing products in the cart
-    const existingProductsMap = new Map<string, number>();
-    buyer.cart.forEach((item) => {
-      existingProductsMap.set(item.productId._id.toString(), item.quantity);
-    });
-
-    for (const productInCart of productsInCart) {
-      const productId = productInCart.productId._id.toString();
-      console.log('productID: ' + productId);
-      const existingQuantity = existingProductsMap.get(productId);
-
-      if (existingQuantity !== undefined) {
-        console.log('Product already exists in the cart');
-        const updatedQuantity = existingQuantity + productInCart.quantity;
-        existingProductsMap.set(productId, updatedQuantity);
+    for (let i = 0; i < productData.length; i++) {
+      const { productId, quantity } = productData[i];
+      const existingItem = buyer.cart.find((item) => item.productId._id.toString() === productId);
+      if (existingItem) {
+        existingItem.quantity = quantity;
       } else {
-        console.log('Adding the product: ' + productId);
-        existingProductsMap.set(productId, productInCart.quantity);
+        buyer.cart.push({
+          productId: products[i],
+          quantity: quantity,
+        });
       }
     }
 
-    // Update the buyer's cart with the updated quantities
-    // Update the buyer's cart with the updated quantities and complete product objects
-    buyer.cart = Array.from(existingProductsMap, ([productId, quantity]) => {
-      const product = products.find((p) => p._id.toString() === productId);
-      if (!product) {
-        console.log('Product not found');
-      }
-      return {
-        productId: product,
-        quantity,
-      };
-    });
+ 
 
     await buyer.save();
-
-    return { cart: buyer.cart };
-  }
-
-  async updateCart(
-    email: string,
-    productData: { productId: string; quantity: number }[],
-  ): Promise<{ cart: { productId: Product; quantity: number }[] } | null> {
-    const buyer = await this.buyersRepository.findOne({ email });
-    if (!buyer) {
-      console.log('ni buyerja');
-      return null;
-    }
-
-    const productIds = productData.map((item) => item.productId);
-    const quantities = productData.map((item) => item.quantity);
-    console.log('productIds: ' + productIds + ' in quantites: ' + quantities);
-    if (!productIds || productIds.length === 0) {
-      throw new NotFoundException('There are no products in this request');
-    }
-
-    const products = await this.productsRepository.find({
-      _id: { $in: productIds },
-    });
-
-    if (products.length !== productIds.length) {
-      throw new NotFoundException('Products for this request not found');
-    }
-
-    //if (buyer.cart.length === 0) {
-    // If the cart is empty, add the products directly
-    buyer.cart = products.map((product, index) => ({
-      productId: product,
-      quantity: quantities[index],
-    }));
-    //} else {
-
-    const updatedCart = buyer.cart.map((item) => {
-      const updatedProduct = productData.find(
-        (product) => product.productId === item.productId.toString(),
-      );
-      if (updatedProduct) {
-        return {
-          productId: item.productId,
-          quantity: updatedProduct.quantity,
-        };
-      }
-      return item;
-    });
-
-    buyer.cart = updatedCart;
-    //}
-
-    await buyer.save();
-
     return { cart: buyer.cart };
   }
 
@@ -219,18 +139,13 @@ export class BuyersService {
     return { cart: populatedCart };
   }
 
-  async deleteProductFromCart(
-    email: string,
-    productId: string,
-  ): Promise<{ cart: { productId: Product; quantity: number }[] }> {
+  async deleteProductFromCart(email: string, productId: string): Promise<{ cart: { product: Product; quantity: number; }[]; }> {
     const buyer = await this.buyersRepository.findOne({ email });
     if (!buyer) {
       throw new NotFoundException('Buyer not found');
     }
 
-    const existingProductIndex = buyer.cart.findIndex(
-      (item) => item.productId._id.toString() === productId,
-    );
+    const existingProductIndex = buyer.cart.findIndex(item => item.productId._id.toString() === productId);
     if (existingProductIndex === -1) {
       throw new NotFoundException('Product not found in the cart');
     }
@@ -238,8 +153,16 @@ export class BuyersService {
     buyer.cart.splice(existingProductIndex, 1);
     await buyer.save();
 
-    return { cart: buyer.cart };
+    const updatedCart = buyer.cart.map((item) => {
+      return {
+        product: item.productId,
+        quantity: item.quantity
+      };
+    });
+
+    return { cart: updatedCart };
   }
+
 
   async getOrdersByBuyer(email: string): Promise<Order[]> {
     return this.buyersRepository.getOrdersByBuyer(email);
