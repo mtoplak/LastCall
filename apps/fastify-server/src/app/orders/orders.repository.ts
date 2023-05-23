@@ -20,7 +20,7 @@ export class OrdersRepository {
       .findOne(orderFilterQuery)
       .populate('seller')
       .populate('buyer')
-      .populate({ path: 'products', populate: { path: 'productId', model: 'Product' } })
+      //.populate({ path: 'products', populate: { path: 'productId', model: 'Product' } })
       .exec();
   }
 
@@ -29,7 +29,7 @@ export class OrdersRepository {
       .find(ordersFilterQuery)
       .populate('seller')
       .populate('buyer')
-      .populate({ path: 'products', populate: { path: 'productId', model: 'Product' } })
+      //.populate({ path: 'products', populate: { path: 'productId', model: 'Product' } })
       .exec();
   }
 
@@ -52,22 +52,18 @@ export class OrdersRepository {
     const seller = await this.sellerModel.findById(sellerId);
     if (!seller) {
       throw new NotFoundException(
-        'Could not find the seller with id ' +
-          sellerId +
-          ' assigned to this order.',
+        `Could not find the seller with id ${sellerId} assigned to this order`,
       );
     }
     const buyer = await this.buyerModel.findById(buyerId);
     if (!buyer) {
       throw new NotFoundException(
-        'Could not find the buyer with id ' +
-          buyerId +
-          ' assigned to this order.',
+        `Could not find the buyer with id ${buyerId} assigned to this order`,
       );
     }
 
     const orderedProducts = products.map((product, index) => ({
-      productId: product._id,
+      product: { ...product.toObject() },
       quantity: quantities[index],
     }));
     const newOrder = new this.ordersModel({
@@ -77,11 +73,13 @@ export class OrdersRepository {
       seller: seller._id,
     });
     const result = await newOrder.save();
+
     seller.orders.push(result._id);
     await seller.save();
 
     buyer.orders.push(result._id);
     await buyer.save();
+
     return result;
   }
 

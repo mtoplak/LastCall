@@ -8,7 +8,7 @@ export const SellerSchema = new Schema({
   city: { type: String, required: true },
   country: { type: String, required: true },
   registerNumber: { type: Number, required: true },
-  tip: { type: String, required: true },
+  companyType: { type: String, required: true },
   targetedMarkets: [{ type: String }],
   phone: { type: String, required: true },
   website: { type: String, required: true },
@@ -28,7 +28,7 @@ export interface Seller extends Document {
   city: string; //array naredi
   country: string; //array naredi
   registerNumber: number;
-  tip: string;
+  companyType: string;
   targetedMarkets: string[];
   phone: string;
   website: string;

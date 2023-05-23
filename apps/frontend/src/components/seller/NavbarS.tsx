@@ -15,7 +15,6 @@ import { darkTheme } from 'assets/styles/styles';
 import { useUserAuth } from 'context/AuthContext';
 import { Link } from 'react-router-dom';
 
-const pages = ['Inventory', 'Contact'];
 //const settings = ['Profile', 'Shopping cart', 'My Orders', 'Logout'];
 
 function NavbarS() {
@@ -104,49 +103,7 @@ function NavbarS() {
 								sx={{
 									display: { xs: 'block', md: 'none' },
 								}}
-							>
-								<MenuItem onClick={handleCloseNavMenu}>
-									<Typography textAlign="center">
-										Orders
-									</Typography>
-								</MenuItem>
-								{pages.map((page) => (
-									<MenuItem
-										key={page}
-										onClick={handleCloseNavMenu}
-									>
-										<Typography textAlign="center">
-											{page}
-										</Typography>
-									</MenuItem>
-								))}
-								<MenuItem onClick={handleCloseNavMenu}>
-									<Typography textAlign="center">
-										neki
-									</Typography>
-								</MenuItem>
-								<Typography textAlign="center">bla </Typography>
-								<Button
-									onClick={handleCloseNavMenu}
-									sx={{
-										my: 2,
-										color: 'white',
-										display: 'block',
-									}}
-								>
-									Orders
-								</Button>
-							</Menu>
-							<Button
-								onClick={handleCloseNavMenu}
-								sx={{
-									my: 2,
-									color: 'white',
-									display: 'block',
-								}}
-							>
-								Orders
-							</Button>
+							></Menu>
 						</Box>
 						<Typography
 							variant="h5"
@@ -172,9 +129,8 @@ function NavbarS() {
 								display: { xs: 'none', md: 'flex' },
 							}}
 						>
-							{pages.map((page) => (
+							<Link to={'/inventory'}>
 								<Button
-									key={page}
 									onClick={handleCloseNavMenu}
 									sx={{
 										my: 2,
@@ -182,11 +138,34 @@ function NavbarS() {
 										display: 'block',
 									}}
 								>
-									{page}
+									Orders
 								</Button>
-							))}
+							</Link>
+							<Link to={'/seller'}>
+								<Button
+									onClick={handleCloseNavMenu}
+									sx={{
+										my: 2,
+										color: 'white',
+										display: 'block',
+									}}
+								>
+									Contact
+								</Button>
+							</Link>
+							<Link to={'/seller/orders'}>
+								<Button
+									onClick={handleCloseNavMenu}
+									sx={{
+										my: 2,
+										color: 'white',
+										display: 'block',
+									}}
+								>
+									Orders
+								</Button>
+							</Link>
 						</Box>
-
 						{user && role === 'seller' ? (
 							<Box sx={{ flexGrow: 0 }}>
 								<Tooltip title="Open settings">
