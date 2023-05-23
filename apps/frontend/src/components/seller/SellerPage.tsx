@@ -1,17 +1,4 @@
-import {
-	Box,
-	Button,
-	Container,
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogContentText,
-	DialogTitle,
-	Divider,
-	Grid,
-	TextField,
-	Typography,
-} from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import { ISeller } from 'models/seller';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -25,8 +12,7 @@ import CustomBox from 'components/ui/CustomBox';
 import SellerProducts from './SellerProducts';
 
 function SellerPage() {
-	const [isOpen, setIsOpen] = useState(false);
-	const [seller, setSller] = useState<ISeller>();
+	const [seller, setSeller] = useState<ISeller>();
 	const [fetchError, setFetchError] = useState(false);
 	const { id } = useParams<{ id: string }>();
 
@@ -35,7 +21,7 @@ function SellerPage() {
 			try {
 				const response = await api.get('/sellers/' + id);
 				console.log(response.data);
-				setSller(response.data);
+				setSeller(response.data);
 			} catch (error) {
 				setFetchError(true);
 				throw error;
@@ -49,7 +35,7 @@ function SellerPage() {
 	}, [seller]);
 
 	if (fetchError) {
-		return <>Seller Not found</>;
+		return <>Seller Not found</>; // TODO lepši ui
 	}
 
 	if (!seller) {
@@ -89,7 +75,7 @@ function SellerPage() {
 									my: 4,
 								}}
 							>
-								{seller?.title} is a {seller?.tip} located in{' '}
+								{seller?.title} is a {seller?.companyType} located in{' '}
 								{seller?.country} in {seller?.city} on{' '}
 								{seller?.address}. For any further information
 								please contact us!
@@ -102,25 +88,27 @@ function SellerPage() {
 									mt: 4,
 								}}
 							>
-								Email: {seller?.email} 
+								Email: {seller?.email}
 							</Typography>
 							<Typography
-							variant="body2"
-							sx={{
-								fontSize: '18px',
-								color: '#5A6473',
-							}}>
+								variant="body2"
+								sx={{
+									fontSize: '18px',
+									color: '#5A6473',
+								}}
+							>
 								Phone: {seller?.phone}
-                            </Typography>
+							</Typography>
 							<Typography
-							variant="body2"
-							sx={{
-								fontSize: '18px',
-								color: '#5A6473',
-								mb: 4,
-							}}>
+								variant="body2"
+								sx={{
+									fontSize: '18px',
+									color: '#5A6473',
+									mb: 4,
+								}}
+							>
 								Website: {seller?.website}
-                            </Typography>
+							</Typography>
 						</Box>
 						<Box sx={{ flex: '1.25' }}>
 							<img

@@ -15,8 +15,6 @@ import { darkTheme } from 'assets/styles/styles';
 import { useUserAuth } from 'context/AuthContext';
 import { Link } from 'react-router-dom';
 
-//const settings = ['Profile', 'Shopping cart', 'My Orders', 'Logout'];
-
 function NavbarS() {
 	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 	const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -138,7 +136,7 @@ function NavbarS() {
 										display: 'block',
 									}}
 								>
-									Orders
+									Inventory
 								</Button>
 							</Link>
 							<Link to={'/seller'}>
@@ -195,16 +193,13 @@ function NavbarS() {
 									open={Boolean(anchorElUser)}
 									onClose={handleCloseUserMenu}
 								>
-									<MenuItem onClick={handleCloseUserMenu}>
-										<Typography textAlign="center">
-											Profile
-										</Typography>
-									</MenuItem>
-									<MenuItem onClick={handleCloseUserMenu}>
-										<Typography textAlign="center">
-											My orders
-										</Typography>
-									</MenuItem>
+									<Link to="/myprofile">
+										<MenuItem onClick={handleCloseUserMenu}>
+											<Typography textAlign="center">
+												Profile
+											</Typography>
+										</MenuItem>
+									</Link>
 									<MenuItem onClick={handleLogOut}>
 										<Typography textAlign="center">
 											Log out

@@ -33,7 +33,7 @@ const initialState = {
 	size: '',
 	price: 0,
 	stock: 0,
-	seller: '64634dd2aca92a0d83eedd44',
+	seller: '645d45c444ddfe8a7fef8986', // TODO dodajanje na podlagi emaila
 	image: '',
 };
 
@@ -78,9 +78,9 @@ const ProductsS = () => {
 		}
 		try {
 			const updatedProduct = { ...newProduct, picture: imageURL };
-			//console.log(updatedProduct);
+			console.log(updatedProduct);
 			const response = await api.post('/products', updatedProduct);
-			//console.log(response.data);
+			console.log(response.data);
 			setNewProduct(initialState);
 			setDrinks((prev: any) => [...prev, response.data]);
 			setIsOpenAdd(false);
@@ -101,7 +101,7 @@ const ProductsS = () => {
 	};
 
 	useEffect(() => {
-		const fetchData = async () => {
+		const fetchSellerProducts = async () => {
 			try {
 				const response = await api.get('/products');
 				//console.log(response.data);
@@ -110,16 +110,16 @@ const ProductsS = () => {
 				throw error;
 			}
 		};
-		fetchData();
+		fetchSellerProducts();
 	}, []);
 
 	const handleChange = (newFile: any) => {
-		console.log(newFile);
+		//console.log(newFile);
 		if (newFile) {
 			if (newFile.type.startsWith('image/')) {
 				// The uploaded file is an image
 				setError('');
-				console.log(newFile.type);
+				//console.log(newFile.type);
 				setProductImage(newFile);
 			} else {
 				// The uploaded file is not an image
@@ -214,15 +214,12 @@ const ProductsS = () => {
 										<MenuItem value="">
 											Select drink category
 										</MenuItem>
-										<MenuItem value="Alcohol">
-											Alcohol
+										<MenuItem value="Beer">Beer</MenuItem>
+										<MenuItem value="Wine">Wine</MenuItem>
+										<MenuItem value="Champagne">
+											Champagne
 										</MenuItem>
-										<MenuItem value="Carbonated">
-											Carbonated
-										</MenuItem>
-										<MenuItem value="Non Carbonated">
-											Non Carbonated
-										</MenuItem>
+										<MenuItem value="Other">Other</MenuItem>
 									</Select>
 								</FormControl>
 								<TextField

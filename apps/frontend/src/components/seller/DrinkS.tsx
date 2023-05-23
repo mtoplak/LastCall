@@ -147,7 +147,7 @@ const DrinkS: React.FC<DrinkProps> = ({
 			<HouseBox>
 				<Link to={`/product/${drink._id}`}>
 					<ImgContainer>
-						<Image src={drink.picture} alt="housePhoto" />
+						<Image src={drink.picture} alt={drink.title} />
 					</ImgContainer>
 				</Link>
 				<InfoBox>

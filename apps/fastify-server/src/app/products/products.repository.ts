@@ -9,7 +9,7 @@ export class ProductsRepository {
   constructor(
     @InjectModel('Product') private productsModel: Model<Product>,
     @InjectModel('Seller') private readonly sellerModel: Model<Seller>,
-  ) {}
+  ) { }
 
   async findOne(productFilterQuery: FilterQuery<Product>): Promise<Product> {
     try {
@@ -35,16 +35,16 @@ export class ProductsRepository {
     if (!seller) {
       throw new NotFoundException(
         'Could not find the seller with id ' +
-          sellerId +
-          ' assigned to this order.',
+        sellerId +
+        ' assigned to this order.',
       );
     }
     const newProduct = new this.productsModel({
-        ...restProductdata,
-        seller: seller._id
+      ...restProductdata,
+      seller: seller._id
     });
     const result = await newProduct.save();
-    seller.orders.push(result._id);
+    seller.products.push(result._id);
     await seller.save();
     return result;
   }
@@ -60,12 +60,10 @@ export class ProductsRepository {
       options,
     );
   }
-  
-  
 
   async deleteOne(
     productFilterQuery: FilterQuery<Product>,
-  ): Promise<{ success: boolean }> {
+  ): Promise<{ success: boolean; }> {
     await this.productsModel.deleteOne(productFilterQuery);
     return { success: true };
   }

@@ -4,26 +4,24 @@ import InfoBox from 'components/ui/InfoBox';
 import Image from 'components/ui/Image';
 import ImgContainer from 'components/ui/ImgContainer';
 import HouseBox from 'components/ui/HouseBox';
+import { IDrink } from 'models/drink';
 
 interface DrinkProps {
-	name: string;
-	img: string;
-	price: number;
+	drink: IDrink;
 }
 
-const DrinkB: React.FC<DrinkProps> = ({ name, img, price }) => {
+const DrinkB: React.FC<DrinkProps> = ({ drink }) => {
 	return (
 		<HouseBox>
 			<ImgContainer>
-				<Image src={img} alt="housePhoto" />
+				<Image src={drink.picture} alt="housePhoto" />
 			</ImgContainer>
-
 			<InfoBox>
 				<Typography variant="h6" sx={{ fontWeight: '700' }}>
-					{name}
+					{drink.title}
 				</Typography>
 				<Typography variant="body1" sx={{ my: 1 }}>
-					Cena: {price}€
+					Cena: {drink.price}€
 				</Typography>
 			</InfoBox>
 		</HouseBox>
