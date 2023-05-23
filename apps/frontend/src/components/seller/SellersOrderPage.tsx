@@ -63,7 +63,7 @@ function SellerOrdersPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Order placed':
+      case 'Order accepted':
         return 'primary';
       case 'In-Transit':
         return 'orange';
@@ -102,9 +102,9 @@ function SellerOrdersPage() {
                         variant="contained"
                         color="primary"
                         fullWidth
-                        onClick={() => handleChangeStatus('Order placed')}
+                        onClick={() => handleChangeStatus('Order accepted')}
                       >
-                        Ordered
+                        Accept
                       </Button>
                     </Box>
                     <Box my={2}>
