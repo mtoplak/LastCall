@@ -71,7 +71,7 @@ export class BuyersService {
     }
 
     const products = await this.productsRepository.find({ _id: { $in: productIds } });
-    console.log(products);
+    //console.log(products);
 
     if (products.length !== productIds.length) {
       throw new NotFoundException('Products for this cart not found');
@@ -110,7 +110,7 @@ export class BuyersService {
     return { cart: populatedCart };
   }
 
-  async deleteProductFromCart(email: string, productId: string): Promise<{ cart: { productId: Product; quantity: number; }[]; }> {
+  async deleteProductFromCart(email: string, productId: string): Promise<{ cart: { product: Product; quantity: number; }[]; }> {
     const buyer = await this.buyersRepository.findOne({ email });
     if (!buyer) {
       throw new NotFoundException('Buyer not found');
@@ -124,7 +124,14 @@ export class BuyersService {
     buyer.cart.splice(existingProductIndex, 1);
     await buyer.save();
 
-    return { cart: buyer.cart };
+    const updatedCart = buyer.cart.map((item) => {
+      return {
+        product: item.productId,
+        quantity: item.quantity
+      };
+    });
+
+    return { cart: updatedCart };
   }
 
 
