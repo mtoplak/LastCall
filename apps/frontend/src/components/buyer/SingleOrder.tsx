@@ -25,7 +25,7 @@ function SingleOrder() {
 
 	const getStatusColor = (status: string) => {
 		switch (status) {
-			case 'Order accepted':
+			case 'Order placed':
 				return 'primary';
 			case 'In-Transit':
 				return 'orange';
