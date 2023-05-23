@@ -8,7 +8,7 @@ export interface ISeller {
 	city: string;
 	address: string;
 	registerNumber: number;
-	tip: string; // spremeni v type
+	companyType: string; // spremeni v type
 	phone: string;
 	website: string;
 	targetedMarket: string;

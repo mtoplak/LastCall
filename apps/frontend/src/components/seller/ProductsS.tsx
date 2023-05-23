@@ -33,7 +33,7 @@ const initialState = {
 	size: '',
 	price: 0,
 	stock: 0,
-	seller: '64634dd2aca92a0d83eedd44',
+	seller: '646d00794b90a5f825353375',
 	image: '',
 };
 

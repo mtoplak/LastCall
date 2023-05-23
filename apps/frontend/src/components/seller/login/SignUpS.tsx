@@ -37,7 +37,7 @@ const initialState = {
 	phone: '',
 	title: '',
 	city: '',
-	tip: '', // TODO -> type
+	companyType: '', // TODO -> type
 	country: '',
 	registerNumber: 0,
 	targetedMarkets: [],
@@ -219,8 +219,8 @@ const SignUpS = () => {
 												fullWidth
 												required
 												onChange={handleChange}
-												name="tip"
-												value={newUserData.tip}
+												name="companyType"
+												value={newUserData.companyType}
 												sx={{ mb: 2 }}
 											/>
 										</Grid>

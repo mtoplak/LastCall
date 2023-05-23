@@ -33,7 +33,7 @@ const initialState = {
 	size: '',
 	price: 0,
 	stock: 0,
-	seller: '645d45c444ddfe8a7fef8986',
+	seller: '646d00794b90a5f825353375',
 };
 
 interface Product {

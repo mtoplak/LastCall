@@ -44,7 +44,7 @@ export class ProductsRepository {
         seller: seller._id
     });
     const result = await newProduct.save();
-    seller.orders.push(result._id);
+    seller.products.push(result._id);
     await seller.save();
     return result;
   }
