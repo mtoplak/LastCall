@@ -1,12 +1,12 @@
 import { Schema, Document, Model, model } from 'mongoose';
 import { Buyer } from '../buyers/buyers.model';
-import { Product } from '../products/product.model';
+import { Product, ProductSchema } from '../products/product.model';
 import { Seller } from '../sellers/sellers.model';
 
 export const OrderSchema = new Schema({
   products: [
     {
-      productId: { type: Schema.Types.ObjectId, ref: 'Product' },
+      product: { type: ProductSchema, required: true },
       quantity: { type: Number, required: true, default: 1 },
     },
   ],
@@ -22,7 +22,7 @@ export const OrderSchema = new Schema({
 });
 
 export interface Order extends Document {
-  products: { productId: Product; quantity: number }[];
+  products: { product: Product; quantity: number }[];
   buyer: Buyer;
   seller: Seller;
   totalPrice: number;
