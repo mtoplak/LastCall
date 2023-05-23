@@ -1,5 +1,4 @@
 import { Box, Typography, Container } from '@mui/material';
-import NavbarS from './NavbarS';
 import heroImg from '../../assets/images/homepageDrink.png';
 import Title from 'components/ui/Title';
 import CustomBox from 'components/ui/CustomBox';
@@ -7,7 +6,6 @@ import CustomBox from 'components/ui/CustomBox';
 const HeroS = () => {
 	return (
 		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '65vh' }}>
-			<NavbarS />
 			<Container>
 				<CustomBox>
 					<Box sx={{ flex: '1' }}>

@@ -25,6 +25,7 @@ const Routing = () => {
 				<Routes>
 					<Route path="/" element={<Buyer />} />
 					<Route path="/suppliers" element={<Suppliers />} />
+					<Route path="/products" element={<Buyer />} />
 					<Route path="/product/:id" element={<Product />} />
 					<Route path="/supplier/:id" element={<SellerPage />} />
 
@@ -50,6 +51,14 @@ const Routing = () => {
 					<Route path="/buy/signin/*" element={<SignInPage />} />
 					<Route path="/order/:id" element={<SingleOrder />} />
 					<Route path="/orders" element={<PastOrders />} />
+					<Route
+						path="/inventory"
+						element={
+							<SellerProtectedRoute>
+								<Seller />
+							</SellerProtectedRoute>
+						}
+					/>
 					<Route
 						path="/seller/orders"
 						element={

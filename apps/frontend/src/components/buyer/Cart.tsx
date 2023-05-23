@@ -41,12 +41,11 @@ function Cart() {
 	}, []);
 
 	const handleRemoveFromCart = async (id: string) => {
-		/* TODO
 		const response = await api.post('/buyers/removefromcart', {
 			email: user?.email,
 			productId: id,
 		});
-		setCartItems(response.data.cart);*/
+		setCartItems(response.data.cart);
 	};
 
 	return (
@@ -86,7 +85,12 @@ function Cart() {
 													variant="subtitle1"
 													component="h2"
 												>
-													{item.product.title}
+													<Link
+														to={`/product/${item.product._id}`}
+														className="blackLink"
+													>
+														{item.product.title}
+													</Link>
 												</Typography>
 												<Typography
 													variant="body2"

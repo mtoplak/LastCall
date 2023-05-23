@@ -15,8 +15,6 @@ import { Link } from 'react-router-dom';
 import { useUserAuth } from 'context/AuthContext';
 import { darkTheme } from 'assets/styles/styles';
 
-const pages = ['Products', 'Suppliers', 'Contact'];
-
 function NavbarB() {
 	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 	const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -106,23 +104,7 @@ function NavbarB() {
 								sx={{
 									display: { xs: 'block', md: 'none' },
 								}}
-							>
-								{pages.map((page) => (
-									<MenuItem
-										key={page}
-										onClick={handleCloseNavMenu}
-									>
-										<Typography textAlign="center">
-											{page}
-										</Typography>
-									</MenuItem>
-								))}
-								<MenuItem onClick={handleCloseNavMenu}>
-									<Typography textAlign="center">
-										Not showing ???
-									</Typography>
-								</MenuItem>
-							</Menu>
+							></Menu>
 						</Box>
 						<Typography
 							variant="h5"
@@ -148,7 +130,7 @@ function NavbarB() {
 								display: { xs: 'none', md: 'flex' },
 							}}
 						>
-							<Link to={'/'}>
+							<Link to={'/products'}>
 								<Button
 									onClick={handleCloseNavMenu}
 									sx={{
