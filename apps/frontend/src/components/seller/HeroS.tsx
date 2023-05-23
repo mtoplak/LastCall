@@ -26,15 +26,6 @@ const HeroS = () => {
 							<span style={{ color: '#24336e' }}>Sellers</span>{' '}
 							and Buyers
 						</Title>
-						<Typography
-							variant="body2"
-							sx={{ fontSize: '18px', color: '#5A6473', my: 4 }}
-						>
-							With an unwavering commitment to enhancing the
-							beverage industry, LastCall bridges the gap between
-							suppliers, distributors, retailers, and enthusiastic
-							consumers.
-						</Typography>
 					</Box>
 
 					<Box sx={{ flex: '1.25' }}>

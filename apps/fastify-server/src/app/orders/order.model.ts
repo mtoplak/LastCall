@@ -18,7 +18,7 @@ export const OrderSchema = new Schema({
   address: { type: String, required: true },
   city: { type: String, required: true },
   country: { type: String, required: true },
-  status: { type: String },
+  status: { type: String, default: 'Pending' },
 });
 
 export interface Order extends Document {
