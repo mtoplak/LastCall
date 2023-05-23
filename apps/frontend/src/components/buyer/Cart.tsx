@@ -34,7 +34,6 @@ function Cart() {
 		};
 		fetchCart();
 	}, [user]);
-	console.log(cartItems);
 
 	useEffect(() => {
 		document.title = 'Shopping Cart';
@@ -45,6 +44,21 @@ function Cart() {
 		console.log(response.data);
 		setCartItems(response.data.cart);
 	};
+
+	const handleQuantityChange = async (id: string, quantity: number) => {
+		const response = await api.post(`/buyers/addcart`, {
+			email: user.email,
+			cart: [
+				{
+					productId: id,
+					quantity: quantity,
+				},
+			],
+		});
+		console.log(response.data.cart);
+		setCartItems(response.data.cart);
+	};
+
 	console.log(cartItems);
 
 	return (
@@ -110,7 +124,7 @@ function Cart() {
 									  ) */}
 												<Alert severity="success">
 													There is currently a 10%
-													discount for this item!{' '}
+													discount for this item!
 												</Alert>
 											</CardContent>
 										</Grid>
@@ -120,6 +134,15 @@ function Cart() {
 													value={item.quantity}
 													variant="outlined"
 													size="small"
+													onChange={(event) =>
+														handleQuantityChange(
+															item.product._id,
+															Number(
+																event.target
+																	.value
+															)
+														)
+													}
 												>
 													{Array.from(
 														{ length: 100 },

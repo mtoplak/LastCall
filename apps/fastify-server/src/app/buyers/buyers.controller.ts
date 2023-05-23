@@ -50,7 +50,7 @@ export class BuyersController {
   async addToCart(
     @Body('email') email: string,
     @Body('cart') cart: { productId: string; quantity: number; }[],
-  ): Promise<{ cart: { productId: Product; quantity: number; }[]; } | null> {
+  ): Promise<{ cart: { product: Product; quantity: number; }[]; } | null> {
     const result = await this.buyersService.addToCart(email, cart);
     if (result && result.cart) {
       return { cart: result.cart };
