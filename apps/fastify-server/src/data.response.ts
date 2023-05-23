@@ -34,7 +34,7 @@ export interface BuyerResponse {
 
 export interface OrderResponse {
   id: string;
-  products: { productId: Product; quantity: number }[];
+  products: { product: Product; quantity: number }[];
   buyer: Buyer;
   seller: Seller;
   totalPrice: number;
@@ -54,7 +54,7 @@ export interface SellerResponse {
   city: string; //array naredi
   country: string; //array naredi
   registerNumber: number;
-  tip: string;
+  companyType: string;
   targetedMarkets: string[];
   phone: string;
   website: string;

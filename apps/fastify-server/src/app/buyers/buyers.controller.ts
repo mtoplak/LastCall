@@ -32,6 +32,11 @@ export class BuyersController {
     return await this.buyersService.getSingleBuyer(id);
   }
 
+  @Get('/get/:email')
+  async getSingleBuyerByEmail(@Param('email') email: string): Promise<Buyer> {
+    return await this.buyersService.getSingleBuyerByEmail(email);
+  }
+
   @Patch(':id')
   async updateBuyer(
     @Param('id') buyerId: string,
@@ -40,9 +45,23 @@ export class BuyersController {
     return await this.buyersService.updateBuyer(buyerId, updatedBuyerData);
   }
 
+  @Patch('/patch/:email')
+  async updateBuyerByEmail(
+    @Param('email') email: string,
+    @Body() updatedBuyerData: Partial<Buyer>,
+  ): Promise<Buyer> {
+    return await this.buyersService.updateBuyerByEmail(email, updatedBuyerData);
+  }
+
   @Delete(':id')
   async removeBuyer(@Param('id') id: string): Promise<{ success: boolean; }> {
     await this.buyersService.removeBuyer(id);
+    return { success: true };
+  }
+
+  @Delete('/delete/:email')
+  async removeBuyerByEmail(@Param('email') email: string): Promise<{ success: boolean }> {
+    await this.buyersService.removeBuyerByEmail(email);
     return { success: true };
   }
 
@@ -78,7 +97,7 @@ export class BuyersController {
   async getAllProductsBySellerId(
     @Body('email') email: string,
   ): Promise<Order[]> {
-    return this.buyersService.getOrdersByBuyer(email);
+    return await this.buyersService.getOrdersByBuyer(email);
   }
 
 }

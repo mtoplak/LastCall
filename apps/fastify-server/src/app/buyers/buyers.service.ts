@@ -31,6 +31,10 @@ export class BuyersService {
     return buyer as Buyer;
   }
 
+  async getSingleBuyerByEmail(email: string): Promise<Buyer> {
+    return this.buyersRepository.findOne({ email });
+  }
+
   async updateBuyer(
     buyerId: string,
     updatedBuyerData: Partial<Buyer>,
@@ -47,9 +51,32 @@ export class BuyersService {
     return updatedBuyer;
   }
 
-  async removeBuyer(buyerId: string): Promise<{ success: boolean; }> {
+  async updateBuyerByEmail(
+    email: string,
+    updatedBuyerData: Partial<Buyer>,
+  ): Promise<Buyer> {
+    const updatedBuyer = await this.buyersRepository.findOneAndUpdate(
+      { email },
+      updatedBuyerData,
+      { new: true },
+    );
+    if (!updatedBuyer) {
+      throw new NotFoundException(`Buyer with email ${email} not found`);
+    }
+
+    return updatedBuyer;
+  }
+
+  async removeBuyer(buyerId: string): Promise<{ success: boolean }> {
     await this.buyersRepository.deleteOne({
       _id: buyerId,
+    });
+    return { success: true };
+  }
+
+  async removeBuyerByEmail(email: string): Promise<{ success: boolean }> {
+    await this.buyersRepository.deleteOne({
+      email: email,
     });
     return { success: true };
   }
@@ -90,6 +117,8 @@ export class BuyersService {
       }
     }
 
+ 
+
     await buyer.save();
 
     const updatedCart = buyer.cart.map((item) => {
@@ -104,14 +133,14 @@ export class BuyersService {
 
   async getCart(
     email: string,
-  ): Promise<{ cart: { product: Product; quantity: number; }[]; } | null> {
-    const buyer = await this.buyersRepository.getCart(email);
+  ): Promise<{ cart: { product: Product; quantity: number }[] } | null> {
+    const buyer = await this.buyersRepository.findOne({ email });
     if (!buyer) {
       throw new NotFoundException('Buyer of this cart not found');
     }
 
     const populatedCart = buyer.cart.map((item) => ({
-      product: item.product,
+      product: item.productId,
       quantity: item.quantity,
     }));
 

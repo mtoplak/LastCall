@@ -83,7 +83,7 @@ export class SellerMapper {
       city: seller.city, //array naredi
       country: seller.country, //array naredi
       registerNumber: seller.registerNumber,
-      tip: seller.tip,
+      companyType: seller.companyType,
       targetedMarkets: seller.targetedMarkets,
       phone: seller.phone,
       website: seller.website,

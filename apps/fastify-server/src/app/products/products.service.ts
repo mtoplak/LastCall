@@ -15,10 +15,10 @@ export class ProductsService {
 
   async createProduct(
     productData: CreateUpdateProductDto,
-    sellerId: string,
+    email: string,
   ): Promise<Product> {
 
-    const product = await this.productsRepository.create(productData, sellerId);
+    const product = await this.productsRepository.create(productData, email);
     if (!product) {
       throw new NotFoundException('Could not create a product');
     }

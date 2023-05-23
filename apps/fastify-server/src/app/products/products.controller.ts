@@ -19,9 +19,9 @@ export class ProductsController {
   @Post()
   async addProduct(
     @Body() createProductDto: CreateUpdateProductDto,
-    @Body('seller') seller: string,
+    @Body('seller') email: string,
   ): Promise<Product> {
-    return this.productService.createProduct(createProductDto, seller);
+    return this.productService.createProduct(createProductDto, email);
   }
 
   @Get()

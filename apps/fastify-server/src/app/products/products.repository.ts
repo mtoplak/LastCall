@@ -29,14 +29,14 @@ export class ProductsRepository {
       .exec();
   }
 
-  async create(productData: Product, sellerId: string): Promise<Product> {
+  async create(productData: Product, email: string): Promise<Product> {
     const { ...restProductdata } = productData;
-    const seller = await this.sellerModel.findById(sellerId);
+    const seller = await this.sellerModel.findOne({ email });
     if (!seller) {
       throw new NotFoundException(
-        'Could not find the seller with id ' +
-        sellerId +
-        ' assigned to this order.',
+        'Could not find the seller with email ' +
+          email +
+          ' assigned to this order.',
       );
     }
     const newProduct = new this.productsModel({
@@ -44,6 +44,7 @@ export class ProductsRepository {
       seller: seller._id
     });
     const result = await newProduct.save();
+    seller.products.push(result._id);
     seller.products.push(result._id);
     await seller.save();
     return result;
@@ -67,5 +68,4 @@ export class ProductsRepository {
     await this.productsModel.deleteOne(productFilterQuery);
     return { success: true };
   }
-
 }
