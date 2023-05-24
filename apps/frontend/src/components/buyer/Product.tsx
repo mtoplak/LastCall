@@ -35,7 +35,7 @@ function Product() {
 	const { user, role } = useUserAuth();
 
 	useEffect(() => {
-		const fetchData = async () => {
+		const fetchProductData = async () => {
 			try {
 				const response = await api.get('/products/' + id);
 				//console.log(response.data);
@@ -45,7 +45,7 @@ function Product() {
 				throw error;
 			}
 		};
-		fetchData();
+		fetchProductData();
 	}, [id]);
 
 	useEffect(() => {
@@ -69,19 +69,15 @@ function Product() {
 			return;
 		}
 		try {
-			const response = await api.post(
-				`/buyers/addcart`, //TODO: get user id
-				{
-					email: user.email,
-					cart: [
-						{
-							productId: id,
-							quantity: quantity,
-						},
-					],
-				}
-			);
-			console.log(response);
+			const response = await api.post(`/buyers/addcart`, {
+				email: user.email,
+				cart: [
+					{
+						productId: id,
+						quantity: quantity,
+					},
+				],
+			});
 			console.log(response.data);
 			setShowAlert(true);
 		} catch (error: any) {

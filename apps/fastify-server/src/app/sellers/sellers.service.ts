@@ -30,6 +30,16 @@ export class SellersService {
     }
   }
 
+  async getSingleSellerByEmail(email: string): Promise<Seller> {
+    try {
+      return await this.sellersRepository.findOne({ email });
+    } catch (err) {
+      throw new NotFoundException(
+        'Could not get the seller with email ' + email,
+      );
+    }
+  }
+
   async updateSeller(
     sellerId: string,
     sellerUpdates: CreateUpdateSellerDto,
@@ -47,9 +57,33 @@ export class SellersService {
     return updatedSeller;
   }
 
+  async updateSellerByEmail(
+    email: string,
+    sellerUpdates: CreateUpdateSellerDto,
+  ): Promise<Seller> {
+    const updatedSeller = await this.sellersRepository.findOneAndUpdate(
+      { email },
+      sellerUpdates,
+      { new: true },
+    );
+    if (!updatedSeller) {
+      throw new NotFoundException(
+        'Failed to update the seller with email: ' + email,
+      );
+    }
+    return updatedSeller;
+  }
+
   async removeSeller(sellerId: string): Promise<{ success: boolean }> {
     await this.sellersRepository.deleteOne({
       _id: sellerId,
+    });
+    return { success: true };
+  }
+
+  async removeSellerByEmail(email: string): Promise<{ success: boolean }> {
+    await this.sellersRepository.deleteOne({
+      email: email,
     });
     return { success: true };
   }

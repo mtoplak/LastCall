@@ -24,6 +24,7 @@ import api from 'services/api';
 import CustomBox from 'components/ui/CustomBox';
 
 const markets = ['Slovenia', 'Italy', 'France', 'Austria', 'United Kingdom'];
+const companyTypes = ['Winery', 'Brewery', 'Other'];
 
 const initialState = {
 	name: '',
@@ -37,7 +38,7 @@ const initialState = {
 	phone: '',
 	title: '',
 	city: '',
-	companyType: '', // TODO -> type
+	companyType: '',
 	country: '',
 	registerNumber: 0,
 	targetedMarkets: [],
@@ -49,16 +50,16 @@ const SignUpS = () => {
 
 	const navigate = useNavigate();
 
-	const handleChange = (e: { target: { value: any; name: any } }) => {
-		const { value, name } = e.target;
-		setNewUserData({ ...newUserData, [name]: value });
-	};
-
 	const { signUp } = useUserAuth();
 
 	useEffect(() => {
 		document.title = 'Sign Up';
 	}, []);
+
+	const handleChange = (e: { target: { value: any; name: any } }) => {
+		const { value, name } = e.target;
+		setNewUserData({ ...newUserData, [name]: value });
+	};
 
 	const handleSubmit = async (e: any) => {
 		setError('');
@@ -138,7 +139,7 @@ const SignUpS = () => {
 								}}
 								sx={{ mb: 4 }}
 							>
-								Sign up
+								Sign Up As Seller
 							</Typography>
 							<Grid>
 								<Paper
@@ -213,16 +214,32 @@ const SignUpS = () => {
 												value={newUserData.phone}
 												sx={{ mb: 2 }}
 											/>
-											<TextField
-												label="Type"
-												placeholder="Enter type"
-												fullWidth
-												required
-												onChange={handleChange}
-												name="companyType"
-												value={newUserData.companyType}
-												sx={{ mb: 2 }}
-											/>
+											<FormControl fullWidth>
+												<InputLabel id="demo-simple-select-label">
+													Company Type
+												</InputLabel>
+												<Select
+													labelId="demo-simple-select-label"
+													id="demo-simple-select"
+													value={
+														newUserData.companyType
+													}
+													label="Company Type"
+													onChange={handleChange}
+													name="companyType"
+												>
+													{companyTypes.map(
+														(type) => (
+															<MenuItem
+																key={type}
+																value={type}
+															>
+																{type}
+															</MenuItem>
+														)
+													)}
+												</Select>
+											</FormControl>
 										</Grid>
 										<Grid item xs={6}>
 											<Typography variant="h6">

@@ -1,10 +1,9 @@
 import { Box, Container, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Drink from './DrinkB';
 import SearchProductsInput from './SearchProductsInput';
 import api from 'services/api';
 import { IDrink } from 'models/drink';
-import drink1 from '../../assets/images/cocacola.jpg';
 import { Link } from 'react-router-dom';
 import DrinkContainer from 'components/ui/DrinkContainer';
 import PropertiesBox from 'components/ui/PropertiesBox';
@@ -20,16 +19,16 @@ const Products = () => {
 	const [filterType, setFilterType] = useState<string>('any');
 
 	useEffect(() => {
-		const fetchData = async () => {
+		const fetchProducts = async () => {
 			try {
 				const response = await api.get('/products');
-				console.log(response.data);
+				console.log(response.data.cart);
 				setDrinks(response.data);
 			} catch (error) {
 				throw error;
 			}
 		};
-		fetchData();
+		fetchProducts();
 	}, []);
 
 	// filtering
@@ -92,11 +91,7 @@ const Products = () => {
 						filteredDrinks.map((drink) => (
 							<Link to={`/product/${drink._id}`} key={drink._id}>
 								<DrinkContainer>
-									<Drink
-										name={drink.title}
-										img={drink.picture}
-										price={drink.price}
-									/>
+									<Drink drink={drink} />
 								</DrinkContainer>
 							</Link>
 						))
@@ -109,11 +104,7 @@ const Products = () => {
 						drinks.map((drink) => (
 							<Link to={`/product/${drink._id}`} key={drink._id}>
 								<DrinkContainer>
-									<Drink
-										name={drink.title}
-										img={drink.picture}
-										price={drink.price}
-									/>
+									<Drink drink={drink} />
 								</DrinkContainer>
 							</Link>
 						))

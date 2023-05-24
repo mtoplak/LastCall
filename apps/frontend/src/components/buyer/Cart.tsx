@@ -34,19 +34,32 @@ function Cart() {
 		};
 		fetchCart();
 	}, [user]);
-	console.log(cartItems);
 
 	useEffect(() => {
 		document.title = 'Shopping Cart';
 	}, []);
 
 	const handleRemoveFromCart = async (id: string) => {
-		const response = await api.post('/buyers/removefromcart', {
-			email: user?.email,
-			productId: id,
-		});
+		const response = await api.delete(`/buyers/${user.email}/cart/${id}`);
+		console.log(response.data);
 		setCartItems(response.data.cart);
 	};
+
+	const handleQuantityChange = async (id: string, quantity: number) => {
+		const response = await api.post(`/buyers/addcart`, {
+			email: user.email,
+			cart: [
+				{
+					productId: id,
+					quantity: quantity,
+				},
+			],
+		});
+		console.log(response.data.cart);
+		setCartItems(response.data.cart);
+	};
+
+	console.log(cartItems);
 
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
@@ -111,7 +124,7 @@ function Cart() {
 									  ) */}
 												<Alert severity="success">
 													There is currently a 10%
-													discount for this item!{' '}
+													discount for this item!
 												</Alert>
 											</CardContent>
 										</Grid>
@@ -121,6 +134,15 @@ function Cart() {
 													value={item.quantity}
 													variant="outlined"
 													size="small"
+													onChange={(event) =>
+														handleQuantityChange(
+															item.product._id,
+															Number(
+																event.target
+																	.value
+															)
+														)
+													}
 												>
 													{Array.from(
 														{ length: 100 },
@@ -182,7 +204,7 @@ function Cart() {
 										€
 										<br />
 										Delivery & Handling: Free
-										<hr />
+										<Divider />
 										Total: 7€
 									</Typography>
 									<Divider />
