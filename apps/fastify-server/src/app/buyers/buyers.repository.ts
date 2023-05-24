@@ -18,7 +18,10 @@ export class BuyersRepository {
       .populate('orders')
       .populate({
         path: 'cart',
-        populate: { path: 'productId', model: 'Product' },
+        populate: {
+          path: 'productId',
+          populate: { path: 'seller', model: 'Seller' },
+        },
       })
       .exec();
   }
@@ -50,15 +53,13 @@ export class BuyersRepository {
         model: 'Product',
       })
       .exec();
-  
+
     if (!updatedBuyer) {
       throw new NotFoundException('Buyer not found');
     }
-  
+
     return updatedBuyer;
   }
-  
-  
 
   async deleteOne(
     buyerFilterQuery: FilterQuery<Buyer>,

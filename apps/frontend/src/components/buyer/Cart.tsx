@@ -19,6 +19,21 @@ import { useEffect, useState } from 'react';
 import api from 'services/api';
 import { ICartItem } from 'models/cartItem';
 import { Link } from 'react-router-dom';
+import { IDrink } from 'models/drink';
+
+interface GroupedProduct {
+	product: IDrink;
+	quantity: number;
+}
+
+interface GroupedSeller {
+	sellerId: string;
+	products: GroupedProduct[];
+}
+
+interface SellerGroup {
+	[seller: string]: GroupedProduct[];
+}
 
 function Cart() {
 	const { user } = useUserAuth();
@@ -31,9 +46,26 @@ function Cart() {
 				email: user.email,
 			});
 			setCartItems(response.data.cart);
+			const groupedProducts = groupProductsBySeller(response.data.cart);
+			console.log('Group');
+			console.log(groupedProducts);
 		};
 		fetchCart();
 	}, [user]);
+
+	const groupProductsBySeller = (cart: any) => {
+		const groupedProducts: SellerGroup = {};
+
+		for (const item of cart) {
+			const seller = item.product.seller._id;
+			if (!groupedProducts[seller]) {
+				groupedProducts[seller] = [];
+			}
+			groupedProducts[seller].push(item);
+		}
+
+		return groupedProducts;
+	};
 
 	useEffect(() => {
 		document.title = 'Shopping Cart';
@@ -61,6 +93,162 @@ function Cart() {
 
 	console.log(cartItems);
 
+	const renderGroupedProducts = (groupedProducts: SellerGroup) => {
+		return Object.entries(groupedProducts).map(([seller, products]) => (
+			<Grid container spacing={2} key={seller}>
+				<Grid item xs={8}>
+					<Typography variant="h6" component="h2" mb={2}>
+						Seller: {products[0].product.seller.title}
+					</Typography>
+					{products.map((item) => (
+						<Card
+							key={item.product._id}
+							sx={{
+								py: 2,
+								alignItems: 'flex-start',
+								mb: 2,
+							}}
+						>
+							<Grid container spacing={2}>
+								<Grid item xs={3}>
+									<Link to={`/product/${item.product._id}`}>
+										<CardMedia
+											component="img"
+											alt={item.product.title}
+											image={item.product.picture}
+										/>
+									</Link>
+								</Grid>
+								<Grid item xs={6}>
+									<CardContent>
+										<Typography
+											variant="subtitle1"
+											component="h2"
+										>
+											<Link
+												to={`/product/${item.product._id}`}
+												className="blackLink"
+											>
+												{item.product.title}
+											</Link>
+										</Typography>
+										<Typography
+											variant="body2"
+											color="text.secondary"
+										>
+											Price:{' '}
+											{item.product.price.toFixed(2)} €
+										</Typography>
+										<Alert severity="success">
+											There is currently a 10% discount
+											for this item!
+										</Alert>
+									</CardContent>
+								</Grid>
+								<Grid item xs={3}>
+									<CardActions>
+										<Select
+											value={item.quantity}
+											variant="outlined"
+											size="small"
+											onChange={(event) =>
+												handleQuantityChange(
+													item.product._id,
+													Number(event.target.value)
+												)
+											}
+										>
+											{Array.from(
+												{ length: 100 },
+												(_, index) => (
+													<MenuItem
+														key={index + 1}
+														value={index + 1}
+													>
+														{index + 1}
+													</MenuItem>
+												)
+											)}
+										</Select>
+										<Button
+											variant="text"
+											size="large"
+											color="error"
+											onClick={() =>
+												handleRemoveFromCart(
+													item.product._id
+												)
+											}
+										>
+											X
+										</Button>
+									</CardActions>
+								</Grid>
+							</Grid>
+						</Card>
+					))}
+				</Grid>
+				<Grid item xs={4} mt={6}>
+					<Card>
+						<CardContent>
+							<Typography variant="h6" component="h2" mb={2}>
+								Total Amount
+							</Typography>
+							<Typography
+								variant="body1"
+								color="text.secondary"
+								mb={2}
+								sx={{ mt: 2, mb: 2 }}
+							>
+								Subtotal:{' '}
+								{products
+									.reduce(
+										(total: number, item: any) =>
+											total +
+											item.product.price * item.quantity,
+										0
+									)
+									.toFixed(2)}{' '}
+								€<br />
+								Delivery & Handling:{' '}
+								{products[0].product.seller.registerNumber} €
+								<Divider />
+								Total:{' '}
+								{(
+									products.reduce(
+										(total: number, item: any) =>
+											total +
+											item.product.price * item.quantity,
+										0
+									) +
+									products[0].product.seller.registerNumber
+								).toFixed(2)}{' '}
+								€
+							</Typography>
+							<Divider />
+							<Button
+								variant="contained"
+								color="primary"
+								sx={{
+									mt: 2,
+									backgroundColor: '#0F1B4C',
+									color: '#FFFFFF',
+									border: '2px solid #0F1B4C',
+									'&:hover': {
+										backgroundColor: '#FFFFFF',
+										color: '#0F1B4C',
+									},
+								}}
+							>
+								Checkout
+							</Button>
+						</CardContent>
+					</Card>
+				</Grid>
+			</Grid>
+		));
+	};
+
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
 			<NavbarB />
@@ -69,165 +257,11 @@ function Cart() {
 					Shopping Cart
 				</Typography>
 				{cartItems && cartItems.length > 0 ? (
-					<Grid container spacing={2}>
-						<Grid item xs={8}>
-							{cartItems?.map((item: ICartItem) => (
-								<Card
-									key={item.product._id}
-									sx={{
-										py: 2,
-										alignItems: 'flex-start',
-										mb: 2,
-									}}
-								>
-									<Grid container spacing={2}>
-										<Grid item xs={3}>
-											<Link
-												to={`/product/${item.product._id}`}
-											>
-												<CardMedia
-													component="img"
-													alt={item.product.title}
-													image={item.product.picture}
-												/>
-											</Link>
-										</Grid>
-										<Grid item xs={6}>
-											<CardContent>
-												<Typography
-													variant="subtitle1"
-													component="h2"
-												>
-													<Link
-														to={`/product/${item.product._id}`}
-														className="blackLink"
-													>
-														{item.product.title}
-													</Link>
-												</Typography>
-												<Typography
-													variant="body2"
-													color="text.secondary"
-												>
-													Price:{' '}
-													{item.product.price.toFixed(
-														2
-													)}{' '}
-													€
-												</Typography>
-												{/* item.product.discount > 0 ? (
-										<Alert severity="success">
-										  There is currently a {item.product.discount}% discount for this item!{' '}
-										</Alert>
-									  ) : (
-										''
-									  ) */}
-												<Alert severity="success">
-													There is currently a 10%
-													discount for this item!
-												</Alert>
-											</CardContent>
-										</Grid>
-										<Grid item xs={3}>
-											<CardActions>
-												<Select
-													value={item.quantity}
-													variant="outlined"
-													size="small"
-													onChange={(event) =>
-														handleQuantityChange(
-															item.product._id,
-															Number(
-																event.target
-																	.value
-															)
-														)
-													}
-												>
-													{Array.from(
-														{ length: 100 },
-														(_, index) => (
-															<MenuItem
-																key={index + 1}
-																value={
-																	index + 1
-																}
-															>
-																{index + 1}
-															</MenuItem>
-														)
-													)}
-												</Select>
-												<Button
-													variant="text"
-													size="large"
-													color="error"
-													onClick={() =>
-														handleRemoveFromCart(
-															item.product._id
-														)
-													}
-												>
-													X
-												</Button>
-											</CardActions>
-										</Grid>
-									</Grid>
-								</Card>
-							))}
-						</Grid>
-						<Grid item xs={4}>
-							<Card>
-								<CardContent>
-									<Typography
-										variant="h6"
-										component="h2"
-										mb={2}
-									>
-										Total Amount
-									</Typography>
-									<Divider />
-									<Typography
-										variant="body1"
-										color="text.secondary"
-										mb={2}
-										sx={{ mt: 2, mb: 2 }}
-									>
-										Subtotal:{' '}
-										{cartItems
-											?.reduce(
-												(total: number, item: any) =>
-													total + item.price,
-												0
-											)
-											.toFixed(2)}{' '}
-										€
-										<br />
-										Delivery & Handling: Free
-										<Divider />
-										Total: 7€
-									</Typography>
-									<Divider />
-									<Button
-										variant="contained"
-										color="primary"
-										sx={{
-											mt: 2,
-											backgroundColor: '#0F1B4C',
-											color: '#FFFFFF',
-											border: '2px solid #0F1B4C',
-											'&:hover': {
-												backgroundColor: '#FFFFFF',
-												color: '#0F1B4C',
-											},
-										}}
-									>
-										Checkout
-									</Button>
-								</CardContent>
-							</Card>
-						</Grid>
-					</Grid>
+					<>
+						{renderGroupedProducts(
+							groupProductsBySeller(cartItems)
+						)}
+					</>
 				) : (
 					<Typography variant="body1" mb={4}>
 						Your cart is empty. &#128549;

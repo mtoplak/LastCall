@@ -9,7 +9,7 @@ export class ProductsRepository {
   constructor(
     @InjectModel('Product') private productsModel: Model<Product>,
     @InjectModel('Seller') private readonly sellerModel: Model<Seller>,
-  ) { }
+  ) {}
 
   async findOne(productFilterQuery: FilterQuery<Product>): Promise<Product> {
     try {
@@ -41,7 +41,7 @@ export class ProductsRepository {
     }
     const newProduct = new this.productsModel({
       ...restProductdata,
-      seller: seller._id
+      seller: seller._id,
     });
     const result = await newProduct.save();
     seller.products.push(result._id);
@@ -64,8 +64,25 @@ export class ProductsRepository {
 
   async deleteOne(
     productFilterQuery: FilterQuery<Product>,
-  ): Promise<{ success: boolean; }> {
-    await this.productsModel.deleteOne(productFilterQuery);
+  ): Promise<{ success: boolean }> {
+    const deletedProduct = await this.productsModel.findOneAndDelete(
+      productFilterQuery,
+    );
+    if (!deletedProduct) {
+      throw new NotFoundException('Could not find the product to delete');
+    }
+
+    const seller = await this.sellerModel.findOne({
+      products: deletedProduct._id,
+    });
+    if (seller) {
+      const productIndex = seller.products.indexOf(deletedProduct._id);
+      if (productIndex !== -1) {
+        seller.products.splice(productIndex, 1);
+        await seller.save();
+      }
+    }
+
     return { success: true };
   }
 }

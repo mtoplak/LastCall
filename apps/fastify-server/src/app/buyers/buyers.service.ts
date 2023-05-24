@@ -11,7 +11,7 @@ export class BuyersService {
   constructor(
     private readonly buyersRepository: BuyersRepository,
     private readonly productsRepository: ProductsRepository,
-  ) { }
+  ) {}
 
   async addBuyer(buyerData: CreateUpdateBuyerDto): Promise<Buyer> {
     return await this.buyersRepository.create(buyerData);
@@ -97,8 +97,9 @@ export class BuyersService {
       throw new NotFoundException('There are no products in this cart');
     }
 
-    const products = await this.productsRepository.find({ _id: { $in: productIds } });
-    //console.log(products);
+    const products = await this.productsRepository.find({
+      _id: { $in: productIds },
+    });
 
     if (products.length !== productIds.length) {
       throw new NotFoundException('Products for this cart not found');
@@ -106,7 +107,9 @@ export class BuyersService {
 
     for (let i = 0; i < productData.length; i++) {
       const { productId, quantity } = productData[i];
-      const existingItem = buyer.cart.find((item) => item.productId._id.toString() === productId);
+      const existingItem = buyer.cart.find(
+        (item) => item.productId._id.toString() === productId,
+      );
       if (existingItem) {
         existingItem.quantity = quantity;
       } else {
@@ -116,8 +119,6 @@ export class BuyersService {
         });
       }
     }
-
- 
 
     await buyer.save();
 
@@ -147,13 +148,18 @@ export class BuyersService {
     return { cart: populatedCart };
   }
 
-  async deleteProductFromCart(email: string, productId: string): Promise<{ cart: { product: Product; quantity: number; }[]; }> {
+  async deleteProductFromCart(
+    email: string,
+    productId: string,
+  ): Promise<{ cart: { product: Product; quantity: number }[] }> {
     const buyer = await this.buyersRepository.findOne({ email });
     if (!buyer) {
       throw new NotFoundException('Buyer not found');
     }
 
-    const existingProductIndex = buyer.cart.findIndex(item => item.productId._id.toString() === productId);
+    const existingProductIndex = buyer.cart.findIndex(
+      (item) => item.productId._id.toString() === productId,
+    );
     if (existingProductIndex === -1) {
       throw new NotFoundException('Product not found in the cart');
     }
@@ -164,13 +170,12 @@ export class BuyersService {
     const updatedCart = buyer.cart.map((item) => {
       return {
         product: item.productId,
-        quantity: item.quantity
+        quantity: item.quantity,
       };
     });
 
     return { cart: updatedCart };
   }
-
 
   async getOrdersByBuyer(email: string): Promise<Order[]> {
     return this.buyersRepository.getOrdersByBuyer(email);

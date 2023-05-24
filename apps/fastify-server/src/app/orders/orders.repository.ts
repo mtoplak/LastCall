@@ -36,8 +36,8 @@ export class OrdersRepository {
   async create(
     orderData: Partial<Order>,
     productData: { productId: string; quantity: number }[],
-    sellerId: string,
-    buyerId: string,
+    sellerEmail: string,
+    buyerEmail: string,
   ): Promise<Order> {
     const { ...restOrderData } = orderData;
     const productIds = productData.map((item) => item.productId);
@@ -49,16 +49,16 @@ export class OrdersRepository {
     if (products.length !== productIds.length) {
       throw new NotFoundException('Products for this order not found');
     }
-    const seller = await this.sellerModel.findById(sellerId);
+    const seller = await this.sellerModel.findOne({ email: sellerEmail });
     if (!seller) {
       throw new NotFoundException(
-        `Could not find the seller with id ${sellerId} assigned to this order`,
+        'Could not find the seller with email ' + sellerEmail,
       );
     }
-    const buyer = await this.buyerModel.findById(buyerId);
+    const buyer = await this.buyerModel.findOne({ email: buyerEmail });
     if (!buyer) {
       throw new NotFoundException(
-        `Could not find the buyer with id ${buyerId} assigned to this order`,
+        'Could not find the buyer with email ' + buyerEmail,
       );
     }
 

@@ -7,17 +7,20 @@ import { CreateUpdateOrderDto } from './createUpdateOrder.dto';
 
 @Injectable()
 export class OrdersService {
-  constructor(
-    private readonly ordersRepository: OrdersRepository,
-  ) {}
+  constructor(private readonly ordersRepository: OrdersRepository) {}
 
   async addOrder(
     orderData: CreateUpdateOrderDto,
     productData: { productId: string; quantity: number }[],
-    sellerId: string,
-    buyerId: string
+    sellerEmail: string,
+    buyerEmail: string,
   ): Promise<Order> {
-    return await  this.ordersRepository.create(orderData, productData, sellerId, buyerId);
+    return await this.ordersRepository.create(
+      orderData,
+      productData,
+      sellerEmail,
+      buyerEmail,
+    );
   }
 
   async getAllOrders(): Promise<Order[]> {
@@ -28,9 +31,7 @@ export class OrdersService {
     try {
       return await this.ordersRepository.findOne({ _id: orderId });
     } catch (err) {
-      throw new NotFoundException(
-        'Could not get the order with id ' + orderId,
-      );
+      throw new NotFoundException('Could not get the order with id ' + orderId);
     }
   }
 
