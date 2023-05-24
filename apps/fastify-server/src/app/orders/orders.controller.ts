@@ -19,10 +19,15 @@ export class OrdersController {
   async addOrder(
     @Body() createOrderDto: CreateUpdateOrderDto,
     @Body('products') products: { productId: string; quantity: number }[],
-    @Body('seller') seller: string,
-    @Body('buyer') buyer: string,
+    @Body('seller') sellerEmail: string,
+    @Body('buyer') buyerEmail: string,
   ): Promise<Order> {
-    return await this.ordersService.addOrder(createOrderDto, products, seller, buyer);
+    return await this.ordersService.addOrder(
+      createOrderDto,
+      products,
+      sellerEmail,
+      buyerEmail,
+    );
   }
 
   @Get()
