@@ -39,7 +39,7 @@ function NavbarB() {
 	//console.log(user);
 	//console.log(user?.email);
 	//console.log(user?.accessToken);
-	console.log(user?.stsTokenManager?.accessToken);
+	//console.log(user?.stsTokenManager?.accessToken);
 
 	const handleLogOut = async () => {
 		try {

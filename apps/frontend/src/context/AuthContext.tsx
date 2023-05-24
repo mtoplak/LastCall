@@ -128,7 +128,7 @@ export function AuthContextProvider({ children }: { children: any }) {
 				setIsLoading(true);
 				try {
 					const refreshedToken = await currentUser.getIdToken(true);
-					console.log(refreshedToken);
+					//console.log(refreshedToken);
 					//console.log('Token refreshed');
 					setUser(currentUser);
 					//console.log(role);
