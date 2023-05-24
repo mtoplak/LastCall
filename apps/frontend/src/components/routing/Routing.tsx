@@ -17,6 +17,7 @@ import SignInS from 'components/seller/login/SignInS';
 import SellersOrderPage from 'components/seller/SellersOrderPage';
 import SingleOrder from 'components/buyer/SingleOrder';
 import SellerProtectedRoute from './SellerProtectedRoute';
+import EditSellerProfile from 'components/seller/EditSellerProfile';
 
 const Routing = () => {
 	return (
@@ -51,6 +52,7 @@ const Routing = () => {
 					<Route path="/buy/signin/*" element={<SignInPage />} />
 					<Route path="/order/:id" element={<SingleOrder />} />
 					<Route path="/orders" element={<PastOrders />} />
+					<Route path="/editprofile" element={<EditSellerProfile />} />
 					<Route
 						path="/inventory"
 						element={

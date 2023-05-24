@@ -200,11 +200,13 @@ function NavbarS() {
 											Profile
 										</Typography>
 									</MenuItem>
+									<Link to="/editprofile">
 									<MenuItem onClick={handleCloseUserMenu}>
 										<Typography textAlign="center">
-											My orders
+											Edit profile
 										</Typography>
 									</MenuItem>
+									</Link>
 									<MenuItem onClick={handleLogOut}>
 										<Typography textAlign="center">
 											Log out
