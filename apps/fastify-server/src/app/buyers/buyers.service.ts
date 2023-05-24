@@ -83,8 +83,8 @@ export class BuyersService {
 
   async addToCart(
     email: string,
-    productData: { productId: string; quantity: number }[],
-  ): Promise<{ cart: { productId: Product; quantity: number }[] } | null> {
+    productData: { productId: string; quantity: number; }[],
+  ): Promise<{ cart: { product: Product; quantity: number; }[]; } | null> {
     const buyer = await this.buyersRepository.findOne({ email });
     if (!buyer) {
       return null;
@@ -121,7 +121,15 @@ export class BuyersService {
     }
 
     await buyer.save();
-    return { cart: buyer.cart };
+
+    const updatedCart = buyer.cart.map((item) => {
+      return {
+        product: item.productId,
+        quantity: item.quantity
+      };
+    });
+
+    return { cart: updatedCart };
   }
 
   async getCart(

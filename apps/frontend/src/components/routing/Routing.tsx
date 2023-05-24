@@ -17,6 +17,7 @@ import SignInS from 'components/seller/login/SignInS';
 import SellersOrderPage from 'components/seller/SellersOrderPage';
 import SingleOrder from 'components/buyer/SingleOrder';
 import SellerProtectedRoute from './SellerProtectedRoute';
+import EditSellerProfile from 'components/seller/EditSellerProfile';
 
 const Routing = () => {
 	return (
