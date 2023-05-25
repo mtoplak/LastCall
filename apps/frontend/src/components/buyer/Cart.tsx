@@ -12,7 +12,12 @@ import {
 	Alert,
 	Select,
 	MenuItem,
+	TextField,
+	Modal,
+	AlertTitle,
+	IconButton,
 } from '@mui/material';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import NavbarB from './NavbarB';
 import { useUserAuth } from 'context/AuthContext';
 import { useEffect, useState } from 'react';
@@ -20,15 +25,13 @@ import api from 'services/api';
 import { ICartItem } from 'models/cartItem';
 import { Link } from 'react-router-dom';
 import { IDrink } from 'models/drink';
+import { style } from 'assets/styles/styles';
+import { getCurrentDate } from '../../utils/getCurrentDate';
+import { ISeller } from 'models/seller';
 
 interface GroupedProduct {
 	product: IDrink;
 	quantity: number;
-}
-
-interface GroupedSeller {
-	sellerId: string;
-	products: GroupedProduct[];
 }
 
 interface SellerGroup {
@@ -38,6 +41,17 @@ interface SellerGroup {
 function Cart() {
 	const { user } = useUserAuth();
 	const [cartItems, setCartItems] = useState<ICartItem[] | null>(null);
+	const [isOpenModal, setIsOpenModal] = useState(false);
+	const [error, setError] = useState('');
+	const [address, setAddress] = useState('');
+	const [city, setCity] = useState('');
+	const [country, setCountry] = useState('');
+	const [lastDateOfDelivery, setLastDateOfDelivery] = useState<string | Date>(
+		getCurrentDate()
+	);
+	const [selectedSeller, setSelectedSeller] = useState<ISeller>();
+	const [groupedProducts, setGroupedProducts] = useState<SellerGroup>({});
+	const [alert, setAlert] = useState(false);
 
 	useEffect(() => {
 		if (!user) return;
@@ -47,7 +61,7 @@ function Cart() {
 			});
 			setCartItems(response.data.cart);
 			const groupedProducts = groupProductsBySeller(response.data.cart);
-			console.log('Group');
+			setGroupedProducts(groupedProducts);
 			console.log(groupedProducts);
 		};
 		fetchCart();
@@ -91,7 +105,46 @@ function Cart() {
 		setCartItems(response.data.cart);
 	};
 
-	console.log(cartItems);
+	const handleCheckout = async () => {
+		console.log('dodali bomo v order');
+
+		const totalPrice =
+			groupedProducts[selectedSeller!._id].reduce((accumulator, item) => {
+				const itemTotalPrice = item.quantity * item.product.price;
+				return accumulator + itemTotalPrice;
+			}, 0) + selectedSeller!.registerNumber;
+
+		const order = groupedProducts[selectedSeller!._id].map((item) => {
+			return {
+				productId: item.product._id,
+				quantity: item.quantity,
+			};
+		});
+		try {
+			const response = await api.post(`/orders`, {
+				seller: selectedSeller?.email,
+				buyer: user.email,
+				address: address,
+				city: city,
+				country: country,
+				lastDateOfDelivery: lastDateOfDelivery,
+				products: order,
+				totalPrice: totalPrice.toFixed(2),
+			});
+			console.log(response.data);
+			setIsOpenModal(false);
+			setAddress('');
+			setCity('');
+			setCountry('');
+			setLastDateOfDelivery(getCurrentDate());
+			/*const filteredObj = Object.fromEntries(
+				Object.entries(obj).filter(([key, _]) => key !== propertyToDelete)
+			  ) */ // TODO pokaži košarico brez izdelkov, ki si jih kupil
+			setAlert(true);
+		} catch (error: any) {
+			setError(error.response.data.message);
+		}
+	};
 
 	const renderGroupedProducts = (groupedProducts: SellerGroup) => {
 		return Object.entries(groupedProducts).map(([seller, products]) => (
@@ -239,6 +292,12 @@ function Cart() {
 										color: '#0F1B4C',
 									},
 								}}
+								onClick={() => {
+									setIsOpenModal(true);
+									setSelectedSeller(
+										products[0].product.seller
+									);
+								}}
 							>
 								Checkout
 							</Button>
@@ -250,25 +309,127 @@ function Cart() {
 	};
 
 	return (
-		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
-			<NavbarB />
-			<Container>
-				<Typography variant="h4" component="h1" mt={4} mb={2}>
-					Shopping Cart
-				</Typography>
-				{cartItems && cartItems.length > 0 ? (
-					<>
-						{renderGroupedProducts(
-							groupProductsBySeller(cartItems)
-						)}
-					</>
-				) : (
-					<Typography variant="body1" mb={4}>
-						Your cart is empty. &#128549;
+		<>
+			<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
+				<NavbarB />
+				<Container>
+					<Typography variant="h4" component="h1" mt={4} mb={2}>
+						Shopping Cart
 					</Typography>
-				)}
-			</Container>
-		</Box>
+					{alert && (
+						<Alert
+							severity="success"
+							style={{ marginTop: '1rem' }}
+							action={
+								<IconButton
+									aria-label="close"
+									color="inherit"
+									size="small"
+									onClick={(e) => setAlert(false)}
+								>
+									<CloseOutlinedIcon fontSize="inherit" />
+								</IconButton>
+							}
+						>
+							<AlertTitle>Order placed!</AlertTitle>
+							Go to{' '}
+							<Link to="/orders">
+								<span className="blackLink">cart</span>
+							</Link>{' '}
+							to see details.
+						</Alert>
+					)}
+					{cartItems && cartItems.length > 0 ? (
+						<>
+							{renderGroupedProducts(
+								groupProductsBySeller(cartItems)
+							)}
+						</>
+					) : (
+						<Typography variant="body1" mb={4}>
+							Your cart is empty. &#128549;
+						</Typography>
+					)}
+				</Container>
+			</Box>
+			<Modal
+				open={isOpenModal}
+				onClose={() => setIsOpenModal(false)}
+				aria-labelledby="modal-modal-title"
+				aria-describedby="modal-modal-description"
+			>
+				<Box component="form" sx={style}>
+					<Typography
+						id="modal-modal-title"
+						variant="h6"
+						component="h2"
+					>
+						Order Details
+					</Typography>
+					<br />
+					<TextField
+						label="Address"
+						placeholder="Enter address"
+						type="text"
+						fullWidth
+						required
+						name="address"
+						value={address}
+						onChange={(e) => setAddress(e.target.value)}
+						sx={{ mb: 2 }}
+					/>
+					<TextField
+						label="City"
+						placeholder="Enter city"
+						type="text"
+						fullWidth
+						required
+						name="city"
+						value={city}
+						onChange={(e) => setCity(e.target.value)}
+						sx={{ mb: 2 }}
+					/>
+					<TextField
+						label="Country"
+						placeholder="Enter country"
+						type="text"
+						fullWidth
+						required
+						name="country"
+						value={country}
+						onChange={(e) => setCountry(e.target.value)}
+						sx={{ mb: 2 }}
+					/>
+					<TextField
+						id="date"
+						label="Last day of delivery"
+						type="date"
+						fullWidth
+						InputLabelProps={{
+							shrink: true,
+						}}
+						value={lastDateOfDelivery}
+						onChange={(e) => setLastDateOfDelivery(e.target.value)}
+					/>
+					<br />
+					{error && (
+						<Alert severity="error">
+							<b>{error}</b>
+						</Alert>
+					)}
+					<Typography sx={{ mt: 2 }}>
+						<Button
+							color="primary"
+							variant="contained"
+							fullWidth
+							onClick={handleCheckout}
+						>
+							Buy
+						</Button>
+					</Typography>
+				</Box>
+			</Modal>
+		</>
 	);
 }
 
