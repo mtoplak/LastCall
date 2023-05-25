@@ -16,6 +16,7 @@ import {
 import api from 'services/api';
 import NavbarS from './NavbarS';
 import { useUserAuth } from 'context/AuthContext';
+const markets = ['Slovenia', 'Italy', 'France', 'Austria', 'United Kingdom'];
 
 interface SellerProfile {
 	name: string;
@@ -50,6 +51,21 @@ function EditSellerProfile() {
 		maxDistance: 0,
 		minPrice: 0,
 	});
+
+	useEffect(() => {
+		if (!user) return;
+		const fetchSellerProfile = async () => {
+		  try {
+			const response = await api.get(`sellers/get/${user.email}`);
+			const profileData = response.data;
+			setSellerProfile(profileData);
+		  } catch (error) {
+			console.error('Error fetching seller profile:', error);
+		  }
+		};
+	
+		fetchSellerProfile();
+	  }, [user]);
 
 	const handleFormSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
