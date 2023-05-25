@@ -18,6 +18,7 @@ export const SellerSchema = new Schema({
   coordinates: [{ type: Number }],
   maxDistance: { type: Number },
   minPrice: { type: Number },
+  deliveryCost: { type: Number }
 });
 
 export interface Seller extends Document {
@@ -38,6 +39,7 @@ export interface Seller extends Document {
   coordinates: number[];
   maxDistance: number;
   minPrice: number;
+  deliveryCost: number;
 }
 
 export const SellerModel: Model<Seller> = model<Seller>('Seller', SellerSchema);

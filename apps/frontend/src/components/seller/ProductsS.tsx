@@ -25,6 +25,7 @@ import { MuiFileInput } from 'mui-file-input';
 import { storage } from '../../firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { v4 } from 'uuid';
+import { useUserAuth } from 'context/AuthContext';
 
 const initialState = {
 	title: '',
@@ -33,7 +34,7 @@ const initialState = {
 	size: '',
 	price: 0,
 	stock: 0,
-	seller: '646d00794b90a5f825353375',
+	seller: '',
 	image: '',
 };
 
@@ -63,6 +64,7 @@ const ProductsS = () => {
 	const [isOpenAdd, setIsOpenAdd] = useState(false);
 	const [error, setError] = useState('');
 	const [productImage, setProductImage] = useState<File | null>(null);
+	const { user } = useUserAuth();
 
 	const handleFormSubmit = async (imageURL: string) => {
 		setError('');
@@ -77,12 +79,14 @@ const ProductsS = () => {
 			}
 		}
 		try {
-			const updatedProduct = { ...newProduct, picture: imageURL };
-			console.log(updatedProduct);
+			const updatedProduct = {
+				...newProduct,
+				seller: user.email,
+				picture: imageURL,
+			};
 			const response = await api.post('/products', updatedProduct);
-			console.log(response.data);
 			setNewProduct(initialState);
-			setDrinks((prev: any) => [...prev, response.data]);
+			setDrinks((prevDrinks) => [...prevDrinks, response.data]); // Add the new product to the existing drinks list
 			setIsOpenAdd(false);
 			setProductImage(null);
 		} catch (error) {
@@ -101,25 +105,25 @@ const ProductsS = () => {
 	};
 
 	useEffect(() => {
+		if (!user) return;
 		const fetchSellerProducts = async () => {
 			try {
-				const response = await api.get('/products');
-				//console.log(response.data);
+				const response = await api.get(
+					`/sellers/productsbyemail/${user.email}`
+				);
 				setDrinks(response.data);
 			} catch (error) {
 				throw error;
 			}
 		};
 		fetchSellerProducts();
-	}, []);
+	}, [user]);
 
 	const handleChange = (newFile: any) => {
-		//console.log(newFile);
 		if (newFile) {
 			if (newFile.type.startsWith('image/')) {
 				// The uploaded file is an image
 				setError('');
-				//console.log(newFile.type);
 				setProductImage(newFile);
 			} else {
 				// The uploaded file is not an image
@@ -153,8 +157,6 @@ const ProductsS = () => {
 			setError(error);
 		}
 	};
-
-	//console.log(drinks);
 
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', py: 10 }}>
@@ -299,8 +301,8 @@ const ProductsS = () => {
 				</PropertiesTextBox>
 				<PropertiesBox>
 					{drinks &&
-						drinks.map((drink: IDrink) => (
-							<DrinkContainer key={drink._id}>
+						drinks.map((drink: IDrink, index: number) => (
+							<DrinkContainer key={index}>
 								<Drink
 									drink={drink}
 									setDrinks={setDrinks}
