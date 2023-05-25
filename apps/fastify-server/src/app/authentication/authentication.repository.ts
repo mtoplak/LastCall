@@ -5,7 +5,7 @@ import { Buyer } from '../buyers/buyers.model';
 import { Seller } from '../sellers/sellers.model';
 
 @Injectable()
-export class EmailRepository {
+export class AuthenticationRepository {
   constructor(
     @InjectModel('Buyer') private buyerModel: Model<Buyer>,
     @InjectModel('Seller') private readonly sellerModel: Model<Seller>,

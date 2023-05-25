@@ -13,6 +13,7 @@ import { IDrink } from 'models/drink';
 import { useParams } from 'react-router-dom';
 import api from 'services/api';
 import NavbarB from './NavbarB';
+import { ISeller } from 'models/seller';
 
 function SingleOrder() {
 	const [order, setOrder] = useState<IOrder>();
@@ -22,7 +23,7 @@ function SingleOrder() {
 		const fetchData = async () => {
 			try {
 				const response = await api.get('/orders/' + id);
-				console.log(response.data);
+				//console.log(response.data);
 				setOrder(response.data);
 			} catch (error) {
 				throw error;
@@ -45,14 +46,26 @@ function SingleOrder() {
 				return 'inherit';
 		}
 	};
+	
+	function formatDate(date: Date): string {
+		const options = {
+			day: 'numeric',
+			month: 'numeric',
+			year: 'numeric',
+		} as Intl.DateTimeFormatOptions;
+		return date.toLocaleDateString(undefined, options);
+	}
 
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
 			<NavbarB />
 			<Container>
-				<Typography variant="h4" component="h1" mt={4} mb={2}>
-					Past Orders
-				</Typography>
+				<Typography
+					variant="h4"
+					component="h1"
+					mt={4}
+					mb={2}
+				></Typography>
 				<Grid container spacing={2}>
 					{order && (
 						<>
@@ -71,7 +84,7 @@ function SingleOrder() {
 									<Typography
 										sx={{ mb: 2, color: 'text.secondary' }}
 									>
-										Thanks for your order! Check out the
+										Thank you for your order! Check out the
 										details below.
 									</Typography>
 								</Card>
@@ -95,7 +108,7 @@ function SingleOrder() {
 										<b>{order.status}</b>
 									</Typography>
 									<Typography variant="h6" sx={{ mb: 4 }}>
-										<b>Order ID:</b> {order._id}
+										<b>Order ID:</b> {order.uid}
 									</Typography>
 									<Divider />
 									<Typography
@@ -121,10 +134,20 @@ function SingleOrder() {
 										</Grid>
 										<Grid item xs={6}>
 											<Typography>
-												Date of Purchase: date
+												Date of Purchase:{' '}
+												{formatDate(
+													new Date(
+														order.dateOfPurchase
+													)
+												)}
 											</Typography>
 											<Typography>
-												Date of Delivery: date
+												Date of Delivery:{' '}
+												{formatDate(
+													new Date(
+														order.lastDateOfDelivery
+													)
+												)}
 											</Typography>
 										</Grid>
 									</Grid>
@@ -138,17 +161,20 @@ function SingleOrder() {
 									<Typography
 										sx={{ color: 'text.secondary' }}
 									>
-										SubTotal: {order.totalPrice}€
+										SubTotal:{' '}
+										{order.totalPrice -
+											order.seller.deliveryCost}{' '}
+										€
 									</Typography>
 									<Typography
 										sx={{ color: 'text.secondary' }}
 									>
-										Delivery: delivery€
+										Delivery: {order.seller.deliveryCost} €
 									</Typography>
 									<Typography
 										sx={{ mt: 1, color: 'text.secondary' }}
 									>
-										<b>Total: total€</b>
+										<b>Total: {order.totalPrice} €</b>
 									</Typography>
 								</Card>
 								<Card

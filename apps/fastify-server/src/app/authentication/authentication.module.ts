@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose/dist';
-import { EmailController } from './email.controller';
-import { EmailService } from './email.service';
-import { EmailRepository } from './email.repository';
 import { BuyerSchema } from '../buyers/buyers.model';
 import { SellerSchema } from '../sellers/sellers.model';
+import { AuthenticationController } from './authentication.controller';
+import { AuthenticationService } from './authentication.service';
+import { AuthenticationRepository } from './authentication.repository';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Buyer', schema: BuyerSchema }]),
     MongooseModule.forFeature([{ name: 'Seller', schema: SellerSchema }]),
   ], //injectalo bo module v katerikoli file ki ga rabi
-  controllers: [EmailController],
-  providers: [EmailService, EmailRepository],
+  controllers: [AuthenticationController],
+  providers: [AuthenticationService, AuthenticationRepository],
 })
-export class EmailModule {}
+export class AuthenticationModule {}

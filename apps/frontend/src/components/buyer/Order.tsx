@@ -72,7 +72,7 @@ const Order: React.FC<OrderProps> = ({order}) => {
           <Grid item xs={12} sm={6}>
             <Typography sx={{ width: '33%', flexShrink: 0 }}>
               <b>Order ID: </b>
-              {order._id}
+              {order.uid}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6}>

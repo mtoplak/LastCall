@@ -17,4 +17,5 @@ export interface ISeller {
 	products: any[];
 	maxDistance: number;
   	minPrice: number;
+	deliveryCost: number;
 }

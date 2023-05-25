@@ -39,11 +39,8 @@ export class SellersRepository {
     );
   }
 
-  async deleteOne(
-    sellerFilterQuery: FilterQuery<Seller>,
-  ): Promise<{ success: boolean }> {
+  async deleteOne(sellerFilterQuery: FilterQuery<Seller>): Promise<void> {
     await this.sellersModel.deleteOne(sellerFilterQuery);
-    return { success: true };
   }
 
   async getAllProductsBySeller(email: string): Promise<Product[]> {

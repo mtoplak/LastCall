@@ -61,27 +61,12 @@ export class ProductsRepository {
     );
   }
 
-  async deleteOne(
-    productFilterQuery: FilterQuery<Product>,
-  ): Promise<{ success: boolean }> {
+  async deleteOne(productFilterQuery: FilterQuery<Product>): Promise<void> {
     const deletedProduct = await this.productsModel.findOneAndDelete(
       productFilterQuery,
     );
     if (!deletedProduct) {
       throw new NotFoundException('Could not find the product to delete');
     }
-
-    const seller = await this.sellerModel.findOne({
-      products: deletedProduct._id,
-    });
-    if (seller) {
-      const productIndex = seller.products.indexOf(deletedProduct._id);
-      if (productIndex !== -1) {
-        seller.products.splice(productIndex, 1);
-        await seller.save();
-      }
-    }
-
-    return { success: true };
   }
 }

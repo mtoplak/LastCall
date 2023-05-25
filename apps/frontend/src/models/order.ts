@@ -15,4 +15,5 @@ export interface IOrder {
 	seller: ISeller;
 	buyer: IBuyer;
     status: string;
+	uid: string;
 }

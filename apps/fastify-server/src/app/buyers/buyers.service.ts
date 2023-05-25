@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Buyer } from './buyers.model';
-import { Product } from '../products/product.model';
+import { Buyer, Cart } from './buyers.model';
 import { CreateUpdateBuyerDto } from './createUpdateBuyer.dto';
 import { BuyersRepository } from './buyers.repository';
 import { ProductsRepository } from '../products/products.repository';
 import { Order } from '../orders/order.model';
+import { SuccessResponse, CartResponse } from 'src/data.response';
 
 @Injectable()
 export class BuyersService {
@@ -67,14 +67,14 @@ export class BuyersService {
     return updatedBuyer;
   }
 
-  async removeBuyer(buyerId: string): Promise<{ success: boolean }> {
+  async removeBuyer(buyerId: string): Promise<SuccessResponse> {
     await this.buyersRepository.deleteOne({
       _id: buyerId,
     });
     return { success: true };
   }
 
-  async removeBuyerByEmail(email: string): Promise<{ success: boolean }> {
+  async removeBuyerByEmail(email: string): Promise<SuccessResponse> {
     await this.buyersRepository.deleteOne({
       email: email,
     });
@@ -83,58 +83,53 @@ export class BuyersService {
 
   async addToCart(
     email: string,
-    productData: { productId: string; quantity: number; }[],
-  ): Promise<{ cart: { product: Product; quantity: number; }[]; } | null> {
+    productData: Cart[],
+  ): Promise<CartResponse | null> {
     const buyer = await this.buyersRepository.findOne({ email });
     if (!buyer) {
       return null;
     }
 
-    const productIds = productData.map((item) => item.productId);
-    const quantities = productData.map((item) => item.quantity);
+    const cartItems = productData.map(({ productId, quantity }) => ({
+      productId,
+      quantity,
+    }));
 
-    if (!productIds || productIds.length === 0) {
+    if (!cartItems.length) {
       throw new NotFoundException('There are no products in this cart');
     }
+
+    const productIds = cartItems.map((item) => item.productId);
 
     const products = await this.productsRepository.find({
       _id: { $in: productIds },
     });
 
-    if (products.length !== productIds.length) {
-      throw new NotFoundException('Products for this cart not found');
-    }
-
-    for (let i = 0; i < productData.length; i++) {
-      const { productId, quantity } = productData[i];
+    cartItems.forEach(({ productId, quantity }, index) => {
       const existingItem = buyer.cart.find(
         (item) => item.productId._id.toString() === productId,
       );
       if (existingItem) {
-        existingItem.quantity = quantity;
+        existingItem.quantity += quantity;
       } else {
         buyer.cart.push({
-          productId: products[i],
+          productId: products[index],
           quantity: quantity,
         });
       }
-    }
+    });
 
     await buyer.save();
 
-    const updatedCart = buyer.cart.map((item) => {
-      return {
-        product: item.productId,
-        quantity: item.quantity
-      };
-    });
+    const updatedCart = buyer.cart.map((item) => ({
+      product: item.productId,
+      quantity: item.quantity,
+    }));
 
     return { cart: updatedCart };
   }
 
-  async getCart(
-    email: string,
-  ): Promise<{ cart: { product: Product; quantity: number }[] } | null> {
+  async getCart(email: string): Promise<CartResponse | null> {
     const buyer = await this.buyersRepository.findOne({ email });
     if (!buyer) {
       throw new NotFoundException('Buyer of this cart not found');
@@ -151,20 +146,23 @@ export class BuyersService {
   async deleteProductFromCart(
     email: string,
     productId: string,
-  ): Promise<{ cart: { product: Product; quantity: number }[] }> {
+  ): Promise<CartResponse> {
     const buyer = await this.buyersRepository.findOne({ email });
     if (!buyer) {
       throw new NotFoundException('Buyer not found');
     }
 
-    const existingProductIndex = buyer.cart.findIndex(
+    const existingProduct = buyer.cart.some(
       (item) => item.productId._id.toString() === productId,
     );
-    if (existingProductIndex === -1) {
+    if (!existingProduct) {
       throw new NotFoundException('Product not found in the cart');
     }
 
-    buyer.cart.splice(existingProductIndex, 1);
+    buyer.cart = buyer.cart.filter(
+      (item) => item.productId._id.toString() !== productId,
+    );
+
     await buyer.save();
 
     const updatedCart = buyer.cart.map((item) => {
@@ -175,6 +173,49 @@ export class BuyersService {
     });
 
     return { cart: updatedCart };
+  }
+
+  async deleteProductsFromCart(
+    email: string,
+    productIds: string[]
+  ): Promise<CartResponse> {
+    const buyer = await this.buyersRepository.findOne({ email });
+    if (!buyer) {
+      throw new NotFoundException('Buyer not found');
+    }
+  
+    const existingProducts = buyer.cart.some((item) =>
+      productIds.includes(item.productId._id.toString())
+    );
+    if (!existingProducts) {
+      throw new NotFoundException('Products not found in the cart');
+    }
+  
+    buyer.cart = buyer.cart.filter(
+      (item) => !productIds.includes(item.productId._id.toString())
+    );
+  
+    await buyer.save();
+  
+    const updatedCart = buyer.cart.map((item) => {
+      return {
+        product: item.productId,
+        quantity: item.quantity,
+      };
+    });
+  
+    return { cart: updatedCart };
+  }
+  
+
+  async deleteAllFromCart(email: string): Promise<CartResponse> {
+    const buyer = await this.buyersRepository.findOne({ email });
+    if (!buyer) {
+      throw new NotFoundException('Buyer not found');
+    }
+    buyer.cart = [];
+    await buyer.save();
+    return { cart: [] };
   }
 
   async getOrdersByBuyer(email: string): Promise<Order[]> {

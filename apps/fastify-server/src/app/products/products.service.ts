@@ -2,22 +2,16 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Product } from './product.model';
 import { ProductsRepository } from './products.repository';
 import { CreateUpdateProductDto } from './createUpdateProduct.dto';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { Seller } from '../sellers/sellers.model';
-import { ProductMapper } from 'src/data.mapper';
+import { SuccessResponse } from 'src/data.response';
 
 @Injectable()
 export class ProductsService {
-  constructor(
-    private readonly productsRepository: ProductsRepository,
-  ) {}
+  constructor(private readonly productsRepository: ProductsRepository) {}
 
   async createProduct(
     productData: CreateUpdateProductDto,
     email: string,
   ): Promise<Product> {
-
     const product = await this.productsRepository.create(productData, email);
     if (!product) {
       throw new NotFoundException('Could not create a product');
@@ -34,11 +28,13 @@ export class ProductsService {
   }
 
   async getSingleProduct(productId: string): Promise<Product> {
-      const product = await this.productsRepository.findOne({ _id: productId });
-      if (!product) {
-        throw new NotFoundException('Could not get the product with id ' + productId);
-      }
-      return product;
+    const product = await this.productsRepository.findOne({ _id: productId });
+    if (!product) {
+      throw new NotFoundException(
+        'Could not get the product with id ' + productId,
+      );
+    }
+    return product;
   }
 
   async updateProduct(
@@ -48,22 +44,20 @@ export class ProductsService {
     const updatedProduct = await this.productsRepository.findOneAndUpdate(
       { _id: productId },
       productUpdates,
-      { new: true } // Set the `new` option to true to return the updated document
+      { new: true }, // Set the `new` option to true to return the updated document
     );
-  
+
     if (!updatedProduct) {
       throw new NotFoundException(`Product with id ${productId} not found`);
     }
-  
+
     return updatedProduct;
   }
-  
 
-  async removeProduct(productId: string): Promise<{ success: boolean }> {
+  async removeProduct(productId: string): Promise<SuccessResponse> {
     await this.productsRepository.deleteOne({
       _id: productId,
     });
     return { success: true };
   }
-
 }

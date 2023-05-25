@@ -61,11 +61,8 @@ export class BuyersRepository {
     return updatedBuyer;
   }
 
-  async deleteOne(
-    buyerFilterQuery: FilterQuery<Buyer>,
-  ): Promise<{ success: boolean }> {
+  async deleteOne(buyerFilterQuery: FilterQuery<Buyer>): Promise<void> {
     await this.buyerModel.deleteOne(buyerFilterQuery);
-    return { success: true };
   }
 
   async getOrdersByBuyer(email: string): Promise<Order[]> {
