@@ -2,6 +2,19 @@ import { Buyer } from './app/buyers/buyers.model';
 import { Product } from './app/products/product.model';
 import { Seller } from './app/sellers/sellers.model';
 
+export interface SuccessResponse {
+  success: boolean;
+}
+
+export interface CartItem {
+  product: Product;
+  quantity: number;
+}
+
+export interface CartResponse {
+  cart: CartItem[];
+}
+
 export interface ProductResponse {
   id: string;
   title: string;

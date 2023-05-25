@@ -10,7 +10,7 @@ import {
 import { ProductsService } from './products.service';
 import { Product } from './product.model';
 import { CreateUpdateProductDto } from './createUpdateProduct.dto';
-import { SuccessResponse } from 'src/common.interfaces';
+import { SuccessResponse } from 'src/data.response';
 
 @Controller('products')
 export class ProductsController {

@@ -4,7 +4,7 @@ import { SellersRepository } from './sellers.repository';
 import { CreateUpdateSellerDto } from './createUpdateSeller.dto';
 import { Product } from '../products/product.model';
 import { Order } from '../orders/order.model';
-import { SuccessResponse } from 'src/common.interfaces';
+import { SuccessResponse } from 'src/data.response';
 
 @Injectable()
 export class SellersService {

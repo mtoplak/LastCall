@@ -12,7 +12,7 @@ import { Seller } from './sellers.model';
 import { CreateUpdateSellerDto } from './createUpdateSeller.dto';
 import { Product } from '../products/product.model';
 import { Order } from '../orders/order.model';
-import { SuccessResponse } from 'src/common.interfaces';
+import { SuccessResponse } from 'src/data.response';
 
 @Controller('sellers')
 export class SellersController {

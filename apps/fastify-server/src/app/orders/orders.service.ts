@@ -1,11 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose/dist';
-import { Model } from 'mongoose';
 import { Order } from './order.model';
 import { OrdersRepository } from './orders.repository';
 import { CreateUpdateOrderDto } from './createUpdateOrder.dto';
 import { BuyersService } from '../buyers/buyers.service';
-import { SuccessResponse } from 'src/common.interfaces';
+import { SuccessResponse } from 'src/data.response';
 
 @Injectable()
 export class OrdersService {

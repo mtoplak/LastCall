@@ -14,6 +14,5 @@ export interface IOrder {
 	seller: ISeller;
 	buyer: IBuyer;
     status: string;
-	deliveryCost: number;
 	uid: string;
 }

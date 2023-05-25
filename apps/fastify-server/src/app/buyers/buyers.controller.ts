@@ -11,7 +11,7 @@ import { BuyersService } from './buyers.service';
 import { Buyer } from './buyers.model';
 import { CreateUpdateBuyerDto } from './createUpdateBuyer.dto';
 import { Order } from '../orders/order.model';
-import { CartResponse, SuccessResponse } from 'src/common.interfaces';
+import { CartResponse, SuccessResponse } from 'src/data.response';
 
 @Controller('buyers')
 export class BuyersController {
@@ -85,12 +85,12 @@ export class BuyersController {
     return result;
   }
 
-  @Delete(':email/cart/:productId')
-  async deleteProductFromCart(
+  @Delete('/:email/deletefromcart')
+  async deleteProductsFromCart(
     @Param('email') email: string,
-    @Param('productId') productId: string,
+    @Body('products') productIds: string[],
   ): Promise<CartResponse> {
-    return this.buyersService.deleteProductFromCart(email, productId);
+    return this.buyersService.deleteProductsFromCart(email, productIds);
   }
 
   @Delete(':email/cart')

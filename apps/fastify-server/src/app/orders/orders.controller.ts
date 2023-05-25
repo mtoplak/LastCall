@@ -10,7 +10,7 @@ import {
 import { OrdersService } from './orders.service';
 import { Order } from './order.model';
 import { CreateUpdateOrderDto } from './createUpdateOrder.dto';
-import { SuccessResponse } from 'src/common.interfaces';
+import { SuccessResponse } from 'src/data.response';
 
 @Controller('orders')
 export class OrdersController {

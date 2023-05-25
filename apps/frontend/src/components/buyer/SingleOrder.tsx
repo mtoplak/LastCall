@@ -5,6 +5,7 @@ import { IDrink } from 'models/drink';
 import { useParams } from 'react-router-dom';
 import api from 'services/api';
 import NavbarB from './NavbarB';
+import { ISeller } from 'models/seller';
 
 function SingleOrder() {
 	const [order, setOrder] = useState<IOrder>();
@@ -14,7 +15,7 @@ function SingleOrder() {
 		const fetchData = async () => {
 			try {
 				const response = await api.get('/orders/' + id);
-				console.log(response.data);
+				//console.log(response.data);
 				setOrder(response.data);
 			} catch (error) {
 				throw error;
@@ -37,6 +38,15 @@ function SingleOrder() {
 				return 'inherit';
 		}
 	};
+	
+	function formatDate(date: Date): string {
+		const options = {
+			day: 'numeric',
+			month: 'numeric',
+			year: 'numeric',
+		} as Intl.DateTimeFormatOptions;
+		return date.toLocaleDateString(undefined, options);
+	}
 
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
@@ -116,10 +126,20 @@ function SingleOrder() {
 										</Grid>
 										<Grid item xs={6}>
 											<Typography>
-												Date of Purchase: date
+												Date of Purchase:{' '}
+												{formatDate(
+													new Date(
+														order.dateOfPurchase
+													)
+												)}
 											</Typography>
 											<Typography>
-												Date of Delivery: date
+												Date of Delivery:{' '}
+												{formatDate(
+													new Date(
+														order.lastDateOfDelivery
+													)
+												)}
 											</Typography>
 										</Grid>
 									</Grid>
@@ -133,12 +153,15 @@ function SingleOrder() {
 									<Typography
 										sx={{ color: 'text.secondary' }}
 									>
-										SubTotal: {} €
+										SubTotal:{' '}
+										{order.totalPrice -
+											order.seller.deliveryCost}{' '}
+										€
 									</Typography>
 									<Typography
 										sx={{ color: 'text.secondary' }}
 									>
-										Delivery: {order.deliveryCost} €
+										Delivery: {order.seller.deliveryCost} €
 									</Typography>
 									<Typography
 										sx={{ mt: 1, color: 'text.secondary' }}
@@ -159,7 +182,7 @@ function SingleOrder() {
 											Products
 										</Typography>
 										{order.products.map(
-											(product: IDrink) => (
+											(product: IDrink) => ( //loopaj skozi cart item
 												<Grid
 													container
 													key={product._id}
