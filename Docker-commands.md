@@ -9,7 +9,7 @@ docker build -f ./apps/frontend/Dockerfile -t docker_username/frontend.
 2. Run Image
 
 ```
-docker run -p 3000:3000 docker_username/frontend
+docker run -p 3000:3000 lastcall/frontend
 ```
 
 3. Run Image with [Volume Mount](https://docs.docker.com/get-started/06_bind_mounts/)

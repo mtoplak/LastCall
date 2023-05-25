@@ -41,4 +41,46 @@ yarn dev
 
 ## Docker
 
-...
+### Build backend image only
+
+Run these commands the root directory:
+
+#### Build image
+
+```
+docker build -t backend-image -f Dockerfile.backend .
+```
+
+#### Run image
+
+``` 
+docker run -p 8080:4000 backend-image
+```
+
+Available at `localhost:8080`.
+
+
+### Build frontend image only
+
+Run these commands the root directory:
+
+#### Build image
+
+```
+docker build -t frontend-image -f Dockerfile.frontend .
+```
+
+#### Run image
+
+```
+docker run -p 3000:80 frontend-image
+```
+
+Available at `localhost:3000`.
+
+
+### Start all services
+
+```
+docker-compose up
+```
