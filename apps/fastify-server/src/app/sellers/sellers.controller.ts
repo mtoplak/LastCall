@@ -11,6 +11,7 @@ import { SellersService } from './sellers.service';
 import { Seller } from './sellers.model';
 import { CreateUpdateSellerDto } from './createUpdateSeller.dto';
 import { Product } from '../products/product.model';
+import { Order } from '../orders/order.model';
 
 @Controller('sellers')
 export class SellersController {
@@ -66,10 +67,24 @@ export class SellersController {
     return { success: true };
   }
 
-  @Get(':id/products')
-  async getAllProductsBySellerId(
-    @Param('id') sellerId: string,
+  @Get('/productsbyemail/:email')
+  async getAllProductsBySeller(
+    @Param('email') email: string,
   ): Promise<Product[]> {
-    return this.sellersService.getAllProductsBySellerId(sellerId);
+    return this.sellersService.getAllProductsBySeller(email);
+  }
+
+  @Get('/:id/products')
+  async getAllProductsBySellerId(
+    @Param('id') id: string,
+  ): Promise<Product[]> {
+    return this.sellersService.getAllProductsBySellerId(id);
+  }
+
+  @Post('/ordersbyemail')
+  async getAllOrdersBySeller(
+    @Body('email') email: string,
+  ): Promise<Order[]> {
+    return this.sellersService.getAllOrdersBySeller(email);
   }
 }

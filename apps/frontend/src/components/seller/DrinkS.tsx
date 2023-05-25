@@ -33,7 +33,7 @@ const initialState = {
 	size: '',
 	price: 0,
 	stock: 0,
-	seller: '646d00794b90a5f825353375',
+	seller: '',
 };
 
 interface Product {
@@ -285,11 +285,10 @@ const DrinkS: React.FC<DrinkProps> = ({
 							onChange={handleInputChange}
 						>
 							<MenuItem value="">Select drink category</MenuItem>
-							<MenuItem value="Alcohol">Alcohol</MenuItem>
-							<MenuItem value="Carbonated">Carbonated</MenuItem>
-							<MenuItem value="Non Carbonated">
-								Non Carbonated
-							</MenuItem>
+							<MenuItem value="Beer">Beer</MenuItem>
+							<MenuItem value="Wine">Wine</MenuItem>
+							<MenuItem value="Champagne">Champagne</MenuItem>
+							<MenuItem value="Other">Other</MenuItem>
 						</Select>
 					</FormControl>
 					<TextField

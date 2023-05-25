@@ -3,6 +3,7 @@ import { Seller } from './sellers.model';
 import { SellersRepository } from './sellers.repository';
 import { CreateUpdateSellerDto } from './createUpdateSeller.dto';
 import { Product } from '../products/product.model';
+import { Order } from '../orders/order.model';
 
 @Injectable()
 export class SellersService {
@@ -88,7 +89,15 @@ export class SellersService {
     return { success: true };
   }
 
+  async getAllProductsBySeller(email: string): Promise<Product[]> {
+    return this.sellersRepository.getAllProductsBySeller(email);
+  }
+
   async getAllProductsBySellerId(sellerId: string): Promise<Product[]> {
     return this.sellersRepository.getAllProductsBySellerId(sellerId);
+  }
+
+  async getAllOrdersBySeller(email: string): Promise<Order[]> {
+    return this.sellersRepository.getAllOrdersBySeller(email);
   }
 }

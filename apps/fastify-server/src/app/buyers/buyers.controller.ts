@@ -94,7 +94,7 @@ export class BuyersController {
   }
 
   @Post('orders')
-  async getAllProductsBySellerId(
+  async getAllOrdersByBuyer(
     @Body('email') email: string,
   ): Promise<Order[]> {
     return await this.buyersService.getOrdersByBuyer(email);

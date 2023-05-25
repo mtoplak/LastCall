@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model, QueryOptions } from 'mongoose';
 import { Seller } from './sellers.model';
 import { Product } from '../products/product.model';
+import { Order } from '../orders/order.model';
 
 @Injectable()
 export class SellersRepository {
@@ -45,11 +46,34 @@ export class SellersRepository {
     return { success: true };
   }
 
-  async getAllProductsBySellerId(sellerId: string): Promise<Product[]> {
+  async getAllProductsBySeller(email: string): Promise<Product[]> {
     const seller = await this.sellersModel
-      .findById(sellerId)
+      .findOne({ email })
       .populate('products')
       .exec();
     return seller.products as unknown as Product[];
+  }
+
+  async getAllProductsBySellerId(sellerId: string): Promise<Product[]> {
+    const seller = await this.sellersModel
+      .findOne({ _id: sellerId })
+      .populate('products')
+      .exec();
+    return seller.products as unknown as Product[];
+  }
+
+  async getAllOrdersBySeller(email: string): Promise<Order[]> {
+    const seller = await this.sellersModel
+      .findOne({ email })
+      .lean()
+      .populate({
+        path: 'orders',
+        populate: {
+          path: 'products',
+          populate: { path: 'productId', model: 'Product' },
+        },
+      })
+      .exec();
+    return seller.orders as unknown as Order[];
   }
 }

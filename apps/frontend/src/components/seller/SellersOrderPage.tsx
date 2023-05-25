@@ -13,15 +13,19 @@ import {
 import { IOrder } from 'models/order';
 import api from 'services/api';
 import NavbarS from './NavbarS';
+import { useUserAuth } from 'context/AuthContext';
 
 function SellerOrdersPage() {
 	const [orders, setOrders] = useState<IOrder[]>([]);
 	const [checked, setChecked] = useState<IOrder[]>([]);
+	const { user } = useUserAuth();
 
 	useEffect(() => {
 		const fetchOrders = async () => {
 			try {
-				const response = await api.get('/orders');
+				const response = await api.post('/sellers/ordersbyemail', {
+					email: user.email,
+				});
 				setOrders(response.data);
 			} catch (error) {
 				console.log(error);
@@ -59,20 +63,20 @@ function SellerOrdersPage() {
 		}
 	};
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'Order placed':
-        return 'primary';
-      case 'In-Transit':
-        return 'orange';
-      case 'Delivered':
-        return 'green';
-      case 'Cancel':
-        return 'error';
-      default:
-        return 'inherit';
-    }
-  };
+	const getStatusColor = (status: string) => {
+		switch (status) {
+			case 'Order placed':
+				return 'primary';
+			case 'In-Transit':
+				return 'orange';
+			case 'Delivered':
+				return 'green';
+			case 'Cancel':
+				return 'error';
+			default:
+				return 'inherit';
+		}
+	};
 
 	return (
 		<>
@@ -114,7 +118,7 @@ function SellerOrdersPage() {
 													)
 												}
 											>
-												Ordered
+												Accept
 											</Button>
 										</Box>
 										<Box my={2}>
