@@ -12,6 +12,7 @@ import NavbarB from './NavbarB';
 import api from '../../services/api';
 import { IOrder } from 'models/order';
 import Order from './Order';
+import Footer from 'components/homepage/Footer';
 
 function PastOrders() {
 	const [pastOrders, setPastOrders] = useState<IOrder[]>([]);
@@ -44,21 +45,14 @@ function PastOrders() {
 					pastOrders.map((order, index) => (
                     <Grid item xs={8} key={index}>
                         <Order
-                                _id={order._id}
-                                total={order.totalPrice}
-                                dateOfPurchase={order.dateOfPurchase}
-                                dateOfDelivery={order.lastDateOfDelivery}
-                                address={order.address}
-                                city={order.city}
-                                country={order.country}
-                                seller={order.seller} 
-                                products={[]} 
+                                order={order}
                                 />
                     <Divider sx={{mt: 2, mb: 2}} />
                     </Grid>
                     )
 				))}
 			</Container>
+			<Footer />
 		</Box>
 	);
 }

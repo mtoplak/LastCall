@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Grid, Box, Container, Card, Divider } from '@mui/material';
+import {
+	Typography,
+	Grid,
+	Box,
+	Container,
+	Card,
+	Divider,
+	CardMedia,
+} from '@mui/material';
 import { IOrder } from 'models/order';
 import { IDrink } from 'models/drink';
 import { useParams } from 'react-router-dom';
@@ -82,7 +90,7 @@ function SingleOrder() {
 									</Typography>
 									<Typography
 										color={getStatusColor(order.status)}
-										sx={{ mb: 2}}
+										sx={{ mb: 2 }}
 									>
 										<b>{order.status}</b>
 									</Typography>
@@ -155,37 +163,66 @@ function SingleOrder() {
 										<Typography variant="h6" sx={{ mb: 2 }}>
 											Products
 										</Typography>
-										{order.products.map(
-											(product: IDrink) => (
-												<Grid
-													container
-													key={product._id}
-													spacing={2}
-													sx={{
-														mb: 2,
-														color: 'text.secondary',
-													}}
-												>
-													<Grid item xs={12}>
-														<Typography>
-															<b>Product ID:</b>{' '}
-															{product._id}
-														</Typography>
-														<Typography>
-															<b>Name:</b>{' '}
-															{product.title}
-														</Typography>
-														<Typography>
-															<b>Price:</b>{' '}
-															{product.price}
-														</Typography>
-														<Divider
-															sx={{ mt: 2 }}
+										{order.products.map((orderProduct) => (
+											<>
+											<Grid
+												container
+												key={orderProduct.product._id}
+												spacing={2}
+												sx={{
+													mb: 2,
+													color: 'text.secondary',
+												}}
+											>
+												<Grid item xs={6} md={2}>
+													<Card>
+														<CardMedia
+															component="img"
+															image={
+																orderProduct
+																	.product
+																	.picture
+															}
+															sx={{
+																maxHeight: 200,
+															}}
 														/>
-													</Grid>
+													</Card>
 												</Grid>
-											)
-										)}
+												<Grid item xs={6} md={10} sx={{my: 4}}>
+													<Typography>
+														<b>Product ID:</b>{' '}
+														{
+															orderProduct.product
+																._id
+														}
+													</Typography>
+													<Typography>
+														<b>Name:</b>{' '}
+														{
+															orderProduct.product
+																.title
+														}
+													</Typography>
+													<Typography>
+														<b>Price:</b>{' '}
+														{
+															orderProduct.product
+																.price
+														} €
+													</Typography>
+													<Typography>
+														<b>Quantity:</b>{' '}
+														{
+															orderProduct.quantity
+														}
+													</Typography>
+												</Grid>
+												
+											</Grid>
+											<Divider sx={{my: 2 }} />
+											</>
+										))}
 									</Grid>
 								</Card>
 							</Grid>
