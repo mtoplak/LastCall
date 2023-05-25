@@ -110,7 +110,7 @@ export class BuyersService {
         (item) => item.productId._id.toString() === productId,
       );
       if (existingItem) {
-        existingItem.quantity = quantity;
+        existingItem.quantity += quantity;
       } else {
         buyer.cart.push({
           productId: products[index],

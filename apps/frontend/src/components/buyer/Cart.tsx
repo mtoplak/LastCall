@@ -87,7 +87,6 @@ function Cart() {
 
 	const handleRemoveFromCart = async (id: string) => {
 		const response = await api.delete(`/buyers/${user.email}/cart/${id}`);
-		//console.log(response.data);
 		setCartItems(response.data.cart);
 	};
 
@@ -101,13 +100,10 @@ function Cart() {
 				},
 			],
 		});
-		//console.log(response.data.cart);
 		setCartItems(response.data.cart);
 	};
 
 	const handleCheckout = async () => {
-		//console.log('dodali bomo v order');
-
 		const totalPrice =
 			groupedProducts[selectedSeller!._id].reduce((accumulator, item) => {
 				const itemTotalPrice = item.quantity * item.product.price;
@@ -137,9 +133,10 @@ function Cart() {
 			setCity('');
 			setCountry('');
 			setLastDateOfDelivery(getCurrentDate());
-			/*const filteredObj = Object.fromEntries(
-				Object.entries(obj).filter(([key, _]) => key !== propertyToDelete)
-			  ) */ // TODO pokaži košarico brez izdelkov, ki si jih kupil
+			const updatedCartItems = cartItems!.filter(
+				(item) => item.product.seller._id !== selectedSeller!._id
+			);
+			setCartItems(updatedCartItems);
 			setAlert(true);
 		} catch (error: any) {
 			setError(error.response.data.message);

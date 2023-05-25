@@ -15,7 +15,6 @@ import {
 	Typography,
 } from '@mui/material';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-
 import { IDrink } from 'models/drink';
 import { MouseEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
