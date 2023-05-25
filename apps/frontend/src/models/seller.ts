@@ -15,4 +15,6 @@ export interface ISeller {
 	coordinates: number[];
 	orders: any[];
 	products: any[];
+	maxDistance: number;
+  	minPrice: number;
 }
