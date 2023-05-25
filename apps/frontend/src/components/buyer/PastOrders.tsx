@@ -1,34 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import {
-	Box,
-	Container,
-	Typography,
-	Card,
-	CardContent,
-	Grid,
-	Divider,
-} from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Box, Container, Typography, Grid, Divider } from '@mui/material';
 import NavbarB from './NavbarB';
 import api from '../../services/api';
 import { IOrder } from 'models/order';
 import Order from './Order';
 import Footer from 'components/homepage/Footer';
+import { useUserAuth } from 'context/AuthContext';
 
 function PastOrders() {
 	const [pastOrders, setPastOrders] = useState<IOrder[]>([]);
+	const { user } = useUserAuth();
 
 	useEffect(() => {
+		if (!user) return;
 		const fetchPastOrders = async () => {
 			try {
-				const response = await api.get('/orders');
+				const response = await api.post('/buyers/orders', {
+					email: user.email,
+				});
 				setPastOrders(response.data);
 			} catch (error) {
 				console.log(error);
 			}
 		};
-
 		fetchPastOrders();
-	}, []);
+	}, [user]);
 
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
@@ -43,14 +39,12 @@ function PastOrders() {
 					</Typography>
 				) : (
 					pastOrders.map((order, index) => (
-                    <Grid item xs={8} key={index}>
-                        <Order
-                                order={order}
-                                />
-                    <Divider sx={{mt: 2, mb: 2}} />
-                    </Grid>
-                    )
-				))}
+						<Grid item xs={8} key={index}>
+							<Order order={order} />
+							<Divider sx={{ mt: 2, mb: 2 }} />
+						</Grid>
+					))
+				)}
 			</Container>
 			<Footer />
 		</Box>

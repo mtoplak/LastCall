@@ -7,15 +7,21 @@ import React, {
 } from 'react';
 import api from 'services/api';
 import { useUserAuth } from './AuthContext';
+import { IDrink } from 'models/drink';
+
+interface CartProduct {
+	product: IDrink & { _id: string };
+	quantity: number;
+}
 
 interface CartContextProps {
-	numOfProductsInCart: number;
-	setNumOfProductsInCart: Dispatch<SetStateAction<number>>;
+	cartProducts: CartProduct[];
+	setCartProducts: Dispatch<SetStateAction<CartProduct[]>>;
 }
 
 const initialCartContextValue: CartContextProps = {
-	numOfProductsInCart: 0,
-	setNumOfProductsInCart: () => {},
+	cartProducts: [],
+	setCartProducts: () => {},
 };
 
 const CartContext = React.createContext(initialCartContextValue);
@@ -25,8 +31,8 @@ export const CartContextProvider = ({
 }: {
 	children: React.ReactNode;
 }) => {
-	const [numOfProductsInCart, setNumOfProductsInCart] = useState<number>(
-		initialCartContextValue.numOfProductsInCart
+	const [cartProducts, setCartProducts] = useState<CartProduct[]>(
+		initialCartContextValue.cartProducts
 	);
 	const { user } = useUserAuth();
 
@@ -36,19 +42,19 @@ export const CartContextProvider = ({
 				const response = await api.post('/buyers/getcart', {
 					email: user?.email,
 				});
-				setNumOfProductsInCart(response.data.cart.length);
+				setCartProducts(response.data.cart);
 			} catch (error: any) {
 				console.log(error.message);
 			}
 		};
 
-		fetchCart();
+		if (user) {
+			fetchCart();
+		}
 	}, [user]);
 
 	return (
-		<CartContext.Provider
-			value={{ numOfProductsInCart, setNumOfProductsInCart }}
-		>
+		<CartContext.Provider value={{ cartProducts, setCartProducts }}>
 			{children}
 		</CartContext.Provider>
 	);
