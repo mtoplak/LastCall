@@ -10,6 +10,7 @@ import {
 import { OrdersService } from './orders.service';
 import { Order } from './order.model';
 import { CreateUpdateOrderDto } from './createUpdateOrder.dto';
+import { SuccessResponse } from 'src/common.interfaces';
 
 @Controller('orders')
 export class OrdersController {
@@ -50,7 +51,7 @@ export class OrdersController {
   }
 
   @Delete(':id')
-  async removeOrder(@Param('id') id: string): Promise<{ success: boolean }> {
+  async removeOrder(@Param('id') id: string): Promise<SuccessResponse> {
     await this.ordersService.removeOrder(id);
     return { success: true };
   }

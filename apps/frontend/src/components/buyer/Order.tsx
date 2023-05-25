@@ -32,9 +32,11 @@ interface OrderProps {
 	city: string;
 	country: string;
 	seller: ISeller;
+	uid: string;
 }
 
-const Order: React.FC<OrderProps> = ({ _id,
+const Order: React.FC<OrderProps> = ({
+	_id,
 	products,
 	total,
 	dateOfPurchase,
@@ -42,7 +44,9 @@ const Order: React.FC<OrderProps> = ({ _id,
 	address,
 	city,
 	country,
-	seller, }: OrderProps) => {
+	seller,
+	uid,
+}: OrderProps) => {
 	return (
 		<Accordion>
 			<AccordionSummary
@@ -73,7 +77,7 @@ const Order: React.FC<OrderProps> = ({ _id,
 					<Grid item xs={12} sm={6}>
 						<Typography sx={{ width: '33%', flexShrink: 0 }}>
 							<b>Order ID: </b>
-							{_id}
+							{uid}
 						</Typography>
 					</Grid>
 					<Grid item xs={12} sm={6}>

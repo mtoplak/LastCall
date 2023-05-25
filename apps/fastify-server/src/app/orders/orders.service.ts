@@ -4,10 +4,15 @@ import { Model } from 'mongoose';
 import { Order } from './order.model';
 import { OrdersRepository } from './orders.repository';
 import { CreateUpdateOrderDto } from './createUpdateOrder.dto';
+import { BuyersService } from '../buyers/buyers.service';
+import { SuccessResponse } from 'src/common.interfaces';
 
 @Injectable()
 export class OrdersService {
-  constructor(private readonly ordersRepository: OrdersRepository) {}
+  constructor(
+    private readonly ordersRepository: OrdersRepository,
+    private readonly buyersService: BuyersService,
+  ) {}
 
   async addOrder(
     orderData: CreateUpdateOrderDto,
@@ -15,12 +20,14 @@ export class OrdersService {
     sellerEmail: string,
     buyerEmail: string,
   ): Promise<Order> {
-    return await this.ordersRepository.create(
+    const order = await this.ordersRepository.create(
       orderData,
       productData,
       sellerEmail,
       buyerEmail,
     );
+    await this.buyersService.deleteAllFromCart(buyerEmail);
+    return order;
   }
 
   async getAllOrders(): Promise<Order[]> {
@@ -51,7 +58,7 @@ export class OrdersService {
     }
   }
 
-  async removeOrder(orderId: string): Promise<{ success: boolean }> {
+  async removeOrder(orderId: string): Promise<SuccessResponse> {
     await this.ordersRepository.deleteOne({
       _id: orderId,
     });

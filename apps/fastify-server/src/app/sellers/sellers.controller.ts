@@ -12,6 +12,7 @@ import { Seller } from './sellers.model';
 import { CreateUpdateSellerDto } from './createUpdateSeller.dto';
 import { Product } from '../products/product.model';
 import { Order } from '../orders/order.model';
+import { SuccessResponse } from 'src/common.interfaces';
 
 @Controller('sellers')
 export class SellersController {
@@ -52,17 +53,22 @@ export class SellersController {
     @Param('email') email: string,
     @Body() updateSellerDto: CreateUpdateSellerDto,
   ): Promise<Seller> {
-    return await this.sellersService.updateSellerByEmail(email, updateSellerDto);
+    return await this.sellersService.updateSellerByEmail(
+      email,
+      updateSellerDto,
+    );
   }
 
   @Delete(':id')
-  async removeSeller(@Param('id') id: string): Promise<{ success: boolean }> {
+  async removeSeller(@Param('id') id: string): Promise<SuccessResponse> {
     await this.sellersService.removeSeller(id);
     return { success: true };
   }
 
   @Delete('/delete/:email')
-  async removeSellerByEmail(@Param('email') email: string): Promise<{ success: boolean }> {
+  async removeSellerByEmail(
+    @Param('email') email: string,
+  ): Promise<SuccessResponse> {
     await this.sellersService.removeSellerByEmail(email);
     return { success: true };
   }
@@ -75,16 +81,12 @@ export class SellersController {
   }
 
   @Get('/:id/products')
-  async getAllProductsBySellerId(
-    @Param('id') id: string,
-  ): Promise<Product[]> {
+  async getAllProductsBySellerId(@Param('id') id: string): Promise<Product[]> {
     return this.sellersService.getAllProductsBySellerId(id);
   }
 
   @Post('/ordersbyemail')
-  async getAllOrdersBySeller(
-    @Body('email') email: string,
-  ): Promise<Order[]> {
+  async getAllOrdersBySeller(@Body('email') email: string): Promise<Order[]> {
     return this.sellersService.getAllOrdersBySeller(email);
   }
 }

@@ -14,6 +14,7 @@ import { IOrder } from 'models/order';
 import api from 'services/api';
 import NavbarS from './NavbarS';
 import { useUserAuth } from 'context/AuthContext';
+import { Link } from 'react-router-dom';
 
 function SellerOrdersPage() {
 	const [orders, setOrders] = useState<IOrder[]>([]);
@@ -199,7 +200,7 @@ function SellerOrdersPage() {
 													>
 														<b>
 															ORDER ID:{' '}
-															{order._id}
+															{order.uid}
 														</b>
 													</Typography>
 													<Typography
@@ -229,7 +230,7 @@ function SellerOrdersPage() {
 										<Divider />
 										<Grid container spacing={2}>
 											<Grid item xs={1} />
-											<Grid item xs={5}>
+											<Grid item xs={4}>
 												<CardContent>
 													<Typography
 														variant="subtitle1"
@@ -253,7 +254,7 @@ function SellerOrdersPage() {
 													</Typography>
 												</CardContent>
 											</Grid>
-											<Grid item xs={5}>
+											<Grid item xs={4}>
 												<CardContent>
 													<Typography
 														variant="subtitle1"
@@ -278,6 +279,29 @@ function SellerOrdersPage() {
 														Date of purchase: DATE
 													</Typography>
 												</CardContent>
+											</Grid>
+											<Grid item xs={2}>
+												<Link
+													to={`/order/${order._id}`}
+													key={order._id}
+												>
+													<Button
+														variant="outlined"
+														sx={{
+															ml: 3,
+															my: 5,
+															color: '#878787',
+															border: '2px solid #878787',
+															'&:hover': {
+																border: '2px solid #878787',
+																backgroundColor:
+																	'#e0e0e0',
+															},
+														}}
+													>
+														details
+													</Button>
+												</Link>
 											</Grid>
 										</Grid>
 									</Card>

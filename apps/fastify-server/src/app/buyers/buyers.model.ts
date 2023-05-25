@@ -8,7 +8,7 @@ export const BuyerSchema = new Schema({
   title: { type: String },
   registerNumber: { type: Number },
   targetedMarkets: [{ type: String }],
-  address: { type: String, required: true }, //array naredi
+  address: { type: String, required: true },
   city: { type: String, required: true },
   country: { type: String, required: true },
   phone: { type: String, required: true },
@@ -35,7 +35,12 @@ export interface Buyer extends Document {
   phone: string;
   email: string;
   orders: string[];
-  cart: { productId: Product; quantity: number; }[];
+  cart: { productId: Product; quantity: number }[];
+}
+
+export interface Cart {
+  productId: string;
+  quantity: number;
 }
 
 export const BuyerModel: Model<Buyer> = model<Buyer>('Buyer', BuyerSchema);

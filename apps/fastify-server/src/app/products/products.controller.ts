@@ -6,11 +6,11 @@ import {
   Param,
   Patch,
   Delete,
-  NotFoundException,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from './product.model';
 import { CreateUpdateProductDto } from './createUpdateProduct.dto';
+import { SuccessResponse } from 'src/common.interfaces';
 
 @Controller('products')
 export class ProductsController {
@@ -31,7 +31,7 @@ export class ProductsController {
 
   @Get(':id')
   async getSingleProduct(@Param('id') id: string): Promise<Product> {
-      return await this.productService.getSingleProduct(id);
+    return await this.productService.getSingleProduct(id);
   }
 
   @Patch(':id')
@@ -39,14 +39,16 @@ export class ProductsController {
     @Param('id') productId: string,
     @Body() updateProductDto: CreateUpdateProductDto,
   ): Promise<Product> {
-    const result = await this.productService.updateProduct(productId, updateProductDto);
+    const result = await this.productService.updateProduct(
+      productId,
+      updateProductDto,
+    );
     return result;
   }
 
   @Delete(':id')
-  async removeProduct(@Param('id') id: string): Promise<{ success: boolean }> {
+  async removeProduct(@Param('id') id: string): Promise<SuccessResponse> {
     await this.productService.removeProduct(id);
     return { success: true };
   }
-
 }

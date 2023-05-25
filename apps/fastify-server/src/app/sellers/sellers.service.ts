@@ -4,6 +4,7 @@ import { SellersRepository } from './sellers.repository';
 import { CreateUpdateSellerDto } from './createUpdateSeller.dto';
 import { Product } from '../products/product.model';
 import { Order } from '../orders/order.model';
+import { SuccessResponse } from 'src/common.interfaces';
 
 @Injectable()
 export class SellersService {
@@ -75,14 +76,14 @@ export class SellersService {
     return updatedSeller;
   }
 
-  async removeSeller(sellerId: string): Promise<{ success: boolean }> {
+  async removeSeller(sellerId: string): Promise<SuccessResponse> {
     await this.sellersRepository.deleteOne({
       _id: sellerId,
     });
     return { success: true };
   }
 
-  async removeSellerByEmail(email: string): Promise<{ success: boolean }> {
+  async removeSellerByEmail(email: string): Promise<SuccessResponse> {
     await this.sellersRepository.deleteOne({
       email: email,
     });

@@ -87,7 +87,7 @@ function Cart() {
 
 	const handleRemoveFromCart = async (id: string) => {
 		const response = await api.delete(`/buyers/${user.email}/cart/${id}`);
-		console.log(response.data);
+		//console.log(response.data);
 		setCartItems(response.data.cart);
 	};
 
@@ -101,12 +101,12 @@ function Cart() {
 				},
 			],
 		});
-		console.log(response.data.cart);
+		//console.log(response.data.cart);
 		setCartItems(response.data.cart);
 	};
 
 	const handleCheckout = async () => {
-		console.log('dodali bomo v order');
+		//console.log('dodali bomo v order');
 
 		const totalPrice =
 			groupedProducts[selectedSeller!._id].reduce((accumulator, item) => {
@@ -334,7 +334,7 @@ function Cart() {
 							<AlertTitle>Order placed!</AlertTitle>
 							Go to{' '}
 							<Link to="/orders">
-								<span className="blackLink">cart</span>
+								<span className="blackLink">orders</span>
 							</Link>{' '}
 							to see details.
 						</Alert>

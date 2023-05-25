@@ -53,6 +53,7 @@ function PastOrders() {
                                 country={order.country}
                                 seller={order.seller} 
                                 products={[]} 
+								uid={order.uid}
                                 />
                     <Divider sx={{mt: 2, mb: 2}} />
                     </Grid>

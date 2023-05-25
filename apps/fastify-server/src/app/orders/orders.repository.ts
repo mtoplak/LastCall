@@ -5,6 +5,7 @@ import { FilterQuery, Model } from 'mongoose';
 import { Product } from '../products/product.model';
 import { Buyer } from '../buyers/buyers.model';
 import { Seller } from '../sellers/sellers.model';
+import { randomInt } from 'crypto';
 
 @Injectable()
 export class OrdersRepository {
@@ -66,11 +67,15 @@ export class OrdersRepository {
       product: { ...product.toObject() },
       quantity: quantities[index],
     }));
+
+    const uid = await this.generateUid();
+
     const newOrder = new this.ordersModel({
       ...restOrderData,
       products: orderedProducts,
       buyer: buyer._id,
       seller: seller._id,
+      uid: uid,
     });
     const result = await newOrder.save();
 
@@ -78,6 +83,7 @@ export class OrdersRepository {
     await seller.save();
 
     buyer.orders.push(result._id);
+
     await buyer.save();
 
     return result;
@@ -90,10 +96,13 @@ export class OrdersRepository {
     return await this.ordersModel.findOneAndUpdate(orderFilterQuery, order);
   }
 
-  async deleteOne(
-    orderFilterQuery: FilterQuery<Order>,
-  ): Promise<{ success: boolean }> {
+  async deleteOne(orderFilterQuery: FilterQuery<Order>): Promise<void> {
     await this.ordersModel.deleteOne(orderFilterQuery);
-    return { success: true };
+  }
+
+  async generateUid(): Promise<string> {
+    const uid = randomInt(100000, 999999).toString();
+    console.log(uid);
+    return uid;
   }
 }

@@ -42,9 +42,12 @@ function SingleOrder() {
 		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
 			<NavbarB />
 			<Container>
-				<Typography variant="h4" component="h1" mt={4} mb={2}>
-					Past Orders
-				</Typography>
+				<Typography
+					variant="h4"
+					component="h1"
+					mt={4}
+					mb={2}
+				></Typography>
 				<Grid container spacing={2}>
 					{order && (
 						<>
@@ -63,7 +66,7 @@ function SingleOrder() {
 									<Typography
 										sx={{ mb: 2, color: 'text.secondary' }}
 									>
-										Thanks for your order! Check out the
+										Thank you for your order! Check out the
 										details below.
 									</Typography>
 								</Card>
@@ -82,12 +85,12 @@ function SingleOrder() {
 									</Typography>
 									<Typography
 										color={getStatusColor(order.status)}
-										sx={{ mb: 2}}
+										sx={{ mb: 2 }}
 									>
 										<b>{order.status}</b>
 									</Typography>
 									<Typography variant="h6" sx={{ mb: 4 }}>
-										<b>Order ID:</b> {order._id}
+										<b>Order ID:</b> {order.uid}
 									</Typography>
 									<Divider />
 									<Typography
@@ -130,17 +133,17 @@ function SingleOrder() {
 									<Typography
 										sx={{ color: 'text.secondary' }}
 									>
-										SubTotal: {order.totalPrice}€
+										SubTotal: {} €
 									</Typography>
 									<Typography
 										sx={{ color: 'text.secondary' }}
 									>
-										Delivery: delivery€
+										Delivery: {order.deliveryCost} €
 									</Typography>
 									<Typography
 										sx={{ mt: 1, color: 'text.secondary' }}
 									>
-										<b>Total: total€</b>
+										<b>Total: {order.totalPrice} €</b>
 									</Typography>
 								</Card>
 								<Card
