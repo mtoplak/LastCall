@@ -14,10 +14,12 @@ import { ThemeProvider } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useUserAuth } from 'context/AuthContext';
 import { darkTheme } from 'assets/styles/styles';
+import { useCartContext } from 'context/CartContext';
 
 function NavbarB() {
 	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 	const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+	const { numOfProductsInCart } = useCartContext();
 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);
@@ -175,7 +177,7 @@ function NavbarB() {
 										display: 'block',
 									}}
 								>
-									Cart (2)
+									Cart ({numOfProductsInCart})
 								</Button>
 							</Link>
 						)}

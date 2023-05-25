@@ -61,7 +61,8 @@ function Suppliers() {
 			filterName === '' ||
 			seller.title.toLowerCase().includes(filterName.toLowerCase());
 		const typeMatch =
-			filterType === 'any' || seller.companyType === filterType.toLowerCase();
+			filterType === 'any' ||
+			seller.companyType.toLowerCase() === filterType.toLowerCase();
 		const locationMatch =
 			filterLocation === 'any' ||
 			seller.country

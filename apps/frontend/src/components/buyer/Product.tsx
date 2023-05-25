@@ -23,6 +23,7 @@ import NavbarB from './NavbarB';
 import CustomBox from 'components/ui/CustomBox';
 import { Link } from 'react-router-dom';
 import { useUserAuth } from 'context/AuthContext';
+import { useCartContext } from 'context/CartContext';
 
 function Product() {
 	const [drink, setDrink] = useState<IDrink>();
@@ -32,12 +33,13 @@ function Product() {
 	const [showWarning, setShowWarning] = useState(false);
 	const { id } = useParams<{ id: string }>();
 	const { user, role } = useUserAuth();
+	const { numOfProductsInCart, setNumOfProductsInCart } = useCartContext();
+	console.log(numOfProductsInCart);
 
 	useEffect(() => {
 		const fetchProductData = async () => {
 			try {
 				const response = await api.get('/products/' + id);
-				//console.log(response.data);
 				setDrink(response.data);
 			} catch (error) {
 				setFetchError(true);
@@ -77,8 +79,8 @@ function Product() {
 					},
 				],
 			});
-			console.log(response.data);
 			setShowAlert(true);
+			setNumOfProductsInCart(numOfProductsInCart + 1);
 		} catch (error: any) {
 			console.error(error);
 			throw error;

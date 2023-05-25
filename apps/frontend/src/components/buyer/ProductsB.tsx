@@ -22,7 +22,6 @@ const Products = () => {
 		const fetchProducts = async () => {
 			try {
 				const response = await api.get('/products');
-				console.log(response.data.cart);
 				setDrinks(response.data);
 			} catch (error) {
 				throw error;
