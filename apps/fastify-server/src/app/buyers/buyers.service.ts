@@ -143,6 +143,38 @@ export class BuyersService {
     return { cart: populatedCart };
   }
 
+  async deleteProductFromCart(
+    email: string,
+    productId: string,
+  ): Promise<CartResponse> {
+    const buyer = await this.buyersRepository.findOne({ email });
+    if (!buyer) {
+      throw new NotFoundException('Buyer not found');
+    }
+
+    const existingProduct = buyer.cart.some(
+      (item) => item.productId._id.toString() === productId,
+    );
+    if (!existingProduct) {
+      throw new NotFoundException('Product not found in the cart');
+    }
+
+    buyer.cart = buyer.cart.filter(
+      (item) => item.productId._id.toString() !== productId,
+    );
+
+    await buyer.save();
+
+    const updatedCart = buyer.cart.map((item) => {
+      return {
+        product: item.productId,
+        quantity: item.quantity,
+      };
+    });
+
+    return { cart: updatedCart };
+  }
+
   async deleteProductsFromCart(
     email: string,
     productIds: string[]

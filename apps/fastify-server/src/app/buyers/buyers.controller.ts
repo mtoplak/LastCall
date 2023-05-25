@@ -85,6 +85,14 @@ export class BuyersController {
     return result;
   }
 
+  @Delete(':email/cart/:productId')
+  async deleteProductFromCart(
+    @Param('email') email: string,
+    @Param('productId') productId: string,
+  ): Promise<CartResponse> {
+    return this.buyersService.deleteProductFromCart(email, productId);
+  }
+
   @Delete('/:email/deletefromcart')
   async deleteProductsFromCart(
     @Param('email') email: string,
