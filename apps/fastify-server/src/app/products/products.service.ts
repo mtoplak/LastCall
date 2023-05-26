@@ -3,10 +3,15 @@ import { Product } from './product.model';
 import { ProductsRepository } from './products.repository';
 import { CreateUpdateProductDto } from './createUpdateProduct.dto';
 import { SuccessResponse } from 'src/data.response';
+import { BuyersRepository } from '../buyers/buyers.repository';
+import { Cart } from '../buyers/buyers.model';
 
 @Injectable()
 export class ProductsService {
-  constructor(private readonly productsRepository: ProductsRepository) {}
+  constructor(
+    private readonly productsRepository: ProductsRepository,
+    private readonly buyersRepository: BuyersRepository,
+  ) {}
 
   async createProduct(
     productData: CreateUpdateProductDto,
@@ -59,5 +64,9 @@ export class ProductsService {
       _id: productId,
     });
     return { success: true };
+  }
+
+  async removeFromStock(productData: Cart[]): Promise<void> {
+    const productIds = productData.map((item) => item.productId);
   }
 }

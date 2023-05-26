@@ -31,29 +31,35 @@ function PastOrders() {
 	}, []);
 
 	return (
-		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
-			<NavbarB />
-			<Container>
-				<Typography variant="h4" component="h1" mt={4} mb={2}>
-					Past Orders
-				</Typography>
-				{pastOrders.length === 0 ? (
-					<Typography variant="body1" mb={4}>
-						You have no past orders.
+		<>
+			<Box
+				sx={{
+					backgroundColor: '#f2f2f2',
+					minHeight: '100vh',
+					minWidth: '100vh',
+				}}
+			>
+				<NavbarB />
+				<Container>
+					<Typography variant="h4" component="h1" mt={4} mb={2}>
+						Past Orders
 					</Typography>
-				) : (
-					pastOrders.map((order, index) => (
-                    <Grid item xs={8} key={index}>
-                        <Order
-                                order={order}
-                                />
-                    <Divider sx={{mt: 2, mb: 2}} />
-                    </Grid>
-                    )
-				))}
-			</Container>
+					{pastOrders.length === 0 ? (
+						<Typography variant="body1" mb={4}>
+							You have no past orders.
+						</Typography>
+					) : (
+						pastOrders.map((order, index) => (
+							<Grid item xs={8} key={index}>
+								<Order order={order} />
+								<Divider sx={{ mt: 2, mb: 2 }} />
+							</Grid>
+						))
+					)}
+				</Container>
+			</Box>
 			<Footer />
-		</Box>
+		</>
 	);
 }
 

@@ -187,6 +187,7 @@ export class BuyersService {
     const existingProducts = buyer.cart.some((item) =>
       productIds.includes(item.productId._id.toString())
     );
+    
     if (!existingProducts) {
       throw new NotFoundException('Products not found in the cart');
     }
@@ -206,7 +207,6 @@ export class BuyersService {
   
     return { cart: updatedCart };
   }
-  
 
   async deleteAllFromCart(email: string): Promise<CartResponse> {
     const buyer = await this.buyersRepository.findOne({ email });

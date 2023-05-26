@@ -4,6 +4,7 @@ import { OrdersRepository } from './orders.repository';
 import { CreateUpdateOrderDto } from './createUpdateOrder.dto';
 import { BuyersService } from '../buyers/buyers.service';
 import { SuccessResponse } from 'src/data.response';
+import { Cart } from '../buyers/buyers.model';
 
 @Injectable()
 export class OrdersService {
@@ -14,7 +15,7 @@ export class OrdersService {
 
   async addOrder(
     orderData: CreateUpdateOrderDto,
-    productData: { productId: string; quantity: number }[],
+    productData: Cart[],
     sellerEmail: string,
     buyerEmail: string,
   ): Promise<Order> {
@@ -24,7 +25,8 @@ export class OrdersService {
       sellerEmail,
       buyerEmail,
     );
-    await this.buyersService.deleteAllFromCart(buyerEmail);
+    const productIds = productData.map(item => item.productId);
+    await this.buyersService.deleteProductsFromCart(buyerEmail, productIds);
     return order;
   }
 
