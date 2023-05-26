@@ -20,7 +20,6 @@ const Buyer = () => {
 			<NavbarB />
 			{location.pathname === '/' && <Hero />}
 			<Products />
-			<Footer />
 		</Box>
 	);
 };

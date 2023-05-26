@@ -12,7 +12,6 @@ function Seller() {
 			<NavbarS />
 			{location.pathname === 'seller' && <HeroS />}
 			<ProductsS />
-			<Footer />
 		</>
 	);
 }

@@ -244,6 +244,9 @@ function Product() {
 												placeholder="1"
 												type="number"
 												fullWidth
+												inputProps={{
+													min: 1,
+												}}
 											/>
 										</Box>
 										<Box>

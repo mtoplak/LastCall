@@ -149,12 +149,9 @@ docker-compose up
 │           │   │   └───login
 │           │   └───ui
 │           ├───context
-│           ├───mobx-store
 │           ├───models
 │           ├───pages
-│           ├───redux-store
 │           ├───services
-│           ├───shared
 │           └───utils
 ├───node_modules
 └───packages

@@ -34,7 +34,7 @@ export const CartContextProvider = ({
 	const [cartProducts, setCartProducts] = useState<CartProduct[]>(
 		initialCartContextValue.cartProducts
 	);
-	const { user } = useUserAuth();
+	const { user, role } = useUserAuth();
 
 	useEffect(() => {
 		const fetchCart = async () => {
@@ -48,7 +48,7 @@ export const CartContextProvider = ({
 			}
 		};
 
-		if (user) {
+		if (user && role === 'buyer') {
 			fetchCart();
 		}
 	}, [user]);
