@@ -9,11 +9,11 @@ import {
 	CardMedia,
 } from '@mui/material';
 import { IOrder } from 'models/order';
-import { IDrink } from 'models/drink';
 import { useParams } from 'react-router-dom';
 import api from 'services/api';
 import NavbarB from './NavbarB';
-import { ISeller } from 'models/seller';
+import { formatDate } from 'utils/formatDate';
+import { getOrderStatusColor } from 'utils/getOrderStatusColor';
 
 function SingleOrder() {
 	const [order, setOrder] = useState<IOrder>();
@@ -31,30 +31,6 @@ function SingleOrder() {
 		};
 		fetchData();
 	}, [id]);
-
-	const getStatusColor = (status: string) => {
-		switch (status) {
-			case 'Order placed':
-				return 'primary';
-			case 'In-Transit':
-				return 'orange';
-			case 'Delivered':
-				return 'green';
-			case 'Cancel':
-				return 'error';
-			default:
-				return 'inherit';
-		}
-	};
-	
-	function formatDate(date: Date): string {
-		const options = {
-			day: 'numeric',
-			month: 'numeric',
-			year: 'numeric',
-		} as Intl.DateTimeFormatOptions;
-		return date.toLocaleDateString(undefined, options);
-	}
 
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
@@ -102,7 +78,9 @@ function SingleOrder() {
 										<b>ORDER STATUS:</b>
 									</Typography>
 									<Typography
-										color={getStatusColor(order.status)}
+										color={getOrderStatusColor(
+											order.status
+										)}
 										sx={{ mb: 2 }}
 									>
 										<b>{order.status}</b>
@@ -190,64 +168,72 @@ function SingleOrder() {
 											Products
 										</Typography>
 										{order.products.map((orderProduct) => (
-											<>
-											<Grid
-												container
+											<React.Fragment
 												key={orderProduct.product._id}
-												spacing={2}
-												sx={{
-													mb: 2,
-													color: 'text.secondary',
-												}}
 											>
-												<Grid item xs={6} md={2} sm={4}>
-													<Card>
-														<CardMedia
-															component="img"
-															image={
+												<Grid
+													container
+													spacing={2}
+													sx={{
+														mb: 2,
+														color: 'text.secondary',
+													}}
+												>
+													<Grid item xs={6} md={2}>
+														<Card>
+															<CardMedia
+																component="img"
+																image={
+																	orderProduct
+																		.product
+																		.picture
+																}
+																sx={{
+																	maxHeight: 200,
+																}}
+															/>
+														</Card>
+													</Grid>
+													<Grid
+														item
+														xs={6}
+														md={10}
+														sx={{ my: 4 }}
+													>
+														<Typography>
+															<b>Product ID:</b>{' '}
+															{
+																orderProduct
+																	.product._id
+															}
+														</Typography>
+														<Typography>
+															<b>Name:</b>{' '}
+															{
 																orderProduct
 																	.product
-																	.picture
+																	.title
 															}
-															sx={{
-																maxHeight: 200,
-															}}
-														/>
-													</Card>
+														</Typography>
+														<Typography>
+															<b>Price:</b>{' '}
+															{
+																orderProduct
+																	.product
+																	.price
+															}{' '}
+															€
+														</Typography>
+														<Typography>
+															<b>Quantity:</b>{' '}
+															{
+																orderProduct.quantity
+															}
+														</Typography>
+													</Grid>
 												</Grid>
-												<Grid item xs={6} md={10} sx={{my: 4}} sm={8}>
-													<Typography>
-														<b>Product ID:</b>{' '}
-														{
-															orderProduct.product
-																._id
-														}
-													</Typography>
-													<Typography>
-														<b>Name:</b>{' '}
-														{
-															orderProduct.product
-																.title
-														}
-													</Typography>
-													<Typography>
-														<b>Price:</b>{' '}
-														{
-															orderProduct.product
-																.price
-														} €
-													</Typography>
-													<Typography>
-														<b>Quantity:</b>{' '}
-														{
-															orderProduct.quantity
-														}
-													</Typography>
-												</Grid>
-												
-											</Grid>
-											<Divider sx={{my: 2 }} />
-											</>
+												<Divider sx={{ my: 2 }} />
+											</React.Fragment>
 										))}
 									</Grid>
 								</Card>

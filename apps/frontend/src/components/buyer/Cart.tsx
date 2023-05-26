@@ -28,6 +28,7 @@ import { IDrink } from 'models/drink';
 import { style } from 'assets/styles/styles';
 import { getCurrentDate } from '../../utils/getCurrentDate';
 import { ISeller } from 'models/seller';
+import { useCartContext } from 'context/CartContext';
 
 interface GroupedProduct {
 	product: IDrink;
@@ -52,6 +53,7 @@ function Cart() {
 	const [selectedSeller, setSelectedSeller] = useState<ISeller>();
 	const [groupedProducts, setGroupedProducts] = useState<SellerGroup>({});
 	const [alert, setAlert] = useState(false);
+	const { cartProducts, setCartProducts } = useCartContext();
 
 	useEffect(() => {
 		if (!user) return;
@@ -62,7 +64,7 @@ function Cart() {
 			setCartItems(response.data.cart);
 			const groupedProducts = groupProductsBySeller(response.data.cart);
 			setGroupedProducts(groupedProducts);
-			console.log(groupedProducts);
+			//console.log(groupedProducts);
 		};
 		fetchCart();
 	}, [user]);
@@ -108,7 +110,7 @@ function Cart() {
 			groupedProducts[selectedSeller!._id].reduce((accumulator, item) => {
 				const itemTotalPrice = item.quantity * item.product.price;
 				return accumulator + itemTotalPrice;
-			}, 0) + selectedSeller!.registerNumber;
+			}, 0) + selectedSeller!.deliveryCost;
 
 		const order = groupedProducts[selectedSeller!._id].map((item) => {
 			return {
@@ -136,6 +138,7 @@ function Cart() {
 			const updatedCartItems = cartItems!.filter(
 				(item) => item.product.seller._id !== selectedSeller!._id
 			);
+			setCartProducts(updatedCartItems);
 			setCartItems(updatedCartItems);
 			setAlert(true);
 		} catch (error: any) {
@@ -261,7 +264,7 @@ function Cart() {
 									.toFixed(2)}{' '}
 								€<br />
 								Delivery & Handling:{' '}
-								{products[0].product.seller.registerNumber} €
+								{products[0].product.seller.deliveryCost} €
 								<Divider />
 								Total:{' '}
 								{(
@@ -270,8 +273,7 @@ function Cart() {
 											total +
 											item.product.price * item.quantity,
 										0
-									) +
-									products[0].product.seller.registerNumber
+									) + products[0].product.seller.deliveryCost
 								).toFixed(2)}{' '}
 								€
 							</Typography>

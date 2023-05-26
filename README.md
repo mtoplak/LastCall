@@ -1,5 +1,21 @@
 # LastCall
 
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/mtoplak/LastCall) ![GitHub repo file count](https://img.shields.io/github/directory-file-count/mtoplak/LastCall) ![GitHub repo size](https://img.shields.io/github/repo-size/mtoplak/LastCall)
+
+## Description
+
+Last Call is an application that aims to facilitate the sales and delivery planning for beverage manufacturers while providing an easy way for customers to search for and order drinks for a specific location and day. The service primarily targets small, local beverage producers, helping them streamline their delivery operations. Customers include restaurants and bars that want to directly order beverages from the manufacturers. Additionally, individual customers who typically purchase larger quantities of drinks or prioritize delivery dates can also use the platform.
+
+## Tech Stack
+
+- [React](https://react.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [NestJS](https://nestjs.com/)
+- [MongoDB](https://www.mongodb.com/)
+- [Firebase](https://firebase.google.com/)
+- [Docker](https://www.docker.com/)
+
+
 ## Installation and usage
 
 Install `node_modules` in the root directory
@@ -83,4 +99,66 @@ Available at `localhost:3000`.
 
 ```
 docker-compose up
+```
+
+
+## Project Structure
+
+```bash
+├───.husky
+├───.yarn
+│   ├───cache
+│   └───releases
+├───apps
+│   ├───fastify-server
+│   │   ├───dist
+│   │   │   └───app
+│   │   │       ├───authentication
+│   │   │       ├───buyers
+│   │   │       ├───orders
+│   │   │       ├───products
+│   │   │       └───sellers
+│   │   ├───src
+│   │   │   └───app
+│   │   │       ├───authentication
+│   │   │       ├───buyers
+│   │   │       ├───orders
+│   │   │       ├───products
+│   │   │       └───sellers
+│   │   └───test
+│   └───frontend
+│       ├───build
+│       │   └───static
+│       │       ├───css
+│       │       ├───js
+│       │       └───media
+│       ├───node_modules
+│       ├───public
+│       └───src
+│           ├───assets
+│           │   ├───icons
+│           │   ├───images
+│           │   └───styles
+│           ├───components
+│           │   ├───404
+│           │   ├───buyer
+│           │   │   └───login
+│           │   ├───homepage
+│           │   ├───routing
+│           │   ├───seller
+│           │   │   └───login
+│           │   └───ui
+│           ├───context
+│           ├───models
+│           ├───pages
+│           ├───services
+│           └───utils
+├───node_modules
+└───packages
+    └───core-lib
+        ├───build
+        │   └───ui
+        └───src
+            └───ui
+
 ```

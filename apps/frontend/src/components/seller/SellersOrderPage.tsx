@@ -16,6 +16,7 @@ import NavbarS from './NavbarS';
 import { useUserAuth } from 'context/AuthContext';
 import SearchOrdersInput from './SearchOrdersInput';
 import { Link } from 'react-router-dom';
+import { getOrderStatusColor } from 'utils/getOrderStatusColor';
 
 function SellerOrdersPage() {
 	const [orders, setOrders] = useState<IOrder[]>([]);
@@ -42,7 +43,6 @@ function SellerOrdersPage() {
 				console.log(error);
 			}
 		};
-
 		fetchOrders();
 	}, []);
 
@@ -73,30 +73,6 @@ function SellerOrdersPage() {
 			throw error;
 		}
 	};
-
-	const getStatusColor = (status: string) => {
-		switch (status) {
-			case 'Order placed':
-				return 'primary';
-			case 'In-Transit':
-				return 'orange';
-			case 'Delivered':
-				return 'green';
-			case 'Cancel':
-				return 'error';
-			default:
-				return 'inherit';
-		}
-	};
-
-	function formatDate(date: Date): string {
-		const options = {
-			day: 'numeric',
-			month: 'numeric',
-			year: 'numeric',
-		} as Intl.DateTimeFormatOptions;
-		return date.toLocaleDateString(undefined, options);
-	}
 
 	return (
 		<>
@@ -247,7 +223,7 @@ function SellerOrdersPage() {
 													<CardContent>
 														Current status:
 														<Typography
-															color={getStatusColor(
+															color={getOrderStatusColor(
 																order.status
 															)}
 														>
@@ -305,23 +281,15 @@ function SellerOrdersPage() {
 															variant="body2"
 															color="text.secondary"
 														>
-															Date of Delivery:{' '}
-															{formatDate(
-																new Date(
-																	order.lastDateOfDelivery
-																)
-															)}
+															Date of delivery:
+															DATE
 														</Typography>
 														<Typography
 															variant="body2"
 															color="text.secondary"
 														>
-															Date of Purchase:{' '}
-															{formatDate(
-																new Date(
-																	order.dateOfPurchase
-																)
-															)}
+															Date of purchase:
+															DATE
 														</Typography>
 													</CardContent>
 												</Grid>
@@ -410,7 +378,7 @@ function SellerOrdersPage() {
 													<CardContent>
 														Current status:
 														<Typography
-															color={getStatusColor(
+															color={getOrderStatusColor(
 																order.status
 															)}
 														>
@@ -468,23 +436,15 @@ function SellerOrdersPage() {
 															variant="body2"
 															color="text.secondary"
 														>
-															Date of Delivery:{' '}
-															{formatDate(
-																new Date(
-																	order.lastDateOfDelivery
-																)
-															)}
+															Date of delivery:
+															DATE
 														</Typography>
 														<Typography
 															variant="body2"
 															color="text.secondary"
 														>
-															Date of Purchase:{' '}
-															{formatDate(
-																new Date(
-																	order.dateOfPurchase
-																)
-															)}
+															Date of purchase:
+															DATE
 														</Typography>
 													</CardContent>
 												</Grid>

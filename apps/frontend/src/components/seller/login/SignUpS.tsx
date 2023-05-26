@@ -23,7 +23,13 @@ import { useEffect, useState } from 'react';
 import api from 'services/api';
 import CustomBox from 'components/ui/CustomBox';
 
-const markets = ['Slovenia', 'Italy', 'France', 'Austria', 'United Kingdom'];
+const markets: string[] = [
+	'Slovenia',
+	'Italy',
+	'France',
+	'Austria',
+	'United Kingdom',
+];
 const companyTypes = ['Winery', 'Brewery', 'Other'];
 
 const initialState = {
@@ -41,7 +47,10 @@ const initialState = {
 	companyType: '',
 	country: '',
 	registerNumber: 0,
-	targetedMarkets: [],
+	targetedMarkets: [] as string[],
+	minPrice: 0,
+	maxDistance: 0,
+	deliveryCost: 0,
 };
 
 const SignUpS = () => {
@@ -117,6 +126,14 @@ const SignUpS = () => {
 		} catch (error: any) {
 			setError(error.message);
 		}
+	};
+
+	const handleChangeMarkets = (event: any) => {
+		const selectedValues = event.target.value as string[];
+		setNewUserData((prevUserData) => ({
+			...prevUserData,
+			targetedMarkets: selectedValues,
+		}));
 	};
 
 	return (
@@ -309,9 +326,14 @@ const SignUpS = () => {
 													}
 													name="targetedMarkets"
 													sx={{ mb: 2 }}
-													onChange={handleChange}
+													onChange={(event) =>
+														handleChangeMarkets(
+															event
+														)
+													}
 													value={
-														newUserData.targetedMarkets
+														newUserData.targetedMarkets ||
+														[]
 													}
 													renderValue={(
 														selected: string[]
@@ -323,7 +345,9 @@ const SignUpS = () => {
 															value={market}
 														>
 															<Checkbox
-															// checked={newUserData.targetedMarket.indexOf(market) > -1} ???
+																checked={newUserData.targetedMarkets.includes(
+																	market
+																)}
 															/>
 															<ListItemText
 																primary={market}
@@ -339,6 +363,34 @@ const SignUpS = () => {
 												name="website"
 												value={newUserData.website}
 												onChange={handleChange}
+												sx={{ mb: 2 }}
+											/>
+											<TextField
+												label="Minimum order value"
+												placeholder="Enter minimum price"
+												fullWidth
+												name="minPrice"
+												value={newUserData.minPrice}
+												onChange={handleChange}
+												sx={{ mb: 2 }}
+											/>
+											<TextField
+												label="Maximum distance location"
+												placeholder="Enter maximum distance"
+												fullWidth
+												name="maxDistance"
+												value={newUserData.maxDistance}
+												onChange={handleChange}
+												sx={{ mb: 2 }}
+											/>
+											<TextField
+												label="Delivery Cost"
+												placeholder="Enter your delivery cost"
+												fullWidth
+												name="deliveryCost"
+												value={newUserData.deliveryCost}
+												onChange={handleChange}
+												sx={{ mb: 2 }}
 											/>
 										</Grid>
 									</Grid>

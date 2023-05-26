@@ -75,10 +75,10 @@ function SellerPage() {
 									my: 4,
 								}}
 							>
-								{seller?.title} is a {seller?.companyType} located in{' '}
-								{seller?.country} in {seller?.city} on{' '}
-								{seller?.address}. For any further information
-								please contact us!
+								{seller?.title} is a {seller?.companyType}{' '}
+								located in {seller?.country} in {seller?.city}{' '}
+								on {seller?.address}. For any further
+								information please contact us!
 							</Typography>
 							<Typography
 								variant="body2"
@@ -136,7 +136,6 @@ function SellerPage() {
 					</PropertiesTextBox>
 				</Container>
 			</Box>
-			<Footer />
 		</>
 	);
 }

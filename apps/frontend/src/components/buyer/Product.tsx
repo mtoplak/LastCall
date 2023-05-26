@@ -23,6 +23,8 @@ import NavbarB from './NavbarB';
 import CustomBox from 'components/ui/CustomBox';
 import { Link } from 'react-router-dom';
 import { useUserAuth } from 'context/AuthContext';
+import { useCartContext } from 'context/CartContext';
+import { isProductInArray } from 'utils/isProductInArray';
 
 function Product() {
 	const [drink, setDrink] = useState<IDrink>();
@@ -32,12 +34,12 @@ function Product() {
 	const [showWarning, setShowWarning] = useState(false);
 	const { id } = useParams<{ id: string }>();
 	const { user, role } = useUserAuth();
+	const { cartProducts, setCartProducts } = useCartContext();
 
 	useEffect(() => {
 		const fetchProductData = async () => {
 			try {
 				const response = await api.get('/products/' + id);
-				//console.log(response.data);
 				setDrink(response.data);
 			} catch (error) {
 				setFetchError(true);
@@ -77,8 +79,13 @@ function Product() {
 					},
 				],
 			});
-			console.log(response.data);
 			setShowAlert(true);
+			if (!isProductInArray(cartProducts, id)) {
+				setCartProducts([
+					...cartProducts,
+					{ product: drink, quantity: quantity },
+				]);
+			}
 		} catch (error: any) {
 			console.error(error);
 			throw error;
@@ -237,6 +244,9 @@ function Product() {
 												placeholder="1"
 												type="number"
 												fullWidth
+												inputProps={{
+													min: 1,
+												}}
 											/>
 										</Box>
 										<Box>

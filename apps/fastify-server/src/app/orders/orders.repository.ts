@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Order } from './order.model';
 import { FilterQuery, Model } from 'mongoose';
 import { Product } from '../products/product.model';
-import { Buyer } from '../buyers/buyers.model';
+import { Buyer, Cart } from '../buyers/buyers.model';
 import { Seller } from '../sellers/sellers.model';
 import { randomInt } from 'crypto';
 
@@ -36,7 +36,7 @@ export class OrdersRepository {
 
   async create(
     orderData: Partial<Order>,
-    productData: { productId: string; quantity: number }[],
+    productData: Cart[],
     sellerEmail: string,
     buyerEmail: string,
   ): Promise<Order> {
@@ -102,7 +102,6 @@ export class OrdersRepository {
 
   async generateUid(): Promise<string> {
     const uid = randomInt(100000, 999999).toString();
-    console.log(uid);
     return uid;
   }
 }
