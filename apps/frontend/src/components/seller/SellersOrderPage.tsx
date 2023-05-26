@@ -26,9 +26,9 @@ function SellerOrdersPage() {
 	const [filterStatus, setFilterStatus] = useState<string>('any');
 	const filteredOrders = orders.filter((order) => {
 		const statusMatch =
-		filterStatus === 'any' ||
-		order.status.toLowerCase() === filterStatus.toLowerCase();
-	return statusMatch;
+			filterStatus === 'any' ||
+			order.status.toLowerCase() === filterStatus.toLowerCase();
+		return statusMatch;
 	});
 
 	useEffect(() => {
@@ -89,6 +89,15 @@ function SellerOrdersPage() {
 		}
 	};
 
+	function formatDate(date: Date): string {
+		const options = {
+			day: 'numeric',
+			month: 'numeric',
+			year: 'numeric',
+		} as Intl.DateTimeFormatOptions;
+		return date.toLocaleDateString(undefined, options);
+	}
+
 	return (
 		<>
 			<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
@@ -108,7 +117,7 @@ function SellerOrdersPage() {
 					) : (
 						<Grid container spacing={2}>
 							<Grid item xs={12} md={2}>
-								<Card sx={{mb: 3}}>
+								<Card sx={{ mb: 3 }}>
 									<CardContent>
 										<Typography
 											variant="h6"
@@ -175,297 +184,337 @@ function SellerOrdersPage() {
 										</Box>
 									</CardContent>
 								</Card>
-								<SearchOrdersInput 
-								setFilterStatus={setFilterStatus}
-								filterStatus={filterStatus}
+								<SearchOrdersInput
+									setFilterStatus={setFilterStatus}
+									filterStatus={filterStatus}
 								/>
 							</Grid>
 							<Grid item xs={12} md={10}>
 								{filteredOrders.length > 0 &&
-								(filterStatus !== 'any') ? (
+								filterStatus !== 'any' ? (
 									filteredOrders.map((order) => (
 										<Card
-										key={order._id}
-										sx={{
-											alignItems: 'flex-start',
-											mb: 2,
-										}}
+											key={order._id}
+											sx={{
+												alignItems: 'flex-start',
+												mb: 2,
+											}}
 										>
-										<Grid container spacing={2}>
-											<Grid item xs={1} sx={{ mt: 3 }}>
-												<Checkbox
-													checked={checked.some(
-														(checkedOrder) =>
-															checkedOrder._id ===
-															order._id
-													)}
-													onChange={handleToggle(
-														order
-													)}
-													inputProps={{
-														'aria-label':
-															'select order',
-													}}
-												/>
-											</Grid>
-											<Grid item xs={8}>
-												<CardContent>
-													<Typography
-														variant="subtitle1"
-														component="h2"
-													>
-														<b>
-															ORDER ID:{' '}
-															{order.uid}
-														</b>
-													</Typography>
-													<Typography
-														variant="body2"
-														color="text.secondary"
-													>
-														Price: €
-														{order.totalPrice.toFixed(
-															2
-														)}
-													</Typography>
-												</CardContent>
-											</Grid>
-											<Grid item xs={3}>
-												<CardContent>
-													Current status:
-													<Typography
-														color={getStatusColor(
-															order.status
-														)}
-													>
-														<b>{order.status}</b>
-													</Typography>
-												</CardContent>
-											</Grid>
-										</Grid>
-										<Divider />
-										<Grid container spacing={2}>
-											<Grid item xs={1} />
-											<Grid item xs={4}>
-												<CardContent>
-													<Typography
-														variant="subtitle1"
-														component="h2"
-														color="text.secondary"
-													>
-														<b>Address details:</b>
-													</Typography>
-													<Typography
-														variant="body2"
-														color="text.secondary"
-													>
-														Address: {order.address}
-													</Typography>
-													<Typography
-														variant="body2"
-														color="text.secondary"
-													>
-														Location: {order.city},{' '}
-														{order.country}
-													</Typography>
-												</CardContent>
-											</Grid>
-											<Grid item xs={4}>
-												<CardContent>
-													<Typography
-														variant="subtitle1"
-														component="h2"
-														color="text.secondary"
-													>
-														<b>
-															Purchase/delivery
-															dates:
-														</b>
-													</Typography>
-													<Typography
-														variant="body2"
-														color="text.secondary"
-													>
-														Date of delivery: DATE
-													</Typography>
-													<Typography
-														variant="body2"
-														color="text.secondary"
-													>
-														Date of purchase: DATE
-													</Typography>
-												</CardContent>
-											</Grid>
-											<Grid item xs={2}>
-												<Link
-													to={`/order/${order._id}`}
-													key={order._id}
+											<Grid container spacing={2}>
+												<Grid
+													item
+													xs={1}
+													sx={{ mt: 3 }}
 												>
-													<Button
-														variant="outlined"
-														sx={{
-															ml: 3,
-															my: 5,
-															color: '#878787',
-															border: '2px solid #878787',
-															'&:hover': {
-																border: '2px solid #878787',
-																backgroundColor:
-																	'#e0e0e0',
-															},
+													<Checkbox
+														checked={checked.some(
+															(checkedOrder) =>
+																checkedOrder._id ===
+																order._id
+														)}
+														onChange={handleToggle(
+															order
+														)}
+														inputProps={{
+															'aria-label':
+																'select order',
 														}}
-													>
-														details
-													</Button>
-												</Link>
+													/>
+												</Grid>
+												<Grid item xs={8}>
+													<CardContent>
+														<Typography
+															variant="subtitle1"
+															component="h2"
+														>
+															<b>
+																ORDER ID:{' '}
+																{order.uid}
+															</b>
+														</Typography>
+														<Typography
+															variant="body2"
+															color="text.secondary"
+														>
+															Price: €
+															{order.totalPrice.toFixed(
+																2
+															)}
+														</Typography>
+													</CardContent>
+												</Grid>
+												<Grid item xs={3}>
+													<CardContent>
+														Current status:
+														<Typography
+															color={getStatusColor(
+																order.status
+															)}
+														>
+															<b>
+																{order.status}
+															</b>
+														</Typography>
+													</CardContent>
+												</Grid>
 											</Grid>
-										</Grid>
-									</Card>
-										))
-										
-								) : (filterStatus !== 'any') &&
-									filteredOrders.length === 0 ? (
-										<>Nothing found &#128549;</>
+											<Divider />
+											<Grid container spacing={2}>
+												<Grid item xs={1} />
+												<Grid item xs={4}>
+													<CardContent>
+														<Typography
+															variant="subtitle1"
+															component="h2"
+															color="text.secondary"
+														>
+															<b>
+																Address details:
+															</b>
+														</Typography>
+														<Typography
+															variant="body2"
+															color="text.secondary"
+														>
+															Address:{' '}
+															{order.address}
+														</Typography>
+														<Typography
+															variant="body2"
+															color="text.secondary"
+														>
+															Location:{' '}
+															{order.city},{' '}
+															{order.country}
+														</Typography>
+													</CardContent>
+												</Grid>
+												<Grid item xs={4}>
+													<CardContent>
+														<Typography
+															variant="subtitle1"
+															component="h2"
+															color="text.secondary"
+														>
+															<b>
+																Purchase/delivery
+																dates:
+															</b>
+														</Typography>
+														<Typography
+															variant="body2"
+															color="text.secondary"
+														>
+															Date of Delivery:{' '}
+															{formatDate(
+																new Date(
+																	order.lastDateOfDelivery
+																)
+															)}
+														</Typography>
+														<Typography
+															variant="body2"
+															color="text.secondary"
+														>
+															Date of Purchase:{' '}
+															{formatDate(
+																new Date(
+																	order.dateOfPurchase
+																)
+															)}
+														</Typography>
+													</CardContent>
+												</Grid>
+												<Grid item xs={2}>
+													<Link
+														to={`/order/${order._id}`}
+														key={order._id}
+													>
+														<Button
+															variant="outlined"
+															sx={{
+																ml: 3,
+																my: 5,
+																color: '#878787',
+																border: '2px solid #878787',
+																'&:hover': {
+																	border: '2px solid #878787',
+																	backgroundColor:
+																		'#e0e0e0',
+																},
+															}}
+														>
+															details
+														</Button>
+													</Link>
+												</Grid>
+											</Grid>
+										</Card>
+									))
+								) : filterStatus !== 'any' &&
+								  filteredOrders.length === 0 ? (
+									<>Nothing found &#128549;</>
 								) : (
 									orders.map((order) => (
 										<Card
-										key={order._id}
-										sx={{
-											alignItems: 'flex-start',
-											mb: 2,
-										}}
+											key={order._id}
+											sx={{
+												alignItems: 'flex-start',
+												mb: 2,
+											}}
 										>
-										<Grid container spacing={2}>
-											<Grid item xs={1} sx={{ mt: 3 }}>
-												<Checkbox
-													checked={checked.some(
-														(checkedOrder) =>
-															checkedOrder._id ===
-															order._id
-													)}
-													onChange={handleToggle(
-														order
-													)}
-													inputProps={{
-														'aria-label':
-															'select order',
-													}}
-												/>
-											</Grid>
-											<Grid item xs={8}>
-												<CardContent>
-													<Typography
-														variant="subtitle1"
-														component="h2"
-													>
-														<b>
-															ORDER ID:{' '}
-															{order.uid}
-														</b>
-													</Typography>
-													<Typography
-														variant="body2"
-														color="text.secondary"
-													>
-														Price: €
-														{order.totalPrice.toFixed(
-															2
-														)}
-													</Typography>
-												</CardContent>
-											</Grid>
-											<Grid item xs={3}>
-												<CardContent>
-													Current status:
-													<Typography
-														color={getStatusColor(
-															order.status
-														)}
-													>
-														<b>{order.status}</b>
-													</Typography>
-												</CardContent>
-											</Grid>
-										</Grid>
-										<Divider />
-										<Grid container spacing={2}>
-											<Grid item xs={1} />
-											<Grid item xs={4}>
-												<CardContent>
-													<Typography
-														variant="subtitle1"
-														component="h2"
-														color="text.secondary"
-													>
-														<b>Address details:</b>
-													</Typography>
-													<Typography
-														variant="body2"
-														color="text.secondary"
-													>
-														Address: {order.address}
-													</Typography>
-													<Typography
-														variant="body2"
-														color="text.secondary"
-													>
-														Location: {order.city},{' '}
-														{order.country}
-													</Typography>
-												</CardContent>
-											</Grid>
-											<Grid item xs={4}>
-												<CardContent>
-													<Typography
-														variant="subtitle1"
-														component="h2"
-														color="text.secondary"
-													>
-														<b>
-															Purchase/delivery
-															dates:
-														</b>
-													</Typography>
-													<Typography
-														variant="body2"
-														color="text.secondary"
-													>
-														Date of delivery: DATE
-													</Typography>
-													<Typography
-														variant="body2"
-														color="text.secondary"
-													>
-														Date of purchase: DATE
-													</Typography>
-												</CardContent>
-											</Grid>
-											<Grid item xs={2}>
-												<Link
-													to={`/order/${order._id}`}
-													key={order._id}
+											<Grid container spacing={2}>
+												<Grid
+													item
+													xs={1}
+													sx={{ mt: 3 }}
 												>
-													<Button
-														variant="outlined"
-														sx={{
-															ml: 3,
-															my: 5,
-															color: '#878787',
-															border: '2px solid #878787',
-															'&:hover': {
-																border: '2px solid #878787',
-																backgroundColor:
-																	'#e0e0e0',
-															},
+													<Checkbox
+														checked={checked.some(
+															(checkedOrder) =>
+																checkedOrder._id ===
+																order._id
+														)}
+														onChange={handleToggle(
+															order
+														)}
+														inputProps={{
+															'aria-label':
+																'select order',
 														}}
-													>
-														details
-													</Button>
-												</Link>
+													/>
+												</Grid>
+												<Grid item xs={8}>
+													<CardContent>
+														<Typography
+															variant="subtitle1"
+															component="h2"
+														>
+															<b>
+																ORDER ID:{' '}
+																{order.uid}
+															</b>
+														</Typography>
+														<Typography
+															variant="body2"
+															color="text.secondary"
+														>
+															Price: €
+															{order.totalPrice.toFixed(
+																2
+															)}
+														</Typography>
+													</CardContent>
+												</Grid>
+												<Grid item xs={3}>
+													<CardContent>
+														Current status:
+														<Typography
+															color={getStatusColor(
+																order.status
+															)}
+														>
+															<b>
+																{order.status}
+															</b>
+														</Typography>
+													</CardContent>
+												</Grid>
 											</Grid>
-										</Grid>
+											<Divider />
+											<Grid container spacing={2}>
+												<Grid item xs={1} />
+												<Grid item xs={4}>
+													<CardContent>
+														<Typography
+															variant="subtitle1"
+															component="h2"
+															color="text.secondary"
+														>
+															<b>
+																Address details:
+															</b>
+														</Typography>
+														<Typography
+															variant="body2"
+															color="text.secondary"
+														>
+															Address:{' '}
+															{order.address}
+														</Typography>
+														<Typography
+															variant="body2"
+															color="text.secondary"
+														>
+															Location:{' '}
+															{order.city},{' '}
+															{order.country}
+														</Typography>
+													</CardContent>
+												</Grid>
+												<Grid item xs={4}>
+													<CardContent>
+														<Typography
+															variant="subtitle1"
+															component="h2"
+															color="text.secondary"
+														>
+															<b>
+																Purchase/delivery
+																dates:
+															</b>
+														</Typography>
+														<Typography
+															variant="body2"
+															color="text.secondary"
+														>
+															Date of Delivery:{' '}
+															{formatDate(
+																new Date(
+																	order.lastDateOfDelivery
+																)
+															)}
+														</Typography>
+														<Typography
+															variant="body2"
+															color="text.secondary"
+														>
+															Date of Purchase:{' '}
+															{formatDate(
+																new Date(
+																	order.dateOfPurchase
+																)
+															)}
+														</Typography>
+													</CardContent>
+												</Grid>
+												<Grid item xs={2}>
+													<Link
+														to={`/order/${order._id}`}
+														key={order._id}
+													>
+														<Button
+															variant="outlined"
+															sx={{
+																ml: 3,
+																my: 5,
+																color: '#878787',
+																border: '2px solid #878787',
+																'&:hover': {
+																	border: '2px solid #878787',
+																	backgroundColor:
+																		'#e0e0e0',
+																},
+															}}
+														>
+															details
+														</Button>
+													</Link>
+												</Grid>
+											</Grid>
 										</Card>
-								)))}
+									))
+								)}
 							</Grid>
 						</Grid>
 					)}

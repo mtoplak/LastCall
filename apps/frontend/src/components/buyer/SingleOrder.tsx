@@ -200,7 +200,7 @@ function SingleOrder() {
 													color: 'text.secondary',
 												}}
 											>
-												<Grid item xs={6} md={2}>
+												<Grid item xs={6} md={2} sm={4}>
 													<Card>
 														<CardMedia
 															component="img"
@@ -215,7 +215,7 @@ function SingleOrder() {
 														/>
 													</Card>
 												</Grid>
-												<Grid item xs={6} md={10} sx={{my: 4}}>
+												<Grid item xs={6} md={10} sx={{my: 4}} sm={8}>
 													<Typography>
 														<b>Product ID:</b>{' '}
 														{
