@@ -17,7 +17,6 @@ import { useUserAuth } from 'context/AuthContext';
 import CustomBox from 'components/ui/CustomBox';
 import { btnstyle, paperStyle } from 'assets/styles/styles';
 import NavbarS from '../NavbarS';
-import api from 'services/api';
 
 const SignInS = () => {
 	const [email, setEmail] = useState('');

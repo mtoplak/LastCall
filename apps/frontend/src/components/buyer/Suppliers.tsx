@@ -243,7 +243,6 @@ function Suppliers() {
 					</Grid>
 				</Container>
 			</Box>
-			<Footer />
 		</>
 	);
 }

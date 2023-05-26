@@ -1,6 +1,5 @@
 import { IBuyer } from './buyer';
 import { ICartItem } from './cartItem';
-import { IDrink } from './drink';
 import { ISeller } from './seller';
 
 export interface IOrder {
@@ -14,6 +13,6 @@ export interface IOrder {
 	country: string;
 	seller: ISeller;
 	buyer: IBuyer;
-    status: string;
+	status: string;
 	uid: string;
 }

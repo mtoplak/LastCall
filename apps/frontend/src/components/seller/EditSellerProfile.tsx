@@ -6,12 +6,14 @@ import {
 	FormControl,
 	Grid,
 	InputLabel,
-	OutlinedInput,
 	Paper,
 	Select,
 	TextField,
 	Typography,
-  MenuItem
+	MenuItem,
+	Checkbox,
+	ListItemText,
+	OutlinedInput,
 } from '@mui/material';
 import api from 'services/api';
 import NavbarS from './NavbarS';
@@ -29,43 +31,56 @@ interface SellerProfile {
 	companyType: string;
 	phone: string;
 	website: string;
-	targetedMarket: string;
+	targetedMarkets: string[];
 	maxDistance: number;
 	minPrice: number;
+	deliveryCost: number;
 }
+
+const initialState = {
+	name: '',
+	surname: '',
+	title: '',
+	country: '',
+	city: '',
+	address: '',
+	registerNumber: 0,
+	companyType: '',
+	phone: '',
+	website: '',
+	targetedMarkets: [],
+	maxDistance: 0,
+	minPrice: 0,
+	deliveryCost: 0,
+};
 
 function EditSellerProfile() {
 	const { user } = useUserAuth();
-	const [sellerProfile, setSellerProfile] = useState<SellerProfile>({
-		name: '',
-		surname: '',
-		title: '',
-		country: '',
-		city: '',
-		address: '',
-		registerNumber: 0,
-		companyType: '',
-		phone: '',
-		website: '',
-		targetedMarket: '',
-		maxDistance: 0,
-		minPrice: 0,
-	});
+	const [sellerProfile, setSellerProfile] =
+		useState<SellerProfile>(initialState);
 
 	useEffect(() => {
 		if (!user) return;
 		const fetchSellerProfile = async () => {
-		  try {
-			const response = await api.get(`sellers/get/${user.email}`);
-			const profileData = response.data;
-			setSellerProfile(profileData);
-		  } catch (error) {
-			console.error('Error fetching seller profile:', error);
-		  }
+			try {
+				const response = await api.get(`sellers/get/${user.email}`);
+				const profileData = response.data;
+				setSellerProfile(profileData);
+			} catch (error) {
+				console.error('Error fetching seller profile:', error);
+			}
 		};
-	
+
 		fetchSellerProfile();
-	  }, [user]);
+	}, [user]);
+
+	const handleTargetedMarketsChange = (event: any) => {
+		const selectedValues = event.target.value as string[];
+		setSellerProfile((prevProfile) => ({
+			...prevProfile,
+			targetedMarkets: selectedValues,
+		}));
+	};
 
 	const handleFormSubmit = async (event: React.FormEvent) => {
 		event.preventDefault();
@@ -79,6 +94,8 @@ function EditSellerProfile() {
 			throw error;
 		}
 	};
+
+	console.log(sellerProfile);
 
 	return (
 		<>
@@ -175,7 +192,7 @@ function EditSellerProfile() {
 											sx={{ mb: 2 }}
 										>
 											<InputLabel id="company-type-label">
-												Type
+												Company Type
 											</InputLabel>
 											<Select
 												labelId="company-type-label"
@@ -251,22 +268,49 @@ function EditSellerProfile() {
 												})
 											}
 										/>
-										<TextField
-											label="Targeted Market"
-											placeholder="Enter your targeted market"
-											fullWidth
-											required
-											name="targetedMarket"
-											sx={{ mb: 2 }}
-											value={sellerProfile.targetedMarket}
-											onChange={(event) =>
-												setSellerProfile({
-													...sellerProfile,
-													targetedMarket:
-														event.target.value,
-												})
-											}
-										/>
+										<FormControl sx={{ width: '100%' }}>
+											<InputLabel id="demo-multiple-checkbox-label">
+												Targeted Markets
+											</InputLabel>
+											<Select
+												labelId="demo-multiple-checkbox-label"
+												id="demo-multiple-checkbox"
+												multiple
+												fullWidth
+												input={
+													<OutlinedInput label="Tag" />
+												}
+												name="targetedMarkets"
+												sx={{ mb: 2 }}
+												onChange={(event) =>
+													handleTargetedMarketsChange(
+														event
+													)
+												}
+												value={
+													sellerProfile.targetedMarkets
+												}
+												renderValue={(
+													selected: string[]
+												) => selected.join(', ')}
+											>
+												{markets.map((market) => (
+													<MenuItem
+														key={market}
+														value={market}
+													>
+														<Checkbox
+															checked={sellerProfile.targetedMarkets.includes(
+																market
+															)}
+														/>
+														<ListItemText
+															primary={market}
+														/>
+													</MenuItem>
+												))}
+											</Select>
+										</FormControl>
 										<TextField
 											label="Website"
 											placeholder="Enter website"
@@ -300,8 +344,8 @@ function EditSellerProfile() {
 											}
 										/>
 										<TextField
-											label="Minimum price"
-											placeholder="Enter price"
+											label="Minimum order value"
+											placeholder="Enter minimum order value"
 											fullWidth
 											required
 											name="minPrice"
@@ -311,6 +355,23 @@ function EditSellerProfile() {
 												setSellerProfile({
 													...sellerProfile,
 													minPrice: parseFloat(
+														event.target.value
+													),
+												})
+											}
+										/>
+										<TextField
+											label="Delivery cost"
+											placeholder="Enter delivery cost"
+											fullWidth
+											required
+											name="deliveryCost"
+											sx={{ mb: 2 }}
+											value={sellerProfile.deliveryCost}
+											onChange={(event) =>
+												setSellerProfile({
+													...sellerProfile,
+													deliveryCost: parseFloat(
 														event.target.value
 													),
 												})

@@ -19,7 +19,7 @@ import { useCartContext } from 'context/CartContext';
 function NavbarB() {
 	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 	const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-	const { numOfProductsInCart } = useCartContext();
+	const { cartProducts } = useCartContext();
 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);
@@ -36,7 +36,6 @@ function NavbarB() {
 		setAnchorElUser(null);
 	};
 
-	// context
 	const { user, logOut, role } = useUserAuth();
 	//console.log(user);
 	//console.log(user?.email);
@@ -177,7 +176,7 @@ function NavbarB() {
 										display: 'block',
 									}}
 								>
-									Cart ({numOfProductsInCart})
+									Cart ({cartProducts.length})
 								</Button>
 							</Link>
 						)}

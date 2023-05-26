@@ -28,6 +28,7 @@ import { IDrink } from 'models/drink';
 import { style } from 'assets/styles/styles';
 import { getCurrentDate } from '../../utils/getCurrentDate';
 import { ISeller } from 'models/seller';
+import { useCartContext } from 'context/CartContext';
 
 interface GroupedProduct {
 	product: IDrink;
@@ -52,6 +53,7 @@ function Cart() {
 	const [selectedSeller, setSelectedSeller] = useState<ISeller>();
 	const [groupedProducts, setGroupedProducts] = useState<SellerGroup>({});
 	const [alert, setAlert] = useState(false);
+	const { cartProducts, setCartProducts } = useCartContext();
 
 	useEffect(() => {
 		if (!user) return;
@@ -136,6 +138,7 @@ function Cart() {
 			const updatedCartItems = cartItems!.filter(
 				(item) => item.product.seller._id !== selectedSeller!._id
 			);
+			setCartProducts(updatedCartItems);
 			setCartItems(updatedCartItems);
 			setAlert(true);
 		} catch (error: any) {
