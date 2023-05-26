@@ -5,12 +5,14 @@ import { CreateUpdateOrderDto } from './createUpdateOrder.dto';
 import { BuyersService } from '../buyers/buyers.service';
 import { SuccessResponse } from 'src/data.response';
 import { Cart } from '../buyers/buyers.model';
+import { ProductsService } from '../products/products.service';
 
 @Injectable()
 export class OrdersService {
   constructor(
     private readonly ordersRepository: OrdersRepository,
     private readonly buyersService: BuyersService,
+    private readonly productsService: ProductsService,
   ) {}
 
   async addOrder(
@@ -25,8 +27,9 @@ export class OrdersService {
       sellerEmail,
       buyerEmail,
     );
-    const productIds = productData.map(item => item.productId);
+    const productIds = productData.map((item) => item.productId);
     await this.buyersService.deleteProductsFromCart(buyerEmail, productIds);
+    await this.productsService.removeFromStock(productData);
     return order;
   }
 

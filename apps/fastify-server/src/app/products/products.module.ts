@@ -9,13 +9,12 @@ import { ProductsRepository } from "./products.repository";
 import { BuyersRepository } from "../buyers/buyers.repository";
 
 @Module({
-    imports: [
-        MongooseModule.forFeature([{ name: 'Product', schema: ProductSchema }]),
-        MongooseModule.forFeature([{ name: 'Order', schema: OrderSchema }]),
-        MongooseModule.forFeature([{ name: 'Seller', schema: SellerSchema }])
-    ], //injectalo bo module v katerikoli file ki ga rabi
-    controllers: [ProductsController],
-    providers: [ProductsService, ProductsRepository]
+  imports: [
+    MongooseModule.forFeature([{ name: 'Product', schema: ProductSchema }]),
+    MongooseModule.forFeature([{ name: 'Order', schema: OrderSchema }]),
+    MongooseModule.forFeature([{ name: 'Seller', schema: SellerSchema }]),
+  ], //injectalo bo module v katerikoli file ki ga rabi
+  controllers: [ProductsController],
+  providers: [ProductsService, ProductsRepository],
 })
-export class ProductsModule {
-}
+export class ProductsModule {}

@@ -64,7 +64,27 @@ export class ProductsService {
     return { success: true };
   }
 
-  async removeFromStock(productData: Cart[]): Promise<void> {
-    const productIds = productData.map((item) => item.productId);
+  async removeFromStock(productData: Cart[]): Promise<Product[]> {
+    const updatedProducts: Product[] = [];
+
+    for (const item of productData) {
+      const product = await this.productsRepository.findOne({
+        _id: item.productId,
+      });
+
+      if (!product) {
+        throw new NotFoundException(
+          `Product with id ${item.productId} not found`,
+        );
+      }
+
+      product.stock -= item.quantity;
+
+      await product.save();
+
+      updatedProducts.push(product);
+    }
+
+    return updatedProducts;
   }
 }
