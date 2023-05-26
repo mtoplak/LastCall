@@ -10,6 +10,7 @@ import { OrdersRepository } from './orders.repository';
 import { BuyersService } from '../buyers/buyers.service';
 import { BuyersRepository } from '../buyers/buyers.repository';
 import { ProductsRepository } from '../products/products.repository';
+import { ProductsService } from '../products/products.service';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ProductsRepository } from '../products/products.repository';
     OrdersRepository,
     BuyersService,
     BuyersRepository,
+    ProductsService,
     ProductsRepository,
   ],
 })
