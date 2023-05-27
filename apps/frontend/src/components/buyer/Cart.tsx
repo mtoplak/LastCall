@@ -58,7 +58,7 @@ function Cart() {
 	useEffect(() => {
 		if (!user) return;
 		const fetchCart = async () => {
-			const response = await api.post('/buyers/getcart', {
+			const response = await api.post('/cart/get', {
 				email: user.email,
 			});
 			setCartItems(response.data.cart);
@@ -88,12 +88,12 @@ function Cart() {
 	}, []);
 
 	const handleRemoveFromCart = async (id: string) => {
-		const response = await api.delete(`/buyers/${user.email}/cart/${id}`);
+		const response = await api.delete(`/cart/${user.email}/${id}`);
 		setCartItems(response.data.cart);
 	};
 
 	const handleQuantityChange = async (id: string, quantity: number) => {
-		const response = await api.post(`/buyers/addcart`, {
+		const response = await api.post(`/cart/add`, {
 			email: user.email,
 			cart: [
 				{
