@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Order } from './order.model';
 import { OrdersRepository } from './orders.repository';
 import { CreateUpdateOrderDto } from './createUpdateOrder.dto';
@@ -21,6 +25,16 @@ export class OrdersService {
     sellerEmail: string,
     buyerEmail: string,
   ): Promise<Order> {
+    const meetsMinPriceRequirements =
+      await this.productsService.minPriceRequirements(sellerEmail, productData);
+    console.log(meetsMinPriceRequirements);
+
+    if (!meetsMinPriceRequirements) {
+      throw new BadRequestException(
+        'Order does not meet the minimum price requirement',
+      );
+    }
+
     const order = await this.ordersRepository.create(
       orderData,
       productData,
