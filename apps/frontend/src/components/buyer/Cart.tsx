@@ -69,6 +69,10 @@ function Cart() {
 		fetchCart();
 	}, [user]);
 
+	useEffect(() => {
+		document.title = 'Shopping Cart';
+	}, []);
+
 	const groupProductsBySeller = (cart: any) => {
 		const groupedProducts: SellerGroup = {};
 
@@ -82,10 +86,6 @@ function Cart() {
 
 		return groupedProducts;
 	};
-
-	useEffect(() => {
-		document.title = 'Shopping Cart';
-	}, []);
 
 	const handleRemoveFromCart = async (id: string) => {
 		const response = await api.delete(`/cart/${user.email}/${id}`);
@@ -151,7 +151,13 @@ function Cart() {
 			<Grid container spacing={2} key={seller}>
 				<Grid item xs={8}>
 					<Typography variant="h6" component="h2" mb={2}>
-						Seller: {products[0].product.seller.title}
+						Seller:{' '}
+						<Link
+							to={`/supplier/${products[0].product.seller._id}`}
+							className="blackLink"
+						>
+							{products[0].product.seller.title}
+						</Link>
 					</Typography>
 					{products.map((item) => (
 						<Card

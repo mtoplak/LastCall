@@ -26,6 +26,10 @@ function PastOrders() {
 		fetchPastOrders();
 	}, [user]);
 
+	useEffect(() => {
+		document.title = 'My Orders';
+	}, []);
+
 	return (
 		<>
 			<Box

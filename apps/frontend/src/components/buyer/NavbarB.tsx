@@ -87,7 +87,9 @@ function NavbarB() {
 								aria-haspopup="true"
 								onClick={handleOpenNavMenu}
 								color="inherit"
-							></IconButton>
+							>
+								smaller screen todo
+							</IconButton>
 							<Menu
 								id="menu-appbar"
 								anchorEl={anchorElNav}
@@ -105,7 +107,9 @@ function NavbarB() {
 								sx={{
 									display: { xs: 'block', md: 'none' },
 								}}
-							></Menu>
+							>
+								smaller screen todo
+							</Menu>
 						</Box>
 						<Typography
 							variant="h5"

@@ -33,6 +33,7 @@ function SellerOrdersPage() {
 	});
 
 	useEffect(() => {
+		if (!user) return;
 		const fetchOrders = async () => {
 			try {
 				const response = await api.post('/sellers/ordersbyemail', {
@@ -44,7 +45,7 @@ function SellerOrdersPage() {
 			}
 		};
 		fetchOrders();
-	}, []);
+	}, [user]);
 
 	const handleToggle = (order: IOrder) => () => {
 		const isChecked = checked.some(
