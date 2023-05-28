@@ -10,6 +10,7 @@ import { BuyersService } from '../buyers/buyers.service';
 import { SuccessResponse } from 'src/data.response';
 import { Cart } from '../buyers/buyers.model';
 import { ProductsService } from '../products/products.service';
+import { CartService } from '../cart/cart.service';
 
 @Injectable()
 export class OrdersService {
@@ -17,6 +18,7 @@ export class OrdersService {
     private readonly ordersRepository: OrdersRepository,
     private readonly buyersService: BuyersService,
     private readonly productsService: ProductsService,
+    private readonly cartService: CartService,
   ) {}
 
   async addOrder(
@@ -25,14 +27,16 @@ export class OrdersService {
     sellerEmail: string,
     buyerEmail: string,
   ): Promise<Order> {
-    const meetsMinPriceRequirements =
-      await this.productsService.minPriceRequirements(sellerEmail, productData);
-    console.log(meetsMinPriceRequirements);
-
+    const meetsMinPriceRequirements = await this.productsService.minPriceRequirements(sellerEmail, productData);
     if (!meetsMinPriceRequirements) {
       throw new BadRequestException(
         'Order does not meet the minimum price requirement',
       );
+    }
+
+    const removeFromStockResult = await this.productsService.removeFromStock(productData);
+    if (removeFromStockResult === false) {
+      throw new BadRequestException('Not enough stock for one or more products');
     }
 
     const order = await this.ordersRepository.create(
@@ -42,8 +46,7 @@ export class OrdersService {
       buyerEmail,
     );
     const productIds = productData.map((item) => item.productId);
-    await this.buyersService.deleteProductsFromCart(buyerEmail, productIds);
-    await this.productsService.removeFromStock(productData);
+    await this.cartService.deleteProductsFromCart(buyerEmail, productIds);
     return order;
   }
 

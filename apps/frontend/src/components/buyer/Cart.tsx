@@ -119,17 +119,31 @@ function Cart() {
 			};
 		});
 		try {
-			const response = await api.post(`/orders`, {
-				seller: selectedSeller?.email,
-				buyer: user.email,
-				address: address,
-				city: city,
-				country: country,
-				lastDateOfDelivery: lastDateOfDelivery,
-				products: order,
-				totalPrice: totalPrice.toFixed(2),
-			});
-			console.log(response.data);
+			const mapResponse = await fetch(
+				`https://nominatim.openstreetmap.org/search?format=json&q=${
+					address + ' ' + city + ' ' + country
+				}&addressdetails=1&limit=1&polygon_svg=1`
+			);
+			const mapData = await mapResponse.json();
+			console.log(mapData);
+			if (mapData.length === 0) {
+				setError('Address not found');
+				return;
+			} else {
+				const coordinates = [mapData[0].lat, mapData[0].lon];
+				const orderPayload = {
+					seller: selectedSeller?.email,
+					buyer: user.email,
+					address: address,
+					city: city,
+					country: country,
+					lastDateOfDelivery: lastDateOfDelivery,
+					products: order,
+					totalPrice: totalPrice.toFixed(2),
+					coordinates: coordinates,
+				};
+				await api.post(`/orders`, orderPayload);
+			}
 			setIsOpenModal(false);
 			setAddress('');
 			setCity('');
@@ -142,7 +156,7 @@ function Cart() {
 			setCartItems(updatedCartItems);
 			setAlert(true);
 		} catch (error: any) {
-			setError(error.response.data.message);
+			setError(error);
 		}
 	};
 

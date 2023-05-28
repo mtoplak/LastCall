@@ -55,7 +55,7 @@ export class ProductsController {
   }
 
   @Post('/removefromstock')
-  async removeFromStock(@Body() productData: Cart[]): Promise<Product[]> {
+  async removeFromStock(@Body() productData: Cart[]): Promise<Product[] | false> {
     return this.productService.removeFromStock(productData);
   }
 

@@ -67,47 +67,6 @@ export class BuyersController {
     return { success: true };
   }
 
-  @Post('/addcart')
-  async addToCart(
-    @Body('email') email: string,
-    @Body('cart') cart: { productId: string; quantity: number }[],
-  ): Promise<CartResponse | null> {
-    const result = await this.buyersService.addToCart(email, cart);
-    if (!result?.cart) {
-      return null;
-    }
-    return { cart: result.cart };
-  }
-
-  @Post('/getcart')
-  async getCart(@Body('email') email: string): Promise<CartResponse | null> {
-    const result = await this.buyersService.getCart(email);
-    return result;
-  }
-
-  @Delete(':email/cart/:productId')
-  async deleteProductFromCart(
-    @Param('email') email: string,
-    @Param('productId') productId: string,
-  ): Promise<CartResponse> {
-    return this.buyersService.deleteProductFromCart(email, productId);
-  }
-
-  @Delete('/:email/deletefromcart')
-  async deleteProductsFromCart(
-    @Param('email') email: string,
-    @Body('products') productIds: string[],
-  ): Promise<CartResponse> {
-    return this.buyersService.deleteProductsFromCart(email, productIds);
-  }
-
-  @Delete(':email/cart')
-  async deleteAllFromCart(
-    @Param('email') email: string,
-  ): Promise<CartResponse> {
-    return this.buyersService.deleteAllFromCart(email);
-  }
-
   @Post('orders')
   async getAllOrdersByBuyer(@Body('email') email: string): Promise<Order[]> {
     return await this.buyersService.getOrdersByBuyer(email);

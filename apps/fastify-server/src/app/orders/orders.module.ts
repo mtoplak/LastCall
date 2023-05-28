@@ -13,6 +13,7 @@ import { ProductsRepository } from '../products/products.repository';
 import { ProductsService } from '../products/products.service';
 import { SellersService } from '../sellers/sellers.service';
 import { SellersRepository } from '../sellers/sellers.repository';
+import { CartService } from '../cart/cart.service';
 
 @Module({
   imports: [
@@ -30,7 +31,8 @@ import { SellersRepository } from '../sellers/sellers.repository';
     ProductsService,
     ProductsRepository,
     SellersService,
-    SellersRepository
+    SellersRepository,
+    CartService
   ],
 })
 export class OrdersModule {}
