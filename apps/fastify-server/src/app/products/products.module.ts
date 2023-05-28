@@ -6,7 +6,6 @@ import { ProductSchema } from "./product.model";
 import { OrderSchema } from "../orders/order.model";
 import { SellerSchema } from "../sellers/sellers.model";
 import { ProductsRepository } from "./products.repository";
-import { BuyersRepository } from "../buyers/buyers.repository";
 
 @Module({
   imports: [
