@@ -66,7 +66,7 @@ export class ProductsService {
     return { success: true };
   }
 
-  async removeFromStock(productData: Cart[]): Promise<Product[]> {
+  async removeFromStock(productData: Cart[]): Promise<Product[] | false> {
     const updatedProducts: Product[] = [];
 
     for (const item of productData) {
@@ -78,6 +78,10 @@ export class ProductsService {
         throw new NotFoundException(
           `Product with id ${item.productId} not found`,
         );
+      }
+
+      if (product.stock < item.quantity) {
+        return false;
       }
 
       product.stock -= item.quantity;

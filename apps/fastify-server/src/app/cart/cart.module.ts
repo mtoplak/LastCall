@@ -16,7 +16,7 @@ import { SellersRepository } from "../sellers/sellers.repository";
         MongooseModule.forFeature([{ name: 'Buyer', schema: BuyerSchema}]),
         MongooseModule.forFeature([{ name: 'Product', schema: ProductSchema}]),
         MongooseModule.forFeature([{ name: 'Seller', schema: SellerSchema}])
-    ], //injectalo bo module v katerikoli file ki ga rabi
+    ],
     controllers: [CartController],
     providers: [CartService, BuyersService, BuyersRepository, ProductsRepository, ProductsService, SellersRepository]
 })
