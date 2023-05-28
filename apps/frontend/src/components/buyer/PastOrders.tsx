@@ -54,7 +54,6 @@ function PastOrders() {
 					)}
 				</Container>
 			</Box>
-			<Footer />
 		</>
 	);
 }

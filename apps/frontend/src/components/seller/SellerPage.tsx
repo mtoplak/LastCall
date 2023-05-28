@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Container, Link, Typography } from '@mui/material';
 import { ISeller } from 'models/seller';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -49,23 +49,9 @@ function SellerPage() {
 				<Container>
 					<CustomBox>
 						<Box sx={{ flex: '1', marginTop: '3rem' }}>
-							<Typography
-								variant="body2"
-								sx={{
-									fontSize: '18px',
-									color: '#687690',
-									fontWeight: '500',
-									mt: 5,
-									mb: 4,
-								}}
-							>
-								Hi There!
-							</Typography>
-							<Title variant="h1">
-								We are{' '}
-								<span style={{ color: '#24336e' }}>
+							<Title variant="h1"
+							sx={{color: '#24336e'}}>
 									{seller?.title}
-								</span>
 							</Title>
 							<Typography
 								variant="body2"
@@ -88,7 +74,7 @@ function SellerPage() {
 									mt: 4,
 								}}
 							>
-								Email: {seller?.email}
+								Email: <b>{seller?.email}</b>
 							</Typography>
 							<Typography
 								variant="body2"
@@ -97,8 +83,9 @@ function SellerPage() {
 									color: '#5A6473',
 								}}
 							>
-								Phone: {seller?.phone}
+								Phone: <b>{seller?.phone}</b>
 							</Typography>
+							<Link href={seller?.website} underline='none'>
 							<Typography
 								variant="body2"
 								sx={{
@@ -106,15 +93,16 @@ function SellerPage() {
 									color: '#5A6473',
 									mb: 4,
 								}}
-							>
-								Website: {seller?.website}
+							>					
+								Website: <b>{seller?.website}</b>
 							</Typography>
+							</Link>
 						</Box>
 						<Box sx={{ flex: '1.25' }}>
 							<img
 								src={sellerProfile}
 								alt="sellerProfile"
-								style={{ maxWidth: '100%', marginTop: '1rem' }}
+								style={{ maxWidth: '70%', marginTop: '1rem' }}
 							/>
 						</Box>
 					</CustomBox>
