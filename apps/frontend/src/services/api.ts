@@ -1,5 +1,6 @@
-import axios from "axios";
-const api = axios.create({
+import axios, { AxiosInstance } from "axios";
+
+const api: AxiosInstance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   timeout: 30000,
   headers: {
@@ -7,4 +8,5 @@ const api = axios.create({
     Accept: "application/json",
   },
 });
+
 export default api;

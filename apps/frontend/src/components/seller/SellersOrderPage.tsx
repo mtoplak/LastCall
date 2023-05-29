@@ -36,9 +36,17 @@ function SellerOrdersPage() {
 		if (!user) return;
 		const fetchOrders = async () => {
 			try {
-				const response = await api.post('/sellers/ordersbyemail', {
-					email: user.email,
-				});
+				const response = await api.post(
+					'/sellers/ordersbyemail',
+					{
+						email: user.email,
+					},
+					{
+						headers: {
+							Authorization: user?.stsTokenManager?.accessToken,
+						},
+					}
+				);
 				setOrders(response.data);
 			} catch (error) {
 				console.log(error);
@@ -322,7 +330,7 @@ function SellerOrdersPage() {
 									))
 								) : filterStatus !== 'any' &&
 								  filteredOrders.length === 0 ? (
-									<>Nothing found &#128549;</>
+									<>No orders found with this filter.</>
 								) : (
 									orders.map((order) => (
 										<Card

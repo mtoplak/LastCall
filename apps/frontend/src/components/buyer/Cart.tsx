@@ -52,15 +52,21 @@ function Cart() {
 	);
 	const [selectedSeller, setSelectedSeller] = useState<ISeller>();
 	const [groupedProducts, setGroupedProducts] = useState<SellerGroup>({});
-	const [alert, setAlert] = useState(false);
+	const [isShownAlert, setIsShownAlert] = useState(false);
 	const { cartProducts, setCartProducts } = useCartContext();
 
 	useEffect(() => {
 		if (!user) return;
 		const fetchCart = async () => {
-			const response = await api.post('/cart/get', {
-				email: user.email,
-			});
+			const response = await api.post(
+				'/cart/get',
+				{ email: user.email },
+				{
+					headers: {
+						Authorization: user?.stsTokenManager?.accessToken,
+					},
+				}
+			);
 			setCartItems(response.data.cart);
 			const groupedProducts = groupProductsBySeller(response.data.cart);
 			setGroupedProducts(groupedProducts);
@@ -125,11 +131,12 @@ function Cart() {
 				}&addressdetails=1&limit=1&polygon_svg=1`
 			);
 			const mapData = await mapResponse.json();
-			console.log(mapData);
+			//console.log(mapData);
 			if (mapData.length === 0) {
 				setError('Address not found');
 				return;
 			} else {
+				console.log(selectedSeller?.email)
 				const coordinates = [mapData[0].lat, mapData[0].lon];
 				const orderPayload = {
 					seller: selectedSeller?.email,
@@ -142,7 +149,15 @@ function Cart() {
 					totalPrice: totalPrice.toFixed(2),
 					coordinates: coordinates,
 				};
-				await api.post(`/orders`, orderPayload);
+				await api.post(
+					`/orders`,
+					{ orderPayload },
+					{
+						headers: {
+							Authorization: user?.stsTokenManager?.accessToken,
+						},
+					}
+				);
 			}
 			setIsOpenModal(false);
 			setAddress('');
@@ -154,9 +169,9 @@ function Cart() {
 			);
 			setCartProducts(updatedCartItems);
 			setCartItems(updatedCartItems);
-			setAlert(true);
+			setIsShownAlert(true);
 		} catch (error: any) {
-			setError(error);
+			setError(error.response.data.message);
 		}
 	};
 
@@ -335,7 +350,7 @@ function Cart() {
 					<Typography variant="h4" component="h1" mt={4} mb={2}>
 						Shopping Cart
 					</Typography>
-					{alert && (
+					{isShownAlert && (
 						<Alert
 							severity="success"
 							style={{ marginTop: '1rem' }}
@@ -344,7 +359,7 @@ function Cart() {
 									aria-label="close"
 									color="inherit"
 									size="small"
-									onClick={(e) => setAlert(false)}
+									onClick={(e) => setIsShownAlert(false)}
 								>
 									<CloseOutlinedIcon fontSize="inherit" />
 								</IconButton>
@@ -431,7 +446,7 @@ function Cart() {
 						onChange={(e) => setLastDateOfDelivery(e.target.value)}
 					/>
 					<br />
-					{error && (
+					{error !== '' && (
 						<Alert severity="error">
 							<b>{error}</b>
 						</Alert>

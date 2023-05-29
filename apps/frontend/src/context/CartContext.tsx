@@ -39,9 +39,15 @@ export const CartContextProvider = ({
 	useEffect(() => {
 		const fetchCart = async () => {
 			try {
-				const response = await api.post('/buyers/getcart', {
-					email: user?.email,
-				});
+				const response = await api.post(
+					'/cart/get',
+					{ email: user.email },
+					{
+						headers: {
+							Authorization: user?.stsTokenManager?.accessToken,
+						},
+					}
+				);
 				setCartProducts(response.data.cart);
 			} catch (error: any) {
 				console.log(error.message);

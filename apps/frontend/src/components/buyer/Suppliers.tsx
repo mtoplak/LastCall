@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import Footer from 'components/homepage/Footer';
 import { Box, Container, Grid, Typography } from '@mui/material';
 import { ISeller } from 'models/seller';
 import api from 'services/api';
