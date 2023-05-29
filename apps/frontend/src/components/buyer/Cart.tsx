@@ -54,6 +54,7 @@ function Cart() {
 	const [groupedProducts, setGroupedProducts] = useState<SellerGroup>({});
 	const [isShownAlert, setIsShownAlert] = useState(false);
 	const { cartProducts, setCartProducts } = useCartContext();
+	const [meetsRequirements, setMeetsRequirements] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (!user) return;
@@ -445,6 +446,7 @@ function Cart() {
 						value={lastDateOfDelivery}
 						onChange={(e) => setLastDateOfDelivery(e.target.value)}
 					/>
+					
 					<br />
 					{error !== '' && (
 						<Alert severity="error">
