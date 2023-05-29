@@ -15,11 +15,11 @@ import { Product } from '../products/product.model';
 import { Order } from '../orders/order.model';
 import { SuccessResponse } from 'src/data.response';
 //import { FirebaseAuthMiddleware } from 'src/app/middleware/firebase-auth.middleware';
-import { FirebaseTokenGuard } from 'src/app/guards/FirebaseTokenGuard';
+import { FirebaseTokenGuard } from '../guards/FirebaseTokenGuard';
 
 @Controller('sellers')
 export class SellersController {
-  constructor(private readonly sellersService: SellersService) {}
+  constructor(private readonly sellersService: SellersService) { }
 
   @Post()
   async addSeller(

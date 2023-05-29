@@ -18,7 +18,7 @@ import { FirebaseTokenGuard } from '../guards/FirebaseTokenGuard';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productService: ProductsService) {}
+  constructor(private readonly productService: ProductsService) { }
 
   @Post()
   @UseGuards(FirebaseTokenGuard)

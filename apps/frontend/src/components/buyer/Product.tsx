@@ -70,15 +70,23 @@ function Product() {
 			return;
 		}
 		try {
-			const response = await api.post(`/cart/add`, {
-				email: user.email,
-				cart: [
-					{
-						productId: id,
-						quantity: quantity,
+			const response = await api.post(
+				`/cart/add`,
+				{
+					email: user.email,
+					cart: [
+						{
+							productId: id,
+							quantity: quantity,
+						},
+					],
+				},
+				{
+					headers: {
+						Authorization: user?.stsTokenManager?.accessToken,
 					},
-				],
-			});
+				}
+			);
 			setShowAlert(true);
 			if (!isProductInArray(cartProducts, id)) {
 				setCartProducts([

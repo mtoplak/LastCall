@@ -1,6 +1,11 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import * as admin from 'firebase-admin';
 
+admin.initializeApp({
+  credential: admin.credential.applicationDefault(),
+  projectId: process.env.FIREBASE_PROJECT_ID
+});
+
 @Injectable()
 export class FirebaseTokenGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {

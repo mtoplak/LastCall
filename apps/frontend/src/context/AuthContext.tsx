@@ -124,6 +124,18 @@ export function AuthContextProvider({ children }: { children: any }) {
 			console.log('Current user: ');
 			console.log(currentUser);
 
+			/*if (currentUser) {
+				try {
+				  const token = await currentUser.getIdToken();
+				  console.log('ID Token:');
+				  console.log(token);
+				  // Send the token to the backend
+				} catch (error) {
+				  // Handle any errors that occurred during the token retrieval
+				}
+			  }*/
+			  
+
 			if (currentUser?.emailVerified) {
 				setIsLoading(true);
 				try {

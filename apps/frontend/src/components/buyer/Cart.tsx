@@ -73,7 +73,7 @@ function Cart() {
 			setGroupedProducts(groupedProducts);
 			//console.log(groupedProducts);
 		};
-		fetchCart();
+		if (user) fetchCart();
 	}, [user]);
 
 	useEffect(() => {
@@ -137,7 +137,7 @@ function Cart() {
 				setError('Address not found');
 				return;
 			} else {
-				console.log(selectedSeller?.email)
+				console.log(selectedSeller?.email);
 				const coordinates = [mapData[0].lat, mapData[0].lon];
 				const orderPayload = {
 					seller: selectedSeller?.email,
@@ -446,7 +446,7 @@ function Cart() {
 						value={lastDateOfDelivery}
 						onChange={(e) => setLastDateOfDelivery(e.target.value)}
 					/>
-					
+
 					<br />
 					{error !== '' && (
 						<Alert severity="error">

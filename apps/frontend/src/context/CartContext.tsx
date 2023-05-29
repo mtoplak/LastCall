@@ -50,10 +50,9 @@ export const CartContextProvider = ({
 				);
 				setCartProducts(response.data.cart);
 			} catch (error: any) {
-				console.log(error.message);
+				console.log(error.response.data.message);
 			}
 		};
-
 		if (user && role === 'buyer') {
 			fetchCart();
 		}

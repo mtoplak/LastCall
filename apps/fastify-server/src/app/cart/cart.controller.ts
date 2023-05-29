@@ -15,6 +15,7 @@ export class CartController {
   constructor(private readonly cartService: CartService) { }
 
   @Post('/add')
+  @UseGuards(FirebaseTokenGuard)
   async addToCart(
     @Body('email') email: string,
     @Body('cart') cart: { productId: string; quantity: number; }[],
