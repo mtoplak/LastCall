@@ -4,11 +4,13 @@ import { ProductsRepository } from './products.repository';
 import { CreateUpdateProductDto } from './createUpdateProduct.dto';
 import { SuccessResponse } from 'src/data.response';
 import { Cart } from '../buyers/buyers.model';
+import { SellersRepository } from '../sellers/sellers.repository';
 
 @Injectable()
 export class ProductsService {
   constructor(
     private readonly productsRepository: ProductsRepository,
+    private readonly sellersRepository: SellersRepository,
   ) {}
 
   async createProduct(
@@ -64,7 +66,58 @@ export class ProductsService {
     return { success: true };
   }
 
-  async removeFromStock(productData: Cart[]): Promise<void> {
-    const productIds = productData.map((item) => item.productId);
+  async removeFromStock(productData: Cart[]): Promise<Product[]> {
+    const updatedProducts: Product[] = [];
+
+    for (const item of productData) {
+      const product = await this.productsRepository.findOne({
+        _id: item.productId,
+      });
+
+      if (!product) {
+        throw new NotFoundException(
+          `Product with id ${item.productId} not found`,
+        );
+      }
+
+      product.stock -= item.quantity;
+
+      await product.save();
+
+      updatedProducts.push(product);
+    }
+
+    return updatedProducts;
+  }
+
+  async minPriceRequirements(
+    email: string,
+    productData: Cart[],
+  ): Promise<boolean> {
+    const seller = await this.sellersRepository.findOne({ email });
+
+    if (!seller) {
+      throw new NotFoundException(
+        'Could not find the seller with email ' + email,
+      );
+    }
+
+    const minPrice = seller.minPrice;
+
+    const products = await this.productsRepository.find({
+      _id: { $in: productData.map((item) => item.productId) },
+    });
+    
+    const totalPrice = products.reduce(
+      (total, product, index) =>
+        total + productData[index].quantity * product.price,
+      0,
+    );
+
+    if (totalPrice < minPrice) {
+      return false; // Order does not meet the minimum price requirement
+    }
+
+    return true; // Order meets the minimum price requirement
   }
 }

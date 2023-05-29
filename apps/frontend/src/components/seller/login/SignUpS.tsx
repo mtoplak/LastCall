@@ -22,15 +22,8 @@ import { useUserAuth } from 'context/AuthContext';
 import { useEffect, useState } from 'react';
 import api from 'services/api';
 import CustomBox from 'components/ui/CustomBox';
-
-const markets: string[] = [
-	'Slovenia',
-	'Italy',
-	'France',
-	'Austria',
-	'United Kingdom',
-];
-const companyTypes = ['Winery', 'Brewery', 'Other'];
+import { companyTypes } from 'constants/companyTypeConstants';
+import { markets } from 'constants/marketConstants';
 
 const initialState = {
 	name: '',

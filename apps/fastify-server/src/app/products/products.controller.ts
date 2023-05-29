@@ -11,6 +11,8 @@ import { ProductsService } from './products.service';
 import { Product } from './product.model';
 import { CreateUpdateProductDto } from './createUpdateProduct.dto';
 import { SuccessResponse } from 'src/data.response';
+import { Cart } from '../buyers/buyers.model';
+import { CreateUpdateOrderDto } from '../orders/createUpdateOrder.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -50,5 +52,22 @@ export class ProductsController {
   async removeProduct(@Param('id') id: string): Promise<SuccessResponse> {
     await this.productService.removeProduct(id);
     return { success: true };
+  }
+
+  @Post('/removefromstock')
+  async removeFromStock(@Body() productData: Cart[]): Promise<Product[]> {
+    return this.productService.removeFromStock(productData);
+  }
+
+  @Post('/meets-requirements/:email')
+  async meetsRequirements(
+    @Param('email') sellerEmail: string,
+    @Body() productData: Cart[],
+  ): Promise<boolean> {
+    const meetsRequirements = await this.productService.minPriceRequirements(
+      sellerEmail,
+      productData,
+    );
+    return meetsRequirements;
   }
 }

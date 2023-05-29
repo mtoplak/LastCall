@@ -12,6 +12,7 @@ import { BuyersModule } from './app/buyers/buyers.module';
 import { SellersModule } from './app/sellers/sellers.module';
 import { OrdersModule } from './app/orders/orders.module';
 import { AuthenticationModule } from './app/authentication/authentication.module';
+import { CartModule } from './app/cart/cart.module';
 
 const databaseHost = require('../constants').databaseHost;
 
@@ -21,6 +22,7 @@ const databaseHost = require('../constants').databaseHost;
     ProductsModule,
     SellersModule,
     OrdersModule,
+    CartModule,
     AuthenticationModule,
     MongooseModule.forRoot(databaseHost),
     ConfigModule.forRoot({
