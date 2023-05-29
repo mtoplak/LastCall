@@ -17,6 +17,7 @@ import { useUserAuth } from 'context/AuthContext';
 import SearchOrdersInput from './SearchOrdersInput';
 import { Link } from 'react-router-dom';
 import { getOrderStatusColor } from 'utils/getOrderStatusColor';
+import { formatDate } from 'utils/formatDate';
 
 function SellerOrdersPage() {
 	const [orders, setOrders] = useState<IOrder[]>([]);
@@ -281,15 +282,23 @@ function SellerOrdersPage() {
 															variant="body2"
 															color="text.secondary"
 														>
-															Date of delivery:
-															DATE
+															Date of delivery:{" "}
+															{formatDate(
+													new Date(
+														order.lastDateOfDelivery
+													)
+												)}
 														</Typography>
 														<Typography
 															variant="body2"
 															color="text.secondary"
 														>
-															Date of purchase:
-															DATE
+															Date of purchase:{" "}
+															{formatDate(
+													new Date(
+														order.dateOfPurchase
+													)
+												)}
 														</Typography>
 													</CardContent>
 												</Grid>
@@ -436,15 +445,23 @@ function SellerOrdersPage() {
 															variant="body2"
 															color="text.secondary"
 														>
-															Date of delivery:
-															DATE
+															Date of delivery:{" "}
+															{formatDate(
+													new Date(
+														order.lastDateOfDelivery
+													)
+												)}
 														</Typography>
 														<Typography
 															variant="body2"
 															color="text.secondary"
 														>
-															Date of purchase:
-															DATE
+															Date of purchase:{" "}
+															{formatDate(
+													new Date(
+														order.dateOfPurchase
+													)
+												)}
 														</Typography>
 													</CardContent>
 												</Grid>

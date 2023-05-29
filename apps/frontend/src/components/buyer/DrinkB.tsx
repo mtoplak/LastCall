@@ -21,7 +21,7 @@ const DrinkB: React.FC<DrinkProps> = ({ drink }) => {
 					{drink.title}
 				</Typography>
 				<Typography variant="body1" sx={{ my: 1 }}>
-					Cena: {drink.price}€
+					Price: {drink.price}€
 				</Typography>
 			</InfoBox>
 		</HouseBox>
