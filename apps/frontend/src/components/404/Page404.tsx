@@ -40,7 +40,7 @@ const Page404: FC = () => {
 							suppliers, distributors, retailers, and enthusiastic
 							consumers.
 						</Typography>
-						<Link to={'/buyer'}>
+						<Link to={'/'}>
 							<CustomButton
 								backgroundColor="#0F1B4C"
 								color="#fff"

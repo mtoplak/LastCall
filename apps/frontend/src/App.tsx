@@ -6,6 +6,7 @@ import { store, persistor } from 'redux-store';
 import { Loading } from 'shared';*/
 import Footer from 'components/homepage/Footer';
 import Routing from 'components/routing/Routing';
+import { useUserAuth } from 'context/AuthContext';
 import { BrowserRouter } from 'react-router-dom';
 
 /*
@@ -19,6 +20,7 @@ import { BrowserRouter } from 'react-router-dom';
 */
 
 function App() {
+
 	return (
 		<BrowserRouter>
 			<Routing />

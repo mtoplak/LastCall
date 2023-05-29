@@ -14,10 +14,13 @@ import api from 'services/api';
 import NavbarB from './NavbarB';
 import { formatDate } from 'utils/formatDate';
 import { getOrderStatusColor } from 'utils/getOrderStatusColor';
+import { useUserAuth } from 'context/AuthContext';
+import NavbarS from 'components/seller/NavbarS';
 
 function SingleOrder() {
 	const [order, setOrder] = useState<IOrder>();
 	const { id } = useParams<{ id: string }>();
+	const { role } = useUserAuth();
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -32,9 +35,13 @@ function SingleOrder() {
 		fetchData();
 	}, [id]);
 
+	useEffect(() => {
+		document.title = `Order ${order?.uid} details`;
+	}, [order?.uid]);
+
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
-			<NavbarB />
+			{role === 'seller' ? <NavbarS /> : <NavbarB />}
 			<Container>
 				<Typography
 					variant="h4"

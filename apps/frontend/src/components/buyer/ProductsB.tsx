@@ -4,7 +4,7 @@ import Drink from './DrinkB';
 import SearchProductsInput from './SearchProductsInput';
 import api from 'services/api';
 import { IDrink } from 'models/drink';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import DrinkContainer from 'components/ui/DrinkContainer';
 import PropertiesBox from 'components/ui/PropertiesBox';
 import PropertiesTextBox from 'components/ui/PropertiesTextBox';
@@ -12,11 +12,11 @@ import PropertiesTextBox from 'components/ui/PropertiesTextBox';
 const Products = () => {
 	const [drinks, setDrinks] = useState<IDrink[]>([]);
 	//console.log(drinks);
-
 	// filtering
 	const [filterName, setFilterName] = useState<string>('');
 	const [filterLocation, setFilterLocation] = useState<string>('any');
 	const [filterType, setFilterType] = useState<string>('any');
+	const location = useLocation();
 
 	useEffect(() => {
 		const fetchProducts = async () => {
@@ -29,6 +29,12 @@ const Products = () => {
 		};
 		fetchProducts();
 	}, []);
+
+	useEffect(() => {
+		location.pathname === '/products'
+			? (document.title = 'Products')
+			: (document.title = 'Last Call');
+	}, [location]);
 
 	// filtering
 	const filteredDrinks = drinks.filter((drink) => {

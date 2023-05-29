@@ -1,4 +1,4 @@
-import { Typography, IconButton } from '@mui/material';
+import { Typography } from '@mui/material';
 import React from 'react';
 import InfoBox from 'components/ui/InfoBox';
 import Image from 'components/ui/Image';

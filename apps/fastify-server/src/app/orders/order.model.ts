@@ -20,6 +20,7 @@ export const OrderSchema = new Schema({
   country: { type: String, required: true },
   status: { type: String, default: 'Pending' },
   uid: { type: String, required: true },
+  coordinates: [{ type: Number }]
 });
 
 export interface Order extends Document {
@@ -34,6 +35,7 @@ export interface Order extends Document {
   country: string;
   status: string;
   uid: string;
+  coordinates: number[];
 }
 
 export const OrderModel: Model<Order> = model<Order>('Order', OrderSchema);

@@ -70,7 +70,7 @@ function Product() {
 			return;
 		}
 		try {
-			const response = await api.post(`/buyers/addcart`, {
+			const response = await api.post(`/cart/add`, {
 				email: user.email,
 				cart: [
 					{

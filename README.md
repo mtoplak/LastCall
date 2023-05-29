@@ -149,6 +149,7 @@ docker-compose up
 │           │   │   └───login
 │           │   └───ui
 │           ├───context
+│           ├───constants
 │           ├───models
 │           ├───pages
 │           ├───services

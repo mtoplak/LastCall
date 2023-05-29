@@ -15,6 +15,12 @@ export interface CartResponse {
   cart: CartItem[];
 }
 
+export interface AddressResponse {
+  address: string,
+  city: string,
+  country: string
+}
+
 export interface ProductResponse {
   id: string;
   title: string;
