@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import api from 'services/api';
 import sellerProfile from '../../assets/images/sellerProfile.png';
 import NavbarB from 'components/buyer/NavbarB';
-import Footer from 'components/homepage/Footer';
+import Footer from 'components/core/Footer';
 import Title from 'components/ui/Title';
 import PropertiesTextBox from 'components/ui/PropertiesTextBox';
 import CustomBox from 'components/ui/CustomBox';

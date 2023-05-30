@@ -4,7 +4,6 @@ import NavbarB from './NavbarB';
 import api from '../../services/api';
 import { IOrder } from 'models/order';
 import Order from './Order';
-import Footer from 'components/homepage/Footer';
 import { useUserAuth } from 'context/AuthContext';
 
 function PastOrders() {
@@ -15,9 +14,17 @@ function PastOrders() {
 		if (!user) return;
 		const fetchPastOrders = async () => {
 			try {
-				const response = await api.post('/buyers/orders', {
-					email: user.email,
-				});
+				const response = await api.post(
+					'/buyers/orders',
+					{
+						email: user.email,
+					},
+					{
+						headers: {
+							Authorization: user?.stsTokenManager?.accessToken,
+						},
+					}
+				);
 				setPastOrders(response.data);
 			} catch (error) {
 				console.log(error);

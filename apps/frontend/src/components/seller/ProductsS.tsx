@@ -84,7 +84,11 @@ const ProductsS = () => {
 				seller: user.email,
 				picture: imageURL,
 			};
-			const response = await api.post('/products', updatedProduct);
+			const response = await api.post('/products', updatedProduct, {
+				headers: {
+					Authorization: user?.stsTokenManager?.accessToken,
+				},
+			});
 			setNewProduct(initialState);
 			setDrinks((prevDrinks) => [...prevDrinks, response.data]); // Add the new product to the existing drinks list
 			setIsOpenAdd(false);

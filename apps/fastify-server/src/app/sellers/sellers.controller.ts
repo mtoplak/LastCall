@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { SellersService } from './sellers.service';
 import { Seller } from './sellers.model';
@@ -13,10 +14,12 @@ import { CreateUpdateSellerDto } from './createUpdateSeller.dto';
 import { Product } from '../products/product.model';
 import { Order } from '../orders/order.model';
 import { SuccessResponse } from 'src/data.response';
+//import { FirebaseAuthMiddleware } from 'src/app/middleware/firebase-auth.middleware';
+import { FirebaseTokenGuard } from '../guards/FirebaseTokenGuard';
 
 @Controller('sellers')
 export class SellersController {
-  constructor(private readonly sellersService: SellersService) {}
+  constructor(private readonly sellersService: SellersService) { }
 
   @Post()
   async addSeller(
@@ -41,6 +44,7 @@ export class SellersController {
   }
 
   @Patch(':id')
+  @UseGuards(FirebaseTokenGuard)
   async updateSeller(
     @Param('id') sellerId: string,
     @Body() updateSellerDto: CreateUpdateSellerDto,
@@ -49,6 +53,7 @@ export class SellersController {
   }
 
   @Patch('/patch/:email')
+  @UseGuards(FirebaseTokenGuard)
   async updateSellerByEmail(
     @Param('email') email: string,
     @Body() updateSellerDto: CreateUpdateSellerDto,
@@ -60,12 +65,14 @@ export class SellersController {
   }
 
   @Delete(':id')
+  @UseGuards(FirebaseTokenGuard)
   async removeSeller(@Param('id') id: string): Promise<SuccessResponse> {
     await this.sellersService.removeSeller(id);
     return { success: true };
   }
 
   @Delete('/delete/:email')
+  @UseGuards(FirebaseTokenGuard)
   async removeSellerByEmail(
     @Param('email') email: string,
   ): Promise<SuccessResponse> {
@@ -86,6 +93,7 @@ export class SellersController {
   }
 
   @Post('/ordersbyemail')
+  @UseGuards(FirebaseTokenGuard)
   async getAllOrdersBySeller(@Body('email') email: string): Promise<Order[]> {
     return this.sellersService.getAllOrdersBySeller(email);
   }

@@ -63,7 +63,11 @@ function EditSellerProfile() {
 		if (!user) return;
 		const fetchSellerProfile = async () => {
 			try {
-				const response = await api.get(`sellers/get/${user.email}`);
+				const response = await api.get(`sellers/get/${user.email}`, {
+					headers: {
+						Authorization: user?.stsTokenManager?.accessToken,
+					},
+				});
 				const profileData = response.data;
 				setSellerProfile(profileData);
 			} catch (error) {
@@ -88,14 +92,17 @@ function EditSellerProfile() {
 		try {
 			const response = await api.patch(
 				`sellers/patch/${user.email}`,
-				sellerProfile
+				sellerProfile,
+				{
+					headers: {
+						Authorization: user?.stsTokenManager?.accessToken,
+					},
+				}
 			);
 		} catch (error) {
 			throw error;
 		}
 	};
-
-	console.log(sellerProfile);
 
 	return (
 		<>

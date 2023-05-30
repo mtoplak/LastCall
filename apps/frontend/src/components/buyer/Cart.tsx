@@ -52,21 +52,29 @@ function Cart() {
 	);
 	const [selectedSeller, setSelectedSeller] = useState<ISeller>();
 	const [groupedProducts, setGroupedProducts] = useState<SellerGroup>({});
-	const [alert, setAlert] = useState(false);
+	const [isShownAlert, setIsShownAlert] = useState(false);
 	const { cartProducts, setCartProducts } = useCartContext();
+	const [meetsRequirements, setMeetsRequirements] = useState<boolean>(false);
+	const [checkEligibility, setcheckEligibility] = useState(false);
 
 	useEffect(() => {
 		if (!user) return;
 		const fetchCart = async () => {
-			const response = await api.post('/cart/get', {
-				email: user.email,
-			});
+			const response = await api.post(
+				'/cart/get',
+				{ email: user.email },
+				{
+					headers: {
+						Authorization: user?.stsTokenManager?.accessToken,
+					},
+				}
+			);
 			setCartItems(response.data.cart);
 			const groupedProducts = groupProductsBySeller(response.data.cart);
 			setGroupedProducts(groupedProducts);
 			//console.log(groupedProducts);
 		};
-		fetchCart();
+		if (user) fetchCart();
 	}, [user]);
 
 	const groupProductsBySeller = (cart: any) => {
@@ -105,6 +113,38 @@ function Cart() {
 		setCartItems(response.data.cart);
 	};
 
+	const handleCheckEligibility = async () => {
+		try {
+			const mapResponse = await fetch(
+				`https://nominatim.openstreetmap.org/search?format=json&q=${
+					address + ' ' + city + ' ' + country
+				}&addressdetails=1&limit=1&polygon_svg=1`
+			);
+			const mapData = await mapResponse.json();
+			if (mapData.length === 0) {
+				setError('Address not found');
+				return;
+			} else {
+				const coordinates: number[] = [
+					Number(mapData[0].lat),
+					Number(mapData[0].lon),
+				];
+				const response = await api.post('/distance/coordinates', {
+					sellerEmail: selectedSeller?.email,
+					orderCoordinates: coordinates,
+				});
+				console.log(response);
+				if(response.data === true){
+					setcheckEligibility(true);
+				} else{
+					setcheckEligibility(false);
+				}
+			}
+		} catch (error: any) {
+			setError(error); 
+		}
+	};
+
 	const handleCheckout = async () => {
 		const totalPrice =
 			groupedProducts[selectedSeller!._id].reduce((accumulator, item) => {
@@ -119,17 +159,38 @@ function Cart() {
 			};
 		});
 		try {
-			const response = await api.post(`/orders`, {
-				seller: selectedSeller?.email,
-				buyer: user.email,
-				address: address,
-				city: city,
-				country: country,
-				lastDateOfDelivery: lastDateOfDelivery,
-				products: order,
-				totalPrice: totalPrice.toFixed(2),
-			});
-			console.log(response.data);
+			const mapResponse = await fetch(
+				`https://nominatim.openstreetmap.org/search?format=json&q=${
+					address + ' ' + city + ' ' + country
+				}&addressdetails=1&limit=1&polygon_svg=1`
+			);
+			const mapData = await mapResponse.json();
+			if (mapData.length === 0) {
+				setError('Address not found');
+				return;
+			} else {
+				console.log(selectedSeller?.email);
+				const coordinates = [mapData[0].lat, mapData[0].lon];
+                await api.post(
+                    '/orders',
+                    {
+                        seller: selectedSeller?.email,
+                        buyer: user.email,
+                        address: address,
+                        city: city,
+                        country: country,
+                        lastDateOfDelivery: lastDateOfDelivery,
+                        products: order,
+                        totalPrice: totalPrice.toFixed(2),
+                        coordinates: coordinates,
+                    },
+                    {
+                        headers: {
+                            Authorization: user?.stsTokenManager?.accessToken,
+                        },
+                    }
+                );
+			}
 			setIsOpenModal(false);
 			setAddress('');
 			setCity('');
@@ -140,7 +201,7 @@ function Cart() {
 			);
 			setCartProducts(updatedCartItems);
 			setCartItems(updatedCartItems);
-			setAlert(true);
+			setIsShownAlert(true);
 		} catch (error: any) {
 			setError(error.response.data.message);
 		}
@@ -265,7 +326,14 @@ function Cart() {
 								€<br />
 								Delivery & Handling:{' '}
 								{products[0].product.seller.deliveryCost} €
-								<Divider />
+								</Typography>
+								<Divider/>
+							<Typography
+								variant="body1"
+								color="text.secondary"
+								mb={2}
+								sx={{ mt: 2, mb: 2 }}
+							>
 								Total:{' '}
 								{(
 									products.reduce(
@@ -293,6 +361,7 @@ function Cart() {
 								}}
 								onClick={() => {
 									setIsOpenModal(true);
+									setcheckEligibility(false);
 									setSelectedSeller(
 										products[0].product.seller
 									);
@@ -315,7 +384,7 @@ function Cart() {
 					<Typography variant="h4" component="h1" mt={4} mb={2}>
 						Shopping Cart
 					</Typography>
-					{alert && (
+					{isShownAlert && (
 						<Alert
 							severity="success"
 							style={{ marginTop: '1rem' }}
@@ -324,7 +393,7 @@ function Cart() {
 									aria-label="close"
 									color="inherit"
 									size="small"
-									onClick={(e) => setAlert(false)}
+									onClick={(e) => setIsShownAlert(false)}
 								>
 									<CloseOutlinedIcon fontSize="inherit" />
 								</IconButton>
@@ -399,7 +468,15 @@ function Cart() {
 						onChange={(e) => setCountry(e.target.value)}
 						sx={{ mb: 2 }}
 					/>
-					<TextField
+					<Button 
+						color="primary"
+						variant="contained"
+						fullWidth
+						onClick={handleCheckEligibility}
+					>
+						Check if eligible for delivery
+					</Button>
+					<TextField sx={{ mt: 2 }}
 						id="date"
 						label="Last day of delivery"
 						type="date"
@@ -411,21 +488,20 @@ function Cart() {
 						onChange={(e) => setLastDateOfDelivery(e.target.value)}
 					/>
 					<br />
-					{error && (
+					{error !== '' && (
 						<Alert severity="error">
 							<b>{error}</b>
 						</Alert>
 					)}
-					<Typography sx={{ mt: 2 }}>
-						<Button
+						<Button sx={{ mt: 2 }}
 							color="primary"
 							variant="contained"
 							fullWidth
+							disabled={!checkEligibility}
 							onClick={handleCheckout}
 						>
 							Buy
 						</Button>
-					</Typography>
 				</Box>
 			</Modal>
 		</>

@@ -20,20 +20,25 @@ import NavbarS from 'components/seller/NavbarS';
 function SingleOrder() {
 	const [order, setOrder] = useState<IOrder>();
 	const { id } = useParams<{ id: string }>();
-	const { role } = useUserAuth();
+	const { role, user } = useUserAuth();
 
 	useEffect(() => {
-		const fetchData = async () => {
+		if (!user) return;
+		const fetchOrder = async () => {
 			try {
-				const response = await api.get('/orders/' + id);
+				const response = await api.get('/orders/' + id, {
+					headers: {
+						Authorization: user?.stsTokenManager?.accessToken,
+					},
+				});
 				//console.log(response.data);
 				setOrder(response.data);
 			} catch (error) {
 				throw error;
 			}
 		};
-		fetchData();
-	}, [id]);
+		fetchOrder();
+	}, [id, user]);
 
 	useEffect(() => {
 		document.title = `Order ${order?.uid} details`;

@@ -54,8 +54,8 @@ const SignInB = () => {
 					const response = await api.post('/email', {
 						email: email,
 					});
-					console.log(response);
-					console.log(response.data);
+					//console.log(response);
+					//console.log(response.data);
 				} catch (error: any) {
 					setError(error.message);
 				}

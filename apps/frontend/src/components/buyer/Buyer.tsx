@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import Hero from './HeroB';
 import Products from './ProductsB';
 import { Box } from '@mui/material';
-import Footer from '../homepage/Footer';
 import { useLocation } from 'react-router-dom';
 //import { useAppDispatch } from 'redux-store';
 import '../../assets/styles/buyer.css';

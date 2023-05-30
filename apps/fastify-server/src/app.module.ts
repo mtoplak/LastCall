@@ -1,8 +1,4 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-} from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
@@ -13,6 +9,7 @@ import { SellersModule } from './app/sellers/sellers.module';
 import { OrdersModule } from './app/orders/orders.module';
 import { AuthenticationModule } from './app/authentication/authentication.module';
 import { CartModule } from './app/cart/cart.module';
+import { DistanceModule } from './app/distance/distance.module';
 
 const databaseHost = require('../constants').databaseHost;
 
@@ -24,6 +21,7 @@ const databaseHost = require('../constants').databaseHost;
     OrdersModule,
     CartModule,
     AuthenticationModule,
+    DistanceModule,
     MongooseModule.forRoot(databaseHost),
     ConfigModule.forRoot({
       cache: true,
@@ -34,7 +32,7 @@ const databaseHost = require('../constants').databaseHost;
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    // zakomentirano zaradi lažjega dela na frontendu
+    // se ne uporablja zdaj
     /*consumer
       .apply(FirebaseAuthMiddleware)
       .forRoutes('/orders'); // Apply the middleware to these routes
