@@ -17,6 +17,7 @@ import SellersOrderPage from 'components/seller/SellersOrderPage';
 import SingleOrder from 'components/buyer/SingleOrder';
 import SellerProtectedRoute from './SellerProtectedRoute';
 import EditSellerProfile from 'components/seller/EditSellerProfile';
+import Sales from 'components/seller/Sales';
 
 const Routing = () => {
 	return (
@@ -76,6 +77,14 @@ const Routing = () => {
 				element={
 					<SellerProtectedRoute>
 						<SellersOrderPage />
+					</SellerProtectedRoute>
+				}
+			/>
+			<Route
+				path="/seller/sales"
+				element={
+					<SellerProtectedRoute>
+						<Sales />
 					</SellerProtectedRoute>
 				}
 			/>

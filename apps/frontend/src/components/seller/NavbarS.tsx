@@ -167,6 +167,18 @@ function NavbarS() {
 									Orders
 								</Button>
 							</Link>
+							<Link to={'/seller/sales'}>
+								<Button
+									onClick={handleCloseNavMenu}
+									sx={{
+										my: 2,
+										color: 'white',
+										display: 'block',
+									}}
+								>
+									Sales
+								</Button>
+							</Link>
 						</Box>
 						{user && role === 'seller' ? (
 							<Box sx={{ flexGrow: 0 }}>
