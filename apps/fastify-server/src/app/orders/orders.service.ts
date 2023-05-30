@@ -6,11 +6,11 @@ import {
 import { Order } from './order.model';
 import { OrdersRepository } from './orders.repository';
 import { CreateUpdateOrderDto } from './createUpdateOrder.dto';
-import { BuyersService } from '../buyers/buyers.service';
 import { SuccessResponse } from 'src/data.response';
 import { Cart } from '../buyers/buyers.model';
 import { ProductsService } from '../products/products.service';
 import { CartService } from '../cart/cart.service';
+import { MailService } from '../mailer/mail.service';
 import { DistanceService } from '../distance/distance.service';
 import { SellersRepository } from '../sellers/sellers.repository';
 
@@ -18,9 +18,9 @@ import { SellersRepository } from '../sellers/sellers.repository';
 export class OrdersService {
   constructor(
     private readonly ordersRepository: OrdersRepository,
-    private readonly buyersService: BuyersService,
     private readonly productsService: ProductsService,
     private readonly cartService: CartService,
+    private readonly mailService: MailService,
     private readonly distanceService: DistanceService,
     private readonly sellersRepository: SellersRepository,
   ) {}
@@ -60,6 +60,10 @@ export class OrdersService {
       sellerEmail,
       buyerEmail,
     );
+
+    // Send the order confirmation email
+    this.mailService.sendOrderConfirmationEmail(buyerEmail, order, productData, sellerEmail); // brez await, da se ne čaka
+
     /*
     const distance = await this.distanceService.calculateDistance(
       sellerEmail,

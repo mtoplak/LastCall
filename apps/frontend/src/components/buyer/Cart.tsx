@@ -16,6 +16,7 @@ import {
 	Modal,
 	AlertTitle,
 	IconButton,
+	LinearProgress,
 } from '@mui/material';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import NavbarB from './NavbarB';
@@ -55,6 +56,7 @@ function Cart() {
 	const [isShownAlert, setIsShownAlert] = useState(false);
 	const { cartProducts, setCartProducts } = useCartContext();
 	const [meetsRequirements, setMeetsRequirements] = useState<boolean>(false);
+	const [isLoading, setIsLoading] = useState(false);
 	const [checkEligibility, setcheckEligibility] = useState(false);
 
 	useEffect(() => {
@@ -99,17 +101,24 @@ function Cart() {
 		const response = await api.delete(`/cart/${user.email}/${id}`);
 		setCartItems(response.data.cart);
 	};
-
 	const handleQuantityChange = async (id: string, quantity: number) => {
-		const response = await api.post(`/cart/add`, {
-			email: user.email,
-			cart: [
-				{
-					productId: id,
-					quantity: quantity,
+		const response = await api.post(
+			`/cart/add`,
+			{
+				email: user.email,
+				cart: [
+					{
+						productId: id,
+						quantity: quantity,
+					},
+				],
+			},
+			{
+				headers: {
+					Authorization: user?.stsTokenManager?.accessToken,
 				},
-			],
-		});
+			}
+		);
 		setCartItems(response.data.cart);
 	};
 
@@ -134,14 +143,14 @@ function Cart() {
 					orderCoordinates: coordinates,
 				});
 				console.log(response);
-				if(response.data === true){
+				if (response.data === true) {
 					setcheckEligibility(true);
-				} else{
+				} else {
 					setcheckEligibility(false);
 				}
 			}
 		} catch (error: any) {
-			setError(error); 
+			setError(error);
 		}
 	};
 
@@ -158,6 +167,7 @@ function Cart() {
 				quantity: item.quantity,
 			};
 		});
+		setIsLoading(true);
 		try {
 			const mapResponse = await fetch(
 				`https://nominatim.openstreetmap.org/search?format=json&q=${
@@ -169,27 +179,27 @@ function Cart() {
 				setError('Address not found');
 				return;
 			} else {
-				console.log(selectedSeller?.email);
 				const coordinates = [mapData[0].lat, mapData[0].lon];
-                await api.post(
-                    '/orders',
-                    {
-                        seller: selectedSeller?.email,
-                        buyer: user.email,
-                        address: address,
-                        city: city,
-                        country: country,
-                        lastDateOfDelivery: lastDateOfDelivery,
-                        products: order,
-                        totalPrice: totalPrice.toFixed(2),
-                        coordinates: coordinates,
-                    },
-                    {
-                        headers: {
-                            Authorization: user?.stsTokenManager?.accessToken,
-                        },
-                    }
-                );
+				await api.post(
+					'/orders',
+					{
+						seller: selectedSeller?.email,
+						buyer: user.email,
+						address: address,
+						city: city,
+						country: country,
+						lastDateOfDelivery: lastDateOfDelivery,
+						products: order,
+						totalPrice: totalPrice.toFixed(2),
+						coordinates: coordinates,
+					},
+					{
+						headers: {
+							Authorization: user?.stsTokenManager?.accessToken,
+						},
+					}
+				);
+				
 			}
 			setIsOpenModal(false);
 			setAddress('');
@@ -203,7 +213,9 @@ function Cart() {
 			setCartItems(updatedCartItems);
 			setIsShownAlert(true);
 		} catch (error: any) {
-			setError(error.response.data.message);
+			setError(error.response.data.message); // error.response
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -273,7 +285,7 @@ function Cart() {
 											}
 										>
 											{Array.from(
-												{ length: 100 },
+												{ length: 1000 },
 												(_, index) => (
 													<MenuItem
 														key={index + 1}
@@ -326,8 +338,8 @@ function Cart() {
 								€<br />
 								Delivery & Handling:{' '}
 								{products[0].product.seller.deliveryCost} €
-								</Typography>
-								<Divider/>
+							</Typography>
+							<Divider />
 							<Typography
 								variant="body1"
 								color="text.secondary"
@@ -468,7 +480,7 @@ function Cart() {
 						onChange={(e) => setCountry(e.target.value)}
 						sx={{ mb: 2 }}
 					/>
-					<Button 
+					<Button
 						color="primary"
 						variant="contained"
 						fullWidth
@@ -476,7 +488,8 @@ function Cart() {
 					>
 						Check if eligible for delivery
 					</Button>
-					<TextField sx={{ mt: 2 }}
+					<TextField
+						sx={{ mt: 2 }}
 						id="date"
 						label="Last day of delivery"
 						type="date"
@@ -493,7 +506,10 @@ function Cart() {
 							<b>{error}</b>
 						</Alert>
 					)}
-						<Button sx={{ mt: 2 }}
+					{isLoading && <LinearProgress color="inherit" />}
+					<Typography sx={{ mt: 2 }}>
+						<Button
+							sx={{ mt: 2 }}
 							color="primary"
 							variant="contained"
 							fullWidth
@@ -502,6 +518,7 @@ function Cart() {
 						>
 							Buy
 						</Button>
+					</Typography>
 				</Box>
 			</Modal>
 		</>
