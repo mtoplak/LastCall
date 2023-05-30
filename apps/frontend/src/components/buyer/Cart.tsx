@@ -105,6 +105,34 @@ function Cart() {
 		setCartItems(response.data.cart);
 	};
 
+	const handleCheckEligibility = async () => {
+		try {
+			const mapResponse = await fetch(
+				`https://nominatim.openstreetmap.org/search?format=json&q=${
+					address + ' ' + city + ' ' + country
+				}&addressdetails=1&limit=1&polygon_svg=1`
+			);
+			const mapData = await mapResponse.json();
+			if (mapData.length === 0) {
+				setError('Address not found');
+				return;
+			} else {
+				const coordinates: number[] = [
+					Number(mapData[0].lat),
+					Number(mapData[0].lon),
+				];
+				const response = await api.post('/distance/coordinates', {
+					sellerEmail: selectedSeller?.email,
+					orderCoordinates: coordinates,
+				});
+				console.log(response);
+			}
+			setAlert(true);
+		} catch (error: any) {
+			setError(error);
+		}
+	};
+
 	const handleCheckout = async () => {
 		const totalPrice =
 			groupedProducts[selectedSeller!._id].reduce((accumulator, item) => {
@@ -130,6 +158,8 @@ function Cart() {
 				setError('Address not found');
 				return;
 			} else {
+				console.log(selectedSeller?.email);
+				console.log(user.email);
 				const coordinates = [mapData[0].lat, mapData[0].lon];
 				const orderPayload = {
 					seller: selectedSeller?.email,
@@ -413,6 +443,14 @@ function Cart() {
 						onChange={(e) => setCountry(e.target.value)}
 						sx={{ mb: 2 }}
 					/>
+					<Button
+						color="primary"
+						variant="contained"
+						fullWidth
+						onClick={handleCheckEligibility}
+					>
+						Check if eligible for delivery
+					</Button>
 					<TextField
 						id="date"
 						label="Last day of delivery"

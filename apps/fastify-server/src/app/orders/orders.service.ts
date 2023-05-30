@@ -11,6 +11,8 @@ import { SuccessResponse } from 'src/data.response';
 import { Cart } from '../buyers/buyers.model';
 import { ProductsService } from '../products/products.service';
 import { CartService } from '../cart/cart.service';
+import { DistanceService } from '../distance/distance.service';
+import { SellersRepository } from '../sellers/sellers.repository';
 
 @Injectable()
 export class OrdersService {
@@ -19,6 +21,8 @@ export class OrdersService {
     private readonly buyersService: BuyersService,
     private readonly productsService: ProductsService,
     private readonly cartService: CartService,
+    private readonly distanceService: DistanceService,
+    private readonly sellersRepository: SellersRepository,
   ) {}
 
   async addOrder(
@@ -27,16 +31,27 @@ export class OrdersService {
     sellerEmail: string,
     buyerEmail: string,
   ): Promise<Order> {
-    const meetsMinPriceRequirements = await this.productsService.minPriceRequirements(sellerEmail, productData);
+    
+    const seller = await this.sellersRepository.findOne({ email: sellerEmail });
+    if (!seller) {
+      throw new NotFoundException('Seller not found');
+    }
+
+    const meetsMinPriceRequirements =
+      await this.productsService.minPriceRequirements(sellerEmail, productData);
     if (!meetsMinPriceRequirements) {
       throw new BadRequestException(
         'Order does not meet the minimum price requirement',
       );
     }
 
-    const removeFromStockResult = await this.productsService.removeFromStock(productData);
+    const removeFromStockResult = await this.productsService.removeFromStock(
+      productData,
+    );
     if (removeFromStockResult === false) {
-      throw new BadRequestException('Not enough stock for one or more products');
+      throw new BadRequestException(
+        'Not enough stock for one or more products',
+      );
     }
 
     const order = await this.ordersRepository.create(
@@ -45,6 +60,17 @@ export class OrdersService {
       sellerEmail,
       buyerEmail,
     );
+    /*
+    const distance = await this.distanceService.calculateDistance(
+      sellerEmail,
+      order._id,
+    );
+    if (distance > seller.maxDistance) {
+      throw new BadRequestException(
+        "Order address is outside the seller's maximum distance",
+      );
+    }
+*/
     const productIds = productData.map((item) => item.productId);
     await this.cartService.deleteProductsFromCart(buyerEmail, productIds);
     return order;
