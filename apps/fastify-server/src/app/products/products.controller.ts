@@ -7,6 +7,7 @@ import {
   Patch,
   Delete,
   UseGuards,
+  NotFoundException,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from './product.model';
@@ -18,7 +19,7 @@ import { FirebaseTokenGuard } from '../guards/FirebaseTokenGuard';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productService: ProductsService) { }
+  constructor(private readonly productService: ProductsService) {}
 
   @Post()
   @UseGuards(FirebaseTokenGuard)
@@ -60,7 +61,9 @@ export class ProductsController {
   }
 
   @Post('/removefromstock')
-  async removeFromStock(@Body() productData: Cart[]): Promise<Product[] | false> {
+  async removeFromStock(
+    @Body() productData: Cart[],
+  ): Promise<Product[] | false> {
     return this.productService.removeFromStock(productData);
   }
 
@@ -75,4 +78,21 @@ export class ProductsController {
     );
     return meetsRequirements;
   }
+
+  @Post('/sale')
+  async makeSale(
+    @Body('productIds') productIds: string[],
+    @Body('discount') discount: number,
+  ) {
+    try {
+      const updatedProducts = await this.productService.makeSale(productIds, discount);
+      return updatedProducts;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
+  }
+  
 }

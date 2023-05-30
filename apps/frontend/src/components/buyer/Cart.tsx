@@ -134,14 +134,14 @@ function Cart() {
 					orderCoordinates: coordinates,
 				});
 				console.log(response);
-				if(response.data === true){
+				if (response.data === true) {
 					setcheckEligibility(true);
-				} else{
+				} else {
 					setcheckEligibility(false);
 				}
 			}
 		} catch (error: any) {
-			setError(error); 
+			setError(error);
 		}
 	};
 
@@ -171,25 +171,25 @@ function Cart() {
 			} else {
 				console.log(selectedSeller?.email);
 				const coordinates = [mapData[0].lat, mapData[0].lon];
-                await api.post(
-                    '/orders',
-                    {
-                        seller: selectedSeller?.email,
-                        buyer: user.email,
-                        address: address,
-                        city: city,
-                        country: country,
-                        lastDateOfDelivery: lastDateOfDelivery,
-                        products: order,
-                        totalPrice: totalPrice.toFixed(2),
-                        coordinates: coordinates,
-                    },
-                    {
-                        headers: {
-                            Authorization: user?.stsTokenManager?.accessToken,
-                        },
-                    }
-                );
+				await api.post(
+					'/orders',
+					{
+						seller: selectedSeller?.email,
+						buyer: user.email,
+						address: address,
+						city: city,
+						country: country,
+						lastDateOfDelivery: lastDateOfDelivery,
+						products: order,
+						totalPrice: totalPrice.toFixed(2),
+						coordinates: coordinates,
+					},
+					{
+						headers: {
+							Authorization: user?.stsTokenManager?.accessToken,
+						},
+					}
+				);
 			}
 			setIsOpenModal(false);
 			setAddress('');
@@ -332,8 +332,8 @@ function Cart() {
 								€<br />
 								Delivery & Handling:{' '}
 								{products[0].product.seller.deliveryCost} €
-								</Typography>
-								<Divider/>
+							</Typography>
+							<Divider />
 							<Typography
 								variant="body1"
 								color="text.secondary"
@@ -474,7 +474,7 @@ function Cart() {
 						onChange={(e) => setCountry(e.target.value)}
 						sx={{ mb: 2 }}
 					/>
-					<Button 
+					<Button
 						color="primary"
 						variant="contained"
 						fullWidth
@@ -482,7 +482,8 @@ function Cart() {
 					>
 						Check if eligible for delivery
 					</Button>
-					<TextField sx={{ mt: 2 }}
+					<TextField
+						sx={{ mt: 2 }}
 						id="date"
 						label="Last day of delivery"
 						type="date"
@@ -500,15 +501,16 @@ function Cart() {
 							<b>{error}</b>
 						</Alert>
 					)}
-						<Button sx={{ mt: 2 }}
-							color="primary"
-							variant="contained"
-							fullWidth
-							disabled={!checkEligibility}
-							onClick={handleCheckout}
-						>
-							Buy
-						</Button>
+					<Button
+						sx={{ mt: 2 }}
+						color="primary"
+						variant="contained"
+						fullWidth
+						disabled={!checkEligibility}
+						onClick={handleCheckout}
+					>
+						Buy
+					</Button>
 				</Box>
 			</Modal>
 		</>
