@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import fetch from 'node-fetch';
 import { SellersRepository } from '../sellers/sellers.repository';
@@ -90,8 +91,17 @@ export class DistanceService {
     const distance = earthRadiusKm * c;
 
     if (!distance) {
-      throw new BadRequestException('Could not calculate distance');
+      throw new NotFoundException('Could not calculate distance');
     }
+    /*
+    if (distance > seller.maxDistance) {
+      throw new UnprocessableEntityException(
+        "Order address is outside the seller's maximum distance",
+      );
+    }
+    */
+    
+    
     return distance;
   }
 
