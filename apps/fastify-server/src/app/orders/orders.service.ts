@@ -6,20 +6,20 @@ import {
 import { Order } from './order.model';
 import { OrdersRepository } from './orders.repository';
 import { CreateUpdateOrderDto } from './createUpdateOrder.dto';
-import { BuyersService } from '../buyers/buyers.service';
 import { SuccessResponse } from 'src/data.response';
 import { Cart } from '../buyers/buyers.model';
 import { ProductsService } from '../products/products.service';
 import { CartService } from '../cart/cart.service';
+import { MailService } from '../mailer/mail.service';
 
 @Injectable()
 export class OrdersService {
   constructor(
     private readonly ordersRepository: OrdersRepository,
-    private readonly buyersService: BuyersService,
     private readonly productsService: ProductsService,
     private readonly cartService: CartService,
-  ) {}
+    private readonly mailService: MailService,
+  ) { }
 
   async addOrder(
     orderData: CreateUpdateOrderDto,
@@ -45,6 +45,10 @@ export class OrdersService {
       sellerEmail,
       buyerEmail,
     );
+
+    // Send the order confirmation email
+    this.mailService.sendOrderConfirmationEmail(buyerEmail, order, productData, sellerEmail); // brez await, da se ne čaka
+
     const productIds = productData.map((item) => item.productId);
     await this.cartService.deleteProductsFromCart(buyerEmail, productIds);
     return order;

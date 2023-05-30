@@ -13,6 +13,7 @@ import { SellersModule } from './app/sellers/sellers.module';
 import { OrdersModule } from './app/orders/orders.module';
 import { AuthenticationModule } from './app/authentication/authentication.module';
 import { CartModule } from './app/cart/cart.module';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 const databaseHost = require('../constants').databaseHost;
 
@@ -24,6 +25,17 @@ const databaseHost = require('../constants').databaseHost;
     OrdersModule,
     CartModule,
     AuthenticationModule,
+    MailerModule.forRoot({
+      transport: {
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true, // Enable SSL encryption
+        auth: {
+          user: 'info.last.call.company@gmail.com',
+          pass: process.env.MAILER_PASS,
+        },
+      },
+    }),
     MongooseModule.forRoot(databaseHost),
     ConfigModule.forRoot({
       cache: true,

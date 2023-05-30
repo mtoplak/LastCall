@@ -14,6 +14,7 @@ import { ProductsService } from '../products/products.service';
 import { SellersService } from '../sellers/sellers.service';
 import { SellersRepository } from '../sellers/sellers.repository';
 import { CartService } from '../cart/cart.service';
+import { MailService } from '../mailer/mail.service';
 
 @Module({
   imports: [
@@ -32,7 +33,8 @@ import { CartService } from '../cart/cart.service';
     ProductsRepository,
     SellersService,
     SellersRepository,
-    CartService
+    CartService,
+    MailService
   ],
 })
-export class OrdersModule {}
+export class OrdersModule { }

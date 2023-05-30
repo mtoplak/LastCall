@@ -16,6 +16,7 @@ import {
 	Modal,
 	AlertTitle,
 	IconButton,
+	LinearProgress,
 } from '@mui/material';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import NavbarB from './NavbarB';
@@ -55,6 +56,7 @@ function Cart() {
 	const [isShownAlert, setIsShownAlert] = useState(false);
 	const { cartProducts, setCartProducts } = useCartContext();
 	const [meetsRequirements, setMeetsRequirements] = useState<boolean>(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
 		if (!user) return;
@@ -100,15 +102,23 @@ function Cart() {
 	};
 
 	const handleQuantityChange = async (id: string, quantity: number) => {
-		const response = await api.post(`/cart/add`, {
-			email: user.email,
-			cart: [
-				{
-					productId: id,
-					quantity: quantity,
+		const response = await api.post(
+			`/cart/add`,
+			{
+				email: user.email,
+				cart: [
+					{
+						productId: id,
+						quantity: quantity,
+					},
+				],
+			},
+			{
+				headers: {
+					Authorization: user?.stsTokenManager?.accessToken,
 				},
-			],
-		});
+			}
+		);
 		setCartItems(response.data.cart);
 	};
 
@@ -125,6 +135,7 @@ function Cart() {
 				quantity: item.quantity,
 			};
 		});
+		setIsLoading(true);
 		try {
 			const mapResponse = await fetch(
 				`https://nominatim.openstreetmap.org/search?format=json&q=${
@@ -137,28 +148,27 @@ function Cart() {
 				setError('Address not found');
 				return;
 			} else {
-				console.log(selectedSeller?.email);
 				const coordinates = [mapData[0].lat, mapData[0].lon];
-				const orderPayload = {
-					seller: selectedSeller?.email,
-					buyer: user.email,
-					address: address,
-					city: city,
-					country: country,
-					lastDateOfDelivery: lastDateOfDelivery,
-					products: order,
-					totalPrice: totalPrice.toFixed(2),
-					coordinates: coordinates,
-				};
 				await api.post(
-					`/orders`,
-					{ orderPayload },
+					'/orders',
+					{
+						seller: selectedSeller?.email,
+						buyer: user.email,
+						address: address,
+						city: city,
+						country: country,
+						lastDateOfDelivery: lastDateOfDelivery,
+						products: order,
+						totalPrice: totalPrice.toFixed(2),
+						coordinates: coordinates,
+					},
 					{
 						headers: {
 							Authorization: user?.stsTokenManager?.accessToken,
 						},
 					}
 				);
+				
 			}
 			setIsOpenModal(false);
 			setAddress('');
@@ -172,7 +182,9 @@ function Cart() {
 			setCartItems(updatedCartItems);
 			setIsShownAlert(true);
 		} catch (error: any) {
-			setError(error.response.data.message);
+			setError(error.response.data.message); // error.response
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -248,7 +260,7 @@ function Cart() {
 											}
 										>
 											{Array.from(
-												{ length: 100 },
+												{ length: 1000 },
 												(_, index) => (
 													<MenuItem
 														key={index + 1}
@@ -446,13 +458,14 @@ function Cart() {
 						value={lastDateOfDelivery}
 						onChange={(e) => setLastDateOfDelivery(e.target.value)}
 					/>
-
+					<br />
 					<br />
 					{error !== '' && (
 						<Alert severity="error">
 							<b>{error}</b>
 						</Alert>
 					)}
+					{isLoading && <LinearProgress color="inherit" />}
 					<Typography sx={{ mt: 2 }}>
 						<Button
 							color="primary"
