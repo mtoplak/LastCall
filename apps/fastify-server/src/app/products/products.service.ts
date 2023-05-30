@@ -111,7 +111,7 @@ export class ProductsService {
     const products = await this.productsRepository.find({
       _id: { $in: productData.map((item) => item.productId) },
     });
-    
+
     const totalPrice = products.reduce(
       (total, product, index) =>
         total + productData[index].quantity * product.price,
@@ -124,4 +124,35 @@ export class ProductsService {
 
     return true; // Order meets the minimum price requirement
   }
+
+  async makeSale(
+    productIds: string[],
+    discount: number
+  ): Promise<Product[]> {
+    const updatedProducts: Product[] = [];
+  
+    for (const productId of productIds) {
+      const product = await this.productsRepository.findOne({ _id: productId });
+      if (!product) {
+        throw new NotFoundException(`Product with id ${productId} not found`);
+      }
+  
+      const actualPrice = product.actualPrice;
+      const price = actualPrice * (100 - discount) / 100;
+  
+      const updatedProduct = await this.productsRepository.findOneAndUpdate(
+        { _id: productId },
+        { price, discount },
+        { new: true }
+      );
+      if (!updatedProduct) {
+        throw new NotFoundException(`Failed to update the product with id ${productId}`);
+      }
+  
+      updatedProducts.push(updatedProduct);
+    }
+  
+    return updatedProducts;
+  }
+  
 }

@@ -57,6 +57,7 @@ function Cart() {
 	const { cartProducts, setCartProducts } = useCartContext();
 	const [meetsRequirements, setMeetsRequirements] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [checkEligibility, setcheckEligibility] = useState(false);
 
 	useEffect(() => {
 		if (!user) return;
@@ -100,7 +101,6 @@ function Cart() {
 		const response = await api.delete(`/cart/${user.email}/${id}`);
 		setCartItems(response.data.cart);
 	};
-
 	const handleQuantityChange = async (id: string, quantity: number) => {
 		const response = await api.post(
 			`/cart/add`,
@@ -120,6 +120,38 @@ function Cart() {
 			}
 		);
 		setCartItems(response.data.cart);
+	};
+
+	const handleCheckEligibility = async () => {
+		try {
+			const mapResponse = await fetch(
+				`https://nominatim.openstreetmap.org/search?format=json&q=${
+					address + ' ' + city + ' ' + country
+				}&addressdetails=1&limit=1&polygon_svg=1`
+			);
+			const mapData = await mapResponse.json();
+			if (mapData.length === 0) {
+				setError('Address not found');
+				return;
+			} else {
+				const coordinates: number[] = [
+					Number(mapData[0].lat),
+					Number(mapData[0].lon),
+				];
+				const response = await api.post('/distance/coordinates', {
+					sellerEmail: selectedSeller?.email,
+					orderCoordinates: coordinates,
+				});
+				console.log(response);
+				if (response.data === true) {
+					setcheckEligibility(true);
+				} else {
+					setcheckEligibility(false);
+				}
+			}
+		} catch (error: any) {
+			setError(error);
+		}
 	};
 
 	const handleCheckout = async () => {
@@ -143,7 +175,6 @@ function Cart() {
 				}&addressdetails=1&limit=1&polygon_svg=1`
 			);
 			const mapData = await mapResponse.json();
-			//console.log(mapData);
 			if (mapData.length === 0) {
 				setError('Address not found');
 				return;
@@ -313,7 +344,14 @@ function Cart() {
 								€<br />
 								Delivery & Handling:{' '}
 								{products[0].product.seller.deliveryCost} €
-								<Divider />
+							</Typography>
+							<Divider />
+							<Typography
+								variant="body1"
+								color="text.secondary"
+								mb={2}
+								sx={{ mt: 2, mb: 2 }}
+							>
 								Total:{' '}
 								{(
 									products.reduce(
@@ -341,6 +379,7 @@ function Cart() {
 								}}
 								onClick={() => {
 									setIsOpenModal(true);
+									setcheckEligibility(false);
 									setSelectedSeller(
 										products[0].product.seller
 									);
@@ -447,7 +486,16 @@ function Cart() {
 						onChange={(e) => setCountry(e.target.value)}
 						sx={{ mb: 2 }}
 					/>
+					<Button
+						color="primary"
+						variant="contained"
+						fullWidth
+						onClick={handleCheckEligibility}
+					>
+						Check if eligible for delivery
+					</Button>
 					<TextField
+						sx={{ mt: 2 }}
 						id="date"
 						label="Last day of delivery"
 						type="date"
@@ -468,9 +516,11 @@ function Cart() {
 					{isLoading && <LinearProgress color="inherit" />}
 					<Typography sx={{ mt: 2 }}>
 						<Button
+							sx={{ mt: 2 }}
 							color="primary"
 							variant="contained"
 							fullWidth
+							disabled={!checkEligibility}
 							onClick={handleCheckout}
 						>
 							Buy
