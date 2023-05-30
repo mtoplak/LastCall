@@ -52,22 +52,33 @@ function Cart() {
 	);
 	const [selectedSeller, setSelectedSeller] = useState<ISeller>();
 	const [groupedProducts, setGroupedProducts] = useState<SellerGroup>({});
-	const [alert, setAlert] = useState(false);
+	const [isShownAlert, setIsShownAlert] = useState(false);
 	const { cartProducts, setCartProducts } = useCartContext();
+	const [meetsRequirements, setMeetsRequirements] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (!user) return;
 		const fetchCart = async () => {
-			const response = await api.post('/cart/get', {
-				email: user.email,
-			});
+			const response = await api.post(
+				'/cart/get',
+				{ email: user.email },
+				{
+					headers: {
+						Authorization: user?.stsTokenManager?.accessToken,
+					},
+				}
+			);
 			setCartItems(response.data.cart);
 			const groupedProducts = groupProductsBySeller(response.data.cart);
 			setGroupedProducts(groupedProducts);
 			//console.log(groupedProducts);
 		};
-		fetchCart();
+		if (user) fetchCart();
 	}, [user]);
+
+	useEffect(() => {
+		document.title = 'Shopping Cart';
+	}, []);
 
 	const groupProductsBySeller = (cart: any) => {
 		const groupedProducts: SellerGroup = {};
@@ -82,10 +93,6 @@ function Cart() {
 
 		return groupedProducts;
 	};
-
-	useEffect(() => {
-		document.title = 'Shopping Cart';
-	}, []);
 
 	const handleRemoveFromCart = async (id: string) => {
 		const response = await api.delete(`/cart/${user.email}/${id}`);
@@ -153,13 +160,12 @@ function Cart() {
 				}&addressdetails=1&limit=1&polygon_svg=1`
 			);
 			const mapData = await mapResponse.json();
-			console.log(mapData);
+			//console.log(mapData);
 			if (mapData.length === 0) {
 				setError('Address not found');
 				return;
 			} else {
 				console.log(selectedSeller?.email);
-				console.log(user.email);
 				const coordinates = [mapData[0].lat, mapData[0].lon];
 				const orderPayload = {
 					seller: selectedSeller?.email,
@@ -172,7 +178,15 @@ function Cart() {
 					totalPrice: totalPrice.toFixed(2),
 					coordinates: coordinates,
 				};
-				await api.post(`/orders`, orderPayload);
+				await api.post(
+					`/orders`,
+					{ orderPayload },
+					{
+						headers: {
+							Authorization: user?.stsTokenManager?.accessToken,
+						},
+					}
+				);
 			}
 			setIsOpenModal(false);
 			setAddress('');
@@ -184,9 +198,9 @@ function Cart() {
 			);
 			setCartProducts(updatedCartItems);
 			setCartItems(updatedCartItems);
-			setAlert(true);
+			setIsShownAlert(true);
 		} catch (error: any) {
-			setError(error);
+			setError(error.response.data.message);
 		}
 	};
 
@@ -195,7 +209,13 @@ function Cart() {
 			<Grid container spacing={2} key={seller}>
 				<Grid item xs={8}>
 					<Typography variant="h6" component="h2" mb={2}>
-						Seller: {products[0].product.seller.title}
+						Seller:{' '}
+						<Link
+							to={`/supplier/${products[0].product.seller._id}`}
+							className="blackLink"
+						>
+							{products[0].product.seller.title}
+						</Link>
 					</Typography>
 					{products.map((item) => (
 						<Card
@@ -359,7 +379,7 @@ function Cart() {
 					<Typography variant="h4" component="h1" mt={4} mb={2}>
 						Shopping Cart
 					</Typography>
-					{alert && (
+					{isShownAlert && (
 						<Alert
 							severity="success"
 							style={{ marginTop: '1rem' }}
@@ -368,7 +388,7 @@ function Cart() {
 									aria-label="close"
 									color="inherit"
 									size="small"
-									onClick={(e) => setAlert(false)}
+									onClick={(e) => setIsShownAlert(false)}
 								>
 									<CloseOutlinedIcon fontSize="inherit" />
 								</IconButton>
@@ -462,8 +482,9 @@ function Cart() {
 						value={lastDateOfDelivery}
 						onChange={(e) => setLastDateOfDelivery(e.target.value)}
 					/>
+
 					<br />
-					{error && (
+					{error !== '' && (
 						<Alert severity="error">
 							<b>{error}</b>
 						</Alert>

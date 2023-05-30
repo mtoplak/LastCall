@@ -4,18 +4,21 @@ import {
   Post,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { CartResponse } from 'src/data.response';
 import { CartService } from './cart.service';
+import { FirebaseTokenGuard } from '../guards/FirebaseTokenGuard';
 
 @Controller('cart')
 export class CartController {
-  constructor(private readonly cartService: CartService) {}
+  constructor(private readonly cartService: CartService) { }
 
   @Post('/add')
+  @UseGuards(FirebaseTokenGuard)
   async addToCart(
     @Body('email') email: string,
-    @Body('cart') cart: { productId: string; quantity: number }[],
+    @Body('cart') cart: { productId: string; quantity: number; }[],
   ): Promise<CartResponse | null> {
     const result = await this.cartService.addToCart(email, cart);
     if (!result?.cart) {
@@ -25,6 +28,7 @@ export class CartController {
   }
 
   @Post('/get')
+  @UseGuards(FirebaseTokenGuard)
   async getCart(@Body('email') email: string): Promise<CartResponse | null> {
     const result = await this.cartService.getCart(email);
     return result;

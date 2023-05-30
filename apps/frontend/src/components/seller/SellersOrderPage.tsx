@@ -17,6 +17,7 @@ import { useUserAuth } from 'context/AuthContext';
 import SearchOrdersInput from './SearchOrdersInput';
 import { Link } from 'react-router-dom';
 import { getOrderStatusColor } from 'utils/getOrderStatusColor';
+import { formatDate } from 'utils/formatDate';
 
 function SellerOrdersPage() {
 	const [orders, setOrders] = useState<IOrder[]>([]);
@@ -33,18 +34,27 @@ function SellerOrdersPage() {
 	});
 
 	useEffect(() => {
+		if (!user) return;
 		const fetchOrders = async () => {
 			try {
-				const response = await api.post('/sellers/ordersbyemail', {
-					email: user.email,
-				});
+				const response = await api.post(
+					'/sellers/ordersbyemail',
+					{
+						email: user.email,
+					},
+					{
+						headers: {
+							Authorization: user?.stsTokenManager?.accessToken,
+						},
+					}
+				);
 				setOrders(response.data);
 			} catch (error) {
 				console.log(error);
 			}
 		};
 		fetchOrders();
-	}, []);
+	}, [user]);
 
 	const handleToggle = (order: IOrder) => () => {
 		const isChecked = checked.some(
@@ -281,15 +291,23 @@ function SellerOrdersPage() {
 															variant="body2"
 															color="text.secondary"
 														>
-															Date of delivery:
-															DATE
+															Date of delivery:{" "}
+															{formatDate(
+													new Date(
+														order.lastDateOfDelivery
+													)
+												)}
 														</Typography>
 														<Typography
 															variant="body2"
 															color="text.secondary"
 														>
-															Date of purchase:
-															DATE
+															Date of purchase:{" "}
+															{formatDate(
+													new Date(
+														order.dateOfPurchase
+													)
+												)}
 														</Typography>
 													</CardContent>
 												</Grid>
@@ -321,7 +339,7 @@ function SellerOrdersPage() {
 									))
 								) : filterStatus !== 'any' &&
 								  filteredOrders.length === 0 ? (
-									<>Nothing found &#128549;</>
+									<>No orders found with this filter.</>
 								) : (
 									orders.map((order) => (
 										<Card
@@ -436,15 +454,23 @@ function SellerOrdersPage() {
 															variant="body2"
 															color="text.secondary"
 														>
-															Date of delivery:
-															DATE
+															Date of delivery:{" "}
+															{formatDate(
+													new Date(
+														order.lastDateOfDelivery
+													)
+												)}
 														</Typography>
 														<Typography
 															variant="body2"
 															color="text.secondary"
 														>
-															Date of purchase:
-															DATE
+															Date of purchase:{" "}
+															{formatDate(
+													new Date(
+														order.dateOfPurchase
+													)
+												)}
 														</Typography>
 													</CardContent>
 												</Grid>

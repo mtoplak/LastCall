@@ -115,6 +115,7 @@ docker-compose up
 │   │   │   └───app
 │   │   │       ├───authentication
 │   │   │       ├───buyers
+│   │   │       ├───guards
 │   │   │       ├───orders
 │   │   │       ├───products
 │   │   │       └───sellers

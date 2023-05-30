@@ -6,16 +6,18 @@ import {
   Param,
   Patch,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { BuyersService } from './buyers.service';
 import { Buyer } from './buyers.model';
 import { CreateUpdateBuyerDto } from './createUpdateBuyer.dto';
 import { Order } from '../orders/order.model';
 import { CartResponse, SuccessResponse } from 'src/data.response';
+import { FirebaseTokenGuard } from '../guards/FirebaseTokenGuard';
 
 @Controller('buyers')
 export class BuyersController {
-  constructor(private readonly buyersService: BuyersService) {}
+  constructor(private readonly buyersService: BuyersService) { }
 
   @Post()
   async addBuyer(@Body() createBuyerDto: CreateUpdateBuyerDto): Promise<Buyer> {
@@ -68,6 +70,7 @@ export class BuyersController {
   }
 
   @Post('orders')
+  @UseGuards(FirebaseTokenGuard)
   async getAllOrdersByBuyer(@Body('email') email: string): Promise<Order[]> {
     return await this.buyersService.getOrdersByBuyer(email);
   }

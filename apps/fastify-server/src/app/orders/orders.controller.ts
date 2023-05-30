@@ -6,20 +6,23 @@ import {
   Param,
   Patch,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { Order } from './order.model';
 import { CreateUpdateOrderDto } from './createUpdateOrder.dto';
 import { SuccessResponse } from 'src/data.response';
+import { FirebaseTokenGuard } from '../guards/FirebaseTokenGuard';
 
 @Controller('orders')
 export class OrdersController {
-  constructor(private readonly ordersService: OrdersService) {}
+  constructor(private readonly ordersService: OrdersService) { }
 
   @Post()
+  @UseGuards(FirebaseTokenGuard)
   async addOrder(
     @Body() createOrderDto: CreateUpdateOrderDto,
-    @Body('products') products: { productId: string; quantity: number }[],
+    @Body('products') products: { productId: string; quantity: number; }[],
     @Body('seller') sellerEmail: string,
     @Body('buyer') buyerEmail: string,
   ): Promise<Order> {
@@ -37,6 +40,7 @@ export class OrdersController {
   }
 
   @Get(':id')
+  @UseGuards(FirebaseTokenGuard)
   async getSingleOrder(@Param('id') id: string): Promise<Order> {
     return await this.ordersService.getSingleOrder(id);
   }
@@ -45,7 +49,7 @@ export class OrdersController {
   async updateOrder(
     @Param('id') orderId: string,
     @Body() updatedOrderData: Partial<Order>,
-  ): Promise<{ success: boolean }> {
+  ): Promise<{ success: boolean; }> {
     await this.ordersService.updateOrder(orderId, updatedOrderData);
     return { success: true };
   }

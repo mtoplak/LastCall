@@ -19,11 +19,12 @@ import Image from 'components/ui/Image';
 import { style } from 'assets/styles/styles';
 import { Link } from 'react-router-dom';
 import { IDrink } from 'models/drink';
+import { useUserAuth } from 'context/AuthContext';
 
 interface DrinkProps {
-	drink: any;
-	setDrinks: React.Dispatch<React.SetStateAction<any>>;
-	drinks: any;
+	drink: IDrink;
+	setDrinks: React.Dispatch<React.SetStateAction<IDrink[]>>;
+	drinks: IDrink[];
 }
 
 const initialState = {
@@ -65,6 +66,7 @@ const DrinkS: React.FC<DrinkProps> = ({
 	const [isOpenDelete, setIsOpenDelete] = useState(false);
 	const [selectedDrink, setSelectedDrink] = useState(initialState);
 	const [error, setError] = useState('');
+	const { user } = useUserAuth();
 
 	const handleInputChange = (event: any) => {
 		const { name, value } = event.target;
@@ -89,9 +91,14 @@ const DrinkS: React.FC<DrinkProps> = ({
 		try {
 			const response = await api.patch(
 				`/products/${productId}`,
-				selectedDrink
+				selectedDrink,
+				{
+					headers: {
+						Authorization: user?.stsTokenManager?.accessToken,
+					},
+				}
 			);
-			console.log(response.data);
+			//console.log(response.data);
 			const updatedDrinks = drinks.map((drink: any) => {
 				if (drink._id === productId) {
 					return response.data;
@@ -109,12 +116,16 @@ const DrinkS: React.FC<DrinkProps> = ({
 	const handleDeleteClick = async () => {
 		setError('');
 		try {
-			await api.delete(`/products/${productId}`);
-			console.log('Drink deleted successfully');
+			await api.delete(`/products/${productId}`, {
+				headers: {
+					Authorization: user?.stsTokenManager?.accessToken,
+				},
+			});
+			//console.log('Drink deleted successfully');
 			const updatedDrinks = drinks.filter(
 				(drink: IDrink) => drink._id !== productId
 			);
-			console.log(updatedDrinks);
+			//console.log(updatedDrinks);
 			setDrinks(updatedDrinks);
 			setIsOpenDelete(!isOpenDelete);
 			setProductId('');

@@ -4,25 +4,32 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import { store, persistor } from 'redux-store';
 import { Loading } from 'shared';*/
-import Footer from 'components/homepage/Footer';
+import Layout from 'components/core/Layout';
 import Routing from 'components/routing/Routing';
+import { AuthContextProvider } from 'context/AuthContext';
 import { BrowserRouter } from 'react-router-dom';
+import { CartContextProvider } from 'context/CartContext';
 
 /*
 <Suspense fallback={<Loading />}>
-				<Provider store={store}>
-					<PersistGate loading={''} persistor={persistor}>
-						<Routing />
-					</PersistGate>
-				</Provider>
-			</Suspense>
+	<Provider store={store}>
+		<PersistGate loading={''} persistor={persistor}>
+			<Routing />
+		</PersistGate>
+	</Provider>
+</Suspense>
 */
 
 function App() {
 	return (
 		<BrowserRouter>
-			<Routing />
-			<Footer />
+			<AuthContextProvider>
+				<CartContextProvider>
+					<Layout>
+						<Routing />
+					</Layout>
+				</CartContextProvider>
+			</AuthContextProvider>
 		</BrowserRouter>
 	);
 }

@@ -32,7 +32,7 @@ const databaseHost = require('../constants').databaseHost;
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    // zakomentirano zaradi lažjega dela na frontendu
+    // se ne uporablja zdaj
     /*consumer
       .apply(FirebaseAuthMiddleware)
       .forRoutes('/orders'); // Apply the middleware to these routes

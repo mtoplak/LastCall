@@ -83,7 +83,9 @@ function NavbarS() {
 								aria-haspopup="true"
 								onClick={handleOpenNavMenu}
 								color="inherit"
-							></IconButton>
+							>
+								smaller screen todo
+							</IconButton>
 							<Menu
 								id="menu-appbar"
 								anchorEl={anchorElNav}
@@ -101,7 +103,9 @@ function NavbarS() {
 								sx={{
 									display: { xs: 'block', md: 'none' },
 								}}
-							></Menu>
+							>
+								smaller screen todo
+							</Menu>
 						</Box>
 						<Typography
 							variant="h5"
@@ -215,7 +219,7 @@ function NavbarS() {
 								</Menu>
 							</Box>
 						) : (
-							<Link to={'/signin'}>
+							<Link to={'/sell/signin'}>
 								<Button
 									sx={{
 										my: 2,
