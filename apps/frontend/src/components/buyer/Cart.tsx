@@ -54,7 +54,6 @@ function Cart() {
 	const [groupedProducts, setGroupedProducts] = useState<SellerGroup>({});
 	const [alert, setAlert] = useState(false);
 	const { cartProducts, setCartProducts } = useCartContext();
-	const [meetsRequirements, setMeetsRequirements] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (!user) return;
@@ -70,10 +69,6 @@ function Cart() {
 		fetchCart();
 	}, [user]);
 
-	useEffect(() => {
-		document.title = 'Shopping Cart';
-	}, []);
-
 	const groupProductsBySeller = (cart: any) => {
 		const groupedProducts: SellerGroup = {};
 
@@ -87,6 +82,10 @@ function Cart() {
 
 		return groupedProducts;
 	};
+
+	useEffect(() => {
+		document.title = 'Shopping Cart';
+	}, []);
 
 	const handleRemoveFromCart = async (id: string) => {
 		const response = await api.delete(`/cart/${user.email}/${id}`);
@@ -120,31 +119,17 @@ function Cart() {
 			};
 		});
 		try {
-			const mapResponse = await fetch(
-				`https://nominatim.openstreetmap.org/search?format=json&q=${
-					address + ' ' + city + ' ' + country
-				}&addressdetails=1&limit=1&polygon_svg=1`
-			);
-			const mapData = await mapResponse.json();
-			console.log(mapData);
-			if (mapData.length === 0) {
-				setError('Address not found');
-				return;
-			} else {
-				const coordinates = [mapData[0].lat, mapData[0].lon];
-				const orderPayload = {
-					seller: selectedSeller?.email,
-					buyer: user.email,
-					address: address,
-					city: city,
-					country: country,
-					lastDateOfDelivery: lastDateOfDelivery,
-					products: order,
-					totalPrice: totalPrice.toFixed(2),
-					coordinates: coordinates,
-				};
-				await api.post(`/orders`, orderPayload);
-			}
+			const response = await api.post(`/orders`, {
+				seller: selectedSeller?.email,
+				buyer: user.email,
+				address: address,
+				city: city,
+				country: country,
+				lastDateOfDelivery: lastDateOfDelivery,
+				products: order,
+				totalPrice: totalPrice.toFixed(2),
+			});
+			console.log(response.data);
 			setIsOpenModal(false);
 			setAddress('');
 			setCity('');
@@ -157,7 +142,7 @@ function Cart() {
 			setCartItems(updatedCartItems);
 			setAlert(true);
 		} catch (error: any) {
-			setError(error);
+			setError(error.response.data.message);
 		}
 	};
 
@@ -166,13 +151,7 @@ function Cart() {
 			<Grid container spacing={2} key={seller}>
 				<Grid item xs={8}>
 					<Typography variant="h6" component="h2" mb={2}>
-						Seller:{' '}
-						<Link
-							to={`/supplier/${products[0].product.seller._id}`}
-							className="blackLink"
-						>
-							{products[0].product.seller.title}
-						</Link>
+						Seller: {products[0].product.seller.title}
 					</Typography>
 					{products.map((item) => (
 						<Card
@@ -431,7 +410,6 @@ function Cart() {
 						value={lastDateOfDelivery}
 						onChange={(e) => setLastDateOfDelivery(e.target.value)}
 					/>
-					
 					<br />
 					{error && (
 						<Alert severity="error">
