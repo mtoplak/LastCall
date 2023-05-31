@@ -30,7 +30,7 @@ export class ProductsRepository {
   }
 
   async create(productData: Product, email: string): Promise<Product> {
-    const { ...restProductdata } = productData;
+    const { actualPrice, ...restProductdata } = productData;
     const seller = await this.sellerModel.findOne({ email });
     if (!seller) {
       throw new NotFoundException(
@@ -39,8 +39,10 @@ export class ProductsRepository {
           ' assigned to this order.',
       );
     }
+
     const newProduct = new this.productsModel({
       ...restProductdata,
+      price: actualPrice,
       seller: seller._id,
     });
     const result = await newProduct.save();
@@ -54,6 +56,9 @@ export class ProductsRepository {
     productUpdates: UpdateQuery<Product>,
     options?: QueryOptions,
   ): Promise<Product> {
+    if (productUpdates.actualPrice) {
+      productUpdates.price = productUpdates.actualPrice;
+    }
     return await this.productsModel.findOneAndUpdate(
       productFilterQuery,
       productUpdates,

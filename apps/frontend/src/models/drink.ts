@@ -10,6 +10,6 @@ export interface IDrink {
     size: string;
     packaging: string;
     seller: ISeller;
-    percentage: number;
-    salePrice: number;
+    discount: number;
+    actualPrice: number;
 }

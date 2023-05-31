@@ -65,7 +65,7 @@ export class MailService {
 
         emailContent += '</table>';
         emailContent += `<h2>Delivery & Handling:</h2>`;
-        emailContent += `<p>${sellerData.deliveryCost} €</p>`; //
+        emailContent += `<p>${sellerData.deliveryCost} €</p>`;
         emailContent += `<h2>Total Price:</h2>`;
         emailContent += `<p>${orderData.totalPrice} €</p>`;
         emailContent += `<h2>Your Order Will Be Delivered To</h2>`;
@@ -78,7 +78,7 @@ export class MailService {
         emailContent += `<p>Last Day of Delivery: ${formatDate(orderData.lastDateOfDelivery)}</p>`;
         emailContent += '<p>We will handle your order in the shortest possible time.</p>';
         emailContent += '<p>Thanks,</p>';
-        emailContent += `<p>${sellerData.title}</p>`; //
+        emailContent += `<p>${sellerData.title}</p>`;
 
         return emailContent;
     }
