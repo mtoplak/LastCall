@@ -174,7 +174,7 @@ const DrinkS: React.FC<DrinkProps> = ({
 						</Typography>
 					</Link>
 					<Typography variant="body1" sx={{ my: 1 }}>
-						Price: {drink.price} €
+						Price: {drink.price.toFixed(2)} €
 					</Typography>
 					<Box
 						sx={{

@@ -47,8 +47,8 @@ export class MailService {
         emailContent += '<tr>';
         emailContent += '<th style="border: 1px solid black;">Product</th>';
         emailContent += '<th style="border: 1px solid black;">Quantity</th>';
-        emailContent += '<th style="border: 1px solid black;">Price</th>';
         emailContent += '<th style="border: 1px solid black;">Product Price</th>';
+        emailContent += '<th style="border: 1px solid black;">Subtotal</th>';
         emailContent += '</tr>';
 
         for (const item of productData) {
@@ -57,7 +57,7 @@ export class MailService {
 
             emailContent += '<tr>';
             emailContent += `<td style="border: 1px solid black;"><h3>${product.title}</h3><img src="${product.picture}" alt="${product.title}" style="max-width: 200px;"></td>`;
-            emailContent += `<td style="border: 1px solid black;">${item.quantity} €</td>`;
+            emailContent += `<td style="border: 1px solid black;">${item.quantity}</td>`;
             emailContent += `<td style="border: 1px solid black;">${product.price} €</td>`;
             emailContent += `<td style="border: 1px solid black;">${totalPrice} €</td>`;
             emailContent += '</tr>';

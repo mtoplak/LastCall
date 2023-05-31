@@ -15,6 +15,7 @@ export const OrderSchema = new Schema({
   totalPrice: { type: Number, required: true },
   dateOfPurchase: { type: Date, immutable: true, default: () => Date.now() },
   lastDateOfDelivery: { type: Date, required: true },
+  actualDateOfDelivery: { type: Date },
   address: { type: String, required: true },
   city: { type: String, required: true },
   country: { type: String, required: true },
@@ -30,6 +31,7 @@ export interface Order extends Document {
   totalPrice: number;
   dateOfPurchase: Date;
   lastDateOfDelivery: Date;
+  actualDateOfDelivery: Date;
   address: string;
   city: string;
   country: string;

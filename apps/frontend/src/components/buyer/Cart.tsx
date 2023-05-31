@@ -103,15 +103,14 @@ function Cart() {
 	};
 	const handleQuantityChange = async (id: string, quantity: number) => {
 		const response = await api.post(
-			`/cart/add`,
+			`/cart/quantity`,
 			{
 				email: user.email,
-				cart: [
+				cart: 
 					{
 						productId: id,
 						quantity: quantity,
 					},
-				],
 			},
 			{
 				headers: {
@@ -213,7 +212,7 @@ function Cart() {
 			setCartItems(updatedCartItems);
 			setIsShownAlert(true);
 		} catch (error: any) {
-			setError(error.response.data.message); // error.response
+			setError(error.response.data.message);
 		} finally {
 			setIsLoading(false);
 		}
@@ -266,7 +265,7 @@ function Cart() {
 											{item.product.price.toFixed(2)} €
 										</Typography>
 										<Alert severity="success">
-											There is currently a 10% discount
+											There is currently a {item.product.discount} % discount
 											for this item!
 										</Alert>
 									</CardContent>
