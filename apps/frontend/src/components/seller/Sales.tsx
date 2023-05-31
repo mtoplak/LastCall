@@ -145,17 +145,17 @@ function Sales() {
 														PRODUCT: {product.title}
 													</b>
 												</Typography>
-												<Typography
-													variant="body2"
-													color="text.secondary"
-												>
-													Price: €
-												</Typography>
                                                 <Typography
 													variant="body2"
 													color="text.secondary"
 												>
 													ID: {product._id}
+												</Typography>
+												<Typography
+													variant="body2"
+													color="text.secondary"
+												>
+													Original price: €
 												</Typography>
 												<Typography
 													variant="body2"
@@ -181,7 +181,7 @@ function Sales() {
                                                 <Divider sx={{mt:2, mb: 2}}/>
                                                 Price with discount:
 												<Typography>
-													<b>discount%</b>
+													<b>price</b>
 												</Typography>
 											</CardContent>
 										</Grid>
