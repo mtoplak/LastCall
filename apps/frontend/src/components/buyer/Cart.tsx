@@ -100,7 +100,10 @@ function Cart() {
 	const handleRemoveFromCart = async (id: string) => {
 		const response = await api.delete(`/cart/${user.email}/${id}`);
 		setCartItems(response.data.cart);
+		setCartProducts(response.data.cart);
+		setGroupedProducts(groupProductsBySeller(response.data.cart));
 	};
+
 	const handleQuantityChange = async (id: string, quantity: number) => {
 		const response = await api.post(
 			`/cart/quantity`,
@@ -118,6 +121,7 @@ function Cart() {
 			}
 		);
 		setCartItems(response.data.cart);
+		setGroupedProducts(groupProductsBySeller(response.data.cart));
 	};
 
 	const handleCheckEligibility = async () => {
@@ -396,7 +400,7 @@ function Cart() {
 											}
 										>
 											{Array.from(
-												{ length: 1000 },
+												{ length: 500 },
 												(_, index) => (
 													<MenuItem
 														key={index + 1}
@@ -526,56 +530,88 @@ function Cart() {
 							{renderGroupedProducts(
 								groupProductsBySeller(cartItems)
 							)}
-							<Box sx={{ width: '100%' }}>
-								<Card>
-									<CardContent>
-										<Typography
-											variant="h6"
-											component="h2"
-											mb={2}
-										>
-											Cart Summary
-										</Typography>
-										<Typography
-											variant="body1"
-											color="text.secondary"
-											mb={2}
-											sx={{ mt: 2, mb: 2 }}
-										>
-											Subtotal: {subtotal.toFixed(2)} €
-											<br />
-											Delivery & Handling:{' '}
-											{deliveryCosts.toFixed(2)} €
-										</Typography>
-										<Divider />
-										<Typography
-											variant="body1"
-											color="text.secondary"
-											mb={2}
-											sx={{ mt: 2, mb: 2 }}
-										>
-											Total:{' '}
-											{(subtotal + deliveryCosts).toFixed(
-												2
-											)}{' '}
-											€
-										</Typography>
-										<Divider />
-										<Button
-											variant="contained"
-											color="primary"
-											sx={checkoutButton}
-											onClick={() => {
-												setIsOpenModal(true);
-												setCheckOutAll(true);
-												setCheckEligibility(false);
-											}}
-										>
-											Checkout All
-										</Button>
-									</CardContent>
-								</Card>
-							</Box>
+							{Object.keys(groupedProducts).length > 1 && (
+								<Box sx={{ width: '100%' }} marginTop={'1rem'}>
+									<Card>
+										<CardContent>
+											<Typography
+												variant="h6"
+												component="h2"
+												mb={2}
+											>
+												Cart Summary
+											</Typography>
+											<Typography
+												variant="body1"
+												color="text.secondary"
+												mb={2}
+												sx={{ mt: 2, mb: 2 }}
+											>
+												Subtotal:{' '}
+												{Object.values(groupedProducts)
+													.reduce(
+														(sum, sellerGroup) => {
+															return (
+																sum +
+																sellerGroup.reduce(
+																	(
+																		groupSum,
+																		groupedProduct
+																	) => {
+																		const productPrice =
+																			groupedProduct
+																				.product
+																				.price;
+																		const productQuantity =
+																			groupedProduct.quantity;
+																		return (
+																			groupSum +
+																			productPrice *
+																				productQuantity
+																		);
+																	},
+																	0
+																)
+															);
+														},
+														0
+													)
+													.toFixed(2)}{' '}
+												€
+												<br />
+												Delivery & Handling:{' '}
+												{deliveryCosts.toFixed(2)} €
+											</Typography>
+											<Divider />
+											<Typography
+												variant="body1"
+												color="text.secondary"
+												mb={2}
+												sx={{ mt: 2, mb: 2 }}
+											>
+												Total:{' '}
+												{(
+													subtotal + deliveryCosts
+												).toFixed(2)}{' '}
+												€
+											</Typography>
+											<Divider />
+											<Button
+												variant="contained"
+												color="primary"
+												sx={checkoutButton}
+												onClick={() => {
+													setIsOpenModal(true);
+													setCheckOutAll(true);
+													setCheckEligibility(false);
+												}}
+											>
+												Checkout All
+											</Button>
+										</CardContent>
+									</Card>
+								</Box>
+							)}
 						</>
 					) : (
 						<Typography variant="body1" mb={4}>

@@ -37,8 +37,6 @@ function Product() {
 	const { user, role } = useUserAuth();
 	const { cartProducts, setCartProducts } = useCartContext();
 
-	console.log(drink);
-
 	useEffect(() => {
 		const fetchProductData = async () => {
 			try {

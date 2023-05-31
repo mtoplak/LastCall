@@ -8,12 +8,13 @@ Last Call is an application that aims to facilitate the sales and delivery plann
 
 ## Tech Stack
 
-- [React](https://react.dev/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [NestJS](https://nestjs.com/)
-- [MongoDB](https://www.mongodb.com/)
-- [Firebase](https://firebase.google.com/)
-- [Docker](https://www.docker.com/)
+<div style="width: 100%; text-align: center;">
+
+| React | TypeScript | NestJS | MongoDB | Firebase | Docker |
+| :---: | :--------: | :----: | :-----: | :------: | :----: |
+| <a href="https://react.dev/" title="React"><img src="https://github.com/get-icon/geticon/raw/master/icons/react.svg" alt="React" width="50px" height="50px"></a> | <a href="https://www.typescriptlang.org/" title="Typescript"><img src="https://github.com/get-icon/geticon/raw/master/icons/typescript-icon.svg" alt="Typescript" width="50px" height="50px"></a> | <a href="https://nestjs.com/" title="NestJS"><img src="https://github.com/get-icon/geticon/raw/master/icons/nestjs.svg" alt="NestJS" width="50px" height="50px"></a> | <a href="https://www.mongodb.com/" title="MongoDB"><img src="https://github.com/get-icon/geticon/raw/master/icons/mongodb.svg" alt="MongoDB" width="80px" height="50px"></a> | <a href="https://www.firebase.com/" title="Firebase"><img src="https://github.com/get-icon/geticon/raw/master/icons/firebase.svg" alt="Firebase" width="50px" height="50px"></a> | <a href="https://www.docker.com/" title="Docker"><img src="https://github.com/get-icon/geticon/raw/master/icons/docker-icon.svg" alt="Docker" width="50px" height="50px"></a> |
+
+</div>
 
 
 ## Installation and usage
@@ -30,7 +31,7 @@ Build the `@core/lib` first.
 yarn build:lib
 ```
 
-Create `.env.dev` and `.env.prod` files in the `apps/fastify-backend` directory with the following content:
+Create `.env.dev` and `.env.prod` files in the `apps/fastify-server` directory with the following content:
 
 ```env
  DATABASE_URI = "mongodb+srv://<username>:<password>@lastcall.apyanwb.mongodb.net/?retryWrites=true&w=majority"
@@ -115,17 +116,26 @@ docker-compose up
 │   │   │   └───app
 │   │   │       ├───authentication
 │   │   │       ├───buyers
+│   │   │       ├───cart
+│   │   │       ├───distance
 │   │   │       ├───guards
+│   │   │       ├───mailer
 │   │   │       ├───orders
 │   │   │       ├───products
-│   │   │       └───sellers
+│   │   │       ├───sellers
+│   │   │       └───utils
 │   │   ├───src
 │   │   │   └───app
 │   │   │       ├───authentication
 │   │   │       ├───buyers
+│   │   │       ├───cart
+│   │   │       ├───distance
+│   │   │       ├───guards
+│   │   │       ├───mailer
 │   │   │       ├───orders
 │   │   │       ├───products
-│   │   │       └───sellers
+│   │   │       ├───sellers
+│   │   │       └───utils
 │   │   └───test
 │   └───frontend
 │       ├───build
@@ -144,6 +154,7 @@ docker-compose up
 │           │   ├───404
 │           │   ├───buyer
 │           │   │   └───login
+│           │   ├───core
 │           │   ├───homepage
 │           │   ├───routing
 │           │   ├───seller
@@ -164,3 +175,9 @@ docker-compose up
             └───ui
 
 ```
+
+## Authors
+
+- Maša Toplak
+- Elena U. Bežan
+- Tia Žvajker
