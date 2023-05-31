@@ -46,7 +46,7 @@ const SignInB = () => {
 		e.preventDefault();
 		try {
 			const signUpResponse = await signIn(email, password);
-			console.log(signUpResponse);
+			//console.log(signUpResponse);
 			if (signUpResponse.success) {
 				// Access the response object if needed: signUpResponse.response
 				//navigate('/');

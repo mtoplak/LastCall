@@ -87,8 +87,7 @@ const SignUpB = () => {
 					});
 					//console.log(response);
 					console.log(response.data);
-					console.log(response.data.buyer);
-					navigate('/buy/signin'); // Navigate to the sign in
+					navigate('/buy/signin');
 				} catch (error: any) {
 					setError(error.message);
 				}

@@ -15,4 +15,5 @@ export interface IOrder {
 	buyer: IBuyer;
 	status: string;
 	uid: string;
+	actualDateOfDelivery: Date;
 }

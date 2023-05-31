@@ -31,7 +31,6 @@ function SingleOrder() {
 						Authorization: user?.stsTokenManager?.accessToken,
 					},
 				});
-				//console.log(response.data);
 				setOrder(response.data);
 			} catch (error) {
 				throw error;
@@ -132,11 +131,24 @@ function SingleOrder() {
 												)}
 											</Typography>
 											<Typography>
-												Date of Delivery:{' '}
+												Estimated Date of Delivery:{' '}
 												{formatDate(
 													new Date(
 														order.lastDateOfDelivery
 													)
+												)}
+											</Typography>
+											<Typography>
+												{order.status ===
+													'Delivered' && (
+													<>
+														Date of Delivery:{' '}
+														{formatDate(
+															new Date(
+																order.actualDateOfDelivery
+															)
+														)}
+													</>
 												)}
 											</Typography>
 										</Grid>

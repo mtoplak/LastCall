@@ -25,6 +25,7 @@ import { Link } from 'react-router-dom';
 import { useUserAuth } from 'context/AuthContext';
 import { useCartContext } from 'context/CartContext';
 import { isProductInArray } from 'utils/isProductInArray';
+import NavbarS from 'components/seller/NavbarS';
 
 function Product() {
 	const [drink, setDrink] = useState<IDrink>();
@@ -35,6 +36,8 @@ function Product() {
 	const { id } = useParams<{ id: string }>();
 	const { user, role } = useUserAuth();
 	const { cartProducts, setCartProducts } = useCartContext();
+
+	console.log(drink);
 
 	useEffect(() => {
 		const fetchProductData = async () => {
@@ -106,8 +109,8 @@ function Product() {
 
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
-			<NavbarB />
-			<Container>
+			{role === 'seller' ? <NavbarS /> : <NavbarB />}
+			<Container style={{ paddingBottom: '3rem' }}>
 				{showAlert && (
 					<Alert
 						severity="success"
@@ -185,21 +188,19 @@ function Product() {
 									{drink?.title}
 								</Typography>
 								<Typography color="textSecondary" gutterBottom>
-									Price: {drink?.price} €
+									Price: {drink?.price.toFixed(2)} €
 								</Typography>
 								<Divider />
-								<br />
 								<Typography
 									variant="h6"
 									component="span"
 									sx={{ flex: '1' }}
 								>
-									Description:
 									<List>
 										<ListItem>
 											<ListItemText
 												primary={
-													'Drink category: ' +
+													'Category: ' +
 													drink?.drinkCategory
 												}
 											/>
@@ -221,56 +222,78 @@ function Product() {
 								</Typography>
 								<Divider />
 								<br />
-
-								<Alert severity="success">
-									There is currently a 25% discount for this
-									item!{' '}
-								</Alert>
-								<br />
-								<Divider />
-								<br />
-								<Typography
-									variant="h6"
-									component="span"
-									sx={{ flex: '1' }}
-								>
-									Add this product to basket:
-									<Box
-										display="flex"
-										alignItems="center"
-										gap={10}
+								{drink?.discount !== 0 && (
+									<Alert severity="success" sx={{ mb: 2 }}>
+										There is currently a {drink?.discount} %
+										discount for this product!
+										<br />
+									</Alert>
+								)}
+								{role === 'buyer' && (
+									<Typography
+										variant="h6"
+										component="span"
+										sx={{ flex: '1' }}
 									>
-										<Box flex="1">
-											<TextField
-												value={quantity}
-												onChange={(e) =>
-													setQuantity(
-														Number(e.target.value)
-													)
-												}
-												label="Quantity"
-												placeholder="1"
-												type="number"
-												fullWidth
-												inputProps={{
-													min: 1,
-												}}
-											/>
+										Add product to cart
+										<Box
+											display="flex"
+											alignItems="center"
+											gap={10}
+										>
+											<Box flex="1">
+												<TextField
+													value={quantity}
+													onChange={(e) =>
+														setQuantity(
+															Number(
+																e.target.value
+															)
+														)
+													}
+													label="Quantity"
+													placeholder="1"
+													type="number"
+													fullWidth
+													inputProps={{
+														min: 1,
+													}}
+												/>
+											</Box>
+											<Box>
+												<Button onClick={addToCart}>
+													Add to cart
+												</Button>
+											</Box>
 										</Box>
-										<Box>
-											<Button onClick={addToCart}>
-												Add to basket
-											</Button>
-										</Box>
-									</Box>
-									<p style={{ fontSize: '15px' }}>
-										In stock: {drink?.stock}
-									</p>
-								</Typography>
+										<p style={{ fontSize: '15px' }}>
+											In stock: {drink?.stock}
+										</p>
+									</Typography>
+								)}
 							</CardContent>
 						</Card>
 					</Box>
 				</CustomBox>
+				<Card>
+					<CardContent>
+						<Typography variant="h6" gutterBottom>
+							Seller Information
+						</Typography>
+						<Typography variant="subtitle1" gutterBottom>
+							<Link
+								to={`/supplier/${drink?.seller._id}`}
+								className="blackLink"
+							>
+								{drink?.seller.title}
+							</Link>
+						</Typography>
+						<Typography variant="subtitle1" gutterBottom>
+							{drink?.seller.address}, {drink?.seller.city},{' '}
+							{drink?.seller.country}
+						</Typography>
+					</CardContent>
+				</Card>
 			</Container>
 		</Box>
 	);

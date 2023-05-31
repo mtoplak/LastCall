@@ -61,7 +61,6 @@ export class OrdersService {
       buyerEmail,
     );
 
-    // Send the order confirmation email
     this.mailService.sendOrderConfirmationEmail(buyerEmail, order, productData, sellerEmail); // brez await, da se ne čaka
 
     /*
@@ -97,6 +96,9 @@ export class OrdersService {
     updatedOrderData: Partial<Order>,
   ): Promise<Order> {
     try {
+      if (updatedOrderData.status === 'Delivered') {
+        updatedOrderData.actualDateOfDelivery = new Date();
+      }
       return await this.ordersRepository.findOneAndUpdate(
         { _id: orderId },
         updatedOrderData,
