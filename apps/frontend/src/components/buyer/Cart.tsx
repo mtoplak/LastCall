@@ -26,7 +26,7 @@ import api from 'services/api';
 import { ICartItem } from 'models/cartItem';
 import { Link } from 'react-router-dom';
 import { IDrink } from 'models/drink';
-import { style } from 'assets/styles/styles';
+import { checkoutButton, style } from 'assets/styles/styles';
 import { getCurrentDate } from '../../utils/getCurrentDate';
 import { ISeller } from 'models/seller';
 import { useCartContext } from 'context/CartContext';
@@ -57,7 +57,8 @@ function Cart() {
 	const { cartProducts, setCartProducts } = useCartContext();
 	const [meetsRequirements, setMeetsRequirements] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState(false);
-	const [checkEligibility, setcheckEligibility] = useState(false);
+	const [checkEligibility, setCheckEligibility] = useState(false);
+	const [checkOutAll, setCheckOutAll] = useState(false);
 
 	useEffect(() => {
 		if (!user) return;
@@ -123,6 +124,7 @@ function Cart() {
 	};
 
 	const handleCheckEligibility = async () => {
+		let coordinates: number[];
 		try {
 			const mapResponse = await fetch(
 				`https://nominatim.openstreetmap.org/search?format=json&q=${
@@ -134,23 +136,51 @@ function Cart() {
 				setError('Address not found');
 				return;
 			} else {
-				const coordinates: number[] = [
-					Number(mapData[0].lat),
-					Number(mapData[0].lon),
-				];
+				coordinates = [Number(mapData[0].lat), Number(mapData[0].lon)];
+			}
+		} catch (error: any) {
+			setError(error.response.data.message);
+			return;
+		}
+
+		if (checkOutAll) {
+			// Check out all sellers
+			const sellerIds = Object.keys(groupedProducts);
+			const requests = sellerIds.map(async (sellerId) => {
+				const seller = groupedProducts[sellerId][0].product.seller;
+				try {
+					const response = await api.post('/distance/coordinates', {
+						sellerEmail: seller.email,
+						orderCoordinates: coordinates,
+					});
+					return response.data === true;
+				} catch (error: any) {
+					setError(error.response.data.message);
+					//console.error(`Error occurred for seller ${sellerId}: ${error}`);
+					return false;
+				}
+			});
+
+			const results = await Promise.all(requests);
+			const eligibility = results.every((result) => result); // Check if all sellers are eligible
+
+			setCheckEligibility(eligibility);
+		} else {
+			// Check out selected seller only
+			try {
 				const response = await api.post('/distance/coordinates', {
 					sellerEmail: selectedSeller?.email,
 					orderCoordinates: coordinates,
 				});
-				console.log(response);
+				//console.log(response);
 				if (response.data === true) {
-					setcheckEligibility(true);
+					setCheckEligibility(true);
 				} else {
-					setcheckEligibility(false);
+					setCheckEligibility(false);
 				}
+			} catch (error: any) {
+				setError(error.message);
 			}
-		} catch (error: any) {
-			setError(error);
 		}
 	};
 
@@ -199,7 +229,6 @@ function Cart() {
 						},
 					}
 				);
-				
 			}
 			setIsOpenModal(false);
 			setAddress('');
@@ -218,6 +247,90 @@ function Cart() {
 			setIsLoading(false);
 		}
 	};
+
+	const handleCheckoutAll = async () => {
+		setIsLoading(true);
+		try {
+			const orders = Object.entries(groupedProducts).map(
+				([sellerId, products]) => {
+					const totalPrice =
+						products.reduce((accumulator, item) => {
+							const itemTotalPrice =
+								item.quantity * item.product.price;
+							return accumulator + itemTotalPrice;
+						}, 0) + products[0].product.seller.deliveryCost;
+
+					const order = products.map((item) => {
+						return {
+							productId: item.product._id,
+							quantity: item.quantity,
+						};
+					});
+
+					return {
+						seller: products[0].product.seller.email,
+						buyer: user.email,
+						address: address,
+						city: city,
+						country: country,
+						lastDateOfDelivery: lastDateOfDelivery,
+						products: order,
+						totalPrice: totalPrice.toFixed(2),
+						coordinates: products[0].product.seller.coordinates,
+					};
+				}
+			);
+
+			await Promise.all(
+				orders.map((order) =>
+					api.post('/orders', order, {
+						headers: {
+							Authorization: user?.stsTokenManager?.accessToken,
+						},
+					})
+				)
+			);
+			setGroupedProducts({});
+			setIsOpenModal(false);
+			setAddress('');
+			setCity('');
+			setCountry('');
+			setLastDateOfDelivery(getCurrentDate());
+			setCartProducts([]);
+			setCartItems([]);
+			setIsShownAlert(true);
+		} catch (error: any) {
+			setError(error.response?.data?.message || 'An error occurred');
+		} finally {
+			setCheckOutAll(false);
+			setIsLoading(false);
+		}
+	};
+
+	// Calculate subtotal price
+	const subtotal = Object.values(groupedProducts).reduce(
+		(sum, sellerGroup) => {
+			return (
+				sum +
+				sellerGroup.reduce((groupSum, groupedProduct) => {
+					const productPrice = groupedProduct.product.price;
+					const productQuantity = groupedProduct.quantity;
+					return groupSum + productPrice * productQuantity;
+				}, 0)
+			);
+		},
+		0
+	);
+
+	// Get unique sellers from groupedProducts
+	const sellers = new Set(Object.keys(groupedProducts));
+
+	// Calculate delivery and handling costs
+	const deliveryCosts = Array.from(sellers).reduce((sum, sellerId) => {
+		const sellerGroup = groupedProducts[sellerId];
+		const sellerDeliveryCost = sellerGroup[0].product.seller.deliveryCost;
+		return sum + sellerDeliveryCost;
+	}, 0);
 
 	const renderGroupedProducts = (groupedProducts: SellerGroup) => {
 		return Object.entries(groupedProducts).map(([seller, products]) => (
@@ -367,19 +480,10 @@ function Cart() {
 							<Button
 								variant="contained"
 								color="primary"
-								sx={{
-									mt: 2,
-									backgroundColor: '#0F1B4C',
-									color: '#FFFFFF',
-									border: '2px solid #0F1B4C',
-									'&:hover': {
-										backgroundColor: '#FFFFFF',
-										color: '#0F1B4C',
-									},
-								}}
+								sx={checkoutButton}
 								onClick={() => {
 									setIsOpenModal(true);
-									setcheckEligibility(false);
+									setCheckEligibility(false);
 									setSelectedSeller(
 										products[0].product.seller
 									);
@@ -430,6 +534,56 @@ function Cart() {
 							{renderGroupedProducts(
 								groupProductsBySeller(cartItems)
 							)}
+							<Box sx={{ width: '100%' }}>
+								<Card>
+									<CardContent>
+										<Typography
+											variant="h6"
+											component="h2"
+											mb={2}
+										>
+											Cart Summary
+										</Typography>
+										<Typography
+											variant="body1"
+											color="text.secondary"
+											mb={2}
+											sx={{ mt: 2, mb: 2 }}
+										>
+											Subtotal: {subtotal.toFixed(2)} €
+											<br />
+											Delivery & Handling:{' '}
+											{deliveryCosts.toFixed(2)} €
+										</Typography>
+										<Divider />
+										<Typography
+											variant="body1"
+											color="text.secondary"
+											mb={2}
+											sx={{ mt: 2, mb: 2 }}
+										>
+											Total:{' '}
+											{(subtotal + deliveryCosts).toFixed(
+												2
+											)}{' '}
+											€
+										</Typography>
+										<Divider />
+										<Button
+											variant="contained"
+											color="primary"
+											sx={checkoutButton}
+											onClick={() => {
+												setIsOpenModal(true);
+												setCheckOutAll(true);
+												setCheckEligibility(false);
+											}}
+										>
+											Checkout All
+										</Button>
+									</CardContent>
+								</Card>
+							</Box>
 						</>
 					) : (
 						<Typography variant="body1" mb={4}>
@@ -437,6 +591,7 @@ function Cart() {
 						</Typography>
 					)}
 				</Container>
+				<br />
 			</Box>
 			<Modal
 				open={isOpenModal}
@@ -521,7 +676,9 @@ function Cart() {
 							variant="contained"
 							fullWidth
 							disabled={!checkEligibility}
-							onClick={handleCheckout}
+							onClick={
+								checkOutAll ? handleCheckoutAll : handleCheckout
+							}
 						>
 							Buy
 						</Button>

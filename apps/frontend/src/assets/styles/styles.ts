@@ -32,3 +32,14 @@ export const darkTheme = createTheme({
         },
     },
 });
+
+export const checkoutButton = {
+    mt: 2,
+    backgroundColor: '#0F1B4C',
+    color: '#FFFFFF',
+    border: '2px solid #0F1B4C',
+    '&:hover': {
+        backgroundColor: '#FFFFFF',
+        color: '#0F1B4C',
+    },
+};
