@@ -37,6 +37,8 @@ function Product() {
 	const { user, role } = useUserAuth();
 	const { cartProducts, setCartProducts } = useCartContext();
 
+	console.log(drink);
+
 	useEffect(() => {
 		const fetchProductData = async () => {
 			try {
@@ -108,7 +110,7 @@ function Product() {
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
 			{role === 'seller' ? <NavbarS /> : <NavbarB />}
-			<Container>
+			<Container style={{ paddingBottom: '3rem' }}>
 				{showAlert && (
 					<Alert
 						severity="success"
@@ -227,15 +229,13 @@ function Product() {
 										<br />
 									</Alert>
 								)}
-								{role === 'seller' ? (
-									<br />
-								) : (
+								{role === 'buyer' && (
 									<Typography
 										variant="h6"
 										component="span"
 										sx={{ flex: '1' }}
 									>
-										Add product to cart:
+										Add product to cart
 										<Box
 											display="flex"
 											alignItems="center"
@@ -275,6 +275,25 @@ function Product() {
 						</Card>
 					</Box>
 				</CustomBox>
+				<Card>
+					<CardContent>
+						<Typography variant="h6" gutterBottom>
+							Seller Information
+						</Typography>
+						<Typography variant="subtitle1" gutterBottom>
+							<Link
+								to={`/supplier/${drink?.seller._id}`}
+								className="blackLink"
+							>
+								{drink?.seller.title}
+							</Link>
+						</Typography>
+						<Typography variant="subtitle1" gutterBottom>
+							{drink?.seller.address}, {drink?.seller.city},{' '}
+							{drink?.seller.country}
+						</Typography>
+					</CardContent>
+				</Card>
 			</Container>
 		</Box>
 	);

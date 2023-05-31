@@ -55,7 +55,6 @@ function Cart() {
 	const [groupedProducts, setGroupedProducts] = useState<SellerGroup>({});
 	const [isShownAlert, setIsShownAlert] = useState(false);
 	const { cartProducts, setCartProducts } = useCartContext();
-	const [meetsRequirements, setMeetsRequirements] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [checkEligibility, setCheckEligibility] = useState(false);
 	const [checkOutAll, setCheckOutAll] = useState(false);
@@ -107,11 +106,10 @@ function Cart() {
 			`/cart/quantity`,
 			{
 				email: user.email,
-				cart: 
-					{
-						productId: id,
-						quantity: quantity,
-					},
+				cart: {
+					productId: id,
+					quantity: quantity,
+				},
 			},
 			{
 				headers: {
@@ -378,7 +376,8 @@ function Cart() {
 											{item.product.price.toFixed(2)} €
 										</Typography>
 										<Alert severity="success">
-											There is currently a {item.product.discount} % discount
+											There is currently a{' '}
+											{item.product.discount} % discount
 											for this item!
 										</Alert>
 									</CardContent>
