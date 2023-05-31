@@ -291,23 +291,23 @@ function SellerOrdersPage() {
 															variant="body2"
 															color="text.secondary"
 														>
-															Date of delivery:{" "}
+															Date of delivery:{' '}
 															{formatDate(
-													new Date(
-														order.lastDateOfDelivery
-													)
-												)}
+																new Date(
+																	order.lastDateOfDelivery
+																)
+															)}
 														</Typography>
 														<Typography
 															variant="body2"
 															color="text.secondary"
 														>
-															Date of purchase:{" "}
+															Date of purchase:{' '}
 															{formatDate(
-													new Date(
-														order.dateOfPurchase
-													)
-												)}
+																new Date(
+																	order.dateOfPurchase
+																)
+															)}
 														</Typography>
 													</CardContent>
 												</Grid>
@@ -454,23 +454,41 @@ function SellerOrdersPage() {
 															variant="body2"
 															color="text.secondary"
 														>
-															Date of delivery:{" "}
+															Date of purchase:{' '}
 															{formatDate(
-													new Date(
-														order.lastDateOfDelivery
-													)
-												)}
+																new Date(
+																	order.dateOfPurchase
+																)
+															)}
 														</Typography>
 														<Typography
 															variant="body2"
 															color="text.secondary"
 														>
-															Date of purchase:{" "}
+															Estimated date of
+															delivery:{' '}
 															{formatDate(
-													new Date(
-														order.dateOfPurchase
-													)
-												)}
+																new Date(
+																	order.lastDateOfDelivery
+																)
+															)}
+														</Typography>
+														<Typography
+															variant="body2"
+															color="text.secondary"
+														>
+															{order.status ===
+																'Delivered' && (
+																<>
+																	Date of
+																	delivery:{' '}
+																	{formatDate(
+																		new Date(
+																			order.actualDateOfDelivery
+																		)
+																	)}
+																</>
+															)}
 														</Typography>
 													</CardContent>
 												</Grid>

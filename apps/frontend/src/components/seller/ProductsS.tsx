@@ -32,6 +32,7 @@ const initialState = {
 	drinkCategory: '',
 	packaging: '',
 	size: '',
+	actualPrice: 0,
 	price: 0,
 	stock: 0,
 	seller: '',
@@ -43,6 +44,7 @@ interface Product {
 	drinkCategory: string;
 	packaging: string;
 	size: string;
+	actualPrice: number;
 	price: number;
 	stock: number;
 	seller: string;
@@ -54,7 +56,7 @@ const requiredFields: (keyof Product)[] = [
 	'drinkCategory',
 	'packaging',
 	'size',
-	'price',
+	'actualPrice',
 	'stock',
 ];
 
@@ -256,8 +258,8 @@ const ProductsS = () => {
 									type="number"
 									fullWidth
 									required
-									name="price"
-									value={newProduct.price}
+									name="actualPrice"
+									value={newProduct.actualPrice}
 									onChange={handleInputChange}
 									sx={{ mb: 2 }}
 								/>

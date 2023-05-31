@@ -80,10 +80,6 @@ function Cart() {
 		if (user) fetchCart();
 	}, [user]);
 
-	useEffect(() => {
-		document.title = 'Shopping Cart';
-	}, []);
-
 	const groupProductsBySeller = (cart: any) => {
 		const groupedProducts: SellerGroup = {};
 
@@ -98,21 +94,24 @@ function Cart() {
 		return groupedProducts;
 	};
 
+	useEffect(() => {
+		document.title = 'Shopping Cart';
+	}, []);
+
 	const handleRemoveFromCart = async (id: string) => {
 		const response = await api.delete(`/cart/${user.email}/${id}`);
 		setCartItems(response.data.cart);
 	};
 	const handleQuantityChange = async (id: string, quantity: number) => {
 		const response = await api.post(
-			`/cart/add`,
+			`/cart/quantity`,
 			{
 				email: user.email,
-				cart: [
+				cart: 
 					{
 						productId: id,
 						quantity: quantity,
 					},
-				],
 			},
 			{
 				headers: {
@@ -242,7 +241,7 @@ function Cart() {
 			setCartItems(updatedCartItems);
 			setIsShownAlert(true);
 		} catch (error: any) {
-			setError(error.response.data.message); // error.response
+			setError(error.response.data.message);
 		} finally {
 			setIsLoading(false);
 		}
@@ -337,13 +336,7 @@ function Cart() {
 			<Grid container spacing={2} key={seller}>
 				<Grid item xs={8}>
 					<Typography variant="h6" component="h2" mb={2}>
-						Seller:{' '}
-						<Link
-							to={`/supplier/${products[0].product.seller._id}`}
-							className="blackLink"
-						>
-							{products[0].product.seller.title}
-						</Link>
+						Seller: {products[0].product.seller.title}
 					</Typography>
 					{products.map((item) => (
 						<Card
@@ -385,7 +378,7 @@ function Cart() {
 											{item.product.price.toFixed(2)} €
 										</Typography>
 										<Alert severity="success">
-											There is currently a 10% discount
+											There is currently a {item.product.discount} % discount
 											for this item!
 										</Alert>
 									</CardContent>
@@ -661,7 +654,6 @@ function Cart() {
 						value={lastDateOfDelivery}
 						onChange={(e) => setLastDateOfDelivery(e.target.value)}
 					/>
-					<br />
 					<br />
 					{error !== '' && (
 						<Alert severity="error">

@@ -32,6 +32,7 @@ const initialState = {
 	drinkCategory: '',
 	packaging: '',
 	size: '',
+	actualPrice: 0,
 	price: 0,
 	stock: 0,
 	seller: '',
@@ -42,6 +43,7 @@ interface Product {
 	drinkCategory: string;
 	packaging: string;
 	size: string;
+	actualPrice: number;
 	price: number;
 	stock: number;
 	seller: string;
@@ -52,7 +54,7 @@ const requiredFields: (keyof Product)[] = [
 	'drinkCategory',
 	'packaging',
 	'size',
-	'price',
+	'actualPrice',
 	'stock',
 ];
 
@@ -172,7 +174,7 @@ const DrinkS: React.FC<DrinkProps> = ({
 						</Typography>
 					</Link>
 					<Typography variant="body1" sx={{ my: 1 }}>
-						Price: {drink.price}€
+						Price: {drink.price.toFixed(2)} €
 					</Typography>
 					<Box
 						sx={{
@@ -330,8 +332,8 @@ const DrinkS: React.FC<DrinkProps> = ({
 						type="number"
 						fullWidth
 						required
-						name="price"
-						value={selectedDrink.price || 0}
+						name="actualPrice"
+						value={selectedDrink.actualPrice || 0}
 						onChange={handleInputChange}
 						sx={{ mb: 2 }}
 					/>

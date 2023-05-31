@@ -27,6 +27,19 @@ export class CartController {
     return { cart: result.cart };
   }
 
+  @Post('/quantity')
+  @UseGuards(FirebaseTokenGuard)
+  async changeQuantity(
+    @Body('email') email: string,
+    @Body('cart') cart: { productId: string; quantity: number; },
+  ): Promise<CartResponse | null> {
+    const result = await this.cartService.changeQuantity(email, cart);
+    if (!result?.cart) {
+      return null;
+    }
+    return { cart: result.cart };
+  }
+
   @Post('/get')
   @UseGuards(FirebaseTokenGuard)
   async getCart(@Body('email') email: string): Promise<CartResponse | null> {
