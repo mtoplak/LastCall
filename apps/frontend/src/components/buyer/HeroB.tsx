@@ -5,7 +5,7 @@ import Title from 'components/ui/Title';
 
 const Hero = () => {
 	return (
-		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '65vh' }}>
+		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '90vh' }}>
 			<Container>
 				<CustomBox>
 					<Box sx={{ flex: '1' }}>
@@ -26,6 +26,14 @@ const Hero = () => {
 							<span style={{ color: '#24336e' }}>Buyers</span> and
 							Sellers
 						</Title>
+						<Typography
+							variant="body2"
+							sx={{ fontSize: '18px', color: '#5A6473', my: 4 }}
+						>
+							With an unwavering commitment to enhancing the
+							beverage industry, we unite suppliers, distributors,
+							retailers, and enthusiastic consumers.
+						</Typography>
 					</Box>
 
 					<Box sx={{ flex: '1.25' }}>

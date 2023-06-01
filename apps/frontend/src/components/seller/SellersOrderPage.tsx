@@ -222,10 +222,7 @@ function SellerOrdersPage() {
 															variant="body2"
 															color="text.secondary"
 														>
-															Price: €
-															{order.totalPrice.toFixed(
-																2
-															)}
+															Price: {order.totalPrice.toFixed(2)} €
 														</Typography>
 													</CardContent>
 												</Grid>
@@ -454,7 +451,7 @@ function SellerOrdersPage() {
 															variant="body2"
 															color="text.secondary"
 														>
-															Date of purchase:{' '}
+															Date of Purchase:{' '}
 															{formatDate(
 																new Date(
 																	order.dateOfPurchase
@@ -465,8 +462,8 @@ function SellerOrdersPage() {
 															variant="body2"
 															color="text.secondary"
 														>
-															Estimated date of
-															delivery:{' '}
+															Estimated Date of
+															Delivery:{' '}
 															{formatDate(
 																new Date(
 																	order.lastDateOfDelivery
@@ -481,7 +478,7 @@ function SellerOrdersPage() {
 																'Delivered' && (
 																<>
 																	Date of
-																	delivery:{' '}
+																	Delivery:{' '}
 																	{formatDate(
 																		new Date(
 																			order.actualDateOfDelivery

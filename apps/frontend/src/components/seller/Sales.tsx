@@ -172,11 +172,11 @@ function Sales() {
 										<Grid item xs={5}>
 											<CardContent>
 												<Typography
-													variant="subtitle1"
+													variant="h6"
 													component="h2"
 												>
 													<b>
-														PRODUCT: {product.title}
+														{product.title}
 													</b>
 												</Typography>
 												<Typography
@@ -202,38 +202,62 @@ function Sales() {
 													variant="body2"
 													color="text.secondary"
 												>
-													Size: {product.size},{' '}
-													{product.packaging}
+													Size: {product.packaging},{' '}
+													{product.size}
 												</Typography>
 											</CardContent>
 										</Grid>
 										<Grid item xs={3}>
-											<CardContent>
-												Current discount:
-												<Typography
-													color={getDiscountColor(
-														product.discount
-													)}
-												>
-													<b>{product.discount}%</b>
-												</Typography>
-												<Divider
-													sx={{ mt: 2, mb: 2 }}
-												/>
-												Price with discount:
-												<Typography
-													color={getDiscountColor(
-														product.discount
-													)}
-												>
-													<b>
-														{product.price.toFixed(
-															2
-														)}{' '}
-														€
-													</b>
-												</Typography>
-											</CardContent>
+											{product.discount !== 0 ? (
+												<CardContent>
+													Current discount:
+													<Typography
+														color={getDiscountColor(
+															product.discount
+														)}
+													>
+														<b>
+															{product.discount} %
+														</b>
+													</Typography>
+													<Divider
+														sx={{ mt: 2, mb: 2 }}
+													/>
+													Price with discount:
+													<Typography
+														color={getDiscountColor(
+															product.discount
+														)}
+													>
+														<b>
+															{product.price.toFixed(
+																2
+															)}{' '}
+															€
+														</b>
+													</Typography>
+												</CardContent>
+											) : (
+												<CardContent>
+													No discount
+													<Divider
+														sx={{ mt: 2, mb: 2 }}
+													/>
+													Original price:
+													<Typography
+														color={getDiscountColor(
+															product.discount
+														)}
+													>
+														<b>
+															{product.actualPrice.toFixed(
+																2
+															)}{' '}
+															€
+														</b>
+													</Typography>
+												</CardContent>
+											)}
 										</Grid>
 									</Grid>
 								</Card>

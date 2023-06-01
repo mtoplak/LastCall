@@ -228,70 +228,76 @@ function Product() {
 									</Alert>
 								)}
 								{role === 'buyer' && (
-									<Typography
-										variant="h6"
-										component="span"
-										sx={{ flex: '1' }}
-									>
-										Add product to cart
-										<Box
-											display="flex"
-											alignItems="center"
-											gap={10}
+									<Box>
+										<Typography
+											variant="h6"
+											component="span"
+											sx={{ flex: '1' }}
 										>
-											<Box flex="1">
-												<TextField
-													value={quantity}
-													onChange={(e) =>
-														setQuantity(
-															Number(
-																e.target.value
+											Add product to cart
+											<Box
+												display="flex"
+												alignItems="center"
+												gap={10}
+											>
+												<Box flex="1">
+													<TextField
+														value={quantity}
+														onChange={(e) =>
+															setQuantity(
+																Number(
+																	e.target
+																		.value
+																)
 															)
-														)
-													}
-													label="Quantity"
-													placeholder="1"
-													type="number"
-													fullWidth
-													inputProps={{
-														min: 1,
-													}}
-												/>
+														}
+														label="Quantity"
+														placeholder="1"
+														type="number"
+														fullWidth
+														inputProps={{
+															min: 1,
+														}}
+													/>
+												</Box>
+												<Box>
+													<Button onClick={addToCart}>
+														Add to cart
+													</Button>
+												</Box>
 											</Box>
-											<Box>
-												<Button onClick={addToCart}>
-													Add to cart
-												</Button>
-											</Box>
-										</Box>
-										<p style={{ fontSize: '15px' }}>
-											In stock: {drink?.stock}
-										</p>
-									</Typography>
+											<p style={{ fontSize: '15px' }}>
+												In stock: {drink?.stock}
+											</p>
+										</Typography>
+									</Box>
 								)}
+								<Divider sx={{ mb: 1 }} />
+								<Typography
+									variant="h6"
+									gutterBottom
+									sx={{ ml: 1 }}
+								>
+									<Link
+										to={`/supplier/${drink?.seller._id}`}
+										className="blackLink"
+									>
+										{drink?.seller.title}
+									</Link>
+								</Typography>
+								<Typography
+									variant="subtitle1"
+									gutterBottom
+									sx={{ ml: 1 }}
+								>
+									{drink?.seller.address},{' '}
+									{drink?.seller.city},{' '}
+									{drink?.seller.country}
+								</Typography>
 							</CardContent>
 						</Card>
 					</Box>
 				</CustomBox>
-				<Card>
-					<CardContent>
-						<Typography variant="h6" gutterBottom>
-							Seller Information
-						</Typography>
-						<Typography variant="subtitle1" gutterBottom>
-							<Link
-								to={`/supplier/${drink?.seller._id}`}
-								className="blackLink"
-							>
-								{drink?.seller.title}
-							</Link>
-						</Typography>
-						<Typography variant="subtitle1" gutterBottom>
-							{drink?.seller.address}, {drink?.seller.city},{' '}
-							{drink?.seller.country}
-						</Typography>
-					</CardContent>
-				</Card>
 			</Container>
 		</Box>
 	);

@@ -5,7 +5,7 @@ import CustomBox from 'components/ui/CustomBox';
 
 const HeroS = () => {
 	return (
-		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '65vh' }}>
+		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '90vh' }}>
 			<Container>
 				<CustomBox>
 					<Box sx={{ flex: '1' }}>
@@ -26,9 +26,17 @@ const HeroS = () => {
 							<span style={{ color: '#24336e' }}>Sellers</span>{' '}
 							and Buyers
 						</Title>
+						<Typography
+							variant="body2"
+							sx={{ fontSize: '18px', color: '#5A6473', my: 4 }}
+						>
+							With an unwavering commitment to enhancing the
+							beverage industry, we unite suppliers, distributors,
+							retailers, and enthusiastic consumers.
+						</Typography>
 					</Box>
 
-					<Box sx={{ flex: '1.25' }}>
+					<Box sx={{ flex: '1.25', mb: 5 }}>
 						<img
 							src={heroImg}
 							alt="heroImg"
