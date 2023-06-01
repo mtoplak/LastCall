@@ -22,8 +22,9 @@ export class ProductMapper {
       price: product.price,
       stock: product.stock,
       seller: product.seller,
-      sale: product.sale,
       picture: product.picture,
+      actualPrice: product.actualPrice,
+      discount: product.discount,
     };
     return response;
   }

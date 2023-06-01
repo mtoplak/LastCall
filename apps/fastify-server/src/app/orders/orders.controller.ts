@@ -59,4 +59,17 @@ export class OrdersController {
     await this.ordersService.removeOrder(id);
     return { success: true };
   }
+
+  @Post('/checkPrice')
+  async checkPrice(
+    @Body('products') products: { productId: string; quantity: number; }[],
+    @Body('seller') sellerId: string,
+  ): Promise<{ meetsMinPriceRequirements: boolean; }> {
+    const meetsMinPriceRequirements = await this.ordersService.checkPrice(
+      products,
+      sellerId,
+    );
+    return { meetsMinPriceRequirements };
+  }
+
 }

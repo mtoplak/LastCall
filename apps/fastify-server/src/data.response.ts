@@ -18,7 +18,7 @@ export interface CartResponse {
 export interface AddressResponse {
   address: string,
   city: string,
-  country: string
+  country: string;
 }
 
 export interface ProductResponse {
@@ -30,8 +30,9 @@ export interface ProductResponse {
   price: number;
   stock: number;
   seller: Seller;
-  sale: number;
   picture: string;
+  actualPrice: number;
+  discount: number;
 }
 
 export interface BuyerResponse {
@@ -48,12 +49,12 @@ export interface BuyerResponse {
   phone: string;
   email: string;
   orders: string[];
-  cart: { productId: Product; quantity: number }[];
+  cart: { productId: Product; quantity: number; }[];
 }
 
 export interface OrderResponse {
   id: string;
-  products: { product: Product; quantity: number }[];
+  products: { product: Product; quantity: number; }[];
   buyer: Buyer;
   seller: Seller;
   totalPrice: number;
