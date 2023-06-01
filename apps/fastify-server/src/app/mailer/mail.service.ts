@@ -5,7 +5,7 @@ import { SellersService } from "../sellers/sellers.service";
 import { ProductsService } from "../products/products.service";
 import { Order } from "../orders/order.model";
 import { Cart } from "../buyers/buyers.model";
-import { formatDate } from "../utils/formatDate.utils";
+import { formatDate } from "../utils/format-date.utils";
 
 @Injectable()
 export class MailService {
@@ -77,7 +77,7 @@ export class MailService {
         emailContent += `<p>Date of Purchase: ${formatDate(orderData.dateOfPurchase)}</p>`;
         emailContent += `<p>Last Day of Delivery: ${formatDate(orderData.lastDateOfDelivery)}</p>`;
         emailContent += '<p>We will handle your order in the shortest possible time.</p>';
-        emailContent += '<p>Thanks,</p>';
+        emailContent += '<p>Thank you,</p>';
         emailContent += `<p>${sellerData.title}</p>`;
 
         return emailContent;

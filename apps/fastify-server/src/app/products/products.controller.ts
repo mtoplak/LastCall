@@ -11,11 +11,10 @@ import {
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from './product.model';
-import { CreateUpdateProductDto } from './createUpdateProduct.dto';
+import { CreateUpdateProductDto } from './create-update-product.dto';
 import { SuccessResponse } from 'src/data.response';
 import { Cart } from '../buyers/buyers.model';
-import { CreateUpdateOrderDto } from '../orders/createUpdateOrder.dto';
-import { FirebaseTokenGuard } from '../guards/FirebaseTokenGuard';
+import { FirebaseTokenGuard } from '../guards/firebase-token-guard';
 
 @Controller('products')
 export class ProductsController {

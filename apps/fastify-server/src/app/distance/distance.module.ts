@@ -8,6 +8,11 @@ import { OrderSchema } from '../orders/order.model';
 import { SellerSchema } from '../sellers/sellers.model';
 import { BuyerSchema } from '../buyers/buyers.model';
 import { ProductSchema } from '../products/product.model';
+import { SellersService } from '../sellers/sellers.service';
+import { ProductsService } from '../products/products.service';
+import { BuyersService } from '../buyers/buyers.service';
+import { ProductsRepository } from '../products/products.repository';
+import { BuyersRepository } from '../buyers/buyers.repository';
 
 @Module({
   imports: [
@@ -17,6 +22,15 @@ import { ProductSchema } from '../products/product.model';
     MongooseModule.forFeature([{ name: 'Product', schema: ProductSchema }]),
   ],
   controllers: [DistanceController],
-  providers: [DistanceService, SellersRepository, OrdersRepository],
+  providers: [
+    DistanceService,
+    SellersService,
+    SellersRepository,
+    OrdersRepository,
+    ProductsRepository,
+    ProductsService,
+    BuyersService,
+    BuyersRepository
+  ],
 })
 export class DistanceModule {}

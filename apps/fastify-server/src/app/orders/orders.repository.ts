@@ -6,6 +6,10 @@ import { Product } from '../products/product.model';
 import { Buyer, Cart } from '../buyers/buyers.model';
 import { Seller } from '../sellers/sellers.model';
 import { randomInt } from 'crypto';
+import { SellersService } from '../sellers/sellers.service';
+import { ProductsService } from '../products/products.service';
+import { BuyersService } from '../buyers/buyers.service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class OrdersRepository {
@@ -14,6 +18,9 @@ export class OrdersRepository {
     @InjectModel('Seller') private readonly sellerModel: Model<Seller>,
     @InjectModel('Buyer') private readonly buyerModel: Model<Buyer>,
     @InjectModel('Product') private readonly productModel: Model<Product>,
+    private readonly productsService: ProductsService,
+    private readonly sellersService: SellersService,
+    private readonly buyersService: BuyersService,
   ) {}
 
   async findOne(orderFilterQuery: FilterQuery<Order>): Promise<Order> {
@@ -50,16 +57,16 @@ export class OrdersRepository {
     if (products.length !== productIds.length) {
       throw new NotFoundException('Products for this order not found');
     }
-    const seller = await this.sellerModel.findOne({ email: sellerEmail });
+    const seller = await this.sellersService.getSingleSellerByEmail(
+      sellerEmail,
+    );
     if (!seller) {
-      throw new NotFoundException(
-        'Could not find the seller with email ' + sellerEmail,
-      );
+      throw new NotFoundException('Seller not found');
     }
-    const buyer = await this.buyerModel.findOne({ email: buyerEmail });
+    const buyer = await this.buyersService.getSingleBuyerByEmail(buyerEmail);
     if (!buyer) {
       throw new NotFoundException(
-        'Could not find the buyer with email ' + buyerEmail,
+        `Could not find the buyer with email ${buyerEmail}`,
       );
     }
 
@@ -68,23 +75,19 @@ export class OrdersRepository {
       quantity: quantities[index],
     }));
 
-    const uid = await this.generateUid();
-
     const newOrder = new this.ordersModel({
       ...restOrderData,
       products: orderedProducts,
       buyer: buyer._id,
       seller: seller._id,
-      uid: uid,
+      uid: uuidv4(),
     });
     const result = await newOrder.save();
 
     seller.orders.push(result._id);
-    await seller.save();
-
     buyer.orders.push(result._id);
 
-    await buyer.save();
+    await Promise.all([seller.save(), buyer.save()]);
 
     return result;
   }
@@ -98,10 +101,5 @@ export class OrdersRepository {
 
   async deleteOne(orderFilterQuery: FilterQuery<Order>): Promise<void> {
     await this.ordersModel.deleteOne(orderFilterQuery);
-  }
-
-  async generateUid(): Promise<string> {
-    const uid = randomInt(100000, 999999).toString();
-    return uid;
   }
 }

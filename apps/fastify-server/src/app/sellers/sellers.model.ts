@@ -4,7 +4,7 @@ export const SellerSchema = new Schema({
   name: { type: String, required: true },
   surname: { type: String, required: true },
   title: { type: String, required: true },
-  address: { type: String, required: true }, //array naredi
+  address: { type: String, required: true },
   city: { type: String, required: true },
   country: { type: String, required: true },
   registerNumber: { type: Number, required: true },
@@ -25,9 +25,9 @@ export interface Seller extends Document {
   name: string;
   surname: string;
   title: string;
-  address: string; //array naredi
-  city: string; //array naredi
-  country: string; //array naredi
+  address: string;
+  city: string;
+  country: string;
   registerNumber: number;
   companyType: string;
   targetedMarkets: string[];

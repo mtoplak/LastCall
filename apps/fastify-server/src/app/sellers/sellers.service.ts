@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Seller } from './sellers.model';
 import { SellersRepository } from './sellers.repository';
-import { CreateUpdateSellerDto } from './createUpdateSeller.dto';
+import { CreateUpdateSellerDto } from './create-update-seller.dto';
 import { Product } from '../products/product.model';
 import { Order } from '../orders/order.model';
 import { SuccessResponse } from 'src/data.response';
@@ -27,7 +27,7 @@ export class SellersService {
       return await this.sellersRepository.findOne({ _id: sellerId });
     } catch (err) {
       throw new NotFoundException(
-        'Could not get the seller with id ' + sellerId,
+        `Could not get the seller with id ${sellerId}`,
       );
     }
   }
@@ -37,7 +37,7 @@ export class SellersService {
       return await this.sellersRepository.findOne({ email });
     } catch (err) {
       throw new NotFoundException(
-        'Could not get the seller with email ' + email,
+        `Could not get the seller with email ${email}`,
       );
     }
   }
@@ -53,7 +53,7 @@ export class SellersService {
     );
     if (!updatedSeller) {
       throw new NotFoundException(
-        'Failed to update the seller with id: ' + sellerId,
+        `Failed to update the seller with id ${sellerId} `,
       );
     }
     return updatedSeller;
@@ -70,7 +70,7 @@ export class SellersService {
     );
     if (!updatedSeller) {
       throw new NotFoundException(
-        'Failed to update the seller with email: ' + email,
+        `Failed to update the seller with email ${email}`,
       );
     }
     return updatedSeller;

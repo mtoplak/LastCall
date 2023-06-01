@@ -17,10 +17,10 @@ import { SellersRepository } from '../sellers/sellers.repository';
   ],
   controllers: [ProductsController],
   providers: [
-    ProductsService,
     ProductsRepository,
     SellersService,
     SellersRepository,
+    ProductsService,
   ],
 })
 export class ProductsModule {}
