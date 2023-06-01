@@ -176,6 +176,7 @@ function Cart() {
 					setCheckEligibility(true);
 				} else {
 					setCheckEligibility(false);
+					setError("Order address is outside the seller's maximum distance.")
 				}
 			} catch (error: any) {
 				setError(error.message);
@@ -423,11 +424,13 @@ function Cart() {
 											Price:{' '}
 											{item.product.price.toFixed(2)} €
 										</Typography>
-										<Alert severity="success">
-											There is currently a{' '}
-											{item.product.discount} % discount
-											for this item!
-										</Alert>
+										{item.product?.discount !== 0 && (
+									<Alert severity="success" sx={{ mb: 2 }}>
+										There is currently a {item.product?.discount} %
+										discount for this product!
+										<br />
+									</Alert>
+								)}
 									</CardContent>
 								</Grid>
 								<Grid item xs={3}>
@@ -700,7 +703,7 @@ function Cart() {
 						Check if eligible for delivery
 					</Button>
 					<TextField
-						sx={{ mt: 2 }}
+						sx={{ mt: 2, mb: 2 }}
 						id="date"
 						label="Last day of delivery"
 						type="date"
@@ -711,7 +714,6 @@ function Cart() {
 						value={lastDateOfDelivery}
 						onChange={(e) => setLastDateOfDelivery(e.target.value)}
 					/>
-					<br />
 					{error !== '' && (
 						<Alert severity="error">
 							<b>{error}</b>

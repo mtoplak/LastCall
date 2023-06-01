@@ -6,9 +6,13 @@ import { useLocation } from 'react-router-dom';
 //import { useAppDispatch } from 'redux-store';
 import '../../assets/styles/buyer.css';
 import NavbarB from './NavbarB';
+import NavbarS from 'components/seller/NavbarS';
+import { useUserAuth } from 'context/AuthContext';
+import HeroS from 'components/seller/HeroS';
 
 const Buyer = () => {
 	const location = useLocation();
+	const { role } = useUserAuth();
 
 	useEffect(() => {
 		document.title = 'Last Call';
@@ -16,8 +20,8 @@ const Buyer = () => {
 
 	return (
 		<Box sx={{ backgroundColor: '#E6F0FF' }}>
-			<NavbarB />
-			{location.pathname === '/' && <Hero />}
+			{role === 'seller' ? <NavbarS /> : <NavbarB />}
+			{location.pathname === '/' && (role === 'buyer' || !role) ? <Hero /> : role === 'seller' && <HeroS />}
 			<Products />
 		</Box>
 	);

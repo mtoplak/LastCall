@@ -70,17 +70,6 @@ export class OrdersService {
 
     this.mailService.sendOrderConfirmationEmail(buyerEmail, order, productData, sellerEmail); // brez await, da se ne čaka
 
-    /*
-    const distance = await this.distanceService.calculateDistance(
-      sellerEmail,
-      order._id,
-    );
-    if (distance > seller.maxDistance) {
-      throw new BadRequestException(
-        "Order address is outside the seller's maximum distance",
-      );
-    }
-*/
     const productIds = productData.map((item) => item.productId);
     await this.cartService.deleteProductsFromCart(buyerEmail, productIds);
     return order;
