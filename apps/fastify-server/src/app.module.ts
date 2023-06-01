@@ -32,8 +32,10 @@ const databaseHost = require('../constants').databaseHost;
         },
       },
     }),
-    MongooseModule.forRoot(databaseHost),
-    ConfigModule.forRoot({
+    DistanceModule,
+    MongooseModule.forRoot(databaseHost, {
+      useUnifiedTopology: true, // Add this option for unified topology
+    }), ConfigModule.forRoot({
       cache: true,
     }),
   ],

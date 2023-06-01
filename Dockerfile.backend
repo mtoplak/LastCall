@@ -19,13 +19,16 @@ COPY --chown=node:node ./apps/fastify-server/package.json apps/fastify-server
 COPY --chown=node:node ./apps/fastify-server apps/fastify-server
 
 # Copy .env.prod file
-#COPY --chown=node:node ./apps/fastify-server/.env.prod /apps/fastify-server
+# COPY --chown=node:node ./apps/fastify-server/.env.prod /apps/fastify-server
 
 # install node_modules
 RUN npm install
 
 # build fastify-server
 RUN yarn fastify-server:build
+
+# port
+# EXPOSE 8080
 
 # run the build
 CMD ["node", "apps/fastify-server/dist/main.js"]

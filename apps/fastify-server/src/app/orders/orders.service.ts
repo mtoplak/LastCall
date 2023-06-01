@@ -23,7 +23,22 @@ export class OrdersService {
     private readonly mailService: MailService,
     private readonly sellersRepository: SellersRepository,
     private readonly sellersService: SellersService
-  ) {}
+  ) { }
+
+  async checkPrice(productData: Cart[],
+    sellerId: string): Promise<boolean> {
+    const seller = await this.sellersRepository.findOne({ _id: sellerId });
+
+    if (!seller) {
+      throw new NotFoundException('Seller not found');
+    }
+    const meetsMinPriceRequirements =
+      await this.productsService.minPriceRequirements(seller.email, productData);
+    if (!meetsMinPriceRequirements) {
+      return false;
+    }
+    return true;
+  }
 
   async addOrder(
     orderData: CreateUpdateOrderDto,
@@ -35,14 +50,6 @@ export class OrdersService {
     const seller = await this.sellersService.getSingleSellerByEmail(sellerEmail);
     if (!seller) {
       throw new NotFoundException('Seller not found');
-    }
-
-    const meetsMinPriceRequirements =
-      await this.productsService.minPriceRequirements(sellerEmail, productData);
-    if (!meetsMinPriceRequirements) {
-      throw new BadRequestException(
-        'Order does not meet the minimum price requirement',
-      );
     }
 
     const removeFromStockResult = await this.productsService.removeFromStock(
