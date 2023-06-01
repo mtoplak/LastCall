@@ -9,6 +9,7 @@ const Footer = () => {
 			<CustomContainer>
 				<CustomContainer>
 					<Box>
+						<Link to={'/'}>
 						<Typography
 							sx={{
 								fontSize: '20px',
@@ -19,17 +20,19 @@ const Footer = () => {
 						>
 							Products
 						</Typography>
+						</Link>
 
-						<FooterLink>All</FooterLink>
+						<FooterLink>Beer</FooterLink>
 						<br />
-						<FooterLink>Alcohol</FooterLink>
+						<FooterLink>Wine</FooterLink>
 						<br />
-						<FooterLink>Carbonated</FooterLink>
+						<FooterLink>Champagne</FooterLink>
 						<br />
-						<FooterLink>Non-carbonated</FooterLink>
+						<FooterLink>& More</FooterLink>
 					</Box>
 
 					<Box>
+						<Link to={'/buy/signin'}>
 						<Typography
 							sx={{
 								fontSize: '20px',
@@ -40,6 +43,7 @@ const Footer = () => {
 						>
 							Account
 						</Typography>
+						</Link>
 
 						<FooterLink>My account</FooterLink>
 						<br />
