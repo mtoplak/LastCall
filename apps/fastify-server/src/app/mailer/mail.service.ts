@@ -34,7 +34,7 @@ export class MailService {
     }
 
     async generateOrderEmailContent(orderData: Order, productData: Cart[], buyerEmail: string, sellerEmail: string): Promise<string> {
-        //console.log(orderData);
+        console.log(orderData);
         const sellerData = await this.sellersService.getSingleSellerByEmail(sellerEmail);
         //console.log(sellerData);
         const buyerData = await this.buyersService.getSingleBuyerByEmail(buyerEmail);
@@ -58,8 +58,8 @@ export class MailService {
             emailContent += '<tr>';
             emailContent += `<td style="border: 1px solid black;"><h3>${product.title}</h3><img src="${product.picture}" alt="${product.title}" style="max-width: 200px;"></td>`;
             emailContent += `<td style="border: 1px solid black;">${item.quantity}</td>`;
-            emailContent += `<td style="border: 1px solid black;">${product.price} €</td>`;
-            emailContent += `<td style="border: 1px solid black;">${totalPrice} €</td>`;
+            emailContent += `<td style="border: 1px solid black;">${product.price.toFixed(2)} €</td>`;
+            emailContent += `<td style="border: 1px solid black;">${totalPrice.toFixed(2)} €</td>`;
             emailContent += '</tr>';
         }
 
@@ -77,10 +77,41 @@ export class MailService {
         emailContent += `<p>Date of Purchase: ${formatDate(orderData.dateOfPurchase)}</p>`;
         emailContent += `<p>Last Day of Delivery: ${formatDate(orderData.lastDateOfDelivery)}</p>`;
         emailContent += '<p>We will handle your order in the shortest possible time.</p>';
+        emailContent += '<p>For any questions, please contact us at:</p>';
+        emailContent += `<p>${sellerData.email}</p>`;
+        emailContent += '<p>In the mean time you can check order status at:</p>';
+        emailContent += `<p>http://localhost:3000/order/${orderData._id}</p>`; // !!! spremeni v actual url
         emailContent += '<p>Thanks,</p>';
         emailContent += `<p>${sellerData.title}</p>`;
 
         return emailContent;
     }
 
+    async sendMessage(sellerEmail: string, buyerEmail: string, message: string): Promise<boolean> {
+        const mailOptions = {
+            to: sellerEmail,
+            subject: 'Message from buyer',
+            html: await this.generateMessageEmailContent(buyerEmail, message),
+            replyTo: buyerEmail
+        };
+
+        try {
+            await this.mailerService.sendMail(mailOptions);
+            //console.log('Order confirmation email sent successfully');
+            return true;
+        } catch (error) {
+            //console.error('Failed to send order confirmation email:', error);
+            return false;
+            //throw error;
+        }
+    }
+
+    async generateMessageEmailContent(buyerEmail: string, message: string): Promise<string> {
+        let emailContent = `<h3>You've got a new message from ${buyerEmail}:</h3>`;
+        emailContent += `<p>${message}</p>`;
+        emailContent += `<p>You can reply to this email and ${buyerEmail} will get it!</p>`;
+        emailContent += '<p>Thanks,</p>';
+        emailContent += `<p>Last Call Company</p>`;
+        return emailContent;
+    }
 }

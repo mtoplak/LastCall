@@ -21,7 +21,11 @@ const Buyer = () => {
 	return (
 		<Box sx={{ backgroundColor: '#E6F0FF' }}>
 			{role === 'seller' ? <NavbarS /> : <NavbarB />}
-			{location.pathname === '/' && (role === 'buyer' || !role) ? <Hero /> : role === 'seller' && <HeroS />}
+			{location.pathname === '/' && (role === 'buyer' || !role) ? (
+				<Hero />
+			) : (
+				role === 'seller' && <HeroS />
+			)}
 			<Products />
 		</Box>
 	);

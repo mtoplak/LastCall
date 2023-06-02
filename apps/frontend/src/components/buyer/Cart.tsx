@@ -218,7 +218,7 @@ function Cart() {
 				})
 			);
 			const response = await api.post('/orders/checkPrice', {
-				seller: selectedSeller.email,
+				seller: selectedSeller._id,
 				products: order,
 			});
 			if (response.data.meetsMinPriceRequirements === true) {

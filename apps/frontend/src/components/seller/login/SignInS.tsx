@@ -29,7 +29,6 @@ const SignInS = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	//context
 	const { signIn, resetPassword } = useUserAuth();
 
 	const handleResetPassword = async (e: any) => {
