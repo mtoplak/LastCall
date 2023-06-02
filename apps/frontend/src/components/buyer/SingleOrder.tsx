@@ -242,11 +242,9 @@ function SingleOrder() {
 														</Typography>
 														<Typography>
 															<b>Price:</b>{' '}
-															{
-																orderProduct
-																	.product
-																	.price
-															}{' '}
+															{orderProduct.product.price.toFixed(
+																2
+															)}{' '}
 															€
 														</Typography>
 														<Typography>
