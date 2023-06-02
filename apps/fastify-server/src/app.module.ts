@@ -10,6 +10,7 @@ import { CartModule } from './app/cart/cart.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { DistanceModule } from './app/distance/distance.module';
 import { MailModule } from './app/mailer/mail.module';
+import { RatingModule } from './app/rating/rating.module';
 
 const databaseHost = require('../constants').databaseHost;
 
@@ -19,6 +20,7 @@ const databaseHost = require('../constants').databaseHost;
     ProductsModule,
     SellersModule,
     OrdersModule,
+    RatingModule,
     CartModule,
     AuthenticationModule,
     DistanceModule,
@@ -37,7 +39,8 @@ const databaseHost = require('../constants').databaseHost;
     MailModule,
     MongooseModule.forRoot(databaseHost, {
       useUnifiedTopology: true, // Add this option for unified topology
-    }), ConfigModule.forRoot({
+    }),
+    ConfigModule.forRoot({
       cache: true,
     }),
   ],
