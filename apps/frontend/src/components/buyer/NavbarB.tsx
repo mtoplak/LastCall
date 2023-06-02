@@ -203,11 +203,6 @@ function NavbarB() {
 									open={Boolean(anchorElUser)}
 									onClose={handleCloseUserMenu}
 								>
-									<MenuItem onClick={handleCloseUserMenu}>
-										<Typography textAlign="center">
-											Profile
-										</Typography>
-									</MenuItem>
 									<Link to="/orders">
 										<MenuItem onClick={handleCloseUserMenu}>
 											<Typography textAlign="center">

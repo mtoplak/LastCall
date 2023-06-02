@@ -18,7 +18,7 @@ const DrinkB: React.FC<DrinkProps> = ({ drink }) => {
 		<ImgContainer>
 		  <Image src={drink.picture} alt="housePhoto" />
 		</ImgContainer>
-		<Divider sx={{ mt: 1 }} />
+		<Divider />
 		<InfoBox>
 		  <Typography variant="h6" sx={{ fontWeight: '700' }}>
 			{drink.title}
@@ -30,15 +30,15 @@ const DrinkB: React.FC<DrinkProps> = ({ drink }) => {
 				  variant="body1"
 				  sx={{ textDecoration: 'line-through', color: 'text.secondary', mr: 1 }}
 				>
-				  {drink.actualPrice.toFixed(2)}€
+				  {drink.actualPrice.toFixed(2)} €
 				</Typography>
 				<Typography variant="body1" sx={{ color: 'error.main' }}>
-				  {drink.price.toFixed(2)}€
+				  {drink.price.toFixed(2)} €
 				</Typography>
 			  </>
 			) : (
 			  <Typography variant="body1">
-				{drink.actualPrice.toFixed(2)}€
+				{drink.actualPrice.toFixed(2)} €
 			  </Typography>
 			)}
 		  </Box>

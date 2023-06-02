@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Container, Grid, Typography } from '@mui/material';
+import { Box, Card, Container, Grid, Typography } from '@mui/material';
 import { ISeller } from 'models/seller';
 import api from 'services/api';
 import SearchSuppliersInput from './SearchSuppliersInput';
@@ -114,12 +114,14 @@ function Suppliers() {
 						</Typography>
 					</PropertiesTextBox>
 					<Box>
-						<SearchSuppliersInput
-							setFilterName={setFilterName}
-							setFilterLocation={setFilterLocation}
-							setFilterType={setFilterType}
-							setIsChecked={setIsChecked}
-						/>
+						<Card  sx={{mb: 2}}>
+							<SearchSuppliersInput
+								setFilterName={setFilterName}
+								setFilterLocation={setFilterLocation}
+								setFilterType={setFilterType}
+								setIsChecked={setIsChecked}
+							/>
+						</Card>
 					</Box>
 					{isChecked &&
 					filteredSellers.length > 0 &&
@@ -193,25 +195,21 @@ function Suppliers() {
 						''
 					)}
 
-					<Grid container spacing={2}>
+					<Grid item xs={12}>
 						{filteredSellers.length > 0 &&
 						(filterType !== 'any' ||
 							filterName !== '' ||
 							filterLocation !== 'any') ? (
 							filteredSellers.map((seller) => (
-								<Grid
-									item
-									xs={12}
-									sm={6}
-									md={4}
-									key={seller._id}
-								>
-									<Link
-										to={`/supplier/${seller._id}`}
-										key={seller._id}
-									>
-										<Supplier seller={seller} />
-									</Link>
+								<Grid container spacing={2} key={seller._id}>
+									<Grid item xs={12}>
+										<Link
+											to={`/supplier/${seller._id}`}
+											key={seller._id}
+										>
+											<Supplier seller={seller} />
+										</Link>
+									</Grid>
 								</Grid>
 							))
 						) : (filterType !== 'any' ||
@@ -225,19 +223,15 @@ function Suppliers() {
 							</Grid>
 						) : (
 							sellers.map((seller) => (
-								<Grid
-									item
-									xs={12}
-									sm={6}
-									md={4}
-									key={seller._id}
-								>
-									<Link
-										to={`/supplier/${seller._id}`}
-										key={seller._id}
-									>
-										<Supplier seller={seller} />
-									</Link>
+								<Grid container spacing={2} key={seller._id}>
+									<Grid item xs={12}>
+										<Link
+											to={`/supplier/${seller._id}`}
+											key={seller._id}
+										>
+											<Supplier seller={seller} />
+										</Link>
+									</Grid>
 								</Grid>
 							))
 						)}
