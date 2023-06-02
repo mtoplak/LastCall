@@ -163,9 +163,9 @@ function SingleOrder() {
 									<Typography
 										sx={{ color: 'text.secondary' }}
 									>
-										SubTotal:{' '}
-										{order.totalPrice -
-											order.seller.deliveryCost}{' '}
+										Subtotal:{' '}
+										{(order.totalPrice -
+											order.seller.deliveryCost).toFixed(2)}{' '}
 										€
 									</Typography>
 									<Typography

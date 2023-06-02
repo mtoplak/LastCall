@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Card, Container, Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import Drink from './DrinkB';
 import SearchProductsInput from './SearchProductsInput';
@@ -79,6 +79,7 @@ const Products = () => {
 					</Typography>
 				</PropertiesTextBox>
 				<Box>
+					<Card>
 					<SearchProductsInput
 						setFilterName={setFilterName}
 						setFilterLocation={setFilterLocation}
@@ -87,6 +88,7 @@ const Products = () => {
 						filterName={filterName}
 						filterType={filterType}
 					/>
+					</Card>
 				</Box>
 				<PropertiesBox>
 					{filteredDrinks.length > 0 &&
@@ -94,11 +96,11 @@ const Products = () => {
 						filterName !== '' ||
 						filterLocation !== 'any') ? (
 						filteredDrinks.map((drink) => (
-							<Link to={`/product/${drink._id}`} key={drink._id}>
-								<DrinkContainer>
-									<Drink drink={drink} />
-								</DrinkContainer>
-							</Link>
+								<Link to={`/product/${drink._id}`} key={drink._id}>
+									<DrinkContainer>
+										<Drink drink={drink} />
+									</DrinkContainer>
+								</Link>
 						))
 					) : (filterType !== 'any' ||
 							filterName !== '' ||
@@ -109,7 +111,9 @@ const Products = () => {
 						drinks.map((drink) => (
 							<Link to={`/product/${drink._id}`} key={drink._id}>
 								<DrinkContainer>
+								
 									<Drink drink={drink} />
+									
 								</DrinkContainer>
 							</Link>
 						))

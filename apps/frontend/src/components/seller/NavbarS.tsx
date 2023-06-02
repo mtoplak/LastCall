@@ -13,11 +13,12 @@ import MenuItem from '@mui/material/MenuItem';
 import { ThemeProvider } from '@mui/material';
 import { darkTheme } from 'assets/styles/styles';
 import { useUserAuth } from 'context/AuthContext';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 function NavbarS() {
 	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 	const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+	const navigate = useNavigate();
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);
 	};
@@ -42,6 +43,7 @@ function NavbarS() {
 	const handleLogOut = async () => {
 		try {
 			await logOut();
+			navigate("/")
 		} catch (error: any) {
 			console.log(error.message);
 		}
@@ -143,18 +145,6 @@ function NavbarS() {
 									Inventory
 								</Button>
 							</Link>
-							<Link to={'/seller'}>
-								<Button
-									onClick={handleCloseNavMenu}
-									sx={{
-										my: 2,
-										color: 'white',
-										display: 'block',
-									}}
-								>
-									Contact
-								</Button>
-							</Link>
 							<Link to={'/seller/orders'}>
 								<Button
 									onClick={handleCloseNavMenu}
@@ -228,6 +218,7 @@ function NavbarS() {
 											Log out
 										</Typography>
 									</MenuItem>
+
 								</Menu>
 							</Box>
 						) : (

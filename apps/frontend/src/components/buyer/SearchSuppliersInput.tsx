@@ -70,13 +70,6 @@ function SearchSuppliersInput({
 				}
 				label="Show on maps"
 			/>
-
-			<Button
-				variant="contained"
-				sx={{ backgroundColor: '#262626', color: '#ffffff', mt: 0 }}
-			>
-				Search
-			</Button>
 		</Box>
 	);
 }

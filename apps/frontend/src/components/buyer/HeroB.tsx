@@ -5,7 +5,7 @@ import Title from 'components/ui/Title';
 
 const Hero = () => {
 	return (
-		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '90vh' }}>
+		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '95vh' }}>
 			<Container>
 				<CustomBox>
 					<Box sx={{ flex: '1' }}>
@@ -40,7 +40,7 @@ const Hero = () => {
 						<img
 							src={heroImg}
 							alt="heroImg"
-							style={{ maxWidth: '100%', marginTop: '5rem' }}
+							style={{ maxWidth: '100%', marginTop: '7rem' }}
 						/>
 					</Box>
 				</CustomBox>

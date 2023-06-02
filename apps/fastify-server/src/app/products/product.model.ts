@@ -9,7 +9,7 @@ export const ProductSchema = new Schema({
   price: { type: Number }, //sale price oz. to kaj se prikaze
   stock: { type: Number, required: true },
   seller: { type: Schema.Types.ObjectId, ref: 'Seller' },
-  actualPrice: { type: Number, required: true }, //polna cena
+  actualPrice: { type: Number }, //polna cena
   discount: { type: Number, default: 0 },
   picture: { type: String },
 });

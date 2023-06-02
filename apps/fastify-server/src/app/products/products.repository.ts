@@ -43,6 +43,7 @@ export class ProductsRepository {
     const newProduct = new this.productsModel({
       ...restProductdata,
       price: actualPrice,
+      actualPrice: actualPrice,
       seller: seller._id,
     });
     const result = await newProduct.save();

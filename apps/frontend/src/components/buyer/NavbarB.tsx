@@ -159,16 +159,6 @@ function NavbarB() {
 									Suppliers
 								</Button>
 							</Link>
-							<Button
-								onClick={handleCloseNavMenu}
-								sx={{
-									my: 2,
-									color: 'white',
-									display: 'block',
-								}}
-							>
-								Contact
-							</Button>
 						</Box>
 						{user && role === 'buyer' && (
 							<Link to={'/cart'}>
