@@ -22,6 +22,7 @@ export class MailService {
             to: buyerEmail,
             subject: 'Order Confirmation',
             html: await this.generateOrderEmailContent(orderData, productData, buyerEmail, sellerEmail),
+            replyTo: sellerEmail,
         };
 
         try {
@@ -34,55 +35,140 @@ export class MailService {
     }
 
     async generateOrderEmailContent(orderData: Order, productData: Cart[], buyerEmail: string, sellerEmail: string): Promise<string> {
-        console.log(orderData);
+        //console.log(orderData);
         const sellerData = await this.sellersService.getSingleSellerByEmail(sellerEmail);
-        //console.log(sellerData);
         const buyerData = await this.buyersService.getSingleBuyerByEmail(buyerEmail);
-        //console.log(buyerData);
-        let emailContent = '<h1>Order Confirmation</h1>';
-        emailContent += '<p>Thank you for your order! We appreciate it.</p>';
-        emailContent += `<p>Order ID: ${orderData.uid}</p>`;
-        emailContent += '<h2>Order Details:</h2>';
-        emailContent += '<table style="border-collapse: collapse; width: 100%; text-align: center;">';
-        emailContent += '<tr>';
-        emailContent += '<th style="border: 1px solid black;">Product</th>';
-        emailContent += '<th style="border: 1px solid black;">Quantity</th>';
-        emailContent += '<th style="border: 1px solid black;">Price</th>';
-        emailContent += '<th style="border: 1px solid black;">Subtotal Product Price</th>';
-        emailContent += '</tr>';
+
+        let emailContent = `<html>
+            <head>
+                <style>
+                    @media only screen and (max-width: 600px) {
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                        }
+                    }
+                    .container {
+                        width: 100%;
+                        max-width: 600px;
+                        margin: 0 auto;
+                        padding: 20px;
+                        background-color: #f4f4f4;
+                        font-family: Arial, sans-serif;
+                        color: #333333;
+                    }
+                    h1 {
+                        text-align: center;
+                        color: #3f51b5;
+                    }
+                    h2 {
+                        margin-top: 30px;
+                        margin-bottom: 15px;
+                        color: #3f51b5;
+                    }
+                    th, td {
+                        border: 1px solid #dddddd;
+                        padding: 8px;
+                    }
+                    img {
+                        max-width: 200px;
+                        height: auto;
+                        margin-top: 10px;
+                    }
+                    .order-details {
+                        margin-top: 30px;
+                    }
+                    .delivery-info {
+                        margin-top: 30px;
+                    }
+                    .order-status {
+                        margin-top: 30px;
+                    }
+                    .order-status p {
+                        margin-bottom: 5px;
+                    }
+                    .order-status p:last-child {
+                        margin-bottom: 0;
+                    }
+                    .contact-info {
+                        margin-top: 30px;
+                    }
+                    .thank-you {
+                        margin-top: 30px;
+                        text-align: center;
+                    }
+                    .button {
+                        display: inline-block;
+                        padding: 10px 20px;
+                        background-color: #3f51b5;
+                        color: white;
+                        text-decoration: none;
+                        border-radius: 4px;
+                    }
+                    .button:hover {
+                        background-color: #1a237e;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h1>Order Confirmation</h1>
+                    <p>${buyerData.name}, thank you for your order! We appreciate it.</p>
+                    <p>Order ID: ${orderData.uid}</p>
+                    <h2>Order Details:</h2>
+                    <table>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Subtotal Product Price</th>
+                        </tr>`;
 
         for (const item of productData) {
             const product = await this.productsService.getSingleProduct(item.productId);
             const totalPrice = item.quantity * product.price;
 
-            emailContent += '<tr>';
-            emailContent += `<td style="border: 1px solid black;"><h3>${product.title}</h3><img src="${product.picture}" alt="${product.title}" style="max-width: 200px;"></td>`;
-            emailContent += `<td style="border: 1px solid black;">${item.quantity}</td>`;
-            emailContent += `<td style="border: 1px solid black;">${product.price.toFixed(2)} €</td>`;
-            emailContent += `<td style="border: 1px solid black;">${totalPrice.toFixed(2)} €</td>`;
-            emailContent += '</tr>';
+            emailContent += `<tr>
+                <td><h3>${product.title}</h3><img src="${product.picture}" alt="${product.title}"></td>
+                <td>${item.quantity}</td>
+                <td>${product.price.toFixed(2)} €</td>
+                <td>${totalPrice.toFixed(2)} €</td>
+            </tr>`;
         }
 
-        emailContent += '</table>';
-        emailContent += `<h2>Delivery & Handling:</h2>`;
-        emailContent += `<p>${sellerData.deliveryCost} €</p>`;
-        emailContent += `<h2>Total Price:</h2>`;
-        emailContent += `<p>${orderData.totalPrice} €</p>`;
-        emailContent += `<h2>Your Order Will Be Delivered To</h2>`;
-        emailContent += `<p><b>${orderData.address}</b></p>`;
-        emailContent += `<p><b>${orderData.city}</b></p>`;
-        emailContent += `<p><b>${orderData.country}</b></p>`;
-        emailContent += `<h2>Order Status:</h2>`;
-        emailContent += `<p>Status: ${orderData.status}</p>`;
-        emailContent += `<p>Date of Purchase: ${formatDate(orderData.dateOfPurchase)}</p>`;
-        emailContent += `<p>Last Day of Delivery: ${formatDate(orderData.lastDateOfDelivery)}</p>`;
-        emailContent += '<p>We will handle your order in the shortest possible time.</p>';
-        emailContent += '<p>For any questions, please contact us at:</p>';
-        emailContent += `<p>${sellerData.email}</p>`;
-        emailContent += '<p>In the mean time you can check order status at:</p>';
-        emailContent += `<p>http://localhost:3000/order/${orderData._id}</p>`; // !!! spremeni v actual url
-        emailContent += '<p>Thank you,</p>';
-        emailContent += `<p>${sellerData.title}</p>`;
+        emailContent += `</table>
+                    <div class="delivery-info">
+                        <h2>Delivery & Handling:</h2>
+                        <p>${sellerData.deliveryCost} €</p>
+                    </div>
+                    <div class="order-details">
+                        <h2>Total Price:</h2>
+                        <p>${orderData.totalPrice} €</p>
+                        <h2>Your Order Will Be Delivered To</h2>
+                        <p><b>${orderData.address}</b></p>
+                        <p><b>${orderData.city}</b></p>
+                        <p><b>${orderData.country}</b></p>
+                    </div>
+                    <div class="order-status">
+                        <h2>Order Status:</h2>
+                        <p>Status: ${orderData.status}</p>
+                        <p>Date of Purchase: ${formatDate(orderData.dateOfPurchase)}</p>
+                        <p>Last Day of Delivery: ${formatDate(orderData.lastDateOfDelivery)}</p>
+                        <p>We will handle your order in the shortest possible time.</p>
+                    </div>
+                    <div class="contact-info">
+                        <p>For any questions, please contact us at</p>
+                        <p>${sellerData.email} or reply to this email.</p>
+                        <p>In the meantime, you can check the order status at:</p>
+                        <p><a href="http://localhost:3000/order/${orderData._id}" class="button">Check Order Status</a></p>
+                    </div>
+                    <div class="thank-you">
+                        <p>Thank you,</p>
+                        <p>${sellerData.title}</p>
+                    </div>
+                </div>
+            </body>
+            </html>`;
 
         return emailContent;
     }
@@ -107,11 +193,54 @@ export class MailService {
     }
 
     async generateMessageEmailContent(buyerEmail: string, message: string): Promise<string> {
-        let emailContent = `<h3>You've got a new message from ${buyerEmail}:</h3>`;
-        emailContent += `<p>${message}</p>`;
-        emailContent += `<p>You can reply to this email and ${buyerEmail} will get it!</p>`;
-        emailContent += '<p>Thanks,</p>';
-        emailContent += `<p>Last Call Company</p>`;
+        let emailContent = `<html>
+            <head>
+                <style>
+                    @media only screen and (max-width: 600px) {
+                        .container {
+                            width: 100%;
+                            max-width: 600px;
+                            margin: 0 auto;
+                            padding: 20px;
+                        }
+                    }
+                    .container {
+                        width: 100%;
+                        max-width: 600px;
+                        margin: 0 auto;
+                        padding: 20px;
+                        background-color: #f4f4f4;
+                        font-family: Arial, sans-serif;
+                        color: #333333;
+                    }
+                    h3 {
+                        color: #3f51b5;
+                    }
+                    p {
+                        margin-bottom: 10px;
+                        font-size: 14px;
+                    }
+                    .thank-you {
+                        margin-top: 30px;
+                        text-align: center;
+                        color: #777777;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h3>You've got a new message from ${buyerEmail}:</h3>
+                    <p>${message}</p>
+                    <p style="font-size: 12px;">You can reply directly to this email and ${buyerEmail} will get it.</p>
+                    <div class="thank-you">
+                        <p>Thank you,</p>
+                        <p>Last Call Company</p>
+                    </div>
+                </div>
+            </body>
+            </html>`;
+
         return emailContent;
     }
+
 }

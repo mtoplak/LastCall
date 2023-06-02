@@ -164,8 +164,10 @@ function SingleOrder() {
 										sx={{ color: 'text.secondary' }}
 									>
 										SubTotal:{' '}
-										{order.totalPrice -
-											order.seller.deliveryCost}{' '}
+										{(
+											order.totalPrice -
+											order.seller.deliveryCost
+										).toFixed(2)}{' '}
 										€
 									</Typography>
 									<Typography
@@ -241,11 +243,9 @@ function SingleOrder() {
 														</Typography>
 														<Typography>
 															<b>Price:</b>{' '}
-															{
-																orderProduct
-																	.product
-																	.price
-															}{' '}
+															{orderProduct.product.price.toFixed(
+																2
+															)}{' '}
 															€
 														</Typography>
 														<Typography>
