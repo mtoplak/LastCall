@@ -84,7 +84,7 @@ const SignInB = () => {
 									<Avatar
 										style={{ backgroundColor: 'lightblue' }}
 									></Avatar>
-									<h2>Sign In</h2>
+									<h2>Sign In As Buyer</h2>
 								</Grid>
 								<FormControl>
 									<TextField

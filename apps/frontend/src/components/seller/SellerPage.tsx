@@ -20,6 +20,7 @@ import CustomBox from 'components/ui/CustomBox';
 import SellerProducts from './SellerProducts';
 import { checkoutButton, style } from 'assets/styles/styles';
 import { useUserAuth } from 'context/AuthContext';
+import NavbarS from './NavbarS';
 
 function SellerPage() {
 	const [seller, setSeller] = useState<ISeller>();
@@ -28,7 +29,7 @@ function SellerPage() {
 	const [error, setError] = useState('');
 	const [message, setMessage] = useState('');
 	const { id } = useParams<{ id: string }>();
-	const { user } = useUserAuth();
+	const { user, role } = useUserAuth();
 	const [buyerEmail, setBuyerEmail] = useState(
 		user && user.email ? user.email : ''
 	);
@@ -88,7 +89,7 @@ function SellerPage() {
 	return (
 		<>
 			<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '65vh' }}>
-				<NavbarB />
+			{role === 'seller' ? <NavbarS /> : <NavbarB />}
 				<Container>
 					<CustomBox>
 						<Box sx={{ flex: '1', marginTop: '3rem' }}>

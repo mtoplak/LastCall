@@ -19,46 +19,47 @@ export class ProductsService {
     productData: CreateUpdateProductDto,
     email: string,
   ): Promise<Product> {
-    const product = await this.productsRepository.create(productData, email);
-    if (!product) {
-      throw new NotFoundException('Could not create a product');
+    try {
+      return await this.productsRepository.create(productData, email);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
     }
-    return product;
   }
 
   async getAllProducts(): Promise<Product[]> {
-    try {
-      return await this.productsRepository.find({});
-    } catch (err) {
-      throw new NotFoundException('Could not find the products');
-    }
+    return await this.productsRepository.find({});
   }
 
   async getSingleProduct(productId: string): Promise<Product> {
-    const product = await this.productsRepository.findOne({ _id: productId });
-    if (!product) {
-      throw new NotFoundException(
-        `Could not get the product with id ${productId}`,
-      );
+    try {
+      return await this.productsRepository.findOne({ _id: productId });
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
     }
-    return product;
   }
 
   async updateProduct(
     productId: string,
     productUpdates: CreateUpdateProductDto,
   ): Promise<Product> {
-    const updatedProduct = await this.productsRepository.findOneAndUpdate(
-      { _id: productId },
-      productUpdates,
-      { new: true }, // Set the `new` option to true to return the updated document
-    );
-
-    if (!updatedProduct) {
-      throw new NotFoundException(`Product with id ${productId} not found`);
+    try {
+      return await this.productsRepository.findOneAndUpdate(
+        { _id: productId },
+        productUpdates,
+        { new: true }, // Set the `new` option to true to return the updated document
+      );
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
     }
-
-    return updatedProduct;
   }
 
   async removeProduct(productId: string): Promise<SuccessResponse> {
@@ -122,34 +123,32 @@ export class ProductsService {
     return true; // Order meets the minimum price requirement
   }
 
-  async makeSale(
-    productIds: string[],
-    discount: number
-  ): Promise<Product[]> {
+  async makeSale(productIds: string[], discount: number): Promise<Product[]> {
     const updatedProducts: Product[] = [];
-  
+
     for (const productId of productIds) {
       const product = await this.productsRepository.findOne({ _id: productId });
       if (!product) {
         throw new NotFoundException(`Product with id ${productId} not found`);
       }
-  
+
       const actualPrice = product.actualPrice;
-      const price = actualPrice * (100 - discount) / 100;
-  
+      const price = (actualPrice * (100 - discount)) / 100;
+
       const updatedProduct = await this.productsRepository.findOneAndUpdate(
         { _id: productId },
         { price, discount },
-        { new: true }
+        { new: true },
       );
       if (!updatedProduct) {
-        throw new NotFoundException(`Failed to update the product with id ${productId}`);
+        throw new NotFoundException(
+          `Failed to update the product with id ${productId}`,
+        );
       }
-  
+
       updatedProducts.push(updatedProduct);
     }
-  
+
     return updatedProducts;
   }
-  
 }

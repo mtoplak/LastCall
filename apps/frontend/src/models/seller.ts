@@ -1,3 +1,5 @@
+import { SellerType } from "enums/seller.enum";
+
 export interface ISeller {
 	_id: string;
 	name: string;
@@ -8,7 +10,7 @@ export interface ISeller {
 	city: string;
 	address: string;
 	registerNumber: number;
-	companyType: string;
+	companyType: SellerType;
 	phone: string;
 	website: string;
 	targetedMarket: string;

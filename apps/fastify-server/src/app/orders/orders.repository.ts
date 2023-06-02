@@ -5,7 +5,6 @@ import { FilterQuery, Model } from 'mongoose';
 import { Product } from '../products/product.model';
 import { Buyer, Cart } from '../buyers/buyers.model';
 import { Seller } from '../sellers/sellers.model';
-import { randomInt } from 'crypto';
 import { SellersService } from '../sellers/sellers.service';
 import { ProductsService } from '../products/products.service';
 import { BuyersService } from '../buyers/buyers.service';
@@ -24,21 +23,29 @@ export class OrdersRepository {
   ) {}
 
   async findOne(orderFilterQuery: FilterQuery<Order>): Promise<Order> {
+    try {
     return await this.ordersModel
       .findOne(orderFilterQuery)
       .populate('seller')
       .populate('buyer')
       //.populate({ path: 'products', populate: { path: 'productId', model: 'Product' } })
       .exec();
+    } catch (err) {
+      throw new NotFoundException('Could not get the order.');
+    }
   }
 
   async find(ordersFilterQuery: FilterQuery<Order>): Promise<Order[]> {
+    try {
     return await this.ordersModel
       .find(ordersFilterQuery)
       .populate('seller')
       .populate('buyer')
       //.populate({ path: 'products', populate: { path: 'productId', model: 'Product' } })
       .exec();
+    } catch (err) {
+      throw new NotFoundException('Could not get the orders.');
+    }
   }
 
   async create(
@@ -96,10 +103,18 @@ export class OrdersRepository {
     orderFilterQuery: FilterQuery<Order>,
     order: Partial<Order>,
   ): Promise<Order> {
+    try {	
     return await this.ordersModel.findOneAndUpdate(orderFilterQuery, order);
+  } catch (err) {
+    throw new NotFoundException('Could not update the order.');
+  }
   }
 
   async deleteOne(orderFilterQuery: FilterQuery<Order>): Promise<void> {
+    try {
     await this.ordersModel.deleteOne(orderFilterQuery);
+  } catch (err) {
+    throw new NotFoundException('Could not delete the order.');
+  }
   }
 }

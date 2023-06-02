@@ -1,3 +1,4 @@
+import { OrderStatus } from 'enums/order.enum';
 import { IBuyer } from './buyer';
 import { ICartItem } from './cartItem';
 import { ISeller } from './seller';
@@ -13,7 +14,7 @@ export interface IOrder {
 	country: string;
 	seller: ISeller;
 	buyer: IBuyer;
-	status: string;
+	status: OrderStatus;
 	uid: string;
 	actualDateOfDelivery: Date;
 }
