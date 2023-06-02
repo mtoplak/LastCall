@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Buyer, Cart } from './buyers.model';
-import { CreateUpdateBuyerDto } from './createUpdateBuyer.dto';
+import { CreateUpdateBuyerDto } from './create-update-buyer.dto';
 import { BuyersRepository } from './buyers.repository';
 import { ProductsRepository } from '../products/products.repository';
 import { Order } from '../orders/order.model';
@@ -25,7 +25,7 @@ export class BuyersService {
     const buyer = await this.buyersRepository.findOne({ _id: buyerId });
     if (!buyer) {
       throw new NotFoundException(
-        'Could not get the buyer with id: ' + buyerId,
+        `Buyer with id ${buyerId} not found`,
       );
     }
     return buyer as Buyer;

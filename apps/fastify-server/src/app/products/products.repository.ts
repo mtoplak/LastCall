@@ -3,12 +3,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Product } from './product.model';
 import { FilterQuery, Model, QueryOptions, UpdateQuery } from 'mongoose';
 import { Seller } from '../sellers/sellers.model';
+import { SellersService } from '../sellers/sellers.service';
 
 @Injectable()
 export class ProductsRepository {
   constructor(
     @InjectModel('Product') private productsModel: Model<Product>,
     @InjectModel('Seller') private readonly sellerModel: Model<Seller>,
+    private readonly sellersService: SellersService
   ) {}
 
   async findOne(productFilterQuery: FilterQuery<Product>): Promise<Product> {
@@ -31,13 +33,9 @@ export class ProductsRepository {
 
   async create(productData: Product, email: string): Promise<Product> {
     const { actualPrice, ...restProductdata } = productData;
-    const seller = await this.sellerModel.findOne({ email });
+    const seller = await this.sellersService.getSingleSellerByEmail(email);
     if (!seller) {
-      throw new NotFoundException(
-        'Could not find the seller with email ' +
-          email +
-          ' assigned to this order.',
-      );
+      throw new NotFoundException(`Could not find the seller with email ${email} assigned to this order.`);
     }
 
     const newProduct = new this.productsModel({

@@ -13093,6 +13093,7 @@ __metadata:
     node-fetch: ^3.3.1
     prettier: ^2.7.1
     turbo: ^1.4.3
+    uuid: ^9.0.0
   languageName: unknown
   linkType: soft
 

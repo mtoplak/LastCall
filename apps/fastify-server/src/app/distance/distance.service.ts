@@ -1,20 +1,19 @@
 import {
-  BadRequestException,
   Injectable,
   NotFoundException,
-  UnprocessableEntityException,
 } from '@nestjs/common';
-import fetch from 'node-fetch';
 import { SellersRepository } from '../sellers/sellers.repository';
 import { OrdersRepository } from '../orders/orders.repository';
+import { SellersService } from '../sellers/sellers.service';
 
 @Injectable()
 export class DistanceService {
   constructor(
     private readonly sellersRepository: SellersRepository,
-    private readonly ordersRepository: OrdersRepository,
+    private readonly sellersService: SellersService
   ) {}
 
+/*
   async calculateDistance(
     sellerEmail: string,
     orderId: string,
@@ -57,14 +56,14 @@ export class DistanceService {
     }
     return distance;
   }
-
+*/
   async calculateAirDistance(
     sellerEmail: string,
     orderCoordinates: number[],
   ): Promise<number> {
     const earthRadiusKm = 6371;
 
-    const seller = await this.sellersRepository.findOne({ email: sellerEmail });
+    const seller = await this.sellersService.getSingleSellerByEmail(sellerEmail);
     if (!seller) {
       throw new NotFoundException('Seller not found');
     }
@@ -93,15 +92,7 @@ export class DistanceService {
     if (!distance) {
       throw new NotFoundException('Could not calculate distance');
     }
-    /*
-    if (distance > seller.maxDistance) {
-      throw new UnprocessableEntityException(
-        "Order address is outside the seller's maximum distance",
-      );
-    }
-    */
-    
-    
+
     return distance;
   }
 

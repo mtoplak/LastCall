@@ -5,14 +5,14 @@ import {
 } from '@nestjs/common';
 import { Order } from './order.model';
 import { OrdersRepository } from './orders.repository';
-import { CreateUpdateOrderDto } from './createUpdateOrder.dto';
+import { CreateUpdateOrderDto } from './create-update-order.dto';
 import { SuccessResponse } from 'src/data.response';
 import { Cart } from '../buyers/buyers.model';
 import { ProductsService } from '../products/products.service';
 import { CartService } from '../cart/cart.service';
 import { MailService } from '../mailer/mail.service';
-import { DistanceService } from '../distance/distance.service';
 import { SellersRepository } from '../sellers/sellers.repository';
+import { SellersService } from '../sellers/sellers.service';
 
 @Injectable()
 export class OrdersService {
@@ -21,8 +21,8 @@ export class OrdersService {
     private readonly productsService: ProductsService,
     private readonly cartService: CartService,
     private readonly mailService: MailService,
-    private readonly distanceService: DistanceService,
     private readonly sellersRepository: SellersRepository,
+    private readonly sellersService: SellersService
   ) { }
 
   async checkPrice(productData: Cart[],
@@ -46,8 +46,8 @@ export class OrdersService {
     sellerEmail: string,
     buyerEmail: string,
   ): Promise<Order> {
-
-    const seller = await this.sellersRepository.findOne({ email: sellerEmail });
+    
+    const seller = await this.sellersService.getSingleSellerByEmail(sellerEmail);
     if (!seller) {
       throw new NotFoundException('Seller not found');
     }
@@ -83,7 +83,7 @@ export class OrdersService {
     try {
       return await this.ordersRepository.findOne({ _id: orderId });
     } catch (err) {
-      throw new NotFoundException('Could not get the order with id ' + orderId);
+      throw new NotFoundException(`Could not get the order with id ${orderId}`);
     }
   }
 
@@ -101,7 +101,7 @@ export class OrdersService {
       );
     } catch (err) {
       throw new NotFoundException(
-        'Failed to update the order with id: ' + orderId,
+        `Failed to update the order with id ${orderId}`,
       );
     }
   }

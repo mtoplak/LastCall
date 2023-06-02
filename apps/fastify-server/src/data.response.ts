@@ -43,7 +43,7 @@ export interface BuyerResponse {
   title: string;
   registerNumber: number;
   targetedMarkets: string[];
-  address: string; //array
+  address: string;
   city: string;
   country: string;
   phone: string;
@@ -70,9 +70,9 @@ export interface SellerResponse {
   name: string;
   surname: string;
   title: string;
-  address: string; //array naredi
-  city: string; //array naredi
-  country: string; //array naredi
+  address: string;
+  city: string;
+  country: string;
   registerNumber: number;
   companyType: string;
   targetedMarkets: string[];

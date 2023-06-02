@@ -10,12 +10,11 @@ import {
 } from '@nestjs/common';
 import { SellersService } from './sellers.service';
 import { Seller } from './sellers.model';
-import { CreateUpdateSellerDto } from './createUpdateSeller.dto';
+import { CreateUpdateSellerDto } from './create-update-seller.dto';
 import { Product } from '../products/product.model';
 import { Order } from '../orders/order.model';
 import { SuccessResponse } from 'src/data.response';
-//import { FirebaseAuthMiddleware } from 'src/app/middleware/firebase-auth.middleware';
-import { FirebaseTokenGuard } from '../guards/FirebaseTokenGuard';
+import { FirebaseTokenGuard } from '../guards/firebase-token-guard';
 
 @Controller('sellers')
 export class SellersController {

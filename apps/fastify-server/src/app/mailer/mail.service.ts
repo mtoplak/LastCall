@@ -5,7 +5,7 @@ import { SellersService } from "../sellers/sellers.service";
 import { ProductsService } from "../products/products.service";
 import { Order } from "../orders/order.model";
 import { Cart } from "../buyers/buyers.model";
-import { formatDate } from "../utils/formatDate.utils";
+import { formatDate } from "../utils/format-date.utils";
 
 @Injectable()
 export class MailService {
@@ -81,7 +81,7 @@ export class MailService {
         emailContent += `<p>${sellerData.email}</p>`;
         emailContent += '<p>In the mean time you can check order status at:</p>';
         emailContent += `<p>http://localhost:3000/order/${orderData._id}</p>`; // !!! spremeni v actual url
-        emailContent += '<p>Thanks,</p>';
+        emailContent += '<p>Thank you,</p>';
         emailContent += `<p>${sellerData.title}</p>`;
 
         return emailContent;

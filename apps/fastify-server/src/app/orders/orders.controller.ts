@@ -10,9 +10,9 @@ import {
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { Order } from './order.model';
-import { CreateUpdateOrderDto } from './createUpdateOrder.dto';
+import { CreateUpdateOrderDto } from './create-update-order.dto';
 import { SuccessResponse } from 'src/data.response';
-import { FirebaseTokenGuard } from '../guards/FirebaseTokenGuard';
+import { FirebaseTokenGuard } from '../guards/firebase-token-guard';
 
 @Controller('orders')
 export class OrdersController {

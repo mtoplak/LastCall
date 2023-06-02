@@ -1,16 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Product } from './product.model';
 import { ProductsRepository } from './products.repository';
-import { CreateUpdateProductDto } from './createUpdateProduct.dto';
+import { CreateUpdateProductDto } from './create-update-product.dto';
 import { SuccessResponse } from 'src/data.response';
 import { Cart } from '../buyers/buyers.model';
 import { SellersRepository } from '../sellers/sellers.repository';
+import { SellersService } from '../sellers/sellers.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     private readonly productsRepository: ProductsRepository,
     private readonly sellersRepository: SellersRepository,
+    private readonly sellersService: SellersService,
   ) {}
 
   async createProduct(
@@ -36,7 +38,7 @@ export class ProductsService {
     const product = await this.productsRepository.findOne({ _id: productId });
     if (!product) {
       throw new NotFoundException(
-        'Could not get the product with id ' + productId,
+        `Could not get the product with id ${productId}`,
       );
     }
     return product;
@@ -70,9 +72,7 @@ export class ProductsService {
     const updatedProducts: Product[] = [];
 
     for (const item of productData) {
-      const product = await this.productsRepository.findOne({
-        _id: item.productId,
-      });
+      const product = await this.getSingleProduct(item.productId);
 
       if (!product) {
         throw new NotFoundException(
@@ -98,12 +98,9 @@ export class ProductsService {
     email: string,
     productData: Cart[],
   ): Promise<boolean> {
-    const seller = await this.sellersRepository.findOne({ email });
-
+    const seller = await this.sellersService.getSingleSellerByEmail(email);
     if (!seller) {
-      throw new NotFoundException(
-        'Could not find the seller with email ' + email,
-      );
+      throw new NotFoundException('Seller not found');
     }
 
     const minPrice = seller.minPrice;
