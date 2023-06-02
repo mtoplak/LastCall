@@ -1,7 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppService } from './app.service';
-import { AppController } from './app.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ProductsModule } from './app/products/products.module';
 import { BuyersModule } from './app/buyers/buyers.module';
@@ -11,6 +9,7 @@ import { AuthenticationModule } from './app/authentication/authentication.module
 import { CartModule } from './app/cart/cart.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { DistanceModule } from './app/distance/distance.module';
+import { MailModule } from './app/mailer/mail.module';
 
 const databaseHost = require('../constants').databaseHost;
 
@@ -22,6 +21,7 @@ const databaseHost = require('../constants').databaseHost;
     OrdersModule,
     CartModule,
     AuthenticationModule,
+    DistanceModule,
     MailerModule.forRoot({
       transport: {
         host: 'smtp.gmail.com',
@@ -34,13 +34,13 @@ const databaseHost = require('../constants').databaseHost;
       },
     }),
     DistanceModule,
-    MongooseModule.forRoot(databaseHost),
-    ConfigModule.forRoot({
+    MailModule,
+    MongooseModule.forRoot(databaseHost, {
+      useUnifiedTopology: true, // Add this option for unified topology
+    }), ConfigModule.forRoot({
       cache: true,
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

@@ -11,11 +11,10 @@ import {
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from './product.model';
-import { CreateUpdateProductDto } from './createUpdateProduct.dto';
+import { CreateUpdateProductDto } from './create-update-product.dto';
 import { SuccessResponse } from 'src/data.response';
 import { Cart } from '../buyers/buyers.model';
-import { CreateUpdateOrderDto } from '../orders/createUpdateOrder.dto';
-import { FirebaseTokenGuard } from '../guards/FirebaseTokenGuard';
+import { FirebaseTokenGuard } from '../guards/firebase-token-guard';
 
 @Controller('products')
 export class ProductsController {
@@ -46,11 +45,7 @@ export class ProductsController {
     @Param('id') productId: string,
     @Body() updateProductDto: CreateUpdateProductDto,
   ): Promise<Product> {
-    const result = await this.productService.updateProduct(
-      productId,
-      updateProductDto,
-    );
-    return result;
+    return await this.productService.updateProduct(productId, updateProductDto);
   }
 
   @Delete(':id')
@@ -72,11 +67,10 @@ export class ProductsController {
     @Param('email') sellerEmail: string,
     @Body() productData: Cart[],
   ): Promise<boolean> {
-    const meetsRequirements = await this.productService.minPriceRequirements(
+    return await this.productService.minPriceRequirements(
       sellerEmail,
       productData,
     );
-    return meetsRequirements;
   }
 
   @Post('/sale')
@@ -85,8 +79,7 @@ export class ProductsController {
     @Body('discount') discount: number,
   ) {
     try {
-      const updatedProducts = await this.productService.makeSale(productIds, discount);
-      return updatedProducts;
+      return await this.productService.makeSale(productIds, discount);
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw new NotFoundException(error.message);
@@ -94,5 +87,4 @@ export class ProductsController {
       throw error;
     }
   }
-  
 }

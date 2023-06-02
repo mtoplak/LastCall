@@ -202,7 +202,7 @@ function NavbarS() {
 									<Link to="/myprofile">
 										<MenuItem onClick={handleCloseUserMenu}>
 											<Typography textAlign="center">
-												Profile
+												My profile
 											</Typography>
 										</MenuItem>
 									</Link>

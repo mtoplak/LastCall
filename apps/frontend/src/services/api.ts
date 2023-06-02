@@ -7,6 +7,7 @@ const api: AxiosInstance = axios.create({
     "Content-Type": "application/json",
     Accept: "application/json",
   },
+  adapter: require("axios/lib/adapters/http"), // Use the 'http' adapter
 });
 
 export default api;

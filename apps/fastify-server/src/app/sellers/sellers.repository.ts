@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model, QueryOptions } from 'mongoose';
 import { Seller } from './sellers.model';
@@ -10,21 +10,32 @@ export class SellersRepository {
   constructor(@InjectModel('Seller') private sellersModel: Model<Seller>) {}
 
   async findOne(sellerFilterQuery: FilterQuery<Seller>): Promise<Seller> {
-    return await this.sellersModel
-      .findOne(sellerFilterQuery)
-      .populate('products')
-      .exec();
+    try {
+      return await this.sellersModel
+        .findOne(sellerFilterQuery)
+        .populate('products')
+        .exec();
+    } catch (err) {
+      throw new NotFoundException('Could not get the seller.');
+    }
   }
 
   async find(sellersFilterQuery: FilterQuery<Seller>): Promise<Seller[]> {
-    return await this.sellersModel
-      .find(sellersFilterQuery)
-      .populate('products');
+    try {
+      return await this.sellersModel
+        .find(sellersFilterQuery)
+        .populate('products');
+    } catch (err) {
+      throw new NotFoundException('Could not find the sellers.');
+    }
   }
 
   async create(seller: Seller): Promise<Seller> {
-    const newSeller = new this.sellersModel(seller);
-    return await newSeller.save();
+    try {
+      return await new this.sellersModel(seller).save();
+    } catch (err) {
+      throw new NotFoundException('Could not create the seller.');
+    }
   }
 
   async findOneAndUpdate(
@@ -32,15 +43,23 @@ export class SellersRepository {
     seller: Partial<Seller>,
     options?: QueryOptions,
   ): Promise<Seller> {
-    return await this.sellersModel.findOneAndUpdate(
-      sellerFilterQuery,
-      seller,
-      options,
-    );
+    try {
+      return await this.sellersModel.findOneAndUpdate(
+        sellerFilterQuery,
+        seller,
+        options,
+      );
+    } catch (err) {
+      throw new NotFoundException('Could not update the seller.');
+    }
   }
 
   async deleteOne(sellerFilterQuery: FilterQuery<Seller>): Promise<void> {
-    await this.sellersModel.deleteOne(sellerFilterQuery);
+    try {
+      await this.sellersModel.deleteOne(sellerFilterQuery);
+    } catch (err) {
+      throw new NotFoundException('Could not delete the seller.');
+    }
   }
 
   async getAllProductsBySeller(email: string): Promise<Product[]> {

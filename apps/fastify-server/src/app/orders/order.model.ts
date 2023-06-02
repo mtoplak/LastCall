@@ -2,6 +2,7 @@ import { Schema, Document, Model, model } from 'mongoose';
 import { Buyer } from '../buyers/buyers.model';
 import { Product, ProductSchema } from '../products/product.model';
 import { Seller } from '../sellers/sellers.model';
+import { OrderStatus } from './order-status.enum';
 
 export const OrderSchema = new Schema({
   products: [
@@ -19,7 +20,7 @@ export const OrderSchema = new Schema({
   address: { type: String, required: true },
   city: { type: String, required: true },
   country: { type: String, required: true },
-  status: { type: String, default: 'Pending' },
+  status: { type: String, default: OrderStatus.PENDING, enum: Object.values(OrderStatus) },
   uid: { type: String, required: true },
   coordinates: [{ type: Number }]
 });
@@ -35,7 +36,7 @@ export interface Order extends Document {
   address: string;
   city: string;
   country: string;
-  status: string;
+  status: OrderStatus;
   uid: string;
   coordinates: number[];
 }

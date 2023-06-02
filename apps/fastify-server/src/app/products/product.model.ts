@@ -1,9 +1,10 @@
 import { Schema, Document, Model, model } from 'mongoose';
 import { Seller } from '../sellers/sellers.model';
+import { ProductCategory } from './product-category.enum';
 
 export const ProductSchema = new Schema({
   title: { type: String, required: true },
-  drinkCategory: { type: String, required: true },
+  drinkCategory: { type: String, enum: Object.values(ProductCategory)},
   packaging: { type: String, required: true },
   size: { type: String, required: true },
   price: { type: Number }, //sale price oz. to kaj se prikaze
@@ -16,7 +17,7 @@ export const ProductSchema = new Schema({
 
 export interface Product extends Document {
   title: string;
-  drinkCategory: string;
+  drinkCategory: ProductCategory;
   packaging: string;
   size: string;
   price: number;

@@ -10,10 +10,10 @@ import {
 } from '@nestjs/common';
 import { BuyersService } from './buyers.service';
 import { Buyer } from './buyers.model';
-import { CreateUpdateBuyerDto } from './createUpdateBuyer.dto';
+import { CreateUpdateBuyerDto } from './create-update-buyer.dto';
 import { Order } from '../orders/order.model';
 import { CartResponse, SuccessResponse } from 'src/data.response';
-import { FirebaseTokenGuard } from '../guards/FirebaseTokenGuard';
+import { FirebaseTokenGuard } from '../guards/firebase-token-guard';
 
 @Controller('buyers')
 export class BuyersController {

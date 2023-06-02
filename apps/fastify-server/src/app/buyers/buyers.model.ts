@@ -29,7 +29,7 @@ export interface Buyer extends Document {
   title: string;
   registerNumber: number;
   targetedMarkets: string[];
-  address: string; //array
+  address: string;
   city: string;
   country: string;
   phone: string;

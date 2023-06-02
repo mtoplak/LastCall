@@ -1,18 +1,17 @@
 import { Module } from '@nestjs/common';
-import { DistanceController } from './distance.controller';
-import { DistanceService } from './distance.service';
+import { BuyersService } from '../buyers/buyers.service';
+import { BuyersRepository } from '../buyers/buyers.repository';
+import { ProductsRepository } from '../products/products.repository';
+import { ProductsService } from '../products/products.service';
+import { SellersService } from '../sellers/sellers.service';
 import { SellersRepository } from '../sellers/sellers.repository';
-import { OrdersRepository } from '../orders/orders.repository';
+import { MailService } from '../mailer/mail.service';
+import { MailController } from './mail.controller';
+import { BuyerSchema } from '../buyers/buyers.model';
 import { MongooseModule } from '@nestjs/mongoose';
 import { OrderSchema } from '../orders/order.model';
 import { SellerSchema } from '../sellers/sellers.model';
-import { BuyerSchema } from '../buyers/buyers.model';
 import { ProductSchema } from '../products/product.model';
-import { SellersService } from '../sellers/sellers.service';
-import { ProductsService } from '../products/products.service';
-import { BuyersService } from '../buyers/buyers.service';
-import { ProductsRepository } from '../products/products.repository';
-import { BuyersRepository } from '../buyers/buyers.repository';
 
 @Module({
   imports: [
@@ -21,16 +20,17 @@ import { BuyersRepository } from '../buyers/buyers.repository';
     MongooseModule.forFeature([{ name: 'Buyer', schema: BuyerSchema }]),
     MongooseModule.forFeature([{ name: 'Product', schema: ProductSchema }]),
   ],
-  controllers: [DistanceController],
+  controllers: [MailController],
   providers: [
-    DistanceService,
-    SellersService,
-    SellersRepository,
-    OrdersRepository,
-    ProductsRepository,
-    ProductsService,
+    MailService,
     BuyersService,
-    BuyersRepository
+    SellersService,
+    ProductsService,
+    BuyersRepository,
+    SellersRepository,
+    ProductsRepository,
+
   ],
 })
-export class DistanceModule {}
+
+export class MailModule { }

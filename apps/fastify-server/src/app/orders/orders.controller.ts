@@ -10,9 +10,10 @@ import {
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { Order } from './order.model';
-import { CreateUpdateOrderDto } from './createUpdateOrder.dto';
+import { CreateUpdateOrderDto } from './create-update-order.dto';
 import { SuccessResponse } from 'src/data.response';
-import { FirebaseTokenGuard } from '../guards/FirebaseTokenGuard';
+import { FirebaseTokenGuard } from '../guards/firebase-token-guard';
+import { Cart } from '../buyers/buyers.model';
 
 @Controller('orders')
 export class OrdersController {
@@ -59,4 +60,17 @@ export class OrdersController {
     await this.ordersService.removeOrder(id);
     return { success: true };
   }
+
+  @Post('/checkPrice')
+  async checkPrice(
+    @Body('products') products: Cart[],
+    @Body('seller') sellerId: string,
+  ): Promise<{ meetsMinPriceRequirements: boolean; }> {
+    const meetsMinPriceRequirements = await this.ordersService.checkPrice(
+      products,
+      sellerId,
+    );
+    return { meetsMinPriceRequirements };
+  }
+
 }

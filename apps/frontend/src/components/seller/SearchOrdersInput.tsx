@@ -2,23 +2,21 @@ import React from 'react';
 import {
 	Box,
 	Card,
-	//	Button,
 	FormControl,
 	InputLabel,
 	MenuItem,
 	Select,
 	TextField,
-    Typography,
+	Typography,
 } from '@mui/material';
+import { OrderStatus } from 'enums/order.enum';
 
 interface SearchInputProps {
-	setFilterStatus: React.Dispatch<React.SetStateAction<string>>;
-	filterStatus: string;
+	setFilterStatus: React.Dispatch<React.SetStateAction<OrderStatus | 'any'>>;
+	filterStatus: OrderStatus | 'any';
 }
 
-const SearchOrdersInput = ({
-	setFilterStatus,
-}: SearchInputProps) => {
+const SearchOrdersInput = ({ setFilterStatus }: SearchInputProps) => {
 	return (
 		<Card sx={{ p: 2, textAlign: 'center' }}>
 			<FormControl sx={{ display: 'inline-block', alignItems: 'center' }}>
@@ -28,14 +26,18 @@ const SearchOrdersInput = ({
 					label="Status"
 					sx={{ mr: 3, mb: 2, mt: 2, width: '150px' }}
 					defaultValue="any"
-					onChange={(event) => setFilterStatus(event.target.value)}
+					onChange={(event) =>
+						setFilterStatus(
+							event.target.value as OrderStatus | 'any'
+						)
+					}
 				>
 					<MenuItem value="any">Any</MenuItem>
-					<MenuItem value="Order placed">Order placed</MenuItem>
-					<MenuItem value="In-Transit">In-Transit</MenuItem>
-					<MenuItem value="Delivered">Delivered</MenuItem>
-                    <MenuItem value="Cancel">Cancel</MenuItem>
-					<MenuItem value="Pending">Pending</MenuItem>
+					<MenuItem value={OrderStatus.PENDING}>Pending</MenuItem>
+					<MenuItem value={OrderStatus.ACCEPTED}>Accepted</MenuItem>
+					<MenuItem value={OrderStatus.INTRANSIT}>In transit</MenuItem>
+					<MenuItem value={OrderStatus.REJECTED}>Rejected</MenuItem>
+					<MenuItem value={OrderStatus.DELIVERED}>Delivered</MenuItem>
 				</Select>
 			</FormControl>
 		</Card>

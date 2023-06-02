@@ -72,9 +72,7 @@ function Cart() {
 				}
 			);
 			setCartItems(response.data.cart);
-			const groupedProducts = groupProductsBySeller(response.data.cart);
-			setGroupedProducts(groupedProducts);
-			//console.log(groupedProducts);
+			setGroupedProducts(groupProductsBySeller(response.data.cart));
 		};
 		if (user) fetchCart();
 	}, [user]);
@@ -182,6 +180,52 @@ function Cart() {
 				}
 			} catch (error: any) {
 				setError(error.message);
+			}
+		}
+	};
+
+	const handleCheckMinPrice = async (e: any, selectedSeller: any) => {
+		e.preventDefault();
+		if (checkOutAll) {
+			const promises = Object.entries(groupedProducts).map(
+				async ([sellerId, products]) => {
+					const order = products.map((item: any) => ({
+						productId: item.product._id,
+						quantity: item.quantity,
+					}));
+					const response = await api.post('/orders/checkPrice', {
+						seller: sellerId,
+						products: order,
+					});
+					return response.data.meetsMinPriceRequirements;
+				}
+			);
+			const results = await Promise.all(promises);
+			const allMeetMinPrice = results.every((result) => result === true);
+			if (allMeetMinPrice) {
+				setCheckEligibility(true);
+			} else {
+				setError(
+					'Order from one or more sellers does not meet minimum price requirement.'
+				);
+				setCheckEligibility(false);
+			}
+		} else {
+			const order = groupedProducts[selectedSeller._id].map(
+				(item: any) => ({
+					productId: item.product._id,
+					quantity: item.quantity,
+				})
+			);
+			const response = await api.post('/orders/checkPrice', {
+				seller: selectedSeller._id,
+				products: order,
+			});
+			if (response.data.meetsMinPriceRequirements === true) {
+				setCheckEligibility(true);
+			} else {
+				setError('Order does not meet the minimum price requirement.');
+				setCheckEligibility(false);
 			}
 		}
 	};
@@ -480,10 +524,14 @@ function Cart() {
 								variant="contained"
 								color="primary"
 								sx={checkoutButton}
-								onClick={() => {
+								onClick={(e) => {
 									setIsOpenModal(true);
 									setCheckEligibility(false);
 									setSelectedSeller(
+										products[0].product.seller
+									);
+									handleCheckMinPrice(
+										e,
 										products[0].product.seller
 									);
 								}}
@@ -550,36 +598,7 @@ function Cart() {
 												mb={2}
 												sx={{ mt: 2, mb: 2 }}
 											>
-												Subtotal:{' '}
-												{Object.values(groupedProducts)
-													.reduce(
-														(sum, sellerGroup) => {
-															return (
-																sum +
-																sellerGroup.reduce(
-																	(
-																		groupSum,
-																		groupedProduct
-																	) => {
-																		const productPrice =
-																			groupedProduct
-																				.product
-																				.price;
-																		const productQuantity =
-																			groupedProduct.quantity;
-																		return (
-																			groupSum +
-																			productPrice *
-																				productQuantity
-																		);
-																	},
-																	0
-																)
-															);
-														},
-														0
-													)
-													.toFixed(2)}{' '}
+												Subtotal: {subtotal.toFixed(2)}{' '}
 												€
 												<br />
 												Delivery & Handling:{' '}
@@ -626,7 +645,10 @@ function Cart() {
 			</Box>
 			<Modal
 				open={isOpenModal}
-				onClose={() => setIsOpenModal(false)}
+				onClose={() => {
+					setIsOpenModal(false);
+					setError('');
+				}}
 				aria-labelledby="modal-modal-title"
 				aria-describedby="modal-modal-description"
 			>

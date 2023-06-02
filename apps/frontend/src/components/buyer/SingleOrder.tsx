@@ -16,6 +16,7 @@ import { formatDate } from 'utils/formatDate';
 import { getOrderStatusColor } from 'utils/getOrderStatusColor';
 import { useUserAuth } from 'context/AuthContext';
 import NavbarS from 'components/seller/NavbarS';
+import { OrderStatus } from 'enums/order.enum';
 
 function SingleOrder() {
 	const [order, setOrder] = useState<IOrder>();
@@ -140,7 +141,7 @@ function SingleOrder() {
 											</Typography>
 											<Typography>
 												{order.status ===
-													'Delivered' && (
+													OrderStatus.DELIVERED && (
 													<>
 														Date of Delivery:{' '}
 														{formatDate(

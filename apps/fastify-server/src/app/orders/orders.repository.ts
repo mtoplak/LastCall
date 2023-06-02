@@ -5,7 +5,10 @@ import { FilterQuery, Model } from 'mongoose';
 import { Product } from '../products/product.model';
 import { Buyer, Cart } from '../buyers/buyers.model';
 import { Seller } from '../sellers/sellers.model';
-import { randomInt } from 'crypto';
+import { SellersService } from '../sellers/sellers.service';
+import { ProductsService } from '../products/products.service';
+import { BuyersService } from '../buyers/buyers.service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class OrdersRepository {
@@ -14,24 +17,35 @@ export class OrdersRepository {
     @InjectModel('Seller') private readonly sellerModel: Model<Seller>,
     @InjectModel('Buyer') private readonly buyerModel: Model<Buyer>,
     @InjectModel('Product') private readonly productModel: Model<Product>,
+    private readonly productsService: ProductsService,
+    private readonly sellersService: SellersService,
+    private readonly buyersService: BuyersService,
   ) {}
 
   async findOne(orderFilterQuery: FilterQuery<Order>): Promise<Order> {
+    try {
     return await this.ordersModel
       .findOne(orderFilterQuery)
       .populate('seller')
       .populate('buyer')
       //.populate({ path: 'products', populate: { path: 'productId', model: 'Product' } })
       .exec();
+    } catch (err) {
+      throw new NotFoundException('Could not get the order.');
+    }
   }
 
   async find(ordersFilterQuery: FilterQuery<Order>): Promise<Order[]> {
+    try {
     return await this.ordersModel
       .find(ordersFilterQuery)
       .populate('seller')
       .populate('buyer')
       //.populate({ path: 'products', populate: { path: 'productId', model: 'Product' } })
       .exec();
+    } catch (err) {
+      throw new NotFoundException('Could not get the orders.');
+    }
   }
 
   async create(
@@ -50,16 +64,16 @@ export class OrdersRepository {
     if (products.length !== productIds.length) {
       throw new NotFoundException('Products for this order not found');
     }
-    const seller = await this.sellerModel.findOne({ email: sellerEmail });
+    const seller = await this.sellersService.getSingleSellerByEmail(
+      sellerEmail,
+    );
     if (!seller) {
-      throw new NotFoundException(
-        'Could not find the seller with email ' + sellerEmail,
-      );
+      throw new NotFoundException('Seller not found');
     }
-    const buyer = await this.buyerModel.findOne({ email: buyerEmail });
+    const buyer = await this.buyersService.getSingleBuyerByEmail(buyerEmail);
     if (!buyer) {
       throw new NotFoundException(
-        'Could not find the buyer with email ' + buyerEmail,
+        `Could not find the buyer with email ${buyerEmail}`,
       );
     }
 
@@ -68,23 +82,19 @@ export class OrdersRepository {
       quantity: quantities[index],
     }));
 
-    const uid = await this.generateUid();
-
     const newOrder = new this.ordersModel({
       ...restOrderData,
       products: orderedProducts,
       buyer: buyer._id,
       seller: seller._id,
-      uid: uid,
+      uid: uuidv4(),
     });
     const result = await newOrder.save();
 
     seller.orders.push(result._id);
-    await seller.save();
-
     buyer.orders.push(result._id);
 
-    await buyer.save();
+    await Promise.all([seller.save(), buyer.save()]);
 
     return result;
   }
@@ -93,15 +103,18 @@ export class OrdersRepository {
     orderFilterQuery: FilterQuery<Order>,
     order: Partial<Order>,
   ): Promise<Order> {
+    try {	
     return await this.ordersModel.findOneAndUpdate(orderFilterQuery, order);
+  } catch (err) {
+    throw new NotFoundException('Could not update the order.');
+  }
   }
 
   async deleteOne(orderFilterQuery: FilterQuery<Order>): Promise<void> {
+    try {
     await this.ordersModel.deleteOne(orderFilterQuery);
+  } catch (err) {
+    throw new NotFoundException('Could not delete the order.');
   }
-
-  async generateUid(): Promise<string> {
-    const uid = randomInt(100000, 999999).toString();
-    return uid;
   }
 }

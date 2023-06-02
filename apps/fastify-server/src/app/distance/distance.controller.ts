@@ -9,14 +9,17 @@ import {
 } from '@nestjs/common';
 import { DistanceService } from './distance.service';
 import { SellersRepository } from '../sellers/sellers.repository';
+import { SellersService } from '../sellers/sellers.service';
 
 @Controller('distance')
 export class DistanceController {
   constructor(
     private readonly distanceService: DistanceService,
     private readonly sellersRepository: SellersRepository,
+    private readonly sellersService: SellersService
   ) {}
 
+/*  
   @Post()
   async getDistance(
     @Body('sellerEmail') sellerEmail: string,
@@ -39,15 +42,14 @@ export class DistanceController {
     }
     return true;
   }
+*/
 
   @Post('/coordinates')
   async getAirDistance(
     @Body('sellerEmail') sellerEmail: string,
     @Body('orderCoordinates') orderCoordinates: number[],
   ): Promise<boolean> {
-    const seller = await this.sellersRepository.findOne({
-      email: sellerEmail,
-    });
+    const seller = await this.sellersService.getSingleSellerByEmail(sellerEmail);
     if (!seller) {
       throw new NotFoundException('Seller not found');
     }

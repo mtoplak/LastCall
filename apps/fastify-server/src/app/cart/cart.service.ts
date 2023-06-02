@@ -3,21 +3,23 @@ import { ProductsRepository } from '../products/products.repository';
 import { CartResponse } from 'src/data.response';
 import { BuyersRepository } from '../buyers/buyers.repository';
 import { Cart } from '../buyers/buyers.model';
+import { BuyersService } from '../buyers/buyers.service';
 
 @Injectable()
 export class CartService {
   constructor(
     private readonly buyersRepository: BuyersRepository,
     private readonly productsRepository: ProductsRepository,
+    private readonly buyersService: BuyersService
   ) {}
 
   async addToCart(
     email: string,
     productData: Cart[],
   ): Promise<CartResponse | null> {
-    const buyer = await this.buyersRepository.findOne({ email });
+    const buyer = await this.buyersService.getSingleBuyerByEmail(email);
     if (!buyer) {
-      return null;
+      throw new NotFoundException('Buyer of this cart not found');
     }
 
     const cartItems = productData.map(({ productId, quantity }) => ({
@@ -63,7 +65,7 @@ export class CartService {
     email: string,
     productData: Cart,
   ): Promise<CartResponse | null> {
-    const buyer = await this.buyersRepository.findOne({ email });
+    const buyer = await this.buyersService.getSingleBuyerByEmail(email);
     if (!buyer) {
       return null;
     }
@@ -104,7 +106,7 @@ export class CartService {
   
 
   async getCart(email: string): Promise<CartResponse | null> {
-    const buyer = await this.buyersRepository.findOne({ email });
+    const buyer = await this.buyersService.getSingleBuyerByEmail(email);
     if (!buyer) {
       throw new NotFoundException('Buyer of this cart not found');
     }
@@ -121,7 +123,7 @@ export class CartService {
     email: string,
     productId: string,
   ): Promise<CartResponse> {
-    const buyer = await this.buyersRepository.findOne({ email });
+    const buyer = await this.buyersService.getSingleBuyerByEmail(email);
     if (!buyer) {
       throw new NotFoundException('Buyer not found');
     }
@@ -153,7 +155,7 @@ export class CartService {
     email: string,
     productIds: string[]
   ): Promise<CartResponse> {
-    const buyer = await this.buyersRepository.findOne({ email });
+    const buyer = await this.buyersService.getSingleBuyerByEmail(email);
     if (!buyer) {
       throw new NotFoundException('Buyer not found');
     }
@@ -183,7 +185,7 @@ export class CartService {
   }
 
   async deleteAllFromCart(email: string): Promise<CartResponse> {
-    const buyer = await this.buyersRepository.findOne({ email });
+    const buyer = await this.buyersService.getSingleBuyerByEmail(email);
     if (!buyer) {
       throw new NotFoundException('Buyer not found');
     }

@@ -18,6 +18,7 @@ import {
 import api from 'services/api';
 import NavbarS from './NavbarS';
 import { useUserAuth } from 'context/AuthContext';
+import { SellerType } from 'enums/seller.enum';
 const markets = ['Slovenia', 'Italy', 'France', 'Austria', 'United Kingdom'];
 
 interface SellerProfile {
@@ -28,7 +29,7 @@ interface SellerProfile {
 	city: string;
 	address: string;
 	registerNumber: number;
-	companyType: string;
+	companyType: SellerType;
 	phone: string;
 	website: string;
 	targetedMarkets: string[];
@@ -45,7 +46,7 @@ const initialState = {
 	city: '',
 	address: '',
 	registerNumber: 0,
-	companyType: '',
+	companyType: SellerType.OTHER,
 	phone: '',
 	website: '',
 	targetedMarkets: [],
@@ -213,16 +214,20 @@ function EditSellerProfile() {
 														...sellerProfile,
 														companyType: event
 															.target
-															.value as string,
+															.value as SellerType,
 													})
 												}
 											>
-												<MenuItem value="Winery">
-													Winery
-												</MenuItem>
-												<MenuItem value="Brewery">
-													Brewery
-												</MenuItem>
+												{Object.values(SellerType).map(
+													(type) => (
+														<MenuItem
+															key={type}
+															value={type}
+														>
+															{type}
+														</MenuItem>
+													)
+												)}
 											</Select>
 										</FormControl>
 										<TextField

@@ -5,14 +5,15 @@ import {
 } from '@nestjs/common';
 import { Order } from './order.model';
 import { OrdersRepository } from './orders.repository';
-import { CreateUpdateOrderDto } from './createUpdateOrder.dto';
+import { CreateUpdateOrderDto } from './create-update-order.dto';
 import { SuccessResponse } from 'src/data.response';
 import { Cart } from '../buyers/buyers.model';
 import { ProductsService } from '../products/products.service';
 import { CartService } from '../cart/cart.service';
 import { MailService } from '../mailer/mail.service';
-import { DistanceService } from '../distance/distance.service';
 import { SellersRepository } from '../sellers/sellers.repository';
+import { SellersService } from '../sellers/sellers.service';
+import { OrderStatus } from './order-status.enum';
 
 @Injectable()
 export class OrdersService {
@@ -21,9 +22,25 @@ export class OrdersService {
     private readonly productsService: ProductsService,
     private readonly cartService: CartService,
     private readonly mailService: MailService,
-    private readonly distanceService: DistanceService,
     private readonly sellersRepository: SellersRepository,
-  ) {}
+    private readonly sellersService: SellersService
+  ) { }
+
+  async checkPrice(
+    productData: Cart[],
+    sellerId: string
+    ): Promise<boolean> {
+    const seller = await this.sellersService.getSingleSeller(sellerId);
+    if (!seller) {
+      throw new NotFoundException('Seller not found');
+    }
+    const meetsMinPriceRequirements =
+      await this.productsService.minPriceRequirements(seller.email, productData);
+    if (!meetsMinPriceRequirements) {
+      return false;
+    }
+    return true;
+  }
 
   async addOrder(
     orderData: CreateUpdateOrderDto,
@@ -32,17 +49,9 @@ export class OrdersService {
     buyerEmail: string,
   ): Promise<Order> {
     
-    const seller = await this.sellersRepository.findOne({ email: sellerEmail });
+    const seller = await this.sellersService.getSingleSellerByEmail(sellerEmail);
     if (!seller) {
       throw new NotFoundException('Seller not found');
-    }
-
-    const meetsMinPriceRequirements =
-      await this.productsService.minPriceRequirements(sellerEmail, productData);
-    if (!meetsMinPriceRequirements) {
-      throw new BadRequestException(
-        'Order does not meet the minimum price requirement',
-      );
     }
 
     const removeFromStockResult = await this.productsService.removeFromStock(
@@ -69,14 +78,24 @@ export class OrdersService {
   }
 
   async getAllOrders(): Promise<Order[]> {
+    try {
     return await this.ordersRepository.find({});
+  } catch (error) {
+    if (error instanceof NotFoundException) {
+      throw new NotFoundException(error.message);
+    }
+    throw error;
+  }
   }
 
   async getSingleOrder(orderId: string): Promise<Order> {
     try {
       return await this.ordersRepository.findOne({ _id: orderId });
-    } catch (err) {
-      throw new NotFoundException('Could not get the order with id ' + orderId);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
     }
   }
 
@@ -85,17 +104,18 @@ export class OrdersService {
     updatedOrderData: Partial<Order>,
   ): Promise<Order> {
     try {
-      if (updatedOrderData.status === 'Delivered') {
+      if (updatedOrderData.status === OrderStatus.DELIVERED) {
         updatedOrderData.actualDateOfDelivery = new Date();
       }
       return await this.ordersRepository.findOneAndUpdate(
         { _id: orderId },
         updatedOrderData,
       );
-    } catch (err) {
-      throw new NotFoundException(
-        'Failed to update the order with id: ' + orderId,
-      );
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
     }
   }
 

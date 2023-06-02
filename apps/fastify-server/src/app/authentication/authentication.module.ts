@@ -10,7 +10,7 @@ import { AuthenticationRepository } from './authentication.repository';
   imports: [
     MongooseModule.forFeature([{ name: 'Buyer', schema: BuyerSchema }]),
     MongooseModule.forFeature([{ name: 'Seller', schema: SellerSchema }]),
-  ], //injectalo bo module v katerikoli file ki ga rabi
+  ],
   controllers: [AuthenticationController],
   providers: [AuthenticationService, AuthenticationRepository],
 })
