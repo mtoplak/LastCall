@@ -26,6 +26,7 @@ import { storage } from '../../firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { v4 } from 'uuid';
 import { useUserAuth } from 'context/AuthContext';
+import { ProductCategory } from 'enums/product.enum';
 
 const initialState = {
 	title: '',
@@ -41,7 +42,7 @@ const initialState = {
 
 interface Product {
 	title: string;
-	drinkCategory: string;
+	drinkCategory: ProductCategory;
 	packaging: string;
 	size: string;
 	actualPrice: number;
@@ -216,18 +217,24 @@ const ProductsS = () => {
 										labelId="drink-category-select"
 										id="drink-category-select"
 										name="drinkCategory"
-										value={newProduct.drinkCategory}
+										value={
+											newProduct.drinkCategory || ''
+										}
 										onChange={handleInputChange}
 									>
 										<MenuItem value="">
 											Select drink category
 										</MenuItem>
-										<MenuItem value="Beer">Beer</MenuItem>
-										<MenuItem value="Wine">Wine</MenuItem>
-										<MenuItem value="Champagne">
-											Champagne
-										</MenuItem>
-										<MenuItem value="Other">Other</MenuItem>
+										{Object.values(ProductCategory).map(
+											(category) => (
+												<MenuItem
+													key={category}
+													value={category}
+												>
+													{category}
+												</MenuItem>
+											)
+										)}
 									</Select>
 								</FormControl>
 								<TextField

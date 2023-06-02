@@ -45,11 +45,7 @@ export class ProductsController {
     @Param('id') productId: string,
     @Body() updateProductDto: CreateUpdateProductDto,
   ): Promise<Product> {
-    const result = await this.productService.updateProduct(
-      productId,
-      updateProductDto,
-    );
-    return result;
+    return await this.productService.updateProduct(productId, updateProductDto);
   }
 
   @Delete(':id')
@@ -71,11 +67,10 @@ export class ProductsController {
     @Param('email') sellerEmail: string,
     @Body() productData: Cart[],
   ): Promise<boolean> {
-    const meetsRequirements = await this.productService.minPriceRequirements(
+    return await this.productService.minPriceRequirements(
       sellerEmail,
       productData,
     );
-    return meetsRequirements;
   }
 
   @Post('/sale')
@@ -84,8 +79,7 @@ export class ProductsController {
     @Body('discount') discount: number,
   ) {
     try {
-      const updatedProducts = await this.productService.makeSale(productIds, discount);
-      return updatedProducts;
+      return await this.productService.makeSale(productIds, discount);
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw new NotFoundException(error.message);
@@ -93,5 +87,4 @@ export class ProductsController {
       throw error;
     }
   }
-  
 }

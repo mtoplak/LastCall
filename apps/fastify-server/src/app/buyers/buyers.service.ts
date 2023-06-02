@@ -14,57 +14,83 @@ export class BuyersService {
   ) {}
 
   async addBuyer(buyerData: CreateUpdateBuyerDto): Promise<Buyer> {
-    return await this.buyersRepository.create(buyerData);
+    try {
+      return await this.buyersRepository.create(buyerData);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
   }
 
   async getAllBuyers(): Promise<Buyer[]> {
-    return await this.buyersRepository.find({});
+    try {
+      return await this.buyersRepository.find({});
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
   }
 
   async getSingleBuyer(buyerId: string): Promise<Buyer> {
-    const buyer = await this.buyersRepository.findOne({ _id: buyerId });
-    if (!buyer) {
-      throw new NotFoundException(
-        `Buyer with id ${buyerId} not found`,
-      );
+    try {
+      return await this.buyersRepository.findOne({ _id: buyerId });
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
     }
-    return buyer as Buyer;
   }
 
   async getSingleBuyerByEmail(email: string): Promise<Buyer> {
-    return this.buyersRepository.findOne({ email });
+    try {
+      return this.buyersRepository.findOne({ email });
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
   }
 
   async updateBuyer(
     buyerId: string,
     updatedBuyerData: Partial<Buyer>,
   ): Promise<Buyer> {
-    const updatedBuyer = await this.buyersRepository.findOneAndUpdate(
-      { _id: buyerId },
-      updatedBuyerData,
-      { new: true },
-    );
-    if (!updatedBuyer) {
-      throw new NotFoundException(`Buyer with id ${buyerId} not found`);
+    try {
+      return await this.buyersRepository.findOneAndUpdate(
+        { _id: buyerId },
+        updatedBuyerData,
+        { new: true },
+      );
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
     }
-
-    return updatedBuyer;
   }
 
   async updateBuyerByEmail(
     email: string,
     updatedBuyerData: Partial<Buyer>,
   ): Promise<Buyer> {
-    const updatedBuyer = await this.buyersRepository.findOneAndUpdate(
-      { email },
-      updatedBuyerData,
-      { new: true },
-    );
-    if (!updatedBuyer) {
-      throw new NotFoundException(`Buyer with email ${email} not found`);
+    try {
+      return await this.buyersRepository.findOneAndUpdate(
+        { email },
+        updatedBuyerData,
+        { new: true },
+      );
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
     }
-
-    return updatedBuyer;
   }
 
   async removeBuyer(buyerId: string): Promise<SuccessResponse> {
@@ -82,6 +108,13 @@ export class BuyersService {
   }
 
   async getOrdersByBuyer(email: string): Promise<Order[]> {
-    return this.buyersRepository.getOrdersByBuyer(email);
+    try {
+      return this.buyersRepository.getOrdersByBuyer(email);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
   }
 }

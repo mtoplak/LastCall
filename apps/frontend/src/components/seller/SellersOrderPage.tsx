@@ -18,6 +18,7 @@ import SearchOrdersInput from './SearchOrdersInput';
 import { Link } from 'react-router-dom';
 import { getOrderStatusColor } from 'utils/getOrderStatusColor';
 import { formatDate } from 'utils/formatDate';
+import { OrderStatus } from 'enums/order.enum';
 
 function SellerOrdersPage() {
 	const [orders, setOrders] = useState<IOrder[]>([]);
@@ -25,11 +26,11 @@ function SellerOrdersPage() {
 	const { user } = useUserAuth();
 
 	//filtering orders
-	const [filterStatus, setFilterStatus] = useState<string>('any');
+	const [filterStatus, setFilterStatus] = useState<OrderStatus | 'any'>('any');
 	const filteredOrders = orders.filter((order) => {
 		const statusMatch =
-			filterStatus === 'any' ||
-			order.status.toLowerCase() === filterStatus.toLowerCase();
+		filterStatus === 'any' || order.status.toLowerCase() === filterStatus.toLowerCase();
+	  
 		return statusMatch;
 	});
 
@@ -67,7 +68,7 @@ function SellerOrdersPage() {
 		setChecked(newChecked);
 	};
 
-	const handleChangeStatus = async (status: string) => {
+	const handleChangeStatus = async (status: OrderStatus) => {
 		try {
 			const orderIds = checked.map((order) => order._id);
 			await Promise.all(
@@ -120,7 +121,7 @@ function SellerOrdersPage() {
 												fullWidth
 												onClick={() =>
 													handleChangeStatus(
-														'Order placed'
+														OrderStatus.ACCEPTED
 													)
 												}
 											>
@@ -134,9 +135,9 @@ function SellerOrdersPage() {
 												fullWidth
 												onClick={() =>
 													handleChangeStatus(
-														'In-Transit'
+														OrderStatus.INTRANSIT
 													)
-												}
+												} // Changed 'In-Transit' to OrderStatus.InTransit
 											>
 												In-Transit
 											</Button>
@@ -148,9 +149,9 @@ function SellerOrdersPage() {
 												fullWidth
 												onClick={() =>
 													handleChangeStatus(
-														'Delivered'
+														OrderStatus.DELIVERED
 													)
-												}
+												} // Changed 'Delivered' to OrderStatus.Delivered
 											>
 												Delivered
 											</Button>
@@ -162,10 +163,12 @@ function SellerOrdersPage() {
 												color="error"
 												fullWidth
 												onClick={() =>
-													handleChangeStatus('Cancel')
-												}
+													handleChangeStatus(
+														OrderStatus.REJECTED
+													)
+												} // Changed 'Cancel' to OrderStatus.Cancel
 											>
-												Cancel
+												Reject
 											</Button>
 										</Box>
 									</CardContent>
@@ -222,7 +225,11 @@ function SellerOrdersPage() {
 															variant="body2"
 															color="text.secondary"
 														>
-															Price: {order.totalPrice.toFixed(2)} €
+															Price:{' '}
+															{order.totalPrice.toFixed(
+																2
+															)}{' '}
+															€
 														</Typography>
 													</CardContent>
 												</Grid>

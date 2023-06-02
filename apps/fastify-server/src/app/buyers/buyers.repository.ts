@@ -13,32 +13,44 @@ export class BuyersRepository {
   ) {}
 
   async findOne(buyerFilterQuery: FilterQuery<Buyer>): Promise<Buyer> {
-    return await this.buyerModel
-      .findOne(buyerFilterQuery)
-      .populate('orders')
-      .populate({
-        path: 'cart',
-        populate: {
-          path: 'productId',
-          populate: { path: 'seller', model: 'Seller' },
-        },
-      })
-      .exec();
+    try {
+      return await this.buyerModel
+        .findOne(buyerFilterQuery)
+        .populate('orders')
+        .populate({
+          path: 'cart',
+          populate: {
+            path: 'productId',
+            populate: { path: 'seller', model: 'Seller' },
+          },
+        })
+        .exec();
+    } catch (err) {
+      throw new NotFoundException('Could not get the buyer.');
+    }
   }
 
   async find(buyersFilterQuery: FilterQuery<Buyer>): Promise<Buyer[]> {
-    return await this.buyerModel
-      .find(buyersFilterQuery)
-      .populate('orders')
-      .populate({
-        path: 'cart',
-        populate: { path: 'productId', model: 'Product' },
-      })
-      .exec();
+    try {
+      return await this.buyerModel
+        .find(buyersFilterQuery)
+        .populate('orders')
+        .populate({
+          path: 'cart',
+          populate: { path: 'productId', model: 'Product' },
+        })
+        .exec();
+    } catch (err) {
+      throw new NotFoundException('Could not get the buyers.');
+    }
   }
 
   async create(buyer: Buyer): Promise<Buyer> {
-    return await new this.buyerModel(buyer).save();
+    try {
+      return await new this.buyerModel(buyer).save();
+    } catch (err) {
+      throw new NotFoundException('Could not create the buyer.');
+    }
   }
 
   async findOneAndUpdate(
@@ -46,37 +58,43 @@ export class BuyersRepository {
     buyer: Partial<Buyer>,
     options?: QueryOptions,
   ): Promise<Buyer> {
-    const updatedBuyer = await this.buyerModel
-      .findOneAndUpdate(buyerFilterQuery, buyer, options)
-      .populate({
-        path: 'cart.productId',
-        model: 'Product',
-      })
-      .exec();
-
-    if (!updatedBuyer) {
-      throw new NotFoundException('Buyer not found');
+    try {
+      return await this.buyerModel
+        .findOneAndUpdate(buyerFilterQuery, buyer, options)
+        .populate({
+          path: 'cart.productId',
+          model: 'Product',
+        })
+        .exec();
+    } catch (err) {
+      throw new NotFoundException('Could not update the buyer');
     }
-
-    return updatedBuyer;
   }
 
   async deleteOne(buyerFilterQuery: FilterQuery<Buyer>): Promise<void> {
-    await this.buyerModel.deleteOne(buyerFilterQuery);
+    try {
+      await this.buyerModel.deleteOne(buyerFilterQuery);
+    } catch (err) {
+      throw new NotFoundException('Could not delete the buyer');
+    }
   }
 
   async getOrdersByBuyer(email: string): Promise<Order[]> {
-    const buyer = await this.buyerModel
-      .findOne({ email })
-      .lean()
-      .populate({
-        path: 'orders',
-        populate: {
-          path: 'products',
-          populate: { path: 'productId', model: 'Product' },
-        },
-      })
-      .exec();
-    return buyer.orders as unknown as Order[];
+    try {
+      const buyer = await this.buyerModel
+        .findOne({ email })
+        .lean()
+        .populate({
+          path: 'orders',
+          populate: {
+            path: 'products',
+            populate: { path: 'productId', model: 'Product' },
+          },
+        })
+        .exec();
+      return buyer.orders as unknown as Order[];
+    } catch (err) {
+      throw new NotFoundException('Could not get the orders by this buyer.');
+    }
   }
 }

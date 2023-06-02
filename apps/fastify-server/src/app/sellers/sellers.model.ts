@@ -1,4 +1,5 @@
 import { Schema, Document, Model, model } from 'mongoose';
+import { SellerType } from './seller-type.enum';
 
 export const SellerSchema = new Schema({
   name: { type: String, required: true },
@@ -8,7 +9,7 @@ export const SellerSchema = new Schema({
   city: { type: String, required: true },
   country: { type: String, required: true },
   registerNumber: { type: Number, required: true },
-  companyType: { type: String, required: true },
+  companyType: { type: String, required: true, enum: Object.values(SellerType)  },
   targetedMarkets: [{ type: String }],
   phone: { type: String, required: true },
   website: { type: String, required: true },
@@ -29,7 +30,7 @@ export interface Seller extends Document {
   city: string;
   country: string;
   registerNumber: number;
-  companyType: string;
+  companyType: SellerType;
   targetedMarkets: string[];
   phone: string;
   website: string;

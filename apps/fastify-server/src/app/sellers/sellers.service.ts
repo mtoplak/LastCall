@@ -11,34 +11,46 @@ export class SellersService {
   constructor(private readonly sellersRepository: SellersRepository) {}
 
   async createSeller(sellerData: CreateUpdateSellerDto): Promise<Seller> {
-    return await this.sellersRepository.create(sellerData);
+    try {
+      return await this.sellersRepository.create(sellerData);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
   }
 
   async getAllSellers(): Promise<Seller[]> {
     try {
       return await this.sellersRepository.find({});
-    } catch (err) {
-      throw new NotFoundException('Could not find the sellers');
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
     }
   }
 
   async getSingleSeller(sellerId: string): Promise<Seller> {
     try {
       return await this.sellersRepository.findOne({ _id: sellerId });
-    } catch (err) {
-      throw new NotFoundException(
-        `Could not get the seller with id ${sellerId}`,
-      );
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
     }
   }
 
   async getSingleSellerByEmail(email: string): Promise<Seller> {
     try {
       return await this.sellersRepository.findOne({ email });
-    } catch (err) {
-      throw new NotFoundException(
-        `Could not get the seller with email ${email}`,
-      );
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
     }
   }
 
@@ -46,34 +58,36 @@ export class SellersService {
     sellerId: string,
     sellerUpdates: CreateUpdateSellerDto,
   ): Promise<Seller> {
-    const updatedSeller = await this.sellersRepository.findOneAndUpdate(
-      { _id: sellerId },
-      sellerUpdates,
-      { new: true },
-    );
-    if (!updatedSeller) {
-      throw new NotFoundException(
-        `Failed to update the seller with id ${sellerId} `,
+    try {
+      return await this.sellersRepository.findOneAndUpdate(
+        { _id: sellerId },
+        sellerUpdates,
+        { new: true },
       );
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
     }
-    return updatedSeller;
   }
 
   async updateSellerByEmail(
     email: string,
     sellerUpdates: CreateUpdateSellerDto,
   ): Promise<Seller> {
-    const updatedSeller = await this.sellersRepository.findOneAndUpdate(
-      { email },
-      sellerUpdates,
-      { new: true },
-    );
-    if (!updatedSeller) {
-      throw new NotFoundException(
-        `Failed to update the seller with email ${email}`,
+    try {
+      return await this.sellersRepository.findOneAndUpdate(
+        { email },
+        sellerUpdates,
+        { new: true },
       );
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
     }
-    return updatedSeller;
   }
 
   async removeSeller(sellerId: string): Promise<SuccessResponse> {

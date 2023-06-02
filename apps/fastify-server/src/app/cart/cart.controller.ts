@@ -44,8 +44,7 @@ export class CartController {
   @Post('/get')
   @UseGuards(FirebaseTokenGuard)
   async getCart(@Body('email') email: string): Promise<CartResponse | null> {
-    const result = await this.cartService.getCart(email);
-    return result;
+    return await this.cartService.getCart(email);
   }
 
   @Delete(':email/:productId')

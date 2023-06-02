@@ -23,6 +23,7 @@ import 'leaflet/dist/leaflet.css';
 import 'react-leaflet-markercluster/dist/styles.min.css';
 import PropertiesTextBox from 'components/ui/PropertiesTextBox';
 import NavbarB from './NavbarB';
+import { SellerType } from '../../enums/seller.enum';
 
 L.Icon.Default.mergeOptions({
 	iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
@@ -34,7 +35,8 @@ function Suppliers() {
 	const [sellers, setSellers] = useState<ISeller[]>([]);
 	const [filterName, setFilterName] = useState('');
 	const [filterLocation, setFilterLocation] = useState('any');
-	const [filterType, setFilterType] = useState('any');
+	const [filterType, setFilterType] = useState<SellerType | 'any'>('any');
+
 	const [isChecked, setIsChecked] = useState(false);
 
 	useEffect(() => {

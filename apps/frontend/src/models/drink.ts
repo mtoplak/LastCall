@@ -1,3 +1,4 @@
+import { ProductCategory } from "enums/product.enum";
 import { ISeller } from "./seller";
 
 export interface IDrink {
@@ -5,7 +6,7 @@ export interface IDrink {
     title: string;
     price: number;
     picture: string;
-    drinkCategory: string;
+    drinkCategory: ProductCategory;
     stock: number;
     size: string;
     packaging: string;

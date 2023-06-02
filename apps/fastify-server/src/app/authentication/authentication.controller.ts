@@ -7,7 +7,6 @@ export class AuthenticationController {
 
   @Post()
   async findEmail(@Body('email') email: string): Promise<string> {
-    const result = await this.authenticationService.findRole(email);
-    return result;
+    return await this.authenticationService.findRole(email);
   }
 }

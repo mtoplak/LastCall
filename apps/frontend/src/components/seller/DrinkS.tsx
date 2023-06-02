@@ -20,6 +20,7 @@ import { style } from 'assets/styles/styles';
 import { Link } from 'react-router-dom';
 import { IDrink } from 'models/drink';
 import { useUserAuth } from 'context/AuthContext';
+import { ProductCategory } from 'enums/product.enum';
 
 interface DrinkProps {
 	drink: IDrink;
@@ -40,7 +41,7 @@ const initialState = {
 
 interface Product {
 	title: string;
-	drinkCategory: string;
+	drinkCategory: ProductCategory;
 	packaging: string;
 	size: string;
 	actualPrice: number;
@@ -298,10 +299,11 @@ const DrinkS: React.FC<DrinkProps> = ({
 							onChange={handleInputChange}
 						>
 							<MenuItem value="">Select drink category</MenuItem>
-							<MenuItem value="Beer">Beer</MenuItem>
-							<MenuItem value="Wine">Wine</MenuItem>
-							<MenuItem value="Champagne">Champagne</MenuItem>
-							<MenuItem value="Other">Other</MenuItem>
+							{Object.values(ProductCategory).map((category) => (
+								<MenuItem key={category} value={category}>
+									{category}
+								</MenuItem>
+							))}
 						</Select>
 					</FormControl>
 					<TextField
