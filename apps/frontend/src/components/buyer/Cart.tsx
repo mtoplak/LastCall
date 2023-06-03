@@ -54,7 +54,7 @@ function Cart() {
 	const [selectedSeller, setSelectedSeller] = useState<ISeller>();
 	const [groupedProducts, setGroupedProducts] = useState<SellerGroup>({});
 	const [isShownAlert, setIsShownAlert] = useState(false);
-	const { cartProducts, setCartProducts } = useCartContext();
+	const { setCartProducts } = useCartContext();
 	const [isLoading, setIsLoading] = useState(false);
 	const [checkEligibility, setCheckEligibility] = useState(false);
 	const [checkOutAll, setCheckOutAll] = useState(false);
@@ -159,11 +159,11 @@ function Cart() {
 					return false;
 				}
 			});
-
 			const results = await Promise.all(requests);
 			const eligibility = results.every((result) => result); // Check if all sellers are eligible
-
 			setCheckEligibility(eligibility);
+			//console.log(eligibility);
+			return eligibility;
 		} else {
 			// Check out selected seller only
 			try {
@@ -171,12 +171,14 @@ function Cart() {
 					sellerEmail: selectedSeller?.email,
 					orderCoordinates: coordinates,
 				});
-				//console.log(response);
+				//console.log(response.data);
 				if (response.data === true) {
-					setCheckEligibility(true);
+					return true;
 				} else {
-					setCheckEligibility(false);
-					setError("Order address is outside the seller's maximum distance.")
+					setError(
+						"Order address is outside the seller's maximum distance."
+					);
+					return false;
 				}
 			} catch (error: any) {
 				setError(error.message);
@@ -184,8 +186,10 @@ function Cart() {
 		}
 	};
 
-	const handleCheckMinPrice = async (e: any, selectedSeller: any) => {
-		e.preventDefault();
+	const handleCheckMinPrice = async (
+		selectedSeller?: any,
+		checkOutAll?: boolean
+	) => {
 		if (checkOutAll) {
 			const promises = Object.entries(groupedProducts).map(
 				async ([sellerId, products]) => {
@@ -231,11 +235,21 @@ function Cart() {
 	};
 
 	const handleCheckout = async () => {
+		const eligibibleDistance = await handleCheckEligibility();
+		if (!eligibibleDistance) {
+			return;
+		}
+		setIsLoading(true);
 		const totalPrice =
 			groupedProducts[selectedSeller!._id].reduce((accumulator, item) => {
-				const itemTotalPrice = item.quantity * item.product.price;
+				const itemTotalPrice = parseFloat(
+					(
+						item.quantity *
+						parseFloat(item.product.price.toFixed(2))
+					).toFixed(2)
+				);
 				return accumulator + itemTotalPrice;
-			}, 0) + selectedSeller!.deliveryCost;
+			}, 0) + parseFloat(selectedSeller!.deliveryCost.toFixed(2));
 
 		const order = groupedProducts[selectedSeller!._id].map((item) => {
 			return {
@@ -243,7 +257,6 @@ function Cart() {
 				quantity: item.quantity,
 			};
 		});
-		setIsLoading(true);
 		try {
 			const mapResponse = await fetch(
 				`https://nominatim.openstreetmap.org/search?format=json&q=${
@@ -287,6 +300,12 @@ function Cart() {
 			setCartProducts(updatedCartItems);
 			setCartItems(updatedCartItems);
 			setIsShownAlert(true);
+			const updatedGroupedProducts = Object.fromEntries(
+				Object.entries(groupedProducts).filter(
+					([key]) => key !== selectedSeller!._id
+				)
+			);
+			setGroupedProducts(updatedGroupedProducts);
 		} catch (error: any) {
 			setError(error.response.data.message);
 		} finally {
@@ -295,6 +314,13 @@ function Cart() {
 	};
 
 	const handleCheckoutAll = async () => {
+		const maxDistance = await handleCheckEligibility();
+		if (!maxDistance) {
+			setError(
+				"Order address is outside of one or more seller's maximum distance delivery."
+			);
+			return;
+		}
 		setIsLoading(true);
 		try {
 			const orders = Object.entries(groupedProducts).map(
@@ -306,12 +332,10 @@ function Cart() {
 							return accumulator + itemTotalPrice;
 						}, 0) + products[0].product.seller.deliveryCost;
 
-					const order = products.map((item) => {
-						return {
-							productId: item.product._id,
-							quantity: item.quantity,
-						};
-					});
+					const order = products.map((item) => ({
+						productId: item.product._id,
+						quantity: item.quantity,
+					}));
 
 					return {
 						seller: products[0].product.seller.email,
@@ -326,7 +350,6 @@ function Cart() {
 					};
 				}
 			);
-
 			await Promise.all(
 				orders.map((order) =>
 					api.post('/orders', order, {
@@ -354,19 +377,20 @@ function Cart() {
 	};
 
 	// Calculate subtotal price
-	const subtotal = Object.values(groupedProducts).reduce(
-		(sum, sellerGroup) => {
-			return (
-				sum +
-				sellerGroup.reduce((groupSum, groupedProduct) => {
-					const productPrice = groupedProduct.product.price;
-					const productQuantity = groupedProduct.quantity;
-					return groupSum + productPrice * productQuantity;
-				}, 0)
-			);
-		},
-		0
-	);
+	let subtotal = Object.values(groupedProducts).reduce((sum, sellerGroup) => {
+		return (
+			sum +
+			sellerGroup.reduce((groupSum, groupedProduct) => {
+				const productPrice = parseFloat(
+					groupedProduct.product.price.toFixed(2)
+				);
+				const productQuantity = groupedProduct.quantity;
+				return groupSum + productPrice * productQuantity;
+			}, 0)
+		);
+	}, 0);
+
+	subtotal = parseFloat(subtotal.toFixed(2));
 
 	// Get unique sellers from groupedProducts
 	const sellers = new Set(Object.keys(groupedProducts));
@@ -425,12 +449,16 @@ function Cart() {
 											{item.product.price.toFixed(2)} €
 										</Typography>
 										{item.product?.discount !== 0 && (
-									<Alert severity="success" sx={{ mb: 2 }}>
-										There is currently a {item.product?.discount} %
-										discount for this product!
-										<br />
-									</Alert>
-								)}
+											<Alert
+												severity="success"
+												sx={{ mb: 2 }}
+											>
+												There is currently a{' '}
+												{item.product?.discount} %
+												discount for this product!
+												<br />
+											</Alert>
+										)}
 									</CardContent>
 								</Grid>
 								<Grid item xs={3}>
@@ -493,7 +521,8 @@ function Cart() {
 									.reduce(
 										(total: number, item: any) =>
 											total +
-											item.product.price * item.quantity,
+											item.product.price.toFixed(2) *
+												item.quantity,
 										0
 									)
 									.toFixed(2)}{' '}
@@ -513,11 +542,13 @@ function Cart() {
 									products.reduce(
 										(total: number, item: any) =>
 											total +
-											item.product.price * item.quantity,
+											parseFloat(
+												item.product.price.toFixed(2)
+											) *
+												item.quantity,
 										0
 									) + products[0].product.seller.deliveryCost
-								).toFixed(2)}{' '}
-								€
+								).toFixed(2) + ' €'}
 							</Typography>
 							<Divider />
 							<Button
@@ -531,7 +562,6 @@ function Cart() {
 										products[0].product.seller
 									);
 									handleCheckMinPrice(
-										e,
 										products[0].product.seller
 									);
 								}}
@@ -626,6 +656,11 @@ function Cart() {
 													setIsOpenModal(true);
 													setCheckOutAll(true);
 													setCheckEligibility(false);
+													handleCheckMinPrice(
+														undefined,
+														true
+													);
+													setCheckOutAll(true);
 												}}
 											>
 												Checkout All
@@ -648,6 +683,7 @@ function Cart() {
 				onClose={() => {
 					setIsOpenModal(false);
 					setError('');
+					setCheckOutAll(false);
 				}}
 				aria-labelledby="modal-modal-title"
 				aria-describedby="modal-modal-description"
@@ -694,14 +730,6 @@ function Cart() {
 						onChange={(e) => setCountry(e.target.value)}
 						sx={{ mb: 2 }}
 					/>
-					<Button
-						color="primary"
-						variant="contained"
-						fullWidth
-						onClick={handleCheckEligibility}
-					>
-						Check if eligible for delivery
-					</Button>
 					<TextField
 						sx={{ mt: 2, mb: 2 }}
 						id="date"

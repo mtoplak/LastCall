@@ -101,7 +101,7 @@ export class MailService {
                         display: inline-block;
                         padding: 10px 20px;
                         background-color: #3f51b5;
-                        color: white;
+                        color: #FFFFFF;
                         text-decoration: none;
                         border-radius: 4px;
                     }
@@ -116,7 +116,7 @@ export class MailService {
                     <p>${buyerData.name}, thank you for your order! We appreciate it.</p>
                     <p>Order ID: ${orderData.uid}</p>
                     <h2>Order Details:</h2>
-                    <table>
+                    <table style="width:100%; text-align:center;">
                         <tr>
                             <th>Product</th>
                             <th>Quantity</th>
@@ -160,7 +160,7 @@ export class MailService {
                         <p>For any questions, please contact us at</p>
                         <p>${sellerData.email} or reply to this email.</p>
                         <p>In the meantime, you can check the order status at:</p>
-                        <p><a href="http://localhost:3000/order/${orderData._id}" class="button">Check Order Status</a></p>
+                        <p><a href="http://localhost:3000/order/${orderData._id}" class="button"><span style="color:white">Check Order Status</span></a></p>
                     </div>
                     <div class="thank-you">
                         <p>Thank you,</p>
