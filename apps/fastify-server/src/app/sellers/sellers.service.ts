@@ -115,4 +115,41 @@ export class SellersService {
   async getAllOrdersBySeller(email: string): Promise<Order[]> {
     return this.sellersRepository.getAllOrdersBySeller(email);
   }
+
+  async calculateAverageScore(
+    score: number,
+    sellerEmail: string,
+  ): Promise<number> {
+    
+    const seller = await this.getSingleSellerByEmail(sellerEmail);
+    if (!seller) {
+      throw new NotFoundException('Seller not found');
+    }
+
+    if (seller.scores.length === 0 || seller.averageScore == 0) {
+      return score;
+    }
+
+    const currentTotalScore = seller.averageScore * seller.scores.length;
+    const newTotalScore = currentTotalScore + score;
+    const newAverageScore = newTotalScore / (seller.scores.length + 1);
+
+    return newAverageScore;
+  }
+
+  async getAverageScoreBySellerId(sellerId: string): Promise<number> {
+    try {
+      const seller = await this.getSingleSeller(sellerId);
+      if (!seller) {
+        throw new NotFoundException('Seller not found');
+      }
+  
+      return seller.averageScore;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
+  }
 }

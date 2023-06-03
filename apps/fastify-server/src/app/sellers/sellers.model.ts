@@ -1,6 +1,6 @@
 import { Schema, Document, Model, model } from 'mongoose';
 import { SellerType } from './seller-type.enum';
-//AVERAGE SCORE
+
 export const SellerSchema = new Schema({
   name: { type: String, required: true },
   surname: { type: String, required: true },
@@ -24,6 +24,8 @@ export const SellerSchema = new Schema({
   maxDistance: { type: Number },
   minPrice: { type: Number },
   deliveryCost: { type: Number },
+  scores: [{ type: Schema.Types.ObjectId, ref: 'Rating' }],
+  averageScore: { type: Number, default: 0 },
 });
 
 export interface Seller extends Document {
@@ -45,8 +47,8 @@ export interface Seller extends Document {
   maxDistance: number;
   minPrice: number;
   deliveryCost: number;
-  //scores: score[]
-  //averageScore: number;
+  scores: string[]
+  averageScore: number;
 }
 
 export const SellerModel: Model<Seller> = model<Seller>('Seller', SellerSchema);

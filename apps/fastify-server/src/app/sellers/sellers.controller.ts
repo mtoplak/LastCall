@@ -7,6 +7,7 @@ import {
   Patch,
   Delete,
   UseGuards,
+  NotFoundException,
 } from '@nestjs/common';
 import { SellersService } from './sellers.service';
 import { Seller } from './sellers.model';
@@ -95,5 +96,17 @@ export class SellersController {
   @UseGuards(FirebaseTokenGuard)
   async getAllOrdersBySeller(@Body('email') email: string): Promise<Order[]> {
     return this.sellersService.getAllOrdersBySeller(email);
+  }
+
+  @Get('/average-score/:sellerId/')
+  async getAverageScoreBySellerId(@Param('sellerId') sellerId: string): Promise<number> {
+    try {
+      return await this.sellersService.getAverageScoreBySellerId(sellerId);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
   }
 }
