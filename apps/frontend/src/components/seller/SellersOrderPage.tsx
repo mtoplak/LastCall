@@ -8,6 +8,7 @@ import {
 	Container,
 	Divider,
 	Grid,
+	Modal,
 	Typography,
 } from '@mui/material';
 import { IOrder } from 'models/order';
@@ -19,18 +20,24 @@ import { Link } from 'react-router-dom';
 import { getOrderStatusColor } from 'utils/getOrderStatusColor';
 import { formatDate } from 'utils/formatDate';
 import { OrderStatus } from 'enums/order.enum';
+import { style } from 'assets/styles/styles';
 
 function SellerOrdersPage() {
 	const [orders, setOrders] = useState<IOrder[]>([]);
-	const [checked, setChecked] = useState<IOrder[]>([]);
+	const [checked, setChecked] = useState<IOrder[]>([]); // the orders you want to change status
+	const [isOpenModal, setIsOpenModal] = useState(false);
+	const [selectedStatus, setSelectedStatus] = useState<OrderStatus>();
 	const { user } = useUserAuth();
 
-	//filtering orders
-	const [filterStatus, setFilterStatus] = useState<OrderStatus | 'any'>('any');
+	// filtering orders
+	const [filterStatus, setFilterStatus] = useState<OrderStatus | 'any'>(
+		'any'
+	);
 	const filteredOrders = orders.filter((order) => {
 		const statusMatch =
-		filterStatus === 'any' || order.status.toLowerCase() === filterStatus.toLowerCase();
-	  
+			filterStatus === 'any' ||
+			order.status.toLowerCase() === filterStatus.toLowerCase();
+
 		return statusMatch;
 	});
 
@@ -79,7 +86,8 @@ function SellerOrdersPage() {
 			const updatedOrders = orders.map((order) =>
 				orderIds.includes(order._id) ? { ...order, status } : order
 			);
-			setOrders(updatedOrders);
+			setOrders(updatedOrders as IOrder[]);
+			setChecked([]);
 		} catch (error) {
 			throw error;
 		}
@@ -119,11 +127,12 @@ function SellerOrdersPage() {
 												variant="contained"
 												color="primary"
 												fullWidth
-												onClick={() =>
-													handleChangeStatus(
+												onClick={() => {
+													setIsOpenModal(true);
+													setSelectedStatus(
 														OrderStatus.ACCEPTED
-													)
-												}
+													);
+												}}
 											>
 												Accept
 											</Button>
@@ -133,11 +142,12 @@ function SellerOrdersPage() {
 												variant="contained"
 												color="warning"
 												fullWidth
-												onClick={() =>
-													handleChangeStatus(
+												onClick={() => {
+													setIsOpenModal(true);
+													setSelectedStatus(
 														OrderStatus.INTRANSIT
-													)
-												} // Changed 'In-Transit' to OrderStatus.InTransit
+													);
+												}}
 											>
 												In-Transit
 											</Button>
@@ -147,11 +157,12 @@ function SellerOrdersPage() {
 												variant="contained"
 												color="success"
 												fullWidth
-												onClick={() =>
-													handleChangeStatus(
+												onClick={() => {
+													setIsOpenModal(true);
+													setSelectedStatus(
 														OrderStatus.DELIVERED
-													)
-												} // Changed 'Delivered' to OrderStatus.Delivered
+													);
+												}}
 											>
 												Delivered
 											</Button>
@@ -162,11 +173,12 @@ function SellerOrdersPage() {
 												variant="contained"
 												color="error"
 												fullWidth
-												onClick={() =>
-													handleChangeStatus(
+												onClick={() => {
+													setIsOpenModal(true);
+													setSelectedStatus(
 														OrderStatus.REJECTED
-													)
-												} // Changed 'Cancel' to OrderStatus.Cancel
+													);
+												}}
 											>
 												Reject
 											</Button>
@@ -528,6 +540,61 @@ function SellerOrdersPage() {
 					)}
 				</Container>
 			</Box>
+			<Modal
+				open={isOpenModal}
+				onClose={() => {
+					setIsOpenModal(false);
+				}}
+				aria-labelledby="modal-modal-title"
+				aria-describedby="modal-modal-description"
+			>
+				<Box component="form" sx={style}>
+					<Typography
+						id="modal-modal-title"
+						variant="h6"
+						component="h2"
+					>
+						Are you sure you want to change the status of the
+						selected order{checked.length > 1 && 's'} to{' '}
+						<Typography
+							component="span"
+							variant="h6"
+							color={getOrderStatusColor(selectedStatus!)}
+						>
+							{selectedStatus?.toLowerCase()}
+						</Typography>
+						?
+					</Typography>
+					<Box
+						sx={{
+							display: 'flex',
+							justifyContent: 'space-between',
+						}}
+					>
+						<Button
+							sx={{ mt: 2, width: '48%' }}
+							color="error"
+							variant="contained"
+							onClick={() => {
+								setIsOpenModal(false);
+							}}
+						>
+							No
+						</Button>
+						<Button
+							sx={{ mt: 2, width: '48%' }}
+							color="primary"
+							variant="contained"
+							onClick={() => {
+								handleChangeStatus(selectedStatus!);
+								setIsOpenModal(false);
+							}}
+						>
+							Yes
+						</Button>
+					</Box>
+				</Box>
+			</Modal>
 		</>
 	);
 }
