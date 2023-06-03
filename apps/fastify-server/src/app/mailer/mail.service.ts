@@ -4,8 +4,11 @@ import { BuyersService } from "../buyers/buyers.service";
 import { SellersService } from "../sellers/sellers.service";
 import { ProductsService } from "../products/products.service";
 import { Order } from "../orders/order.model";
-import { Cart } from "../buyers/buyers.model";
+import { Buyer, Cart } from "../buyers/buyers.model";
 import { formatDate } from "../utils/format-date.utils";
+import { OrdersService } from "../orders/orders.service";
+import { Seller } from "../sellers/sellers.model";
+import { CartService } from "../cart/cart.service";
 
 @Injectable()
 export class MailService {
@@ -16,7 +19,7 @@ export class MailService {
         private readonly mailerService: MailerService
     ) { }
 
-    async sendOrderConfirmationEmail(buyerEmail: string, orderData: Order, productData: Cart[], sellerEmail): Promise<void> {
+    async sendOrderConfirmationEmail(buyerEmail: string, orderData: Order, productData: Cart[], sellerEmail: string): Promise<void> {
         const mailOptions = {
             from: 'info.last.call.company@gmail.com',
             to: buyerEmail,
@@ -177,7 +180,7 @@ export class MailService {
         const mailOptions = {
             to: sellerEmail,
             subject: 'Message from buyer',
-            html: await this.generateMessageEmailContent(buyerEmail, message),
+            html: this.generateMessageEmailContent(buyerEmail, message),
             replyTo: buyerEmail
         };
 
@@ -192,18 +195,19 @@ export class MailService {
         }
     }
 
-    async generateMessageEmailContent(buyerEmail: string, message: string): Promise<string> {
+    generateMessageEmailContent(buyerEmail: string, message: string): string {
         let emailContent = `<html>
             <head>
                 <style>
                     @media only screen and (max-width: 600px) {
                         .container {
-                            width: 100%;
+                            width: calc(100% - 40px);
                             max-width: 600px;
                             margin: 0 auto;
                             padding: 20px;
+                            margin-right: 20px;
                         }
-                    }
+                    }             
                     .container {
                         width: 100%;
                         max-width: 600px;
@@ -239,7 +243,124 @@ export class MailService {
                 </div>
             </body>
             </html>`;
+        return emailContent;
+    }
 
+    async sendOrderStatusUpdateEmail(status: string, order: Order): Promise<void> {
+        //console.log(order.buyer.email);
+        const mailOptions = {
+            from: 'info.last.call.company@gmail.com',
+            to: order.buyer.email,
+            subject: 'Order Status Update',
+            html: this.generateOrderStatusEmail(order.buyer, order.seller, status, order),
+            replyTo: order.seller.email,
+        };
+
+        try {
+            await this.mailerService.sendMail(mailOptions);
+            //console.log('Order confirmation email sent successfully');
+        } catch (error) {
+            //console.error('Failed to send order confirmation email:', error);
+            throw error;
+        }
+    }
+
+    generateOrderStatusEmail(buyer: Buyer, seller: Seller, status: string, order: Order): string {
+        let productList = "";
+        for (const productData of order.products) {
+            const product = productData.product;
+            productList += `
+                <tr>
+                    <td>${product.title}</td>
+                    <td>${product.drinkCategory}</td>
+                    <td>${product.packaging}</td>
+                    <td>${product.size}</td>
+                    <td>${product.price.toFixed(2)} €</td>
+                    <td>${productData.quantity}</td>
+                    <td>${((productData.quantity) * product.price).toFixed(2)} €</td>
+                    </tr>`;
+        }
+
+        const emailContent = `<html>
+            <head>
+                <style>
+                    @media only screen and (max-width: 600px) {
+                        .container {
+                            width: 100%;
+                            max-width: 600px;
+                            margin: 0 auto;
+                            padding: 20px;
+                        }
+                        
+                        table {
+                            margin-left: 0;
+                            margin-right: 0;
+                        }
+                    }
+                    .container {
+                        width: 100%;
+                        max-width: 600px;
+                        margin: 0 auto;
+                        padding: 20px;
+                        background-color: #f4f4f4;
+                        font-family: Arial, sans-serif;
+                        color: #333333;
+                    }
+                    h3 {
+                        color: #3f51b5;
+                    }
+                    p {
+                        margin-bottom: 10px;
+                        font-size: 14px;
+                    }
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin-bottom: 20px;
+                        margin-left: auto;
+                        margin-right: auto;
+                    }
+                    th, td {
+                        padding: 10px;
+                        border-bottom: 1px solid #dddddd;
+                        text-align: center;
+                    }
+                    .thank-you {
+                        margin-top: 30px;
+                        text-align: center;
+                        color: #777777;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h3>Order Status Update</h3>
+                    <p>Dear ${buyer.name} ${buyer.surname},</p>
+                    <p>Your order ${order.uid} status from <b>${seller.title}</b> has been updated to "<b>${status}</b>".</p>
+                    <h4>Order Details:</h4>
+                    <table>
+                        <tr>
+                            <th>Product</th>
+                            <th>Category</th>
+                            <th>Packaging</th>
+                            <th>Size</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Subtotal product price</th>
+                        </tr>
+                        ${productList}
+                    </table>
+                    <p>Delivery and handling: ${seller.deliveryCost} €</p>
+                    <p>Total Price: ${order.totalPrice.toFixed(2)} €</p>
+                    <p>Last Date of Delivery: ${formatDate(order.lastDateOfDelivery)}</p>
+                    <p>Shipping Address: ${order.address}, ${order.city}, ${order.country}</p>
+                    <div class="thank-you">
+                        <p>Thank you,</p>
+                        <p>Last Call Company</p>
+                    </div>
+                </div>
+            </body>
+            </html>`;
         return emailContent;
     }
 

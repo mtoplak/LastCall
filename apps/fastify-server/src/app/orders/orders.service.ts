@@ -107,6 +107,8 @@ export class OrdersService {
       if (updatedOrderData.status === OrderStatus.DELIVERED) {
         updatedOrderData.actualDateOfDelivery = new Date();
       }
+      const order = await this.getSingleOrder(orderId);
+      this.mailService.sendOrderStatusUpdateEmail(updatedOrderData.status, order);
       return await this.ordersRepository.findOneAndUpdate(
         { _id: orderId },
         updatedOrderData,

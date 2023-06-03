@@ -101,10 +101,6 @@ function Product() {
 		}
 	};
 
-	const handleCloseAlert = () => {
-		setShowAlert(false);
-	};
-
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
 			{role === 'seller' ? <NavbarS /> : <NavbarB />}
@@ -118,7 +114,7 @@ function Product() {
 								aria-label="close"
 								color="inherit"
 								size="small"
-								onClick={handleCloseAlert}
+								onClick={() => setShowAlert(false)}
 							>
 								<CloseOutlinedIcon fontSize="inherit" />
 							</IconButton>

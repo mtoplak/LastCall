@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
+	Alert,
+	AlertTitle,
 	Box,
 	Button,
 	Card,
@@ -8,6 +10,7 @@ import {
 	Container,
 	Divider,
 	Grid,
+	IconButton,
 	Modal,
 	Typography,
 } from '@mui/material';
@@ -21,12 +24,14 @@ import { getOrderStatusColor } from 'utils/getOrderStatusColor';
 import { formatDate } from 'utils/formatDate';
 import { OrderStatus } from 'enums/order.enum';
 import { style } from 'assets/styles/styles';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 function SellerOrdersPage() {
 	const [orders, setOrders] = useState<IOrder[]>([]);
 	const [checked, setChecked] = useState<IOrder[]>([]); // the orders you want to change status
 	const [isOpenModal, setIsOpenModal] = useState(false);
 	const [selectedStatus, setSelectedStatus] = useState<OrderStatus>();
+	const [showAlert, setShowAlert] = useState(false); // alert for success status change
 	const { user } = useUserAuth();
 
 	// filtering orders
@@ -64,6 +69,10 @@ function SellerOrdersPage() {
 		fetchOrders();
 	}, [user]);
 
+	useEffect(() => {
+		document.title = 'Orders';
+	}, []);
+
 	const handleToggle = (order: IOrder) => () => {
 		const isChecked = checked.some(
 			(checkedOrder) => checkedOrder._id === order._id
@@ -76,6 +85,7 @@ function SellerOrdersPage() {
 	};
 
 	const handleChangeStatus = async (status: OrderStatus) => {
+		setShowAlert(false);
 		try {
 			const orderIds = checked.map((order) => order._id);
 			await Promise.all(
@@ -88,6 +98,7 @@ function SellerOrdersPage() {
 			);
 			setOrders(updatedOrders as IOrder[]);
 			setChecked([]);
+			setShowAlert(true);
 		} catch (error) {
 			throw error;
 		}
@@ -105,12 +116,32 @@ function SellerOrdersPage() {
 					>
 						Order List
 					</Typography>
+					{showAlert && (
+						<Alert
+							severity="success"
+							style={{ marginTop: '1rem' }}
+							action={
+								<IconButton
+									aria-label="close"
+									color="inherit"
+									size="small"
+									onClick={() => setShowAlert(false)}
+								>
+									<CloseOutlinedIcon fontSize="inherit" />
+								</IconButton>
+							}
+						>
+							<AlertTitle>
+								Status updated successfully!
+							</AlertTitle>
+						</Alert>
+					)}
 					{orders.length === 0 ? (
-						<Typography variant="body1" mb={4}>
+						<Typography variant="body1" mb={4} mt={2}>
 							Your order list is empty.
 						</Typography>
 					) : (
-						<Grid container spacing={2}>
+						<Grid container spacing={2} mt={2}>
 							<Grid item xs={12} md={2}>
 								<Card sx={{ mb: 3 }}>
 									<CardContent>
@@ -207,20 +238,27 @@ function SellerOrdersPage() {
 													xs={1}
 													sx={{ mt: 3 }}
 												>
-													<Checkbox
-														checked={checked.some(
-															(checkedOrder) =>
-																checkedOrder._id ===
-																order._id
-														)}
-														onChange={handleToggle(
-															order
-														)}
-														inputProps={{
-															'aria-label':
-																'select order',
-														}}
-													/>
+													{order.status !==
+														OrderStatus.DELIVERED && (
+														<Checkbox
+															checked={checked.some(
+																(
+																	checkedOrder
+																) =>
+																	checkedOrder._id ===
+																	order._id
+															)}
+															onChange={() => {
+																handleToggle(
+																	order
+																);
+															}}
+															inputProps={{
+																'aria-label':
+																	'select order',
+															}}
+														/>
+													)}
 												</Grid>
 												<Grid item xs={8}>
 													<CardContent>
@@ -371,20 +409,25 @@ function SellerOrdersPage() {
 													xs={1}
 													sx={{ mt: 3 }}
 												>
-													<Checkbox
-														checked={checked.some(
-															(checkedOrder) =>
-																checkedOrder._id ===
-																order._id
-														)}
-														onChange={handleToggle(
-															order
-														)}
-														inputProps={{
-															'aria-label':
-																'select order',
-														}}
-													/>
+													{order.status !==
+														OrderStatus.DELIVERED && (
+														<Checkbox
+															checked={checked.some(
+																(
+																	checkedOrder
+																) =>
+																	checkedOrder._id ===
+																	order._id
+															)}
+															onChange={handleToggle(
+																order
+															)}
+															inputProps={{
+																'aria-label':
+																	'select order',
+															}}
+														/>
+													)}
 												</Grid>
 												<Grid item xs={8}>
 													<CardContent>
