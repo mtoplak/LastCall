@@ -1,6 +1,7 @@
 import { Schema, Document, Model, model, Types } from 'mongoose';
 import { Seller } from '../sellers/sellers.model';
 import { Buyer } from '../buyers/buyers.model';
+import { Order } from '../orders/order.model';
 
 export const RatingSchema = new Schema({
   seller: {
@@ -11,6 +12,11 @@ export const RatingSchema = new Schema({
   buyer: {
     type: Types.ObjectId,
     ref: 'Buyer',
+    required: true, 
+  },
+  order: {
+    type: Types.ObjectId,
+    ref: 'Order',
     required: true, 
   },
   score: {
@@ -24,6 +30,7 @@ export const RatingSchema = new Schema({
 export interface Rating extends Document {
   seller: Seller;
   buyer: Buyer;
+  order: Order;
   score: number;
 }
 

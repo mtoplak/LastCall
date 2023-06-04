@@ -43,7 +43,7 @@ const Supplier: React.FC<SupplierProps> = ({ seller }) => {
           </Grid>
           <Grid item xs={12} md={2} sx={{ my: 1 }}>
             <Typography component="legend">Rating</Typography>
-            <Rating name="no-value" value={null} />
+            <Rating name="read-only" value={null} readOnly />
           </Grid>
         </Grid>
       </Card>

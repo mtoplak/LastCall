@@ -16,6 +16,10 @@ export class OrderMapper {
       address: order.address,
       city: order.city,
       country: order.country,
+      status: order.status,
+      uid: order.uid,
+      coordinates: order.coordinates,
+      score: order.score
     };
     return response;
   }

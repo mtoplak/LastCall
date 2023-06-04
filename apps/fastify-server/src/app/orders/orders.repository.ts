@@ -87,7 +87,7 @@ export class OrdersRepository {
       products: orderedProducts,
       buyer: buyer._id,
       seller: seller._id,
-      uid: uuidv4(),
+      uid: uuidv4().substr(0, 6),
     });
     const result = await newOrder.save();
 
@@ -117,4 +117,5 @@ export class OrdersRepository {
     throw new NotFoundException('Could not delete the order.');
   }
   }
+  
 }

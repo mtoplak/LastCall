@@ -20,4 +20,6 @@ export interface ISeller {
 	maxDistance: number;
   	minPrice: number;
 	deliveryCost: number;
+	scores: string[];
+	averageScore: number;
 }
