@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
+	Alert,
+	AlertTitle,
 	Box,
 	Button,
 	Card,
@@ -8,6 +10,8 @@ import {
 	Container,
 	Divider,
 	Grid,
+	IconButton,
+	Modal,
 	Typography,
 } from '@mui/material';
 import { IOrder } from 'models/order';
@@ -19,18 +23,26 @@ import { Link } from 'react-router-dom';
 import { getOrderStatusColor } from 'utils/getOrderStatusColor';
 import { formatDate } from 'utils/formatDate';
 import { OrderStatus } from 'enums/order.enum';
+import { style } from 'assets/styles/styles';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 function SellerOrdersPage() {
 	const [orders, setOrders] = useState<IOrder[]>([]);
-	const [checked, setChecked] = useState<IOrder[]>([]);
+	const [checked, setChecked] = useState<IOrder[]>([]); // the orders you want to change status
+	const [isOpenModal, setIsOpenModal] = useState(false);
+	const [selectedStatus, setSelectedStatus] = useState<OrderStatus>();
+	const [showAlert, setShowAlert] = useState(false); // alert for success status change
 	const { user } = useUserAuth();
 
-	//filtering orders
-	const [filterStatus, setFilterStatus] = useState<OrderStatus | 'any'>('any');
+	// filtering orders
+	const [filterStatus, setFilterStatus] = useState<OrderStatus | 'any'>(
+		'any'
+	);
 	const filteredOrders = orders.filter((order) => {
 		const statusMatch =
-		filterStatus === 'any' || order.status.toLowerCase() === filterStatus.toLowerCase();
-	  
+			filterStatus === 'any' ||
+			order.status.toLowerCase() === filterStatus.toLowerCase();
+
 		return statusMatch;
 	});
 
@@ -57,6 +69,10 @@ function SellerOrdersPage() {
 		fetchOrders();
 	}, [user]);
 
+	useEffect(() => {
+		document.title = 'Orders';
+	}, []);
+
 	const handleToggle = (order: IOrder) => () => {
 		const isChecked = checked.some(
 			(checkedOrder) => checkedOrder._id === order._id
@@ -69,6 +85,7 @@ function SellerOrdersPage() {
 	};
 
 	const handleChangeStatus = async (status: OrderStatus) => {
+		setShowAlert(false);
 		try {
 			const orderIds = checked.map((order) => order._id);
 			await Promise.all(
@@ -79,7 +96,9 @@ function SellerOrdersPage() {
 			const updatedOrders = orders.map((order) =>
 				orderIds.includes(order._id) ? { ...order, status } : order
 			);
-			setOrders(updatedOrders);
+			setOrders(updatedOrders as IOrder[]);
+			setChecked([]);
+			setShowAlert(true);
 		} catch (error) {
 			throw error;
 		}
@@ -97,12 +116,32 @@ function SellerOrdersPage() {
 					>
 						Order List
 					</Typography>
+					{showAlert && (
+						<Alert
+							severity="success"
+							style={{ marginTop: '1rem' }}
+							action={
+								<IconButton
+									aria-label="close"
+									color="inherit"
+									size="small"
+									onClick={() => setShowAlert(false)}
+								>
+									<CloseOutlinedIcon fontSize="inherit" />
+								</IconButton>
+							}
+						>
+							<AlertTitle>
+								Status updated successfully!
+							</AlertTitle>
+						</Alert>
+					)}
 					{orders.length === 0 ? (
-						<Typography variant="body1" mb={4}>
+						<Typography variant="body1" mb={4} mt={2}>
 							Your order list is empty.
 						</Typography>
 					) : (
-						<Grid container spacing={2}>
+						<Grid container spacing={2} mt={2}>
 							<Grid item xs={12} md={2}>
 								<Card sx={{ mb: 3 }}>
 									<CardContent>
@@ -119,11 +158,12 @@ function SellerOrdersPage() {
 												variant="contained"
 												color="primary"
 												fullWidth
-												onClick={() =>
-													handleChangeStatus(
+												onClick={() => {
+													setIsOpenModal(true);
+													setSelectedStatus(
 														OrderStatus.ACCEPTED
-													)
-												}
+													);
+												}}
 											>
 												Accept
 											</Button>
@@ -133,11 +173,12 @@ function SellerOrdersPage() {
 												variant="contained"
 												color="warning"
 												fullWidth
-												onClick={() =>
-													handleChangeStatus(
+												onClick={() => {
+													setIsOpenModal(true);
+													setSelectedStatus(
 														OrderStatus.INTRANSIT
-													)
-												} // Changed 'In-Transit' to OrderStatus.InTransit
+													);
+												}}
 											>
 												In-Transit
 											</Button>
@@ -147,11 +188,12 @@ function SellerOrdersPage() {
 												variant="contained"
 												color="success"
 												fullWidth
-												onClick={() =>
-													handleChangeStatus(
+												onClick={() => {
+													setIsOpenModal(true);
+													setSelectedStatus(
 														OrderStatus.DELIVERED
-													)
-												} // Changed 'Delivered' to OrderStatus.Delivered
+													);
+												}}
 											>
 												Delivered
 											</Button>
@@ -162,11 +204,12 @@ function SellerOrdersPage() {
 												variant="contained"
 												color="error"
 												fullWidth
-												onClick={() =>
-													handleChangeStatus(
+												onClick={() => {
+													setIsOpenModal(true);
+													setSelectedStatus(
 														OrderStatus.REJECTED
-													)
-												} // Changed 'Cancel' to OrderStatus.Cancel
+													);
+												}}
 											>
 												Reject
 											</Button>
@@ -195,20 +238,27 @@ function SellerOrdersPage() {
 													xs={1}
 													sx={{ mt: 3 }}
 												>
-													<Checkbox
-														checked={checked.some(
-															(checkedOrder) =>
-																checkedOrder._id ===
-																order._id
-														)}
-														onChange={handleToggle(
-															order
-														)}
-														inputProps={{
-															'aria-label':
-																'select order',
-														}}
-													/>
+													{order.status !==
+														OrderStatus.DELIVERED && (
+														<Checkbox
+															checked={checked.some(
+																(
+																	checkedOrder
+																) =>
+																	checkedOrder._id ===
+																	order._id
+															)}
+															onChange={() => {
+																handleToggle(
+																	order
+																);
+															}}
+															inputProps={{
+																'aria-label':
+																	'select order',
+															}}
+														/>
+													)}
 												</Grid>
 												<Grid item xs={8}>
 													<CardContent>
@@ -359,20 +409,25 @@ function SellerOrdersPage() {
 													xs={1}
 													sx={{ mt: 3 }}
 												>
-													<Checkbox
-														checked={checked.some(
-															(checkedOrder) =>
-																checkedOrder._id ===
-																order._id
-														)}
-														onChange={handleToggle(
-															order
-														)}
-														inputProps={{
-															'aria-label':
-																'select order',
-														}}
-													/>
+													{order.status !==
+														OrderStatus.DELIVERED && (
+														<Checkbox
+															checked={checked.some(
+																(
+																	checkedOrder
+																) =>
+																	checkedOrder._id ===
+																	order._id
+															)}
+															onChange={handleToggle(
+																order
+															)}
+															inputProps={{
+																'aria-label':
+																	'select order',
+															}}
+														/>
+													)}
 												</Grid>
 												<Grid item xs={8}>
 													<CardContent>
@@ -528,6 +583,61 @@ function SellerOrdersPage() {
 					)}
 				</Container>
 			</Box>
+			<Modal
+				open={isOpenModal}
+				onClose={() => {
+					setIsOpenModal(false);
+				}}
+				aria-labelledby="modal-modal-title"
+				aria-describedby="modal-modal-description"
+			>
+				<Box component="form" sx={style}>
+					<Typography
+						id="modal-modal-title"
+						variant="h6"
+						component="h2"
+					>
+						Are you sure you want to change the status of the
+						selected order{checked.length > 1 && 's'} to{' '}
+						<Typography
+							component="span"
+							variant="h6"
+							color={getOrderStatusColor(selectedStatus!)}
+						>
+							{selectedStatus?.toLowerCase()}
+						</Typography>
+						?
+					</Typography>
+					<Box
+						sx={{
+							display: 'flex',
+							justifyContent: 'space-between',
+						}}
+					>
+						<Button
+							sx={{ mt: 2, width: '48%' }}
+							color="error"
+							variant="contained"
+							onClick={() => {
+								setIsOpenModal(false);
+							}}
+						>
+							No
+						</Button>
+						<Button
+							sx={{ mt: 2, width: '48%' }}
+							color="primary"
+							variant="contained"
+							onClick={() => {
+								handleChangeStatus(selectedStatus!);
+								setIsOpenModal(false);
+							}}
+						>
+							Yes
+						</Button>
+					</Box>
+				</Box>
+			</Modal>
 		</>
 	);
 }

@@ -29,7 +29,6 @@ import { ProductSchema } from '../products/product.model';
     BuyersRepository,
     SellersRepository,
     ProductsRepository,
-
   ],
 })
 

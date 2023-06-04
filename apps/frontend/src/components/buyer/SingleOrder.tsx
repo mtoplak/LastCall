@@ -41,6 +41,7 @@ function SingleOrder() {
 	}, [id, user]);
 
 	useEffect(() => {
+		if (!order) return;
 		document.title = `Order ${order?.uid} details`;
 	}, [order?.uid]);
 
@@ -165,8 +166,10 @@ function SingleOrder() {
 										sx={{ color: 'text.secondary' }}
 									>
 										Subtotal:{' '}
-										{(order.totalPrice -
-											order.seller.deliveryCost).toFixed(2)}{' '}
+										{(
+											order.totalPrice -
+											order.seller.deliveryCost
+										).toFixed(2)}{' '}
 										€
 									</Typography>
 									<Typography

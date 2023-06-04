@@ -11,11 +11,14 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { DistanceModule } from './app/distance/distance.module';
 import { MailModule } from './app/mailer/mail.module';
 import { RatingModule } from './app/rating/rating.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 const databaseHost = require('../constants').databaseHost;
 
 @Module({
   imports: [
+    AppModule,
     BuyersModule,
     ProductsModule,
     SellersModule,
@@ -24,6 +27,8 @@ const databaseHost = require('../constants').databaseHost;
     CartModule,
     AuthenticationModule,
     DistanceModule,
+    DistanceModule,
+    MailModule,
     MailerModule.forRoot({
       transport: {
         host: 'smtp.gmail.com',
@@ -35,8 +40,6 @@ const databaseHost = require('../constants').databaseHost;
         },
       },
     }),
-    DistanceModule,
-    MailModule,
     MongooseModule.forRoot(databaseHost, {
       useUnifiedTopology: true, // Add this option for unified topology
     }),
@@ -44,6 +47,8 @@ const databaseHost = require('../constants').databaseHost;
       cache: true,
     }),
   ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

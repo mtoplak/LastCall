@@ -67,8 +67,10 @@ export class RatingRepository {
         buyer: buyer._id,
       });
       const result = await newRating.save();
-      //seller.scores.push(result._id);
-      //await seller.save();
+      seller.scores.push(result._id);
+      const average = await this.sellersService.calculateAverageScore(newRating.score, seller.email);
+      seller.averageScore = average;
+      await seller.save();
       return result;
     } catch (error) {
       console.error('Error creating rating:', error);

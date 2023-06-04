@@ -13,7 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { ThemeProvider } from '@mui/material';
 import { darkTheme } from 'assets/styles/styles';
 import { useUserAuth } from 'context/AuthContext';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function NavbarS() {
 	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
