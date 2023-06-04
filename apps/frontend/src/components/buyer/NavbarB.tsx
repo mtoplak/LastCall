@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 import { useUserAuth } from 'context/AuthContext';
 import { darkTheme } from 'assets/styles/styles';
 import { useCartContext } from 'context/CartContext';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 function NavbarB() {
 	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -88,7 +89,7 @@ function NavbarB() {
 								onClick={handleOpenNavMenu}
 								color="inherit"
 							>
-								smaller screen todo
+								 <MoreVertIcon />
 							</IconButton>
 							<Menu
 								id="menu-appbar"
@@ -108,7 +109,30 @@ function NavbarB() {
 									display: { xs: 'block', md: 'none' },
 								}}
 							>
-								smaller screen todo
+								<Link to={'/products'}>
+								<Button
+									onClick={handleCloseNavMenu}
+									sx={{
+										my: 2,
+										color: 'white',
+										display: 'block',
+									}}
+								>
+									Products
+								</Button>
+							</Link>
+							<Link to="/suppliers">
+								<Button
+									onClick={handleCloseNavMenu}
+									sx={{
+										my: 2,
+										color: 'white',
+										display: 'block',
+									}}
+								>
+									Suppliers
+								</Button>
+							</Link>
 							</Menu>
 						</Box>
 						<Typography

@@ -143,8 +143,8 @@ function SellerPage() {
 							please contact us!
 						</Typography>
 						<Divider sx={{ mb: 1 }} />
-						<Grid container spacing={2}>
-							<Grid item xs={12} md={4}>
+						<Grid container spacing={2} sx={{display: 'flex', justifyContent: 'space-between'}}>
+							<Grid item>
 								<Typography
 									variant="body2"
 									sx={{
@@ -158,7 +158,7 @@ function SellerPage() {
 									<b>{seller?.email}</b>
 								</Typography>
 							</Grid>
-							<Grid item xs={12} md={3} sx={{ mx: 2 }}>
+							<Grid item sx={{ mx: 2 }}>
 								<Typography
 									variant="body2"
 									sx={{
@@ -172,7 +172,7 @@ function SellerPage() {
 									<b>{seller?.phone}</b>
 								</Typography>
 							</Grid>
-							<Grid item xs={12} md={4}>
+							<Grid item>
 								<Link href={seller?.website} underline="none">
 									<Typography
 										variant="body2"
@@ -192,7 +192,7 @@ function SellerPage() {
 							</Grid>
 						</Grid>
 						<Divider sx={{ my: 1 }} />
-						<Grid container justifyContent="flex-end">
+						<Grid container justifyContent="flex-start">
 							<Grid item xs={2}>
 								<Button
 									variant="contained"

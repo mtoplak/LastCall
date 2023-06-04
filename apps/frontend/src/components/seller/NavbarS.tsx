@@ -14,6 +14,7 @@ import { ThemeProvider } from '@mui/material';
 import { darkTheme } from 'assets/styles/styles';
 import { useUserAuth } from 'context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 function NavbarS() {
 	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -86,7 +87,7 @@ function NavbarS() {
 								onClick={handleOpenNavMenu}
 								color="inherit"
 							>
-								smaller screen todo
+								 <MoreVertIcon />
 							</IconButton>
 							<Menu
 								id="menu-appbar"
@@ -106,7 +107,42 @@ function NavbarS() {
 									display: { xs: 'block', md: 'none' },
 								}}
 							>
-								smaller screen todo
+								<Link to={'/inventory'}>
+								<Button
+									onClick={handleCloseNavMenu}
+									sx={{
+										my: 2,
+										color: 'white',
+										display: 'block',
+									}}
+								>
+									Inventory
+								</Button>
+							</Link>
+							<Link to={'/seller/orders'}>
+								<Button
+									onClick={handleCloseNavMenu}
+									sx={{
+										my: 2,
+										color: 'white',
+										display: 'block',
+									}}
+								>
+									Orders
+								</Button>
+							</Link>
+							<Link to={'/seller/sales'}>
+								<Button
+									onClick={handleCloseNavMenu}
+									sx={{
+										my: 2,
+										color: 'white',
+										display: 'block',
+									}}
+								>
+									Sales
+								</Button>
+							</Link>
 							</Menu>
 						</Box>
 						<Typography
