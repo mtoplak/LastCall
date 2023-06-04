@@ -64,22 +64,27 @@ const SignInS = () => {
 	return (
 		<>
 			<NavbarS />
-			<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '100vh' }}>
+			<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '70vh' }}>
 				<Container>
 					<CustomBox>
+					<Paper elevation={10} sx={{ my: 10, display: 'flex', flexDirection: ['column', 'row'] }}>
 						<Box
-							component="form"
-							sx={{ flex: '1', marginTop: '5rem' }}
+							sx={{
+								flex: 1,
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+							}}
 						>
-							<Grid>
-								<Paper elevation={10} style={paperStyle}>
+							<Box component="form" sx={{ marginTop: '5rem' }}>
+								<Grid>
 									<Grid>
 										<Avatar
 											style={{
 												backgroundColor: 'lightblue',
 											}}
 										></Avatar>
-										<h2>Sign In As Seller</h2>
+										<h2>Sign In As A Seller</h2>
 									</Grid>
 									<FormControl>
 										<TextField
@@ -122,7 +127,7 @@ const SignInS = () => {
 											</span>
 										</Link>
 									</Typography>
-									<Typography>
+									<Typography sx={{ marginBottom: '1rem' }}>
 										<span
 											onClick={(event) =>
 												setIsShownForgot(!isShownForgot)
@@ -134,6 +139,8 @@ const SignInS = () => {
 									</Typography>
 									{isShownForgot && (
 										<>
+										<Grid>
+												<Grid item>
 											<TextField
 												label="Enter email to reset password"
 												placeholder="Enter email"
@@ -144,6 +151,8 @@ const SignInS = () => {
 													setResetMail(e.target.value)
 												}
 											/>
+											</Grid>
+												<Grid item>
 											<FormControl>
 												<Button
 													type="submit"
@@ -158,6 +167,8 @@ const SignInS = () => {
 													Reset
 												</Button>
 											</FormControl>
+											</Grid>
+											</Grid>
 											{isShownResetAlert && (
 												<Alert severity="info">
 													Reset email sent!
@@ -168,16 +179,40 @@ const SignInS = () => {
 									{error && (
 										<Alert severity="error">{error}</Alert>
 									)}
-								</Paper>
-							</Grid>
+								<Typography sx={{ marginBottom: '8rem' }} />
+								</Grid>
+							</Box>
 						</Box>
-						<Box sx={{ flex: '1.25' }}>
-							<img
-								src={heroImg}
-								alt="heroImg"
-								style={{ maxWidth: '100%', marginTop: '14rem' }}
-							/>
+						<Box
+							sx={{
+								flex: 1.25,
+								backgroundColor: '#E6F0FF',
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+								order: [2, 1],
+							}}
+						>
+							<Container
+								sx={{
+									height: '100%',
+									display: 'flex',
+									alignItems: 'center',
+									justifyContent: 'center',
+								}}
+							>
+								<img
+									src={heroImg}
+									alt="heroImg"
+									style={{
+										maxWidth: '100%',
+										maxHeight: '100%',
+										objectFit: 'cover',
+									}}
+								/>
+							</Container>
 						</Box>
+					</Paper>
 					</CustomBox>
 				</Container>
 			</Box>

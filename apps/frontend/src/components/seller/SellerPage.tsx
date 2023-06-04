@@ -2,7 +2,10 @@ import {
 	Alert,
 	Box,
 	Button,
+	Card,
 	Container,
+	Divider,
+	Grid,
 	Link,
 	Modal,
 	TextField,
@@ -21,6 +24,10 @@ import SellerProducts from './SellerProducts';
 import { checkoutButton, style } from 'assets/styles/styles';
 import { useUserAuth } from 'context/AuthContext';
 import NavbarS from './NavbarS';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import EmailIcon from '@mui/icons-material/Email';
+import PhoneIcon from '@mui/icons-material/Phone';
+import LanguageIcon from '@mui/icons-material/Language';
 
 function SellerPage() {
 	const [seller, setSeller] = useState<ISeller>();
@@ -89,75 +96,120 @@ function SellerPage() {
 	return (
 		<>
 			<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '65vh' }}>
-			{role === 'seller' ? <NavbarS /> : <NavbarB />}
-				<Container>
-					<CustomBox>
-						<Box sx={{ flex: '1', marginTop: '3rem' }}>
-							<Title variant="h1" sx={{ color: '#24336e' }}>
-								{seller?.title}
-							</Title>
-							<Typography
-								variant="body2"
-								sx={{
-									fontSize: '18px',
-									color: '#5A6473',
-									my: 4,
-								}}
-							>
-								{seller?.title} is a {seller?.companyType}{' '}
-								located in {seller?.country} in {seller?.city}{' '}
-								on {seller?.address}. For any further
-								information please contact us!
-							</Typography>
-							<Typography
-								variant="body2"
-								sx={{
-									fontSize: '18px',
-									color: '#5A6473',
-									mt: 4,
-								}}
-							>
-								Email: <b>{seller?.email}</b>
-							</Typography>
-							<Typography
-								variant="body2"
-								sx={{
-									fontSize: '18px',
-									color: '#5A6473',
-								}}
-							>
-								Phone: <b>{seller?.phone}</b>
-							</Typography>
-							<Link href={seller?.website} underline="none">
+				{role === 'seller' ? <NavbarS /> : <NavbarB />}
+				<Box
+					sx={{
+						display: 'flex',
+						flexDirection: 'column',
+						alignItems: 'center',
+					}}
+				>
+					<img
+						src={sellerProfile}
+						alt="sellerProfile"
+						style={{
+							width: '200px',
+							height: '200px',
+							borderRadius: '50%',
+							marginBottom: '2rem',
+						}}
+					/>
+
+					<Card
+						sx={{
+							backgroundColor: 'rgba(255, 255, 255, 0.4)',
+							backdropFilter: 'blur(10px)',
+							padding: '2rem',
+							marginBottom: '2rem',
+							color: 'black',
+							mx: 2,
+							px: 10,
+						}}
+					>
+						<Typography
+							variant="h3"
+							component="h1"
+							sx={{ mb: 2, color: '#24336e' }}
+						>
+							<b>{seller?.title}</b>
+						</Typography>
+						<Typography
+							variant="body2"
+							sx={{ fontSize: '18px', mb: 2 }}
+						>
+							{seller?.title} is a {seller?.companyType} located
+							in {seller?.country} in {seller?.city} on{' '}
+							{seller?.address}. For any further information
+							please contact us!
+						</Typography>
+						<Divider sx={{ mb: 1 }} />
+						<Grid container spacing={2}>
+							<Grid item xs={12} md={4}>
 								<Typography
 									variant="body2"
 									sx={{
-										fontSize: '18px',
-										color: '#5A6473',
-										mb: 4,
+										fontSize: '14px',
+										color: 'gray',
+										display: 'flex',
+										alignItems: 'center',
 									}}
 								>
-									Website: <b>{seller?.website}</b>
+									<EmailIcon sx={{ marginRight: '0.5rem' }} />
+									<b>{seller?.email}</b>
 								</Typography>
-							</Link>
-						</Box>
-						<Box sx={{ flex: '1.25' }}>
-							<img
-								src={sellerProfile}
-								alt="sellerProfile"
-								style={{ maxWidth: '70%', marginTop: '1rem' }}
-							/>
-						</Box>
-					</CustomBox>
-					<Button
-						variant="contained"
-						color="primary"
-						sx={checkoutButton}
-						onClick={() => setIsOpenModal(true)}
-					>
-						Contact Us
-					</Button>
-				</Container>
+							</Grid>
+							<Grid item xs={12} md={3} sx={{ mx: 2 }}>
+								<Typography
+									variant="body2"
+									sx={{
+										fontSize: '14px',
+										color: 'gray',
+										display: 'flex',
+										alignItems: 'center',
+									}}
+								>
+									<PhoneIcon sx={{ marginRight: '0.5rem' }} />
+									<b>{seller?.phone}</b>
+								</Typography>
+							</Grid>
+							<Grid item xs={12} md={4}>
+								<Link href={seller?.website} underline="none">
+									<Typography
+										variant="body2"
+										sx={{
+											fontSize: '14px',
+											color: 'gray',
+											display: 'flex',
+											alignItems: 'center',
+										}}
+									>
+										<LanguageIcon
+											sx={{ marginRight: '0.5rem' }}
+										/>
+										<b>{seller?.website}</b>
+									</Typography>
+								</Link>
+							</Grid>
+						</Grid>
+						<Divider sx={{ my: 1 }} />
+						<Grid container justifyContent="flex-end">
+							<Grid item xs={2}>
+								<Button
+									variant="contained"
+									sx={{
+										backgroundColor: '#24336e',
+										'&:hover': {
+											backgroundColor: '#1a2756',
+										},
+									}}
+									onClick={() => setIsOpenModal(true)}
+								>
+									Contact Us
+								</Button>
+							</Grid>
+						</Grid>
+					</Card>
+				</Box>
 			</Box>
 			<Box sx={{ backgroundColor: '#f2f2f2', py: 3 }}>
 				<Container>

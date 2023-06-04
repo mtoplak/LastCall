@@ -102,7 +102,7 @@ const SignUpB = () => {
 	};
 
 	return (
-		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '100vh' }}>
+		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '80vh' }}>
 			<Container>
 				<CustomBox>
 					<Box
@@ -124,7 +124,7 @@ const SignUpB = () => {
 						<Grid>
 							<Paper elevation={10} sx={{ px: 4, mb: 3, pb: 2 }}>
 								<Grid container spacing={2}>
-									<Grid item xs={6}>
+									<Grid item xs={12} md={6}>
 										<Typography variant="h6">
 											Basic info
 										</Typography>
@@ -202,7 +202,7 @@ const SignUpB = () => {
 											label="Legal Person"
 										/>
 									</Grid>
-									<Grid item xs={6}>
+									<Grid item xs={12} md={6}>
 										<Typography variant="h6">
 											Additional Information
 										</Typography>

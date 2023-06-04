@@ -34,11 +34,11 @@ const SellerProducts: React.FC<SellerProductsProps> = ({ sellerId }) => {
 	}, []);
 
 	return (
-		<Grid container spacing={2}>
+		<Grid container spacing={2} sx={{ justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
 			{products.length > 0 ? (
 				products.map((drink) => (
-					<DrinkContainer key={drink._id}>
-						<HouseBox>
+					<Box sx={{mx: 1}}>
+						<HouseBox >
 							<Link to={`/product/${drink._id}`}>
 								<ImgContainer>
 									<Image
@@ -69,7 +69,7 @@ const SellerProducts: React.FC<SellerProductsProps> = ({ sellerId }) => {
 								></Box>
 							</InfoBox>
 						</HouseBox>
-					</DrinkContainer>
+					</Box>
 				))
 			) : (
 				<div>

@@ -134,7 +134,7 @@ const SignUpS = () => {
 	return (
 		<>
 			<NavbarS />
-			<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '100vh' }}>
+			<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
 				<Container>
 					<CustomBox>
 						<Box
@@ -159,7 +159,7 @@ const SignUpS = () => {
 									sx={{ px: 4, mb: 3, pb: 2 }}
 								>
 									<Grid container spacing={2}>
-										<Grid item xs={6}>
+										<Grid item xs={12} md={6}>
 											<Typography variant="h6">
 												Basic info
 											</Typography>
@@ -226,6 +226,16 @@ const SignUpS = () => {
 												value={newUserData.phone}
 												sx={{ mb: 2 }}
 											/>
+											<TextField
+												label="Company name"
+												placeholder="Enter company name"
+												required
+												fullWidth
+												name="title"
+												value={newUserData.title}
+												onChange={handleChange}
+												sx={{ mb: 2 }}
+											/>
 											<FormControl fullWidth>
 												<InputLabel id="demo-simple-select-label">
 													Company Type
@@ -253,20 +263,10 @@ const SignUpS = () => {
 												</Select>
 											</FormControl>
 										</Grid>
-										<Grid item xs={6}>
+										<Grid item xs={12} md={6}>
 											<Typography variant="h6">
 												Additional Information
 											</Typography>
-											<TextField
-												label="Company name"
-												placeholder="Enter company name"
-												required
-												fullWidth
-												name="title"
-												value={newUserData.title}
-												onChange={handleChange}
-												sx={{ mb: 2 }}
-											/>
 											<TextField
 												label="Address"
 												placeholder="Enter your/company address"

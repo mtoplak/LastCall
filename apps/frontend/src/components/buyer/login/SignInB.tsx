@@ -60,7 +60,6 @@ const SignInB = () => {
 					setError(error.message);
 				}
 
-		
 				const redirectPath = location.search
 					? decodeURIComponent(location.search.split('=')[1])
 					: '/';
@@ -74,115 +73,166 @@ const SignInB = () => {
 	};
 
 	return (
-		<Box sx={{ backgroundColor: '#E6F0FF', minHeight: '100vh' }}>
+		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '70vh' }}>
 			<Container>
 				<CustomBox>
-					<Box component="form" sx={{ flex: '1', marginTop: '5rem' }}>
-						<Grid>
-							<Paper elevation={10} style={paperStyle}>
+					<Paper
+						elevation={10}
+						sx={{
+							my: 10,
+							display: 'flex',
+							flexDirection: ['column', 'row'],
+						}}
+					>
+						<Box
+							sx={{
+								flex: 1.25,
+								backgroundColor: '#E6F0FF',
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+								order: [2, 1],
+							}}
+						>
+							<Container
+								sx={{
+									height: '100%',
+									display: 'flex',
+									alignItems: 'center',
+									justifyContent: 'center',
+								}}
+							>
+								<img
+									src={heroImg}
+									alt="heroImg"
+									style={{
+										maxWidth: '100%',
+										maxHeight: '100%',
+										objectFit: 'cover',
+									}}
+								/>
+							</Container>
+						</Box>
+						<Box
+							sx={{
+								flex: 1,
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+							}}
+						>
+							<Box component="form" sx={{ marginTop: '5rem' }}>
 								<Grid>
-									<Avatar
-										style={{ backgroundColor: 'lightblue' }}
-									></Avatar>
-									<h2>Sign In As Buyer</h2>
-								</Grid>
-								<FormControl>
-									<TextField
-										label="Email"
-										placeholder="Enter email"
-										fullWidth
-										required
-										value={email}
-										onChange={(e) =>
-											setEmail(e.target.value)
-										}
-									/>
-									<TextField
-										label="Password"
-										placeholder="Enter password"
-										type="password"
-										fullWidth
-										required
-										value={password}
-										onChange={(e) =>
-											setPassword(e.target.value)
-										}
-									/>
-									<Button
-										type="submit"
-										color="primary"
-										variant="contained"
-										style={btnstyle}
-										fullWidth
-										onClick={(e) => handleSubmitSign(e)} // Replace onSubmit with onClick
-									>
-										Sign in
-									</Button>
-								</FormControl>
-								<Typography>
-									Don't have an account yet?{' '}
-									<Link to={'/buy/signup'}>
-										<span style={{ color: 'black' }}>
-											Sign up
-										</span>
-									</Link>
-								</Typography>
-								<Typography>
-									<span
-										onClick={(event) =>
-											setIsShownForgot(!isShownForgot)
-										}
-										style={{ cursor: 'pointer' }}
-									>
-										Forgot password?
-									</span>
-								</Typography>
-								{isShownForgot && (
-									<>
+									<Grid>
+										<Avatar
+											style={{
+												backgroundColor: 'lightblue',
+											}}
+										></Avatar>
+										<h2>Sign In As A Buyer</h2>
+									</Grid>
+									<FormControl>
 										<TextField
-											label="Enter email to reset password"
+											label="Email"
 											placeholder="Enter email"
-											type="email"
+											fullWidth
 											required
-											value={resetMail}
+											value={email}
 											onChange={(e) =>
-												setResetMail(e.target.value)
+												setEmail(e.target.value)
 											}
 										/>
-										<FormControl>
-											<Button
-												type="submit"
-												color="primary"
-												variant="contained"
-												fullWidth
-												style={btnstyle}
-												onClick={(e) =>
-													handleResetPassword(e)
-												}
-											>
-												Reset
-											</Button>
-										</FormControl>
-										{isShownResetAlert && (
-											<Alert severity="info">
-												Reset email sent!
-											</Alert>
-										)}
-									</>
-								)}
-								{error && (
-									<Alert severity="error">{error}</Alert>
-								)}
-							</Paper>
-						</Grid>
-					</Box>
-					<Box sx={{ flex: '1.25' }}>
-						<img
-							src={heroImg}
-							alt="heroImg"
-							style={{ maxWidth: '100%', marginTop: '14rem' }}
-						/>
-					</Box>
+										<TextField
+											label="Password"
+											placeholder="Enter password"
+											type="password"
+											fullWidth
+											required
+											value={password}
+											onChange={(e) =>
+												setPassword(e.target.value)
+											}
+										/>
+										<Button
+											type="submit"
+											color="primary"
+											variant="contained"
+											style={btnstyle}
+											fullWidth
+											onClick={(e) => handleSubmitSign(e)}
+										>
+											Sign in
+										</Button>
+									</FormControl>
+									<Typography>
+										Don't have an account yet?{' '}
+										<Link to={'/sell/signup'}>
+											<span style={{ color: 'black' }}>
+												Sign up
+											</span>
+										</Link>
+									</Typography>
+									<Typography sx={{ marginBottom: '1rem' }}>
+										<span
+											onClick={(event) =>
+												setIsShownForgot(!isShownForgot)
+											}
+											style={{ cursor: 'pointer' }}
+										>
+											Forgot password?
+										</span>
+									</Typography>
+									{isShownForgot && (
+										<>
+											<Grid>
+												<Grid item>
+													<TextField
+														label="Enter email to reset password"
+														placeholder="Enter email"
+														type="email"
+														required
+														value={resetMail}
+														onChange={(e) =>
+															setResetMail(
+																e.target.value
+															)
+														}
+													/>
+												</Grid>
+												<Grid item>
+													<FormControl>
+														<Button
+															type="submit"
+															color="primary"
+															variant="contained"
+															fullWidth
+															style={btnstyle}
+															onClick={(e) =>
+																handleResetPassword(
+																	e
+																)
+															}
+														>
+															Reset
+														</Button>
+													</FormControl>
+												</Grid>
+											</Grid>
+											{isShownResetAlert && (
+												<Alert severity="info">
+													Reset email sent!
+												</Alert>
+											)}
+										</>
+									)}
+									{error && (
+										<Alert severity="error">{error}</Alert>
+									)}
+									<Typography sx={{ marginBottom: '8rem' }} />
+								</Grid>
+							</Box>
+						</Box>
+					</Paper>
 				</CustomBox>
 			</Container>
 		</Box>
