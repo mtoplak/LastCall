@@ -39,6 +39,7 @@ function PastOrders() {
 
 	return (
 		<>
+		<NavbarB />
 			<Box
 				sx={{
 					backgroundColor: '#f2f2f2',
@@ -46,7 +47,7 @@ function PastOrders() {
 					py:2
 				}}
 			>
-				<NavbarB />
+				
 				<Container>
 					<Typography variant="h4" component="h1" mt={4} mb={2}>
 						Past Orders

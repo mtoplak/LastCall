@@ -34,11 +34,19 @@ const SellerProducts: React.FC<SellerProductsProps> = ({ sellerId }) => {
 	}, []);
 
 	return (
-		<Grid container spacing={2} sx={{ justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
+		<Grid
+			container
+			spacing={2}
+			sx={{
+				justifyContent: 'center',
+				alignItems: 'center',
+				flexWrap: 'wrap',
+			}}
+		>
 			{products.length > 0 ? (
 				products.map((drink) => (
-					<Box sx={{mx: 1}} key={drink._id}>
-						<HouseBox >
+					<Box sx={{ mx: 1 }} key={drink._id}>
+						<HouseBox>
 							<Link to={`/product/${drink._id}`}>
 								<ImgContainer>
 									<Image
@@ -57,9 +65,32 @@ const SellerProducts: React.FC<SellerProductsProps> = ({ sellerId }) => {
 										{drink.title}
 									</Typography>
 								</Link>
-								<Typography variant="body1" sx={{ my: 1 }}>
-									Price: {drink.price.toFixed(2)}€
-								</Typography>
+								<Box sx={{ display: 'flex', alignItems: 'center' }}>
+								{drink.actualPrice !== drink.price ? (
+									<>
+										<Typography
+											variant="body1"
+											sx={{
+												textDecoration: 'line-through',
+												color: 'text.secondary',
+												mr: 1,
+											}}
+										>
+											{drink.actualPrice.toFixed(2)} €
+										</Typography>
+										<Typography
+											variant="body1"
+											sx={{ color: 'error.main' }}
+										>
+											{drink.price.toFixed(2)} €
+										</Typography>
+									</>
+								) : (
+									<Typography variant="body1">
+										{drink.actualPrice.toFixed(2)} €
+									</Typography>
+								)}
+								</Box>
 								<Box
 									sx={{
 										display: 'flex',

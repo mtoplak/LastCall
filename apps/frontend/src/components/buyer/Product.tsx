@@ -7,10 +7,12 @@ import {
 	CardContent,
 	Container,
 	Divider,
+	Grid,
 	IconButton,
 	List,
 	ListItem,
 	ListItemText,
+	Paper,
 	TextField,
 	Typography,
 } from '@mui/material';
@@ -102,36 +104,13 @@ function Product() {
 	};
 
 	return (
-		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
+		<Box sx={{ backgroundColor: '#f2f2f2' }}>
 			{role === 'seller' ? <NavbarS /> : <NavbarB />}
-			<Container style={{ paddingBottom: '3rem' }}>
-				{showAlert && (
-					<Alert
-						severity="success"
-						style={{ marginTop: '1rem' }}
-						action={
-							<IconButton
-								aria-label="close"
-								color="inherit"
-								size="small"
-								onClick={() => setShowAlert(false)}
-							>
-								<CloseOutlinedIcon fontSize="inherit" />
-							</IconButton>
-						}
-					>
-						<AlertTitle>Product added to cart</AlertTitle>
-						Go to{' '}
-						<Link to="/cart">
-							<span className="blackLink">cart</span>
-						</Link>{' '}
-						to checkout.
-					</Alert>
-				)}
-				{showWarning && (
+			<Container style={{ paddingBottom: '3rem' }} sx={{ mt: 5 }}>
+				{!(role === 'seller' || role === 'buyer') && (
 					<Alert
 						severity="error"
-						style={{ marginTop: '1rem' }}
+						style={{ marginBottom: '3rem' }}
 						action={
 							<IconButton
 								aria-label="close"
@@ -155,25 +134,25 @@ function Product() {
 						.
 					</Alert>
 				)}
-				<CustomBox>
-					<Box sx={{ flex: '1.25' }}>
-						<img
-							src={drink?.picture}
-							alt="heroImg"
-							style={{ maxWidth: '100%', marginTop: '7rem' }}
-						/>
-					</Box>
-
-					<Box
-						sx={{
-							flex: '1',
-							marginTop: '7rem',
-							minHeight: '52vh',
-							marginBottom: '10rem',
-						}}
-					>
-						<Card>
-							<CardContent>
+				<Paper sx={{ mb: 2 }}>
+					<Grid container spacing={2}>
+						<Grid item md={5} xs={12}>
+							<Box sx={{ my: '1rem', mx: '1rem' }}>
+								<img
+									src={drink?.picture}
+									alt="heroImg"
+									style={{ maxWidth: '100%' }}
+								/>
+							</Box>
+						</Grid>
+						<Divider orientation="vertical" flexItem />
+						<Grid item md={6} xs={12} sx={{ my: '1rem' }}>
+							<Box
+								sx={{
+									minHeight: '52vh',
+									mx: '1rem',
+								}}
+							>
 								<Typography
 									variant="h4"
 									component="span"
@@ -181,9 +160,42 @@ function Product() {
 								>
 									{drink?.title}
 								</Typography>
-								<Typography color="textSecondary" gutterBottom>
-									Price: {drink?.price.toFixed(2)} €
-								</Typography>
+								<Box
+									sx={{
+										display: 'flex',
+										alignItems: 'center',
+									}}
+								>
+									{drink.actualPrice !== drink.price ? (
+										<>
+											<Typography
+												variant="body1"
+												sx={{
+													textDecoration:
+														'line-through',
+													color: 'text.secondary',
+													mr: 1,
+												}}
+												gutterBottom
+											>
+												Price:{' '}
+												{drink.actualPrice.toFixed(2)} €
+											</Typography>
+											<Typography
+												variant="body1"
+												sx={{ color: 'error.main' }}
+												gutterBottom
+											>
+												{drink.price.toFixed(2)} €
+											</Typography>
+										</>
+									) : (
+										<Typography variant="body1">
+											Price:{' '}
+											{drink.actualPrice.toFixed(2)} €
+										</Typography>
+									)}
+								</Box>
 								<Divider />
 								<Typography
 									variant="h6"
@@ -217,7 +229,7 @@ function Product() {
 								<Divider />
 								<br />
 								{drink?.discount !== 0 && (
-									<Alert severity="success" sx={{ mb: 2 }}>
+									<Alert severity="info" sx={{ mb: 2 }}>
 										There is currently a {drink?.discount} %
 										discount for this product!
 										<br />
@@ -268,6 +280,38 @@ function Product() {
 										</Typography>
 									</Box>
 								)}
+								{showAlert && (
+									<Alert
+										severity="success"
+										style={{
+											marginTop: '1rem',
+											marginBottom: '1rem',
+										}}
+										action={
+											<IconButton
+												aria-label="close"
+												color="inherit"
+												size="small"
+												onClick={() =>
+													setShowAlert(false)
+												}
+											>
+												<CloseOutlinedIcon fontSize="inherit" />
+											</IconButton>
+										}
+									>
+										<AlertTitle>
+											Product added to cart
+										</AlertTitle>
+										Go to{' '}
+										<Link to="/cart">
+											<span className="blackLink">
+												cart
+											</span>
+										</Link>{' '}
+										to checkout.
+									</Alert>
+								)}
 								<Divider sx={{ mb: 1 }} />
 								<Typography
 									variant="h6"
@@ -290,10 +334,10 @@ function Product() {
 									{drink?.seller.city},{' '}
 									{drink?.seller.country}
 								</Typography>
-							</CardContent>
-						</Card>
-					</Box>
-				</CustomBox>
+							</Box>
+						</Grid>
+					</Grid>
+				</Paper>
 			</Container>
 		</Box>
 	);

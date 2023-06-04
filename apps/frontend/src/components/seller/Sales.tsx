@@ -250,7 +250,9 @@ function Sales() {
 														)}
 													>
 														<b>
-															{product.actualPrice}{' '}
+															{product.actualPrice.toFixed(
+																2
+															)}{' '}
 															€
 														</b>
 													</Typography>

@@ -9,6 +9,7 @@ import {
 	InputLabel,
 	Select,
 	MenuItem,
+	Divider,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import api from '../../services/api';
@@ -164,6 +165,7 @@ const DrinkS: React.FC<DrinkProps> = ({
 						<Image src={drink.picture} alt={drink.title} />
 					</ImgContainer>
 				</Link>
+				<Divider />
 				<InfoBox>
 					<Link to={`/product/${drink._id}`}>
 						<Typography
