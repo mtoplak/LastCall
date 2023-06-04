@@ -17,9 +17,11 @@ import { getOrderStatusColor } from 'utils/getOrderStatusColor';
 import { useUserAuth } from 'context/AuthContext';
 import NavbarS from 'components/seller/NavbarS';
 import { OrderStatus } from 'enums/order.enum';
+import Page404 from 'components/404/Page404';
 
 function SingleOrder() {
 	const [order, setOrder] = useState<IOrder>();
+	const [fetchError, setFetchError] = useState(false);
 	const { id } = useParams<{ id: string }>();
 	const { role, user } = useUserAuth();
 
@@ -34,6 +36,7 @@ function SingleOrder() {
 				});
 				setOrder(response.data);
 			} catch (error) {
+				setFetchError(true);
 				throw error;
 			}
 		};
@@ -44,6 +47,10 @@ function SingleOrder() {
 		if (!order) return;
 		document.title = `Order ${order?.uid} details`;
 	}, [order?.uid]);
+
+	if (fetchError) {
+		return <Page404 notFound="Order" />;
+	}
 
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>

@@ -28,6 +28,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
 import LanguageIcon from '@mui/icons-material/Language';
+import Page404 from 'components/404/Page404';
 
 function SellerPage() {
 	const [seller, setSeller] = useState<ISeller>();
@@ -51,10 +52,12 @@ function SellerPage() {
 		const fetchData = async () => {
 			try {
 				const response = await api.get('/sellers/' + id);
-				console.log(response.data);
+				//console.log(response.data);
 				setSeller(response.data);
-			} catch (error) {
-				setFetchError(true);
+			} catch (error: any) {
+				if (error.response.status === 404) {
+					setFetchError(true);
+				}
 				throw error;
 			}
 		};
@@ -66,17 +69,13 @@ function SellerPage() {
 	}, [seller]);
 
 	if (fetchError) {
-		return <>Seller Not found</>; // TODO lepši ui
-	}
-
-	if (!seller) {
-		return null; // Render a loader or placeholder here if desired
+		return <Page404 notFound="Seller" />;
 	}
 
 	const handleSendMessage = async () => {
 		try {
 			const response = await api.post('/contact/sendMessage', {
-				seller: seller.email,
+				seller: seller?.email,
 				buyer: user.email,
 				message: message,
 			});
