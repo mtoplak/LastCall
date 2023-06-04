@@ -214,7 +214,7 @@ function SellerPage() {
 			<Box sx={{ backgroundColor: '#f2f2f2', py: 3 }}>
 				<Container>
 					<PropertiesTextBox>
-						<Typography
+						<Box
 							sx={{
 								color: '#000339',
 								fontSize: '35px',
@@ -223,7 +223,7 @@ function SellerPage() {
 						>
 							Our products
 							<SellerProducts sellerId={id || ''} />
-						</Typography>
+						</Box>
 					</PropertiesTextBox>
 				</Container>
 			</Box>

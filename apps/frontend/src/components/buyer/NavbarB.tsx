@@ -16,6 +16,8 @@ import { useUserAuth } from 'context/AuthContext';
 import { darkTheme } from 'assets/styles/styles';
 import { useCartContext } from 'context/CartContext';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Badge from '@mui/material/Badge';
 
 function NavbarB() {
 	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -89,7 +91,7 @@ function NavbarB() {
 								onClick={handleOpenNavMenu}
 								color="inherit"
 							>
-								 <MoreVertIcon />
+								<MoreVertIcon />
 							</IconButton>
 							<Menu
 								id="menu-appbar"
@@ -110,29 +112,29 @@ function NavbarB() {
 								}}
 							>
 								<Link to={'/products'}>
-								<Button
-									onClick={handleCloseNavMenu}
-									sx={{
-										my: 2,
-										color: 'white',
-										display: 'block',
-									}}
-								>
-									Products
-								</Button>
-							</Link>
-							<Link to="/suppliers">
-								<Button
-									onClick={handleCloseNavMenu}
-									sx={{
-										my: 2,
-										color: 'white',
-										display: 'block',
-									}}
-								>
-									Suppliers
-								</Button>
-							</Link>
+									<Button
+										onClick={handleCloseNavMenu}
+										sx={{
+											my: 2,
+											color: 'white',
+											display: 'block',
+										}}
+									>
+										Products
+									</Button>
+								</Link>
+								<Link to="/suppliers">
+									<Button
+										onClick={handleCloseNavMenu}
+										sx={{
+											my: 2,
+											color: 'white',
+											display: 'block',
+										}}
+									>
+										Suppliers
+									</Button>
+								</Link>
 							</Menu>
 						</Box>
 						<Typography
@@ -185,16 +187,23 @@ function NavbarB() {
 							</Link>
 						</Box>
 						{user && role === 'buyer' && (
-							<Link to={'/cart'}>
+							<Link to={'/cart'} onClick={handleCloseNavMenu}>
 								<Button
-									onClick={handleCloseNavMenu}
 									sx={{
 										my: 2,
 										color: 'white',
-										display: 'block',
+										display: 'flex',
+										alignItems: 'center',
 									}}
 								>
-									Cart ({cartProducts.length})
+									<Badge
+										badgeContent={cartProducts.length}
+										color="error"
+										variant="standard"
+										sx={{ marginRight: '0.5rem' }}
+									>
+										<ShoppingCartIcon />
+									</Badge>
 								</Button>
 							</Link>
 						)}
