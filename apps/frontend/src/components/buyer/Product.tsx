@@ -165,7 +165,7 @@ function Product() {
 										alignItems: 'center',
 									}}
 								>
-									{drink.actualPrice !== drink.price ? (
+									{drink?.actualPrice !== drink?.price ? (
 										<>
 											<Typography
 												variant="body1"
@@ -178,20 +178,20 @@ function Product() {
 												gutterBottom
 											>
 												Price:{' '}
-												{drink.actualPrice.toFixed(2)} €
+												{drink?.actualPrice.toFixed(2)} €
 											</Typography>
 											<Typography
 												variant="body1"
 												sx={{ color: 'error.main' }}
 												gutterBottom
 											>
-												{drink.price.toFixed(2)} €
+												{drink?.price.toFixed(2)} €
 											</Typography>
 										</>
 									) : (
 										<Typography variant="body1">
 											Price:{' '}
-											{drink.actualPrice.toFixed(2)} €
+											{drink?.actualPrice.toFixed(2)} €
 										</Typography>
 									)}
 								</Box>
