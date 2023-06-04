@@ -37,7 +37,7 @@ const SellerProducts: React.FC<SellerProductsProps> = ({ sellerId }) => {
 		<Grid container spacing={2} sx={{ justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
 			{products.length > 0 ? (
 				products.map((drink) => (
-					<Box sx={{mx: 1}}>
+					<Box sx={{mx: 1}} key={drink._id}>
 						<HouseBox >
 							<Link to={`/product/${drink._id}`}>
 								<ImgContainer>

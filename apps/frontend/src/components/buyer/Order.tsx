@@ -80,7 +80,7 @@ const Order: React.FC<OrderProps> = ({ order }) => {
 				<Divider />
 				<Grid
 					container
-					sx={{ mt: 2, display: 'flex', flexWrap: 'wrap' }}
+					sx={{ mt: 2, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}
 				>
 					<Grid item xs={12} sm={6}>
 						<Typography sx={{ width: '33%', flexShrink: 0 }}>
@@ -88,7 +88,7 @@ const Order: React.FC<OrderProps> = ({ order }) => {
 							{order.uid}
 						</Typography>
 					</Grid>
-					<Grid item xs={12} sm={6}>
+					<Grid item xs={12} sm={2} sx={{justifyContent: 'flex-end'}}>
 						<Link to={`/order/${order._id}`} key={order._id}>
 							<Button
 								variant="outlined"
@@ -104,7 +104,7 @@ const Order: React.FC<OrderProps> = ({ order }) => {
 									},
 								}}
 							>
-								Order details
+								Details
 							</Button>
 						</Link>
 					</Grid>

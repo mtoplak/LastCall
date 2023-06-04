@@ -405,7 +405,7 @@ function Cart() {
 	const renderGroupedProducts = (groupedProducts: SellerGroup) => {
 		return Object.entries(groupedProducts).map(([seller, products]) => (
 			<Grid container spacing={2} key={seller}>
-				<Grid item xs={8}>
+				<Grid item xs={12} md={8}>
 					<Typography variant="h6" component="h2" mb={2}>
 						Seller: {products[0].product.seller.title}
 					</Typography>
@@ -419,7 +419,7 @@ function Cart() {
 							}}
 						>
 							<Grid container spacing={2}>
-								<Grid item xs={3}>
+								<Grid item xs={12} md={3}>
 									<Link to={`/product/${item.product._id}`}>
 										<CardMedia
 											component="img"
@@ -428,10 +428,10 @@ function Cart() {
 										/>
 									</Link>
 								</Grid>
-								<Grid item xs={6}>
+								<Grid item xs={12} md={6}>
 									<CardContent>
 										<Typography
-											variant="subtitle1"
+											variant="h6"
 											component="h2"
 										>
 											<Link
@@ -451,7 +451,6 @@ function Cart() {
 										{item.product?.discount !== 0 && (
 											<Alert
 												severity="success"
-												sx={{ mb: 2 }}
 											>
 												There is currently a{' '}
 												{item.product?.discount} %
@@ -461,7 +460,7 @@ function Cart() {
 										)}
 									</CardContent>
 								</Grid>
-								<Grid item xs={3}>
+								<Grid item xs={12} md={3}>
 									<CardActions>
 										<Select
 											value={item.quantity}
@@ -504,7 +503,7 @@ function Cart() {
 						</Card>
 					))}
 				</Grid>
-				<Grid item xs={4} mt={6}>
+				<Grid item xs={12} md={4} sx={{mt:1, mb: 8}}>
 					<Card>
 						<CardContent>
 							<Typography variant="h6" component="h2" mb={2}>

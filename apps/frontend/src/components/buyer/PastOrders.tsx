@@ -43,7 +43,7 @@ function PastOrders() {
 				sx={{
 					backgroundColor: '#f2f2f2',
 					minHeight: '100vh',
-					minWidth: '100vh',
+					py:2
 				}}
 			>
 				<NavbarB />
@@ -57,9 +57,8 @@ function PastOrders() {
 						</Typography>
 					) : (
 						pastOrders.map((order, index) => (
-							<Grid item xs={8} key={index}>
+							<Grid item xs={8} key={index} sx={{mt:2}}>
 								<Order order={order} />
-								<Divider sx={{ mt: 2, mb: 2 }} />
 							</Grid>
 						))
 					)}
