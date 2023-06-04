@@ -11,7 +11,6 @@ import PropertiesTextBox from 'components/ui/PropertiesTextBox';
 
 const Products = () => {
 	const [drinks, setDrinks] = useState<IDrink[]>([]);
-	//console.log(drinks);
 	// filtering
 	const [filterName, setFilterName] = useState<string>('');
 	const [filterLocation, setFilterLocation] = useState<string>('any');
@@ -80,14 +79,14 @@ const Products = () => {
 				</PropertiesTextBox>
 				<Box>
 					<Card>
-					<SearchProductsInput
-						setFilterName={setFilterName}
-						setFilterLocation={setFilterLocation}
-						setFilterType={setFilterType}
-						filterLocation={filterLocation}
-						filterName={filterName}
-						filterType={filterType}
-					/>
+						<SearchProductsInput
+							setFilterName={setFilterName}
+							setFilterLocation={setFilterLocation}
+							setFilterType={setFilterType}
+							filterLocation={filterLocation}
+							filterName={filterName}
+							filterType={filterType}
+						/>
 					</Card>
 				</Box>
 				<PropertiesBox>
@@ -96,11 +95,11 @@ const Products = () => {
 						filterName !== '' ||
 						filterLocation !== 'any') ? (
 						filteredDrinks.map((drink) => (
-								<Link to={`/product/${drink._id}`} key={drink._id}>
-									<DrinkContainer>
-										<Drink drink={drink} />
-									</DrinkContainer>
-								</Link>
+							<Link to={`/product/${drink._id}`} key={drink._id}>
+								<DrinkContainer>
+									<Drink drink={drink} />
+								</DrinkContainer>
+							</Link>
 						))
 					) : (filterType !== 'any' ||
 							filterName !== '' ||
@@ -111,9 +110,7 @@ const Products = () => {
 						drinks.map((drink) => (
 							<Link to={`/product/${drink._id}`} key={drink._id}>
 								<DrinkContainer>
-								
 									<Drink drink={drink} />
-									
 								</DrinkContainer>
 							</Link>
 						))

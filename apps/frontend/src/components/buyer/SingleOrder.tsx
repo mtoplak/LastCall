@@ -22,9 +22,11 @@ import NavbarS from 'components/seller/NavbarS';
 import { OrderStatus } from 'enums/order.enum';
 import { style } from 'assets/styles/styles';
 import { IRating } from 'models/rating';
+import Page404 from 'components/404/Page404';
 
 function SingleOrder() {
 	const [order, setOrder] = useState<IOrder>();
+	const [fetchError, setFetchError] = useState(false);
 	const { id } = useParams<{ id: string }>();
 	const { role, user } = useUserAuth();
 	const [open, setOpen] = React.useState(false);
@@ -49,6 +51,7 @@ function SingleOrder() {
 				setRated(!!response.data?.score); // Check if score exists and set `rated` accordingly
 				setScore(parseFloat(response.data?.score) || 1);
 			} catch (error) {
+				setFetchError(true);
 				throw error;
 			}
 		};
@@ -59,7 +62,11 @@ function SingleOrder() {
 	useEffect(() => {
 		if (!order) return;
 		document.title = `Order ${order?.uid} details`;
-	}, [order?.uid]);
+	}, [order?.uid, order]);
+
+	if (fetchError) {
+		return <Page404 notFound="Order" />;
+	}
 
 	const handleRating = async () => {
 		if (score === null) {

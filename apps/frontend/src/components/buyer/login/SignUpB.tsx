@@ -17,7 +17,6 @@ import {
 	Alert,
 } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import heroImg from '../../../assets/images/homepageDrink.png';
 import { useState } from 'react';
 import { useUserAuth } from 'context/AuthContext';
 import api from 'services/api';
@@ -61,7 +60,6 @@ const SignUpB = () => {
 		}
 	};
 
-	//context
 	const { signUp, user } = useUserAuth();
 
 	const handleSubmit = async (e: any) => {
@@ -85,7 +83,6 @@ const SignUpB = () => {
 						...newUserData,
 						// targetedMarket: targetedMarkets,
 					});
-					//console.log(response);
 					console.log(response.data);
 					navigate('/buy/signin');
 				} catch (error: any) {
