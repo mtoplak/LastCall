@@ -15,7 +15,7 @@ import heroImg from '../../../assets/images/homepageDrink.png';
 import { useState } from 'react';
 import { useUserAuth } from 'context/AuthContext';
 import CustomBox from 'components/ui/CustomBox';
-import { btnstyle, paperStyle } from 'assets/styles/styles';
+import { btnstyle } from 'assets/styles/styles';
 import api from 'services/api';
 
 const SignInB = () => {
@@ -25,11 +25,11 @@ const SignInB = () => {
 	const [isShownForgot, setIsShownForgot] = useState(false);
 	const [resetMail, setResetMail] = useState('');
 	const [isShownResetAlert, setIsShownResetAlert] = useState(false);
+	const [link, setLink] = useState<any>();
 
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	//context
 	const { signIn, resetPassword } = useUserAuth();
 
 	const handleResetPassword = async (e: any) => {
@@ -41,11 +41,12 @@ const SignInB = () => {
 		}
 	};
 
-	const handleSubmitSign = async (e: any) => {
+	const handleSubmitSignIn = async (e: any) => {
 		setError('');
+		setLink(null);
 		e.preventDefault();
 		try {
-			const signUpResponse = await signIn(email, password);
+			const signUpResponse = await signIn(email, password, 'buyer');
 			//console.log(signUpResponse);
 			if (signUpResponse.success) {
 				// Access the response object if needed: signUpResponse.response
@@ -65,9 +66,12 @@ const SignInB = () => {
 					: '/';
 				navigate(redirectPath);
 			} else {
+				//console.log(signUpResponse);
+				setLink(signUpResponse.link);
 				setError(signUpResponse.error.message);
 			}
 		} catch (error: any) {
+			//console.log(error);
 			setError(error.message);
 		}
 	};
@@ -129,7 +133,7 @@ const SignInB = () => {
 												backgroundColor: 'lightblue',
 											}}
 										></Avatar>
-										<h2>Sign In As A Buyer</h2>
+										<h2>Sign In As Buyer</h2>
 									</Grid>
 									<FormControl>
 										<TextField
@@ -159,7 +163,9 @@ const SignInB = () => {
 											variant="contained"
 											style={btnstyle}
 											fullWidth
-											onClick={(e) => handleSubmitSign(e)}
+											onClick={(e) =>
+												handleSubmitSignIn(e)
+											}
 										>
 											Sign in
 										</Button>
@@ -226,7 +232,9 @@ const SignInB = () => {
 										</>
 									)}
 									{error && (
-										<Alert severity="error">{error}</Alert>
+										<Alert severity="error">
+											{error} {link} page.
+										</Alert>
 									)}
 									<Typography sx={{ marginBottom: '8rem' }} />
 								</Grid>

@@ -16,7 +16,7 @@ const DrinkB: React.FC<DrinkProps> = ({ drink }) => {
 	return (
 		<HouseBox>
 		<ImgContainer>
-		  <Image src={drink.picture} alt="housePhoto" />
+		  <Image src={drink.picture} alt={drink.title} />
 		</ImgContainer>
 		<Divider />
 		<InfoBox>

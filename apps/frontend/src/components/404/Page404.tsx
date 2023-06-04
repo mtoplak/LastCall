@@ -18,7 +18,7 @@ const Page404: React.FC<Page404Props> = ({ notFound, previousPage }) => {
 	const { role } = useUserAuth();
 	useEffect(() => {
 		document.title = notFound ? `${notFound} not found` : 'Page not found';
-	}, []);
+	}, [notFound]);
 
 	return (
 		<>

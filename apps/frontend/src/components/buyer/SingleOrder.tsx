@@ -46,7 +46,7 @@ function SingleOrder() {
 	useEffect(() => {
 		if (!order) return;
 		document.title = `Order ${order?.uid} details`;
-	}, [order?.uid]);
+	}, [order?.uid, order]);
 
 	if (fetchError) {
 		return <Page404 notFound="Order" />;

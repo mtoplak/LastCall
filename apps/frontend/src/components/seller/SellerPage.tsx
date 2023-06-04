@@ -17,14 +17,11 @@ import { useParams } from 'react-router-dom';
 import api from 'services/api';
 import sellerProfile from '../../assets/images/sellerProfile.png';
 import NavbarB from 'components/buyer/NavbarB';
-import Title from 'components/ui/Title';
 import PropertiesTextBox from 'components/ui/PropertiesTextBox';
-import CustomBox from 'components/ui/CustomBox';
 import SellerProducts from './SellerProducts';
-import { checkoutButton, style } from 'assets/styles/styles';
+import { style } from 'assets/styles/styles';
 import { useUserAuth } from 'context/AuthContext';
 import NavbarS from './NavbarS';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
 import LanguageIcon from '@mui/icons-material/Language';
@@ -142,7 +139,14 @@ function SellerPage() {
 							please contact us!
 						</Typography>
 						<Divider sx={{ mb: 1 }} />
-						<Grid container spacing={2} sx={{display: 'flex', justifyContent: 'space-between'}}>
+						<Grid
+							container
+							spacing={2}
+							sx={{
+								display: 'flex',
+								justifyContent: 'space-between',
+							}}
+						>
 							<Grid item>
 								<Typography
 									variant="body2"
