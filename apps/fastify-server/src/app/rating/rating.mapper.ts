@@ -9,6 +9,7 @@ export class RatingMapper {
       id: rating.id,
       seller: rating.seller,
       buyer: rating.buyer,
+      order: rating.order,
       score: rating.score
     };
     return response;

@@ -10,10 +10,15 @@ import {
 	sendEmailVerification,
 } from 'firebase/auth';
 import api from 'services/api';
+import { Link } from 'react-router-dom';
 
 const AuthContext = createContext({
 	signUp: async (email: string, password: string): Promise<any> => {},
-	signIn: async (email: string, password: string): Promise<any> => {},
+	signIn: async (
+		email: string,
+		password: string,
+		role: string
+	): Promise<any> => {},
 	logOut: async (): Promise<any> => {},
 	resetPassword: async (email: string): Promise<any> => {},
 	verifyEmail: async (): Promise<any> => {},
@@ -57,7 +62,8 @@ export function AuthContextProvider({ children }: { children: any }) {
 		}
 	}
 
-	async function signIn(email: string, password: string) {
+	async function signIn(email: string, password: string, role: string) {
+		let link;
 		try {
 			// check if email is verified first
 			/*const isEmailVerified = user?.emailVerified;
@@ -80,9 +86,26 @@ export function AuthContextProvider({ children }: { children: any }) {
 					const response = await api.post('/email', {
 						email: userEmail,
 					});
-					console.log(response.data);
-					setRole(response.data);
-					setUser({ ...currentUser, role: response.data });
+					//console.log(response.data);
+					// check if user has signed in on the correct page
+					if (response.data === role) {
+						setRole(response.data);
+						setUser({ ...currentUser, role: response.data });
+					} else {
+						link =
+							response.data === 'buyer' ? (
+								<Link to={'/buy/signin'} className="blackLink">
+									buyer
+								</Link>
+							) : (
+								<Link to={'/sell/signin'} className="blackLink">
+									seller
+								</Link>
+							);
+						throw new Error(
+							`You're ${response.data}! Please sign in on`
+						);
+					}
 				} catch (error: any) {
 					throw new Error(error.message);
 				}
@@ -95,7 +118,7 @@ export function AuthContextProvider({ children }: { children: any }) {
 				throw new Error('User does not exist!');
 			}
 		} catch (error) {
-			return { success: false, error };
+			return { success: false, error, link };
 		}
 	}
 
@@ -134,7 +157,6 @@ export function AuthContextProvider({ children }: { children: any }) {
 				  // Handle any errors that occurred during the token retrieval
 				}
 			  }*/
-			  
 
 			if (currentUser?.emailVerified) {
 				setIsLoading(true);

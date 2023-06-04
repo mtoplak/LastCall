@@ -7,6 +7,9 @@ import {
 	Card,
 	Divider,
 	CardMedia,
+	Button,
+	Modal,
+	Rating,
 } from '@mui/material';
 import { IOrder } from 'models/order';
 import { useParams } from 'react-router-dom';
@@ -17,14 +20,25 @@ import { getOrderStatusColor } from 'utils/getOrderStatusColor';
 import { useUserAuth } from 'context/AuthContext';
 import NavbarS from 'components/seller/NavbarS';
 import { OrderStatus } from 'enums/order.enum';
+import { style } from 'assets/styles/styles';
+import { IRating } from 'models/rating';
+import Page404 from 'components/404/Page404';
 
 function SingleOrder() {
 	const [order, setOrder] = useState<IOrder>();
+	const [fetchError, setFetchError] = useState(false);
 	const { id } = useParams<{ id: string }>();
 	const { role, user } = useUserAuth();
+	const [open, setOpen] = React.useState(false);
+	const handleOpen = () => setOpen(true);
+	const handleClose = () => setOpen(false);
+	const [score, setScore] = React.useState<number>(1); // Set initial value as a number
+	const [error, setError] = useState('');
+	const [rated, setRated] = useState(false);
 
 	useEffect(() => {
 		if (!user) return;
+
 		const fetchOrder = async () => {
 			try {
 				const response = await api.get('/orders/' + id, {
@@ -32,18 +46,83 @@ function SingleOrder() {
 						Authorization: user?.stsTokenManager?.accessToken,
 					},
 				});
+
 				setOrder(response.data);
+				setRated(!!response.data?.score); // Check if score exists and set `rated` accordingly
+				setScore(parseFloat(response.data?.score) || 1);
 			} catch (error) {
+				setFetchError(true);
 				throw error;
 			}
 		};
+
 		fetchOrder();
 	}, [id, user]);
 
 	useEffect(() => {
 		if (!order) return;
 		document.title = `Order ${order?.uid} details`;
-	}, [order?.uid]);
+	}, [order?.uid, order]);
+
+	if (fetchError) {
+		return <Page404 notFound="Order" />;
+	}
+
+	const handleRating = async () => {
+		if (score === null) {
+			return;
+		}
+		try {
+			await api.post(
+				`/rating`,
+				{
+					score: score,
+					seller: order?.seller.email,
+					order: order?._id,
+					buyer: user.email,
+				},
+				{
+					headers: {
+						Authorization: user?.stsTokenManager?.accessToken,
+					},
+				}
+			);
+			handleClose();
+			console.log(score);
+			console.log(user.email);
+			console.log(order?._id);
+			setRated(true);
+		} catch (error: any) {
+			setError(error.response.data.message);
+		}
+	};
+
+	useEffect(() => {
+		const fetchRating = async () => {
+			try {
+				const response = await api.get(`/rating/order/${order?._id}`);
+				console.log(response.data);
+
+				if (response.data) {
+					setScore(response.data.score);
+				}
+			} catch (error: any) {
+				setError(error.response.data.message);
+			}
+		};
+
+		if (order?._id && !rated) {
+			fetchRating();
+		}
+	}, [order?._id, rated]);
+
+	const getRating = async () => {
+		try {
+			await api.get(`/rating/order/${order?._id}`);
+		} catch (error: any) {
+			setError(error.response.data.message);
+		}
+	};
 
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
@@ -101,6 +180,24 @@ function SingleOrder() {
 									<Typography variant="h6" sx={{ mb: 4 }}>
 										<b>Order ID:</b> {order.uid}
 									</Typography>
+									<Button
+										sx={{ mb: 4 }}
+										onClick={handleOpen}
+										disabled={rated}
+									>
+										{rated ? (
+											<>
+												You already rated this seller:{' '}
+												<Rating
+													name="read-only"
+													value={score}
+													readOnly
+												/>
+											</>
+										) : (
+											<>Rate the seller</>
+										)}
+									</Button>
 									<Divider />
 									<Typography
 										variant="h6"
@@ -268,6 +365,32 @@ function SingleOrder() {
 					)}
 				</Grid>
 			</Container>
+			<Modal
+				open={open}
+				onClose={handleClose}
+				aria-labelledby="modal-modal-title"
+				aria-describedby="modal-modal-description"
+			>
+				<Box sx={style}>
+					<Typography
+						id="modal-modal-title"
+						variant="h6"
+						component="h2"
+					>
+						Rate your experience with this seller
+					</Typography>
+					<Rating
+						name="simple-controlled"
+						value={score}
+						onChange={(event, newValue) => {
+							if (newValue) {
+								setScore(newValue);
+							}
+						}}
+					/>{' '}
+					<Button onClick={handleRating}>Confirm</Button>
+				</Box>
+			</Modal>
 		</Box>
 	);
 }

@@ -1,16 +1,8 @@
 import { IDrink } from 'models/drink';
 import React, { useEffect, useState } from 'react';
 import api from 'services/api';
-import {
-	Grid,
-	Typography,
-	Card,
-	CardMedia,
-	CardContent,
-	Box,
-} from '@mui/material';
+import { Grid, Typography, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
-import DrinkContainer from 'components/ui/DrinkContainer';
 import HouseBox from 'components/ui/HouseBox';
 import ImgContainer from 'components/ui/ImgContainer';
 import InfoBox from 'components/ui/InfoBox';
@@ -26,12 +18,12 @@ const SellerProducts: React.FC<SellerProductsProps> = ({ sellerId }) => {
 	useEffect(() => {
 		const fetchSellerProducts = async () => {
 			const response = await api.get(`/sellers/${sellerId}/products`);
-			console.log(response.data);
+			//console.log(response.data);
 			setProducts(response.data);
 		};
 
 		fetchSellerProducts();
-	}, []);
+	}, [sellerId]);
 
 	return (
 		<Grid

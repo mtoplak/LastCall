@@ -3,6 +3,7 @@ import { Buyer } from '../buyers/buyers.model';
 import { Product, ProductSchema } from '../products/product.model';
 import { Seller } from '../sellers/sellers.model';
 import { OrderStatus } from './order-status.enum';
+import { Rating } from '../rating/rating.model';
 
 export const OrderSchema = new Schema({
   products: [
@@ -22,7 +23,8 @@ export const OrderSchema = new Schema({
   country: { type: String, required: true },
   status: { type: String, default: OrderStatus.PENDING, enum: Object.values(OrderStatus) },
   uid: { type: String, required: true },
-  coordinates: [{ type: Number }]
+  coordinates: [{ type: Number }],
+  score: { type: Schema.Types.ObjectId, ref: 'Seller' }
 });
 
 export interface Order extends Document {
@@ -39,6 +41,7 @@ export interface Order extends Document {
   status: OrderStatus;
   uid: string;
   coordinates: number[];
+  score: Rating;
 }
 
 export const OrderModel: Model<Order> = model<Order>('Order', OrderSchema);

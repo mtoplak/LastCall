@@ -57,7 +57,6 @@ export class DistanceController {
       sellerEmail,
       orderCoordinates,
     );
-    console.log(distance);
 
     if (distance > seller.maxDistance) {
       return false;

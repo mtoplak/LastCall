@@ -15,6 +15,7 @@ import { FirebaseTokenGuard } from '../guards/firebase-token-guard';
 import { RatingService } from './rating.service';
 import { CreateUpdateRatingDto } from './create-update-rating.dto';
 import { Rating } from './rating.model';
+import { Order } from '../orders/order.model';
 
 @Controller('rating')
 export class RatingController {
@@ -26,11 +27,13 @@ export class RatingController {
     @Body() createRatingDto: CreateUpdateRatingDto,
     @Body('seller') sellerEmail: string,
     @Body('buyer') buyerEmail: string,
+    @Body('order') orderId: string,
   ): Promise<Rating> {
     return this.ratingService.createRating(
       createRatingDto,
       sellerEmail,
       buyerEmail,
+      orderId
     );
   }
 
@@ -40,7 +43,7 @@ export class RatingController {
   }
 
   @Get(':id')
-  async getSinglerating(@Param('id') id: string): Promise<Rating> {
+  async getSingleRating(@Param('id') id: string): Promise<Rating> {
     return await this.ratingService.getSingleRating(id);
   }
 
@@ -59,4 +62,10 @@ export class RatingController {
     await this.ratingService.removeRating(id);
     return { success: true };
   }
+
+    @Get('/order/:id')
+  async getSingleRatingByOrder(@Param('id') id: string): Promise<number> {
+    return await this.ratingService.getSingleRatingByOrder(id);
+  }
+
 }

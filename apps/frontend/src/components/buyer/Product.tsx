@@ -28,6 +28,7 @@ import { useUserAuth } from 'context/AuthContext';
 import { useCartContext } from 'context/CartContext';
 import { isProductInArray } from 'utils/isProductInArray';
 import NavbarS from 'components/seller/NavbarS';
+import Page404 from 'components/404/Page404';
 
 function Product() {
 	const [drink, setDrink] = useState<IDrink>();
@@ -59,11 +60,7 @@ function Product() {
 	}, [drink]);
 
 	if (fetchError) {
-		return <>Product Not found</>;
-	}
-
-	if (!drink) {
-		return null; // Render a loader or placeholder here
+		return <Page404 notFound="Product" />;
 	}
 
 	const addToCart = async (event: MouseEvent<HTMLElement>) => {
@@ -92,10 +89,12 @@ function Product() {
 			);
 			setShowAlert(true);
 			if (!isProductInArray(cartProducts, id)) {
-				setCartProducts([
-					...cartProducts,
-					{ product: drink, quantity: quantity },
-				]);
+				if (drink) {
+					setCartProducts([
+						...cartProducts,
+						{ product: drink, quantity: quantity },
+					]);
+				}
 			}
 		} catch (error: any) {
 			console.error(error);

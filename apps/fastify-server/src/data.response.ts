@@ -1,5 +1,8 @@
 import { Buyer } from './app/buyers/buyers.model';
+import { OrderStatus } from './app/orders/order-status.enum';
+import { Order } from './app/orders/order.model';
 import { Product } from './app/products/product.model';
+import { Rating } from './app/rating/rating.model';
 import { Seller } from './app/sellers/sellers.model';
 
 export interface SuccessResponse {
@@ -63,6 +66,10 @@ export interface OrderResponse {
   address: string;
   city: string;
   country: string;
+  status: OrderStatus;
+  uid: string;
+  coordinates: number[];
+  score: Rating;
 }
 
 export interface SellerResponse {
@@ -88,5 +95,6 @@ export interface RatingResponse {
   id: string;
   seller: Seller;
   buyer: Buyer;
+  order: Order;
   score: number;
 }

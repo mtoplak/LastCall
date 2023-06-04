@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { SuccessResponse } from 'src/data.response';
 import { SellersRepository } from '../sellers/sellers.repository';
 import { SellersService } from '../sellers/sellers.service';
@@ -6,28 +6,51 @@ import { ProductsRepository } from '../products/products.repository';
 import { CreateUpdateRatingDto } from './create-update-rating.dto';
 import { Rating } from './rating.model';
 import { RatingRepository } from './rating.repository';
+import { OrdersService } from '../orders/orders.service';
+import { OrdersRepository } from '../orders/orders.repository';
+import { Order } from '../orders/order.model';
 //GET OCENO ENEGA SELLERJA (ID)
 //ZRACUNAJ AVERAGE SCORE
 
 @Injectable()
 export class RatingService {
   constructor(
-    private readonly productsRepository: ProductsRepository,
+    private readonly ordersRepository: OrdersRepository,
     private readonly sellersRepository: SellersRepository,
     private readonly sellersService: SellersService,
     private readonly ratingRepository: RatingRepository,
+    private readonly ordersService: OrdersService
   ) {}
 
   async createRating(
     ratingData: CreateUpdateRatingDto,
     sellerEmail: string,
     buyerEmail: string,
+    orderId: string,
   ): Promise<Rating> {
-    return await this.ratingRepository.create(
+    /*
+    if (orderId) {
+      const order = await this.ordersService.getSingleOrder(orderId);
+      if (order && order.score) {
+        throw new BadRequestException('Order already rated');
+      }
+    }
+*/
+    const rating = await this.ratingRepository.create(
       ratingData,
       sellerEmail,
       buyerEmail,
     );
+
+    if (orderId) {
+      const order = await this.ordersService.getSingleOrder(orderId);
+      if (order) {
+        order.score = rating._id;
+        await order.save();
+      }
+    }
+
+    return rating;
   }
 
   async getAllRatings(): Promise<Rating[]> {
@@ -70,6 +93,21 @@ export class RatingService {
     return { success: true };
   }
 
+  async getSingleRatingByOrder(orderId: string): Promise<number> {
+    try {
+      const rating = await this.ratingRepository.findOne({ order: orderId });
+      if (!rating) {
+        throw new NotFoundException('Rating not found');
+      }
+      return rating.score;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw error;
+    }
+  }
+  
   
 
 }

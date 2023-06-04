@@ -12,6 +12,12 @@ import { RatingSchema } from './rating.model';
 import { BuyerSchema } from '../buyers/buyers.model';
 import { ProductsRepository } from '../products/products.repository';
 import { ProductSchema } from '../products/product.model';
+import { OrdersService } from '../orders/orders.service';
+import { OrdersRepository } from '../orders/orders.repository';
+import { ProductsService } from '../products/products.service';
+import { CartService } from '../cart/cart.service';
+import { MailService } from '../mailer/mail.service';
+import { OrderSchema } from '../orders/order.model';
 
 @Module({
   imports: [
@@ -19,6 +25,7 @@ import { ProductSchema } from '../products/product.model';
     MongooseModule.forFeature([{ name: 'Rating', schema: RatingSchema }]),
     MongooseModule.forFeature([{ name: 'Seller', schema: SellerSchema }]),
     MongooseModule.forFeature([{ name: 'Product', schema: ProductSchema }]),
+    MongooseModule.forFeature([{ name: 'Order', schema: OrderSchema }]),
   ],
   controllers: [RatingController],
   providers: [
@@ -28,7 +35,12 @@ import { ProductSchema } from '../products/product.model';
     BuyersRepository,
     RatingService,
     RatingRepository,
+    ProductsService,
     ProductsRepository,
+    OrdersService,
+    OrdersRepository,
+    CartService,
+    MailService,
   ],
 })
 export class RatingModule {}

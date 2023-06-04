@@ -6,6 +6,7 @@ import { Seller } from '../sellers/sellers.model';
 import { SellersService } from '../sellers/sellers.service';
 import { Buyer } from '../buyers/buyers.model';
 import { BuyersService } from '../buyers/buyers.service';
+import { OrdersService } from '../orders/orders.service';
 
 @Injectable()
 export class RatingRepository {
