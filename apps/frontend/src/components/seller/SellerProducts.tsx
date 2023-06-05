@@ -33,7 +33,6 @@ const SellerProducts: React.FC<SellerProductsProps> = ({ sellerId }) => {
 				justifyContent: 'center',
 				alignItems: 'center',
 				flexWrap: 'wrap',
-				mt: 2,
 			}}
 		>
 			{products.length > 0 ? (
@@ -58,9 +57,32 @@ const SellerProducts: React.FC<SellerProductsProps> = ({ sellerId }) => {
 										{drink.title}
 									</Typography>
 								</Link>
-								<Typography variant="body1" sx={{ my: 1 }}>
-									{drink.price.toFixed(2)}€
-								</Typography>
+								<Box sx={{ display: 'flex', alignItems: 'center' }}>
+								{drink.actualPrice !== drink.price ? (
+									<>
+										<Typography
+											variant="body1"
+											sx={{
+												textDecoration: 'line-through',
+												color: 'text.secondary',
+												mr: 1,
+											}}
+										>
+											{drink.actualPrice.toFixed(2)} €
+										</Typography>
+										<Typography
+											variant="body1"
+											sx={{ color: 'error.main' }}
+										>
+											{drink.price.toFixed(2)} €
+										</Typography>
+									</>
+								) : (
+									<Typography variant="body1">
+										{drink.actualPrice.toFixed(2)} €
+									</Typography>
+								)}
+								</Box>
 								<Box
 									sx={{
 										display: 'flex',
