@@ -3,8 +3,6 @@ import {
 	AlertTitle,
 	Box,
 	Button,
-	Card,
-	CardContent,
 	Container,
 	Divider,
 	Grid,
@@ -22,7 +20,6 @@ import { MouseEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import api from 'services/api';
 import NavbarB from './NavbarB';
-import CustomBox from 'components/ui/CustomBox';
 import { Link } from 'react-router-dom';
 import { useUserAuth } from 'context/AuthContext';
 import { useCartContext } from 'context/CartContext';

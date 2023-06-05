@@ -21,10 +21,10 @@ import NavbarS from '../NavbarS';
 const SignInS = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	const [error, setError] = useState<any>('');
+	const [error, setError] = useState<string>('');
 	const [isShownForgot, setIsShownForgot] = useState(false);
 	const [resetMail, setResetMail] = useState('');
-	const [isShownResetAlert, setIsShownResetAlert] = useState(false);
+	const [resetError, setResetError] = useState('');
 	const [link, setLink] = useState<any>();
 
 	const navigate = useNavigate();
@@ -39,7 +39,12 @@ const SignInS = () => {
 	const handleResetPassword = async (e: any) => {
 		e.preventDefault();
 		try {
-			await resetPassword(resetMail);
+			const response = await resetPassword(resetMail);
+			if (response.success) {
+				setResetError('Reset mail sent! Check your email.');
+			} else {
+				setResetError(response.error.message);
+			}
 		} catch (error: any) {
 			setError(error.message);
 		}
@@ -47,6 +52,9 @@ const SignInS = () => {
 
 	const handleSubmitSignIn = async (e: any) => {
 		e.preventDefault();
+		setIsShownForgot(false);
+		setResetError('');
+		setResetMail('');
 		setError('');
 		setLink(null);
 		try {
@@ -111,9 +119,13 @@ const SignInS = () => {
 												fullWidth
 												required
 												value={email}
-												onChange={(e) =>
-													setEmail(e.target.value)
-												}
+												onChange={(e) => {
+													setError('');
+													setResetError('');
+													setIsShownForgot(false);
+													setResetMail('');
+													setEmail(e.target.value);
+												}}
 												sx={{ mb: 1 }}
 											/>
 											<TextField
@@ -123,9 +135,13 @@ const SignInS = () => {
 												fullWidth
 												required
 												value={password}
-												onChange={(e) =>
-													setPassword(e.target.value)
-												}
+												onChange={(e) => {
+													setError('');
+													setResetError('');
+													setResetMail('');
+													setIsShownForgot(false);
+													setPassword(e.target.value);
+												}}
 												sx={{ mb: 1 }}
 											/>
 											<Button
@@ -136,7 +152,7 @@ const SignInS = () => {
 												fullWidth
 												onClick={(e) =>
 													handleSubmitSignIn(e)
-												} // Replace onSubmit with onClick
+												}
 											>
 												Sign in
 											</Button>
@@ -202,9 +218,9 @@ const SignInS = () => {
 														</FormControl>
 													</Grid>
 												</Grid>
-												{isShownResetAlert && (
-													<Alert severity="info">
-														Reset email sent!
+												{resetError && (
+													<Alert severity="error">
+														{resetError}
 													</Alert>
 												)}
 											</>

@@ -49,12 +49,12 @@ const SignInB = () => {
 	};
 
 	const handleSubmitSignIn = async (e: any) => {
+		e.preventDefault();
 		setIsShownForgot(false);
 		setResetError('');
 		setResetMail('');
 		setError('');
 		setLink(null);
-		e.preventDefault();
 		try {
 			const signUpResponse = await signIn(email, password, 'buyer');
 			//console.log(signUpResponse);
@@ -135,7 +135,10 @@ const SignInB = () => {
 								justifyContent: 'center',
 							}}
 						>
-							<Box component="form" sx={{ marginTop: '5rem', px: 10 }}>
+							<Box
+								component="form"
+								sx={{ marginTop: '5rem', px: 10 }}
+							>
 								<Grid>
 									<Grid>
 										<Avatar
