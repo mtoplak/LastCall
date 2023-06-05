@@ -88,7 +88,7 @@ const SignInS = () => {
 							>
 								<Box
 									component="form"
-									sx={{ marginTop: '5rem' }}
+									sx={{ marginTop: '5rem', px: 10 }}
 								>
 									<Grid>
 										<Grid>
@@ -205,7 +205,7 @@ const SignInS = () => {
 										)}
 										{error && (
 											<Alert severity="error">
-												{error} {link} page.
+												{error} {link}
 											</Alert>
 										)}
 										<Typography

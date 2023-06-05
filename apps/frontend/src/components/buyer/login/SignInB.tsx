@@ -125,7 +125,7 @@ const SignInB = () => {
 								justifyContent: 'center',
 							}}
 						>
-							<Box component="form" sx={{ marginTop: '5rem' }}>
+							<Box component="form" sx={{ marginTop: '5rem', px: 10 }}>
 								<Grid>
 									<Grid>
 										<Avatar
@@ -236,7 +236,7 @@ const SignInB = () => {
 									)}
 									{error && (
 										<Alert severity="error">
-											{error} {link} page.
+											{error} {link}
 										</Alert>
 									)}
 									<Typography sx={{ marginBottom: '8rem' }} />
