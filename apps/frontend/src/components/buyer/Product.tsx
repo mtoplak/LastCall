@@ -177,7 +177,7 @@ function Product() {
 												}}
 												gutterBottom
 											>
-												Price:{' '}
+												{' '}
 												{drink?.actualPrice.toFixed(2)} €
 											</Typography>
 											<Typography
