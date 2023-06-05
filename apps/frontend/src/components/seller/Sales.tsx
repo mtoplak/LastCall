@@ -60,8 +60,21 @@ function Sales() {
 				productIds,
 				discount: parseFloat(discountAmount),
 			});
-			window.location.reload();
-		} catch (error) {}
+			const updatedProducts = products.map((product) => {
+				// Check if the current product ID exists in the updated product data
+				const updatedProduct = response.data.find(
+					(updatedProduct: { _id: string }) =>
+						updatedProduct._id === product._id
+				);
+				// If the updated product is found, return it; otherwise, return the original product
+				return updatedProduct ? updatedProduct : product;
+			});
+			setProducts(updatedProducts);
+			setChecked([]);
+			setDiscountAmount('');
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	const handleRemoveSale = async () => {
@@ -71,8 +84,23 @@ function Sales() {
 				productIds,
 				discount: 0,
 			});
-			window.location.reload();
-		} catch (error) {}
+			// Update the products state with the removed sale information
+			const updatedProducts = products.map((product) => {
+				// Check if the current product ID exists in the updated product data
+				const updatedProduct = response.data.find(
+					(updatedProduct: { _id: string }) =>
+						updatedProduct._id === product._id
+				);
+				// If the updated product is found, return it with the discount removed; otherwise, return the original product
+				return updatedProduct
+					? { ...updatedProduct, discount: 0 }
+					: product;
+			});
+			setProducts(updatedProducts);
+			setChecked([]);
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	return (
@@ -109,7 +137,7 @@ function Sales() {
 											<TextField
 												sx={{ mb: 2 }}
 												label="Discount"
-												placeholder="Enter discount amount"
+												placeholder="Enter discount percent"
 												fullWidth
 												value={discountAmount}
 												onChange={(event) => {
@@ -254,7 +282,7 @@ function Sales() {
 														)}
 													>
 														<b>
-															{product.discount} %
+															{product.discount}%
 														</b>
 													</Typography>
 													<Divider
