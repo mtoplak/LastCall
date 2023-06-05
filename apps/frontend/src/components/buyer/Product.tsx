@@ -181,7 +181,7 @@ function Product() {
 									{drink?.title}
 								</Typography>
 								<Typography color="textSecondary" gutterBottom>
-									Price: {drink?.price.toFixed(2)} €
+									{drink?.price.toFixed(2)} €
 								</Typography>
 								<Divider />
 								<Typography

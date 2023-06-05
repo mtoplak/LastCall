@@ -8,6 +8,7 @@ import {
 	Grid,
 	Link,
 	Modal,
+	Rating,
 	TextField,
 	Typography,
 } from '@mui/material';
@@ -35,6 +36,7 @@ function SellerPage() {
 	const [message, setMessage] = useState('');
 	const { id } = useParams<{ id: string }>();
 	const { user, role } = useUserAuth();
+	const [rating, setRating] = useState<number | null>(null);
 	const [buyerEmail, setBuyerEmail] = useState(
 		user && user.email ? user.email : ''
 	);
@@ -46,10 +48,26 @@ function SellerPage() {
 	}, [user]);
 
 	useEffect(() => {
+		const fetchRating = async () => {
+			try {
+				const response = await api.get(
+					'sellers/average-score/' + seller?._id
+				);
+				setRating(response.data);
+
+				if (response.data.success !== true) {
+					setError("There was an error getting the seller's rating.");
+				} else {
+					setError('');
+				}
+			} catch (error: any) {
+				setError(error.response.data);
+			}
+		};
+
 		const fetchData = async () => {
 			try {
 				const response = await api.get('/sellers/' + id);
-				//console.log(response.data);
 				setSeller(response.data);
 			} catch (error: any) {
 				if (error.response.status === 404) {
@@ -58,8 +76,12 @@ function SellerPage() {
 				throw error;
 			}
 		};
+
 		fetchData();
-	}, [id]);
+		if (seller?._id) {
+			fetchRating();
+		}
+	}, [id, seller?._id]);
 
 	useEffect(() => {
 		document.title = seller?.title || '';
@@ -195,8 +217,12 @@ function SellerPage() {
 							</Grid>
 						</Grid>
 						<Divider sx={{ my: 1 }} />
-						<Grid container justifyContent="flex-start">
-							<Grid item xs={2}>
+						<Grid
+							container
+							justifyContent="space-between"
+							alignItems="center"
+						>
+							<Grid item>
 								<Button
 									variant="contained"
 									sx={{
@@ -209,6 +235,28 @@ function SellerPage() {
 								>
 									Contact Us
 								</Button>
+							</Grid>
+							<Grid item>
+								<Box
+									sx={{
+										display: 'flex',
+										alignItems: 'center',
+									}}
+								>
+									<Typography
+										variant="body2"
+										sx={{ fontSize: '14px', color: 'gray' }}
+									>
+										Average rating for this seller:
+									</Typography>
+									<Rating
+										name="read-only"
+										precision={0.25}
+										value={rating}
+										readOnly
+										sx={{ ml: 1 }}
+									/>
+								</Box>
 							</Grid>
 						</Grid>
 					</Card>
