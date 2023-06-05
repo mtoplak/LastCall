@@ -4,7 +4,7 @@ import { ProductCategory } from './product-category.enum';
 
 export const ProductSchema = new Schema({
   title: { type: String, required: true },
-  drinkCategory: { type: String, enum: Object.values(ProductCategory)},
+  drinkCategory: { type: String, enum: Object.values(ProductCategory) },
   packaging: { type: String, required: true },
   size: { type: String, required: true },
   price: { type: Number }, //sale price oz. to kaj se prikaze

@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { ProductResponse, RatingResponse } from "src/data.response";
+import { RatingResponse } from "src/data.response";
 import { Rating } from "./rating.model";
 
 @Injectable()

@@ -54,13 +54,11 @@ const Order: React.FC<OrderProps> = ({ order }) => {
 								sm={6}
 								md={4}
 							>
-								<Card>
 									<CardMedia
 										component="img"
 										image={orderProduct.product.picture}
-										sx={{ maxHeight: 320 }}
+										sx={{ maxHeight: 220, maxWidth: 220 }}
 									/>
-								</Card>
 							</Grid>
 						))}
 						{order.products.length > 3 && (

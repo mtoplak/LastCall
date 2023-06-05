@@ -2,18 +2,14 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Rating } from './rating.model';
 import { FilterQuery, Model, QueryOptions, UpdateQuery } from 'mongoose';
-import { Seller } from '../sellers/sellers.model';
 import { SellersService } from '../sellers/sellers.service';
-import { Buyer } from '../buyers/buyers.model';
 import { BuyersService } from '../buyers/buyers.service';
-import { OrdersService } from '../orders/orders.service';
+import { SuccessResponse } from 'src/data.response';
 
 @Injectable()
 export class RatingRepository {
   constructor(
     @InjectModel('Rating') private ratingModel: Model<Rating>,
-    @InjectModel('Seller') private readonly sellerModel: Model<Seller>,
-    @InjectModel('Buyer') private readonly buyerModel: Model<Buyer>,
     private readonly sellersService: SellersService,
     private readonly buyerService: BuyersService,
   ) {}
@@ -95,9 +91,10 @@ export class RatingRepository {
     }
   }
 
-  async deleteOne(ratingFilterQuery: FilterQuery<Rating>): Promise<void> {
+  async deleteOne(ratingFilterQuery: FilterQuery<Rating>): Promise<SuccessResponse> {
     try {
-      return await this.ratingModel.findOneAndDelete(ratingFilterQuery);
+      await this.ratingModel.findOneAndDelete(ratingFilterQuery);
+      return { success: true };
     } catch (err) {
       throw new NotFoundException('Could not delete the rating.');
     }

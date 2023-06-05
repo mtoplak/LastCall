@@ -54,12 +54,6 @@ function SellerPage() {
 					'sellers/average-score/' + seller?._id
 				);
 				setRating(response.data);
-
-				if (response.data.success !== true) {
-					setError("There was an error getting the seller's rating.");
-				} else {
-					setError('');
-				}
 			} catch (error: any) {
 				setError(error.response.data);
 			}
@@ -243,19 +237,37 @@ function SellerPage() {
 										alignItems: 'center',
 									}}
 								>
-									<Typography
-										variant="body2"
-										sx={{ fontSize: '14px', color: 'gray' }}
-									>
-										Average rating for this seller:
-									</Typography>
-									<Rating
-										name="read-only"
-										precision={0.25}
-										value={rating}
-										readOnly
-										sx={{ ml: 1 }}
-									/>
+									{rating !== 0 ? (
+										<>
+											<Typography
+												variant="body2"
+												sx={{
+													fontSize: '14px',
+													color: 'gray',
+												}}
+											>
+												Average rating for this seller:
+											</Typography>
+											<Rating
+												name="read-only"
+												precision={0.25}
+												value={rating}
+												readOnly
+												sx={{ ml: 1 }}
+											/>
+										</>
+									) : (
+										<Typography
+											variant="body2"
+											sx={{
+												fontSize: '14px',
+												color: 'gray',
+												marginLeft: '4px',
+											}}
+										>
+											This seller has not been rated yet.
+										</Typography>
+									)}
 								</Box>
 							</Grid>
 						</Grid>

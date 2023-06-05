@@ -6,9 +6,7 @@ import { ProductsService } from "../products/products.service";
 import { Order } from "../orders/order.model";
 import { Buyer, Cart } from "../buyers/buyers.model";
 import { formatDate } from "../utils/format-date.utils";
-import { OrdersService } from "../orders/orders.service";
 import { Seller } from "../sellers/sellers.model";
-import { CartService } from "../cart/cart.service";
 
 @Injectable()
 export class MailService {

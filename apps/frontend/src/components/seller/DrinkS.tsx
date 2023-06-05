@@ -176,9 +176,45 @@ const DrinkS: React.FC<DrinkProps> = ({
 							{drink.title}
 						</Typography>
 					</Link>
-					<Typography variant="body1" sx={{ my: 1 }}>
-						Price: {drink.price.toFixed(2)} €
-					</Typography>
+					<Box
+									sx={{
+										display: 'flex',
+										alignItems: 'center',
+									}}
+								>
+					{drink?.actualPrice !== drink?.price ? (
+										<>
+											<Typography
+												variant="body1"
+												sx={{
+													textDecoration:
+														'line-through',
+													color: 'text.secondary',
+													mr: 1,
+												}}
+												gutterBottom
+											>
+												{' '}
+												{drink?.actualPrice.toFixed(
+													2
+												)}{' '}
+												€
+											</Typography>
+											<Typography
+												variant="body1"
+												sx={{ color: 'error.main' }}
+												gutterBottom
+											>
+												{drink?.price.toFixed(2)} €
+											</Typography>
+										</>
+									) : (
+										<Typography variant="body1" sx={{ mb: 1}}>
+											{' '}
+											{drink?.actualPrice.toFixed(2)} €
+										</Typography>
+									)}
+									</Box>
 					<Box
 						sx={{
 							display: 'flex',

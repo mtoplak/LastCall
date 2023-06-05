@@ -7,6 +7,6 @@ export class AuthenticationController {
 
   @Post()
   async findEmail(@Body('email') email: string): Promise<string> {
-    return await this.authenticationService.findRole(email);
+    return this.authenticationService.findRole(email);
   }
 }

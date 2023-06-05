@@ -15,9 +15,6 @@ export class FirebaseTokenGuard implements CanActivate {
       const token = request.headers.authorization;
       // Verify the Firebase token
       const decodedToken = await admin.auth().verifyIdToken(token);
-
-      // console.log(decodedToken);
-
       // Optionally, you can add additional checks here, such as validating the user's role, etc.
       // Set the authenticated user on the request for future use
       request.user = decodedToken;

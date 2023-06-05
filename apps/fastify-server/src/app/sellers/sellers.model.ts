@@ -47,7 +47,7 @@ export interface Seller extends Document {
   maxDistance: number;
   minPrice: number;
   deliveryCost: number;
-  scores: string[]
+  scores: string[];
   averageScore: number;
 }
 

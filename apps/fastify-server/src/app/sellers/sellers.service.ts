@@ -91,11 +91,11 @@ export class SellersService {
   }
 
   async removeSeller(sellerId: string): Promise<SuccessResponse> {
-    await this.sellersRepository.deleteOne({
+    return await this.sellersRepository.deleteOne({
       _id: sellerId,
     });
-    return { success: true };
   }
+  
 
   async removeSellerByEmail(email: string): Promise<SuccessResponse> {
     await this.sellersRepository.deleteOne({

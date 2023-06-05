@@ -1,25 +1,15 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { SuccessResponse } from 'src/data.response';
-import { SellersRepository } from '../sellers/sellers.repository';
-import { SellersService } from '../sellers/sellers.service';
-import { ProductsRepository } from '../products/products.repository';
 import { CreateUpdateRatingDto } from './create-update-rating.dto';
 import { Rating } from './rating.model';
 import { RatingRepository } from './rating.repository';
 import { OrdersService } from '../orders/orders.service';
-import { OrdersRepository } from '../orders/orders.repository';
-import { Order } from '../orders/order.model';
-//GET OCENO ENEGA SELLERJA (ID)
-//ZRACUNAJ AVERAGE SCORE
 
 @Injectable()
 export class RatingService {
   constructor(
-    private readonly ordersRepository: OrdersRepository,
-    private readonly sellersRepository: SellersRepository,
-    private readonly sellersService: SellersService,
     private readonly ratingRepository: RatingRepository,
-    private readonly ordersService: OrdersService
+    private readonly ordersService: OrdersService,
   ) {}
 
   async createRating(
@@ -28,14 +18,6 @@ export class RatingService {
     buyerEmail: string,
     orderId: string,
   ): Promise<Rating> {
-    /*
-    if (orderId) {
-      const order = await this.ordersService.getSingleOrder(orderId);
-      if (order && order.score) {
-        throw new BadRequestException('Order already rated');
-      }
-    }
-*/
     const rating = await this.ratingRepository.create(
       ratingData,
       sellerEmail,
@@ -82,15 +64,12 @@ export class RatingService {
       if (error instanceof NotFoundException) {
         throw new NotFoundException(error.message);
       }
-      throw error; 
+      throw error;
     }
   }
 
   async removeRating(ratingId: string): Promise<SuccessResponse> {
-    await this.ratingRepository.deleteOne({
-      _id: ratingId,
-    });
-    return { success: true };
+    return await this.ratingRepository.deleteOne({ _id: ratingId });
   }
 
   async getSingleRatingByOrder(orderId: string): Promise<number> {
@@ -107,7 +86,4 @@ export class RatingService {
       throw error;
     }
   }
-  
-  
-
 }

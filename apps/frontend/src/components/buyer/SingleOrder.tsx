@@ -10,6 +10,7 @@ import {
 	Button,
 	Modal,
 	Rating,
+	IconButton,
 } from '@mui/material';
 import { IOrder } from 'models/order';
 import { useParams } from 'react-router-dom';
@@ -23,6 +24,7 @@ import { OrderStatus } from 'enums/order.enum';
 import { style } from 'assets/styles/styles';
 import { IRating } from 'models/rating';
 import Page404 from 'components/404/Page404';
+
 
 function SingleOrder() {
 	const [order, setOrder] = useState<IOrder>();
@@ -146,42 +148,72 @@ function SingleOrder() {
 										px: 2,
 									}}
 								>
-									<Typography
-										sx={{ color: 'text.secondary' }}
-									>
-										<b>ORDER STATUS:</b>
-									</Typography>
-									<Typography
-										color={getOrderStatusColor(
-											order.status
-										)}
-										sx={{ mb: 2 }}
-									>
-										<b>{order.status}</b>
-									</Typography>
-									<Typography variant="h6" sx={{ mb: 4 }}>
-										<b>Order ID:</b> {order.uid}
-									</Typography>
-									<Button
-										sx={{ mb: 4 }}
-										onClick={() => {
-											setOpen(true);
-										}}
-										disabled={rated}
-									>
-										{rated ? (
-											<>
-												You have already rated this
-												seller:{' '}
-												<Rating
-													value={score!}
-													//onChange={() => {}}
-												/>
-											</>
-										) : (
-											<>Rate this seller</>
-										)}
-									</Button>
+									<Grid container spacing={2}>
+										<Grid item xs={12} md={6}>
+											<Typography
+												sx={{ color: 'text.secondary' }}
+											>
+												<b>ORDER STATUS:</b>
+											</Typography>
+											<Typography
+												color={getOrderStatusColor(
+													order.status
+												)}
+												sx={{ mb: 2 }}
+											>
+												<b>{order.status}</b>
+											</Typography>
+											<Typography
+												variant="h6"
+												sx={{mb: 2}}
+											>
+												<b>Order ID:</b> {order.uid}
+											</Typography>
+										</Grid>
+										<Grid item xs={12} md={6} sx={{ mt:{xs: 0, md: 5} }}>
+											{role !== 'seller' && (
+												<>
+													<Button
+													variant="outlined"
+													sx={{
+														mr: 3,
+														mb: 2,
+														color: '#878787',
+														border: '2px solid #878787',
+														'&:hover': {
+															border: '2px solid #878787',
+															backgroundColor: '#e0e0e0',
+														},
+													}}
+														onClick={() => {
+															setOpen(true);
+														}}
+														disabled={
+															rated ||
+															order.status !==
+																OrderStatus.DELIVERED
+														}
+													>
+														{rated ? (
+															<>
+																You have rated
+																this seller:{' '}
+																<Rating
+																	value={
+																		score!
+																	}
+																/>
+															</>
+														) : (
+															<>
+																Rate this seller
+															</>
+														)}
+													</Button>
+												</>
+											)}
+										</Grid>
+									</Grid>
 									<Divider />
 									<Typography
 										variant="h6"
@@ -193,7 +225,7 @@ function SingleOrder() {
 										container
 										sx={{ mb: 4, color: 'text.secondary' }}
 									>
-										<Grid item xs={6}>
+										<Grid item xs={12} md={6} sx={{mb:2}}>
 											<Typography>
 												Address: {order.address}
 											</Typography>
@@ -204,7 +236,7 @@ function SingleOrder() {
 												Country: {order.country}
 											</Typography>
 										</Grid>
-										<Grid item xs={6}>
+										<Grid item xs={12} md={6}>
 											<Typography>
 												Date of Purchase:{' '}
 												{formatDate(
@@ -214,7 +246,7 @@ function SingleOrder() {
 												)}
 											</Typography>
 											<Typography>
-												Estimated Date of Delivery:{' '}
+												Estimated Delivery Date:{' '}
 												{formatDate(
 													new Date(
 														order.lastDateOfDelivery
@@ -288,8 +320,8 @@ function SingleOrder() {
 														color: 'text.secondary',
 													}}
 												>
-													<Grid item xs={6} md={2}>
-														<Card>
+													<Grid item xs={12} sm={4} md={3}>
+														<Card sx={{maxWidth: {xs: 400, sm:200, md:200}}}>
 															<CardMedia
 																component="img"
 																image={
@@ -297,16 +329,14 @@ function SingleOrder() {
 																		.product
 																		.picture
 																}
-																sx={{
-																	maxHeight: 200,
-																}}
 															/>
 														</Card>
 													</Grid>
 													<Grid
 														item
-														xs={6}
-														md={10}
+														xs={12}
+														sm={8}
+														md={9}
 														sx={{ my: 4 }}
 													>
 														<Typography>
@@ -350,33 +380,33 @@ function SingleOrder() {
 				</Grid>
 			</Container>
 			<Modal
-				open={open}
-				onClose={() => {
-					setOpen(false);
-					setError('');
-				}}
-				aria-labelledby="modal-modal-title"
-				aria-describedby="modal-modal-description"
-			>
-				<Box sx={style}>
-					<Typography
-						id="modal-modal-title"
-						variant="h6"
-						component="h2"
-					>
-						Rate your experience with this seller
-					</Typography>
-					<Rating
-						name="simple-controlled"
-						value={score}
-						onChange={(event, newValue) => {
-							setScore(newValue!);
-						}}
-					/>{' '}
-					{error}
-					<Button onClick={handleRate}>Confirm</Button>
-				</Box>
-			</Modal>
+	open={open}
+	onClose={() => {
+		setOpen(false);
+		setError('');
+	}}
+	aria-labelledby="modal-modal-title"
+	aria-describedby="modal-modal-description"
+>
+	<Box sx={style} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px' }}>
+		<Typography variant="h6" component="h2" style={{ marginBottom: '16px' }}>
+			Rate your experience with this seller
+		</Typography>
+		<Rating
+			name="simple-controlled"
+			value={score}
+			onChange={(event, newValue) => {
+				setScore(newValue!);
+			}}
+			style={{ marginBottom: '16px' }}
+		/>
+		{error && <Typography color="error" style={{ marginBottom: '16px' }}>{error}</Typography>}
+		<Button variant="contained" color="primary" onClick={handleRate}>
+			Confirm
+		</Button>
+	</Box>
+</Modal>
+
 		</Box>
 	);
 }

@@ -103,7 +103,7 @@ function Product() {
 	};
 
 	return (
-		<Box sx={{ backgroundColor: '#f2f2f2' }}>
+		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '80vh' }}>
 			{role === 'seller' ? <NavbarS /> : <NavbarB />}
 			<Container style={{ paddingBottom: '3rem' }} sx={{ mt: 5 }}>
 				{!(role === 'seller' || role === 'buyer') && (
@@ -178,7 +178,10 @@ function Product() {
 												gutterBottom
 											>
 												{' '}
-												{drink?.actualPrice.toFixed(2)} €
+												{drink?.actualPrice.toFixed(
+													2
+												)}{' '}
+												€
 											</Typography>
 											<Typography
 												variant="body1"
@@ -225,17 +228,19 @@ function Product() {
 										</ListItem>
 									</List>
 								</Typography>
-								<Divider />
-								<br />
 								{drink?.discount !== 0 && (
-									<Alert severity="info" sx={{ mb: 2 }}>
-										There is currently a {drink?.discount} %
-										discount for this product!
+									<Alert
+										severity="info"
+										sx={{ mb: 2, mt: 1 }}
+									>
+										There is currently a {drink?.discount}%
+										discount on this product!
 										<br />
 									</Alert>
 								)}
 								{role === 'buyer' && (
 									<Box>
+										<Divider />
 										<Typography
 											variant="h6"
 											component="span"
@@ -245,6 +250,7 @@ function Product() {
 											<Box
 												display="flex"
 												alignItems="center"
+												sx={{ mt: 1 }}
 												gap={10}
 											>
 												<Box flex="1">

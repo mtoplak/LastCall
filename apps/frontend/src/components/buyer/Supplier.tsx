@@ -35,8 +35,8 @@ const Supplier: React.FC<SupplierProps> = ({ seller }) => {
 	return (
 		<>
 			<Card sx={{ mt: 5, mb: 2 }}>
-				<Grid container spacing={1} sx={{ my: 3, mx: 1 }}>
-					<Grid item xs={6} md={3}>
+				<Grid container spacing={1} sx={{ my: 3, mx: 1, px: 2 }}>
+					<Grid item xs={12} md={3}>
 						<CardMedia
 							component="img"
 							image={companyTypeImage}
@@ -47,7 +47,7 @@ const Supplier: React.FC<SupplierProps> = ({ seller }) => {
 							}}
 						/>
 					</Grid>
-					<Grid item xs={6} sx={{ my: 4 }} md={7}>
+					<Grid item xs={12} sx={{ my: 4 }} md={6}>
 						<Typography variant="h4" component="h2">
 							{seller.title}
 						</Typography>
@@ -58,15 +58,27 @@ const Supplier: React.FC<SupplierProps> = ({ seller }) => {
 							{seller.companyType}
 						</Typography>
 					</Grid>
-					<Grid item xs={12} md={2} sx={{ my: 1 }}>
-						<Typography component="legend">Rating: </Typography>
-						<Rating
-							name="read-only"
-							precision={0.5}
-							value={rating}
-							readOnly
-							sx={{ ml: 1 }}
-						/>
+					<Grid item xs={12} md={3} sx={{ my: 1 }}>
+						{rating !== 0 ? (
+								<Rating
+									name="read-only"
+									precision={0.5}
+									value={rating}
+									readOnly
+									sx={{ ml: 1 }}
+								/>
+						) : (
+							<Typography
+								variant="body2"
+								sx={{
+									fontSize: '14px',
+									color: 'gray',
+									marginLeft: '4px',
+								}}
+							>
+								This seller has not been rated yet.
+							</Typography>
+						)}
 					</Grid>
 				</Grid>
 			</Card>

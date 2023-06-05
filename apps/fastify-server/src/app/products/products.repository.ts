@@ -2,14 +2,13 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Product } from './product.model';
 import { FilterQuery, Model, QueryOptions, UpdateQuery } from 'mongoose';
-import { Seller } from '../sellers/sellers.model';
 import { SellersService } from '../sellers/sellers.service';
+import { SuccessResponse } from 'src/data.response';
 
 @Injectable()
 export class ProductsRepository {
   constructor(
     @InjectModel('Product') private productsModel: Model<Product>,
-    @InjectModel('Seller') private readonly sellerModel: Model<Seller>,
     private readonly sellersService: SellersService,
   ) {}
 
@@ -75,12 +74,13 @@ export class ProductsRepository {
     }
   }
 
-  async deleteOne(productFilterQuery: FilterQuery<Product>): Promise<void> {
-    const deletedProduct = await this.productsModel.findOneAndDelete(
-      productFilterQuery,
-    );
-    if (!deletedProduct) {
-      throw new NotFoundException('Could not find the product to delete');
+  async deleteOne(productFilterQuery: FilterQuery<Product>): Promise<SuccessResponse> {
+    try {
+      await this.productsModel.deleteOne(productFilterQuery);
+      return { success: true };
+    } catch (err) {
+      throw new NotFoundException('Could not delete the product.');
     }
   }
+  
 }

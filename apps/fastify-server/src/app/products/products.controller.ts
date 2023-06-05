@@ -31,7 +31,7 @@ export class ProductsController {
 
   @Get()
   async getAllProducts(): Promise<Product[]> {
-    return await this.productService.getAllProducts();
+    return this.productService.getAllProducts();
   }
 
   @Get(':id')
@@ -49,11 +49,10 @@ export class ProductsController {
   }
 
   @Delete(':id')
-  @UseGuards(FirebaseTokenGuard)
-  async removeProduct(@Param('id') id: string): Promise<SuccessResponse> {
-    await this.productService.removeProduct(id);
-    return { success: true };
+  async removeProduct(@Param('id') productId: string): Promise<SuccessResponse> {
+    return this.productService.removeProduct(productId);
   }
+  
 
   @Post('/removefromstock')
   async removeFromStock(

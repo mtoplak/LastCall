@@ -19,7 +19,7 @@ import { FirebaseTokenGuard } from '../guards/firebase-token-guard';
 
 @Controller('sellers')
 export class SellersController {
-  constructor(private readonly sellersService: SellersService) { }
+  constructor(private readonly sellersService: SellersService) {}
 
   @Post()
   async addSeller(
@@ -66,18 +66,17 @@ export class SellersController {
 
   @Delete(':id')
   @UseGuards(FirebaseTokenGuard)
-  async removeSeller(@Param('id') id: string): Promise<SuccessResponse> {
-    await this.sellersService.removeSeller(id);
-    return { success: true };
+  async removeSeller(@Param('id') sellerId: string): Promise<SuccessResponse> {
+    return this.sellersService.removeSeller(sellerId);
   }
+  
 
   @Delete('/delete/:email')
   @UseGuards(FirebaseTokenGuard)
   async removeSellerByEmail(
     @Param('email') email: string,
   ): Promise<SuccessResponse> {
-    await this.sellersService.removeSellerByEmail(email);
-    return { success: true };
+    return this.sellersService.removeSellerByEmail(email);
   }
 
   @Get('/productsbyemail/:email')
@@ -99,7 +98,9 @@ export class SellersController {
   }
 
   @Get('/average-score/:sellerId/')
-  async getAverageScoreBySellerId(@Param('sellerId') sellerId: string): Promise<number> {
+  async getAverageScoreBySellerId(
+    @Param('sellerId') sellerId: string,
+  ): Promise<number> {
     try {
       return await this.sellersService.getAverageScoreBySellerId(sellerId);
     } catch (error) {

@@ -27,7 +27,7 @@ export class OrdersController {
     @Body('seller') sellerEmail: string,
     @Body('buyer') buyerEmail: string,
   ): Promise<Order> {
-    return await this.ordersService.addOrder(
+    return this.ordersService.addOrder(
       createOrderDto,
       products,
       sellerEmail,
@@ -37,13 +37,13 @@ export class OrdersController {
 
   @Get()
   async getAllOrders(): Promise<Order[]> {
-    return await this.ordersService.getAllOrders();
+    return this.ordersService.getAllOrders();
   }
 
   @Get(':id')
   @UseGuards(FirebaseTokenGuard)
   async getSingleOrder(@Param('id') id: string): Promise<Order> {
-    return await this.ordersService.getSingleOrder(id);
+    return this.ordersService.getSingleOrder(id);
   }
 
   @Patch(':id')
@@ -51,14 +51,13 @@ export class OrdersController {
     @Param('id') orderId: string,
     @Body() updatedOrderData: Partial<Order>,
   ): Promise<{ success: boolean; }> {
-    await this.ordersService.updateOrder(orderId, updatedOrderData);
+    this.ordersService.updateOrder(orderId, updatedOrderData);
     return { success: true };
   }
 
   @Delete(':id')
   async removeOrder(@Param('id') id: string): Promise<SuccessResponse> {
-    await this.ordersService.removeOrder(id);
-    return { success: true };
+    return this.ordersService.removeOrder(id);
   }
 
   @Post('/checkPrice')

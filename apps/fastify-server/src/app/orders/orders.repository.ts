@@ -3,21 +3,17 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Order } from './order.model';
 import { FilterQuery, Model } from 'mongoose';
 import { Product } from '../products/product.model';
-import { Buyer, Cart } from '../buyers/buyers.model';
-import { Seller } from '../sellers/sellers.model';
+import { Cart } from '../buyers/buyers.model';
 import { SellersService } from '../sellers/sellers.service';
-import { ProductsService } from '../products/products.service';
 import { BuyersService } from '../buyers/buyers.service';
 import { v4 as uuidv4 } from 'uuid';
+import { SuccessResponse } from 'src/data.response';
 
 @Injectable()
 export class OrdersRepository {
   constructor(
     @InjectModel('Order') private ordersModel: Model<Order>,
-    @InjectModel('Seller') private readonly sellerModel: Model<Seller>,
-    @InjectModel('Buyer') private readonly buyerModel: Model<Buyer>,
     @InjectModel('Product') private readonly productModel: Model<Product>,
-    private readonly productsService: ProductsService,
     private readonly sellersService: SellersService,
     private readonly buyersService: BuyersService,
   ) {}
@@ -28,7 +24,6 @@ export class OrdersRepository {
       .findOne(orderFilterQuery)
       .populate('seller')
       .populate('buyer')
-      //.populate({ path: 'products', populate: { path: 'productId', model: 'Product' } })
       .exec();
     } catch (err) {
       throw new NotFoundException('Could not get the order.');
@@ -41,7 +36,6 @@ export class OrdersRepository {
       .find(ordersFilterQuery)
       .populate('seller')
       .populate('buyer')
-      //.populate({ path: 'products', populate: { path: 'productId', model: 'Product' } })
       .exec();
     } catch (err) {
       throw new NotFoundException('Could not get the orders.');
@@ -88,6 +82,7 @@ export class OrdersRepository {
       buyer: buyer._id,
       seller: seller._id,
       uid: uuidv4().substr(0, 6),
+      //uid: uuidv4().substr(0, 6).toUpperCase(),
     });
     const result = await newOrder.save();
 
@@ -110,9 +105,10 @@ export class OrdersRepository {
   }
   }
 
-  async deleteOne(orderFilterQuery: FilterQuery<Order>): Promise<void> {
+  async deleteOne(orderFilterQuery: FilterQuery<Order>): Promise<SuccessResponse> {
     try {
     await this.ordersModel.deleteOne(orderFilterQuery);
+    return { success: true };
   } catch (err) {
     throw new NotFoundException('Could not delete the order.');
   }

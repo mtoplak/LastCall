@@ -524,8 +524,8 @@ function SellerOrdersPage() {
 															variant="body2"
 															color="text.secondary"
 														>
-															Estimated Date of
-															Delivery:{' '}
+															Estimated Delivery
+															Date:{' '}
 															{formatDate(
 																new Date(
 																	order.lastDateOfDelivery

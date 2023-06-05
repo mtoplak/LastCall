@@ -7,15 +7,12 @@ import {
   Patch,
   Delete,
   UseGuards,
-  NotFoundException,
 } from '@nestjs/common';
 import { SuccessResponse } from 'src/data.response';
-import { Cart } from '../buyers/buyers.model';
 import { FirebaseTokenGuard } from '../guards/firebase-token-guard';
 import { RatingService } from './rating.service';
 import { CreateUpdateRatingDto } from './create-update-rating.dto';
 import { Rating } from './rating.model';
-import { Order } from '../orders/order.model';
 
 @Controller('rating')
 export class RatingController {
@@ -43,6 +40,7 @@ export class RatingController {
   }
 
   @Get(':id')
+  @UseGuards(FirebaseTokenGuard)
   async getSingleRating(@Param('id') id: string): Promise<Rating> {
     return await this.ratingService.getSingleRating(id);
   }
@@ -59,8 +57,7 @@ export class RatingController {
   @Delete(':id')
   @UseGuards(FirebaseTokenGuard)
   async removeRating(@Param('id') id: string): Promise<SuccessResponse> {
-    await this.ratingService.removeRating(id);
-    return { success: true };
+    return await this.ratingService.removeRating(id);
   }
 
     @Get('/order/:id')

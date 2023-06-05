@@ -11,7 +11,6 @@ import { Cart } from '../buyers/buyers.model';
 import { ProductsService } from '../products/products.service';
 import { CartService } from '../cart/cart.service';
 import { MailService } from '../mailer/mail.service';
-import { SellersRepository } from '../sellers/sellers.repository';
 import { SellersService } from '../sellers/sellers.service';
 import { OrderStatus } from './order-status.enum';
 
@@ -22,7 +21,6 @@ export class OrdersService {
     private readonly productsService: ProductsService,
     private readonly cartService: CartService,
     private readonly mailService: MailService,
-    private readonly sellersRepository: SellersRepository,
     private readonly sellersService: SellersService
   ) { }
 
@@ -122,10 +120,9 @@ export class OrdersService {
   }
 
   async removeOrder(orderId: string): Promise<SuccessResponse> {
-    await this.ordersRepository.deleteOne({
+    return await this.ordersRepository.deleteOne({
       _id: orderId,
     });
-    return { success: true };
   }
   
 }

@@ -4,6 +4,7 @@ import { FilterQuery, Model, QueryOptions } from 'mongoose';
 import { Seller } from './sellers.model';
 import { Product } from '../products/product.model';
 import { Order } from '../orders/order.model';
+import { SuccessResponse } from 'src/data.response';
 
 @Injectable()
 export class SellersRepository {
@@ -54,13 +55,15 @@ export class SellersRepository {
     }
   }
 
-  async deleteOne(sellerFilterQuery: FilterQuery<Seller>): Promise<void> {
+  async deleteOne(sellerFilterQuery: FilterQuery<Seller>): Promise<SuccessResponse> {
     try {
       await this.sellersModel.deleteOne(sellerFilterQuery);
+      return { success: true };
     } catch (err) {
       throw new NotFoundException('Could not delete the seller.');
     }
   }
+  
 
   async getAllProductsBySeller(email: string): Promise<Product[]> {
     const seller = await this.sellersModel

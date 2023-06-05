@@ -4,6 +4,7 @@ import { FilterQuery, Model, QueryOptions } from 'mongoose';
 import { Product } from '../products/product.model';
 import { Buyer } from './buyers.model';
 import { Order } from '../orders/order.model';
+import { SuccessResponse } from 'src/data.response';
 
 @Injectable()
 export class BuyersRepository {
@@ -14,7 +15,7 @@ export class BuyersRepository {
 
   async findOne(buyerFilterQuery: FilterQuery<Buyer>): Promise<Buyer> {
     try {
-      return await this.buyerModel
+      return this.buyerModel
         .findOne(buyerFilterQuery)
         .populate('orders')
         .populate({
@@ -32,7 +33,7 @@ export class BuyersRepository {
 
   async find(buyersFilterQuery: FilterQuery<Buyer>): Promise<Buyer[]> {
     try {
-      return await this.buyerModel
+      return this.buyerModel
         .find(buyersFilterQuery)
         .populate('orders')
         .populate({
@@ -47,7 +48,7 @@ export class BuyersRepository {
 
   async create(buyer: Buyer): Promise<Buyer> {
     try {
-      return await new this.buyerModel(buyer).save();
+      return new this.buyerModel(buyer).save();
     } catch (err) {
       throw new NotFoundException('Could not create the buyer.');
     }
@@ -59,7 +60,7 @@ export class BuyersRepository {
     options?: QueryOptions,
   ): Promise<Buyer> {
     try {
-      return await this.buyerModel
+      return this.buyerModel
         .findOneAndUpdate(buyerFilterQuery, buyer, options)
         .populate({
           path: 'cart.productId',
@@ -71,9 +72,10 @@ export class BuyersRepository {
     }
   }
 
-  async deleteOne(buyerFilterQuery: FilterQuery<Buyer>): Promise<void> {
+  async deleteOne(buyerFilterQuery: FilterQuery<Buyer>): Promise<SuccessResponse> {
     try {
       await this.buyerModel.deleteOne(buyerFilterQuery);
+      return { success: true };
     } catch (err) {
       throw new NotFoundException('Could not delete the buyer');
     }

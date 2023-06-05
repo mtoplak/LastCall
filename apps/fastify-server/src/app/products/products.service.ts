@@ -4,14 +4,12 @@ import { ProductsRepository } from './products.repository';
 import { CreateUpdateProductDto } from './create-update-product.dto';
 import { SuccessResponse } from 'src/data.response';
 import { Cart } from '../buyers/buyers.model';
-import { SellersRepository } from '../sellers/sellers.repository';
 import { SellersService } from '../sellers/sellers.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     private readonly productsRepository: ProductsRepository,
-    private readonly sellersRepository: SellersRepository,
     private readonly sellersService: SellersService,
   ) {}
 
@@ -63,10 +61,7 @@ export class ProductsService {
   }
 
   async removeProduct(productId: string): Promise<SuccessResponse> {
-    await this.productsRepository.deleteOne({
-      _id: productId,
-    });
-    return { success: true };
+    return await this.productsRepository.deleteOne({ _id: productId });
   }
 
   async removeFromStock(productData: Cart[]): Promise<Product[] | false> {
@@ -117,10 +112,10 @@ export class ProductsService {
     );
 
     if (totalPrice < minPrice) {
-      return false; // Order does not meet the minimum price requirement
+      return false;
     }
 
-    return true; // Order meets the minimum price requirement
+    return true;
   }
 
   async makeSale(productIds: string[], discount: number): Promise<Product[]> {
