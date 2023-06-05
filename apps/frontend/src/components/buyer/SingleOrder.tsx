@@ -105,7 +105,7 @@ function SingleOrder() {
 			setError(error.response.data.message);
 		}
 	};
-*/
+
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
 			{role === 'seller' ? <NavbarS /> : <NavbarB />}
