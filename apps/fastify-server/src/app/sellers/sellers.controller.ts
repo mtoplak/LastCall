@@ -97,7 +97,7 @@ export class SellersController {
     return this.sellersService.getAllOrdersBySeller(email);
   }
 
-  @Get('/average-score/:sellerId/')
+  @Get('/average-score/:sellerId')
   async getAverageScoreBySellerId(
     @Param('sellerId') sellerId: string,
   ): Promise<number> {

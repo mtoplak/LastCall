@@ -62,7 +62,7 @@ const Supplier: React.FC<SupplierProps> = ({ seller }) => {
 						{rating !== 0 ? (
 								<Rating
 									name="read-only"
-									precision={0.5}
+									precision={0.25}
 									value={rating}
 									readOnly
 									sx={{ ml: 1 }}

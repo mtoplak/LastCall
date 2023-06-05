@@ -48,17 +48,6 @@ function SellerPage() {
 	}, [user]);
 
 	useEffect(() => {
-		const fetchRating = async () => {
-			try {
-				const response = await api.get(
-					'sellers/average-score/' + seller?._id
-				);
-				setRating(response.data);
-			} catch (error: any) {
-				setError(error.response.data);
-			}
-		};
-
 		const fetchData = async () => {
 			try {
 				const response = await api.get('/sellers/' + id);
@@ -70,12 +59,26 @@ function SellerPage() {
 				throw error;
 			}
 		};
-
+	
 		fetchData();
+	}, [id]);
+
+	useEffect(() => {
+		const fetchRating = async () => {
+			try {
+				const response = await api.get(
+					'sellers/average-score/' + seller?._id
+				);
+				console.log(response.data);
+				setRating(response.data);
+			} catch (error: any) {
+				setError(error.response.data);
+			}
+		};
 		if (seller?._id) {
 			fetchRating();
 		}
-	}, [id, seller?._id]);
+	}, [seller?._id]);
 
 	useEffect(() => {
 		document.title = seller?.title || '';
@@ -150,7 +153,7 @@ function SellerPage() {
 							sx={{ fontSize: '18px', mb: 2 }}
 						>
 							{seller?.title} is a {seller?.companyType} located
-							in {seller?.country} in {seller?.city} on{' '}
+							in {seller?.city}, {seller?.country} on{' '}
 							{seller?.address}. For any further information
 							please contact us!
 						</Typography>
