@@ -29,16 +29,13 @@ function SingleOrder() {
 	const [fetchError, setFetchError] = useState(false);
 	const { id } = useParams<{ id: string }>();
 	const { role, user } = useUserAuth();
-	const [open, setOpen] = React.useState(false);
-	const handleOpen = () => setOpen(true);
-	const handleClose = () => setOpen(false);
-	const [score, setScore] = React.useState<number>(1); // Set initial value as a number
+	const [open, setOpen] = useState(false);
+	const [score, setScore] = useState<number | null>(null);
 	const [error, setError] = useState('');
 	const [rated, setRated] = useState(false);
 
 	useEffect(() => {
 		if (!user) return;
-
 		const fetchOrder = async () => {
 			try {
 				const response = await api.get('/orders/' + id, {
@@ -46,16 +43,15 @@ function SingleOrder() {
 						Authorization: user?.stsTokenManager?.accessToken,
 					},
 				});
-
 				setOrder(response.data);
 				setRated(!!response.data?.score); // Check if score exists and set `rated` accordingly
-				setScore(parseFloat(response.data?.score) || 1);
+				//setRated(!!response.data && response.data.score !== null);
+				//setScore(parseFloat(response.data?.score) || null);
 			} catch (error) {
 				setFetchError(true);
 				throw error;
 			}
 		};
-
 		fetchOrder();
 	}, [id, user]);
 
@@ -64,12 +60,27 @@ function SingleOrder() {
 		document.title = `Order ${order?.uid} details`;
 	}, [order?.uid, order]);
 
+	useEffect(() => {
+		const fetchRating = async () => {
+			try {
+				const response = await api.get(`/rating/order/${order?._id}`);
+				setScore(response.data);
+			} catch (error: any) {
+				setError(error.response.data.message);
+			}
+		};
+		if (order?.score) {
+			fetchRating();
+		}
+	}, [order]);
+
 	if (fetchError) {
 		return <Page404 notFound="Order" />;
 	}
 
-	const handleRating = async () => {
-		if (score === null) {
+	const handleRate = async () => {
+		if (score === null || score === undefined || score === 0) {
+			setError('Please select a score');
 			return;
 		}
 		try {
@@ -87,38 +98,9 @@ function SingleOrder() {
 					},
 				}
 			);
-			handleClose();
-			console.log(score);
-			console.log(user.email);
-			console.log(order?._id);
+			setOpen(false);
 			setRated(true);
-		} catch (error: any) {
-			setError(error.response.data.message);
-		}
-	};
-
-	useEffect(() => {
-		const fetchRating = async () => {
-			try {
-				const response = await api.get(`/rating/order/${order?._id}`);
-				console.log(response.data);
-
-				if (response.data) {
-					setScore(response.data.score);
-				}
-			} catch (error: any) {
-				setError(error.response.data.message);
-			}
-		};
-
-		if (order?._id && !rated) {
-			fetchRating();
-		}
-	}, [order?._id, rated]);
-
-	const getRating = async () => {
-		try {
-			await api.get(`/rating/order/${order?._id}`);
+			setScore(score);
 		} catch (error: any) {
 			setError(error.response.data.message);
 		}
@@ -182,20 +164,22 @@ function SingleOrder() {
 									</Typography>
 									<Button
 										sx={{ mb: 4 }}
-										onClick={handleOpen}
+										onClick={() => {
+											setOpen(true);
+										}}
 										disabled={rated}
 									>
 										{rated ? (
 											<>
-												You already rated this seller:{' '}
+												You have already rated this
+												seller:{' '}
 												<Rating
-													name="read-only"
-													value={score}
-													readOnly
+													value={score!}
+													//onChange={() => {}}
 												/>
 											</>
 										) : (
-											<>Rate the seller</>
+											<>Rate this seller</>
 										)}
 									</Button>
 									<Divider />
@@ -367,7 +351,10 @@ function SingleOrder() {
 			</Container>
 			<Modal
 				open={open}
-				onClose={handleClose}
+				onClose={() => {
+					setOpen(false);
+					setError('');
+				}}
 				aria-labelledby="modal-modal-title"
 				aria-describedby="modal-modal-description"
 			>
@@ -383,12 +370,11 @@ function SingleOrder() {
 						name="simple-controlled"
 						value={score}
 						onChange={(event, newValue) => {
-							if (newValue) {
-								setScore(newValue);
-							}
+							setScore(newValue!);
 						}}
 					/>{' '}
-					<Button onClick={handleRating}>Confirm</Button>
+					{error}
+					<Button onClick={handleRate}>Confirm</Button>
 				</Box>
 			</Modal>
 		</Box>

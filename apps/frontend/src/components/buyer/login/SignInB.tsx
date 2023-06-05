@@ -180,9 +180,12 @@ const SignInB = () => {
 									</Typography>
 									<Typography sx={{ marginBottom: '1rem' }}>
 										<span
-											onClick={(event) =>
-												setIsShownForgot(!isShownForgot)
-											}
+											onClick={() => {
+												setIsShownForgot(
+													!isShownForgot
+												);
+												setError('');
+											}}
 											style={{ cursor: 'pointer' }}
 										>
 											Forgot password?

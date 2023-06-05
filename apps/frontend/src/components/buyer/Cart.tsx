@@ -430,10 +430,7 @@ function Cart() {
 								</Grid>
 								<Grid item xs={12} md={6}>
 									<CardContent>
-										<Typography
-											variant="h6"
-											component="h2"
-										>
+										<Typography variant="h6" component="h2">
 											<Link
 												to={`/product/${item.product._id}`}
 												className="blackLink"
@@ -449,9 +446,7 @@ function Cart() {
 											{item.product.price.toFixed(2)} €
 										</Typography>
 										{item.product?.discount !== 0 && (
-											<Alert
-												severity="success"
-											>
+											<Alert severity="success">
 												There is currently a{' '}
 												{item.product?.discount} %
 												discount for this product!
@@ -503,7 +498,7 @@ function Cart() {
 						</Card>
 					))}
 				</Grid>
-				<Grid item xs={12} md={4} sx={{mt:1, mb: 8}}>
+				<Grid item xs={12} md={4} sx={{ mt: 6, mb: 8 }}>
 					<Card>
 						<CardContent>
 							<Typography variant="h6" component="h2" mb={2}>
@@ -742,9 +737,12 @@ function Cart() {
 						onChange={(e) => setLastDateOfDelivery(e.target.value)}
 					/>
 					{error !== '' && (
-						<Alert severity="error">
-							<b>{error}</b>
-						</Alert>
+						<>
+							<Alert severity="error">
+								<b>{error}</b>
+							</Alert>
+							<br />
+						</>
 					)}
 					{isLoading && <LinearProgress color="inherit" />}
 					<Typography sx={{ mt: 2 }}>
