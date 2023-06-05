@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import heroImg from '../../../assets/images/homepageDrink.png';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useUserAuth } from 'context/AuthContext';
 import CustomBox from 'components/ui/CustomBox';
 import { btnstyle } from 'assets/styles/styles';
@@ -32,6 +32,10 @@ const SignInS = () => {
 
 	const { signIn, resetPassword } = useUserAuth();
 
+	useEffect(() => {
+		document.title = 'Sign In | Seller';
+	}, []);
+
 	const handleResetPassword = async (e: any) => {
 		e.preventDefault();
 		try {
@@ -47,7 +51,7 @@ const SignInS = () => {
 		setLink(null);
 		try {
 			const signUpResponse = await signIn(email, password, 'seller');
-			console.log(signUpResponse);
+			//console.log(signUpResponse);
 			if (signUpResponse.success) {
 				// Access the response object if needed: signUpResponse.response
 				//navigate('/');
@@ -88,7 +92,7 @@ const SignInS = () => {
 							>
 								<Box
 									component="form"
-									sx={{ marginTop: '5rem' }}
+									sx={{ marginTop: '5rem', px: 10 }}
 								>
 									<Grid>
 										<Grid>
@@ -110,6 +114,7 @@ const SignInS = () => {
 												onChange={(e) =>
 													setEmail(e.target.value)
 												}
+												sx={{ mb: 1 }}
 											/>
 											<TextField
 												label="Password"
@@ -121,6 +126,7 @@ const SignInS = () => {
 												onChange={(e) =>
 													setPassword(e.target.value)
 												}
+												sx={{ mb: 1 }}
 											/>
 											<Button
 												type="submit"
@@ -205,7 +211,8 @@ const SignInS = () => {
 										)}
 										{error && (
 											<Alert severity="error">
-												{error} {link} page.
+												{error} {link && link}{' '}
+												{link && 'page.'}
 											</Alert>
 										)}
 										<Typography

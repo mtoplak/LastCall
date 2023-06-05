@@ -88,7 +88,7 @@ function Sales() {
 						Product List
 					</Typography>
 					<Grid container spacing={2}>
-						<Grid item xs={12} md={2}>
+						<Grid item xs={12} md={3}>
 							<Card sx={{ mb: 3 }}>
 								<CardContent>
 									<Typography
@@ -100,18 +100,56 @@ function Sales() {
 									</Typography>
 									<Divider />
 									<Box my={2}>
-										<FormControl>
+										<FormControl
+											sx={{
+												display: 'flex',
+												flexDirection: 'column',
+											}}
+										>
 											<TextField
 												sx={{ mb: 2 }}
 												label="Discount"
 												placeholder="Enter discount amount"
 												fullWidth
 												value={discountAmount}
-												onChange={(event) =>
-													setDiscountAmount(
-														event.target.value
-													)
-												}
+												onChange={(event) => {
+													let value =
+														event.target.value;
+													// Remove any non-digit characters
+													value = value.replace(
+														/\D/g,
+														''
+													);
+													// Ensure the value is within the specified range
+													if (value === '') {
+														setDiscountAmount('');
+													} else {
+														const numericValue =
+															parseInt(value, 10);
+														if (numericValue < 1) {
+															setDiscountAmount(
+																'1'
+															);
+														} else if (
+															numericValue > 99
+														) {
+															setDiscountAmount(
+																'99'
+															);
+														} else {
+															setDiscountAmount(
+																numericValue.toString()
+															);
+														}
+													}
+												}}
+												inputProps={{
+													min: 1,
+													max: 99,
+												}}
+												InputProps={{
+													endAdornment: '%',
+												}}
 											/>
 											<Button
 												variant="contained"
@@ -137,7 +175,8 @@ function Sales() {
 								</CardContent>
 							</Card>
 						</Grid>
-						<Grid item xs={12} md={10}>
+
+						<Grid item xs={12} md={9}>
 							{products.map((product) => (
 								<Card sx={{ mb: 3 }} key={product._id}>
 									<Grid
@@ -175,9 +214,7 @@ function Sales() {
 													variant="h6"
 													component="h2"
 												>
-													<b>
-														{product.title}
-													</b>
+													<b>{product.title}</b>
 												</Typography>
 												<Typography
 													variant="body2"

@@ -5,7 +5,6 @@ import {
 	signInWithEmailAndPassword,
 	signOut,
 	onAuthStateChanged,
-	User,
 	sendPasswordResetEmail,
 	sendEmailVerification,
 } from 'firebase/auth';
@@ -43,7 +42,7 @@ export function AuthContextProvider({ children }: { children: any }) {
 			const currentUser = auth.currentUser;
 			if (currentUser) {
 				const response = await sendEmailVerification(currentUser); // Send email verification
-				console.log(response);
+				//console.log(response);
 				return { success: true, response };
 			} else {
 				throw new Error('User is null');
@@ -103,7 +102,7 @@ export function AuthContextProvider({ children }: { children: any }) {
 								</Link>
 							);
 						throw new Error(
-							`You're ${response.data}! Please sign in on`
+							`You're ${response.data}! Please sign in on the`
 						);
 					}
 				} catch (error: any) {
@@ -145,7 +144,7 @@ export function AuthContextProvider({ children }: { children: any }) {
 		const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
 			//console.log('Auth state changed');
 			//console.log('Current user: ');
-			console.log(currentUser);
+			//console.log(currentUser);
 
 			/*if (currentUser) {
 				try {

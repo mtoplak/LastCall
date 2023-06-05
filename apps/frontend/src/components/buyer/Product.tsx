@@ -118,9 +118,7 @@ function Product() {
 								onClick={() => {
 									setShowWarning(false);
 								}}
-							>
-								<CloseOutlinedIcon fontSize="inherit" />
-							</IconButton>
+							></IconButton>
 						}
 					>
 						<AlertTitle>

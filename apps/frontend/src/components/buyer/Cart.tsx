@@ -30,6 +30,7 @@ import { checkoutButton, style } from 'assets/styles/styles';
 import { getCurrentDate } from '../../utils/getCurrentDate';
 import { ISeller } from 'models/seller';
 import { useCartContext } from 'context/CartContext';
+import payments from '../../assets/images/payments.jpg';
 
 interface GroupedProduct {
 	product: IDrink;
@@ -406,8 +407,11 @@ function Cart() {
 		return Object.entries(groupedProducts).map(([seller, products]) => (
 			<Grid container spacing={2} key={seller}>
 				<Grid item xs={12} md={8}>
-					<Typography variant="h6" component="h2" mb={2}>
+					<Typography variant="h6" component="h2" >
 						Seller: {products[0].product.seller.title}
+					</Typography>
+					<Typography variant="body2" color="text.secondary" mb={2}>
+						Minimum price for delivery: {products[0].product.seller.minPrice} €
 					</Typography>
 					{products.map((item) => (
 						<Card
@@ -446,7 +450,7 @@ function Cart() {
 											{item.product.price.toFixed(2)} €
 										</Typography>
 										{item.product?.discount !== 0 && (
-											<Alert severity="success">
+											<Alert severity="info">
 												There is currently a{' '}
 												{item.product?.discount} %
 												discount for this product!
@@ -746,6 +750,11 @@ function Cart() {
 					)}
 					{isLoading && <LinearProgress color="inherit" />}
 					<Typography sx={{ mt: 2 }}>
+						<img
+							src={payments}
+							alt="heroImg"
+							style={{ width: '100%' }}
+						/>
 						<Button
 							sx={{ mt: 2 }}
 							color="primary"

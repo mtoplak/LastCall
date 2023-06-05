@@ -142,7 +142,7 @@ function SellerOrdersPage() {
 						</Typography>
 					) : (
 						<Grid container spacing={2} mt={2}>
-							<Grid item xs={12} md={2}>
+							<Grid item xs={12} md={3}>
 								<Card sx={{ mb: 3 }}>
 									<CardContent>
 										<Typography
@@ -153,10 +153,22 @@ function SellerOrdersPage() {
 											Change status
 										</Typography>
 										<Divider />
-										<Box my={2}>
+										<Box
+											my={2}
+											sx={{
+												display: 'flex',
+												flexDirection: {
+													xs: 'row',
+													sm: 'row',
+													md: 'column',
+												},
+												gap: { xs: 2, sm: 2, md: 0 },
+											}}
+										>
 											<Button
 												variant="contained"
 												color="primary"
+												sx={{ mb: 1 }}
 												fullWidth
 												onClick={() => {
 													setIsOpenModal(true);
@@ -167,11 +179,10 @@ function SellerOrdersPage() {
 											>
 												Accept
 											</Button>
-										</Box>
-										<Box my={2}>
 											<Button
 												variant="contained"
 												color="warning"
+												sx={{ mb: 1 }}
 												fullWidth
 												onClick={() => {
 													setIsOpenModal(true);
@@ -182,11 +193,10 @@ function SellerOrdersPage() {
 											>
 												In-Transit
 											</Button>
-										</Box>
-										<Box my={2}>
 											<Button
 												variant="contained"
 												color="success"
+												sx={{ mb: 1 }}
 												fullWidth
 												onClick={() => {
 													setIsOpenModal(true);
@@ -197,12 +207,10 @@ function SellerOrdersPage() {
 											>
 												Delivered
 											</Button>
-										</Box>
-										<Divider />
-										<Box my={2}>
 											<Button
 												variant="contained"
 												color="error"
+												sx={{ mb: 1 }}
 												fullWidth
 												onClick={() => {
 													setIsOpenModal(true);
@@ -221,7 +229,8 @@ function SellerOrdersPage() {
 									filterStatus={filterStatus}
 								/>
 							</Grid>
-							<Grid item xs={12} md={10}>
+
+							<Grid item xs={12} md={9}>
 								{filteredOrders.length > 0 &&
 								filterStatus !== 'any' ? (
 									filteredOrders.map((order) => (
@@ -248,11 +257,9 @@ function SellerOrdersPage() {
 																	checkedOrder._id ===
 																	order._id
 															)}
-															onChange={() => {
-																handleToggle(
-																	order
-																);
-															}}
+															onChange={handleToggle(
+																order
+															)}
 															inputProps={{
 																'aria-label':
 																	'select order',
@@ -300,8 +307,8 @@ function SellerOrdersPage() {
 											</Grid>
 											<Divider />
 											<Grid container spacing={2}>
-												<Grid item xs={1} />
-												<Grid item xs={4}>
+												<Grid item xs={1} md={1} />
+												<Grid item xs={5} md={4}>
 													<CardContent>
 														<Typography
 															variant="subtitle1"
@@ -329,7 +336,7 @@ function SellerOrdersPage() {
 														</Typography>
 													</CardContent>
 												</Grid>
-												<Grid item xs={4}>
+												<Grid item md={4} xs={6}>
 													<CardContent>
 														<Typography
 															variant="subtitle1"
@@ -365,28 +372,47 @@ function SellerOrdersPage() {
 														</Typography>
 													</CardContent>
 												</Grid>
-												<Grid item xs={2}>
-													<Link
-														to={`/order/${order._id}`}
-														key={order._id}
+												<Divider />
+												<Grid item xs={12} md={2}>
+													<Grid
+														container
+														justifyContent={{
+															xs: 'flex-end',
+															md: 'flex-start',
+														}}
+														alignItems={{
+															xs: 'flex-end',
+															md: 'center',
+														}}
 													>
-														<Button
-															variant="outlined"
-															sx={{
-																ml: 3,
-																my: 5,
-																color: '#878787',
-																border: '2px solid #878787',
-																'&:hover': {
-																	border: '2px solid #878787',
-																	backgroundColor:
-																		'#e0e0e0',
-																},
-															}}
+														<Link
+															to={`/order/${order._id}`}
+															key={order._id}
 														>
-															details
-														</Button>
-													</Link>
+															<Button
+																variant="outlined"
+																sx={{
+																	mx: {
+																		xs: 1,
+																		md: 3,
+																	},
+																	my: {
+																		xs: 1,
+																		md: 5,
+																	},
+																	color: '#878787',
+																	border: '2px solid #878787',
+																	'&:hover': {
+																		border: '2px solid #878787',
+																		backgroundColor:
+																			'#e0e0e0',
+																	},
+																}}
+															>
+																details
+															</Button>
+														</Link>
+													</Grid>
 												</Grid>
 											</Grid>
 										</Card>
@@ -444,10 +470,11 @@ function SellerOrdersPage() {
 															variant="body2"
 															color="text.secondary"
 														>
-															Price: €
+															Price:{' '}
 															{order.totalPrice.toFixed(
 																2
-															)}
+															)}{' '}
+															€
 														</Typography>
 													</CardContent>
 												</Grid>
@@ -468,8 +495,8 @@ function SellerOrdersPage() {
 											</Grid>
 											<Divider />
 											<Grid container spacing={2}>
-												<Grid item xs={1} />
-												<Grid item xs={4}>
+												<Grid item xs={1} md={1} />
+												<Grid item xs={5} md={4}>
 													<CardContent>
 														<Typography
 															variant="subtitle1"
@@ -497,7 +524,7 @@ function SellerOrdersPage() {
 														</Typography>
 													</CardContent>
 												</Grid>
-												<Grid item xs={4}>
+												<Grid item md={4} xs={6}>
 													<CardContent>
 														<Typography
 															variant="subtitle1"
@@ -536,43 +563,56 @@ function SellerOrdersPage() {
 															variant="body2"
 															color="text.secondary"
 														>
-															{order.status ===
-																'Delivered' && (
-																<>
-																	Date of
-																	Delivery:{' '}
-																	{formatDate(
-																		new Date(
-																			order.actualDateOfDelivery
-																		)
-																	)}
-																</>
+															Date of purchase:{' '}
+															{formatDate(
+																new Date(
+																	order.dateOfPurchase
+																)
 															)}
 														</Typography>
 													</CardContent>
 												</Grid>
-												<Grid item xs={2}>
-													<Link
-														to={`/order/${order._id}`}
-														key={order._id}
+												<Divider />
+												<Grid item xs={12} md={2}>
+													<Grid
+														container
+														justifyContent={{
+															xs: 'flex-end',
+															md: 'flex-start',
+														}}
+														alignItems={{
+															xs: 'flex-end',
+															md: 'center',
+														}}
 													>
-														<Button
-															variant="outlined"
-															sx={{
-																ml: 3,
-																my: 5,
-																color: '#878787',
-																border: '2px solid #878787',
-																'&:hover': {
-																	border: '2px solid #878787',
-																	backgroundColor:
-																		'#e0e0e0',
-																},
-															}}
+														<Link
+															to={`/order/${order._id}`}
+															key={order._id}
 														>
-															details
-														</Button>
-													</Link>
+															<Button
+																variant="outlined"
+																sx={{
+																	mx: {
+																		xs: 1,
+																		md: 3,
+																	},
+																	my: {
+																		xs: 1,
+																		md: 5,
+																	},
+																	color: '#878787',
+																	border: '2px solid #878787',
+																	'&:hover': {
+																		border: '2px solid #878787',
+																		backgroundColor:
+																			'#e0e0e0',
+																	},
+																}}
+															>
+																details
+															</Button>
+														</Link>
+													</Grid>
 												</Grid>
 											</Grid>
 										</Card>

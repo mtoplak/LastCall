@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -15,10 +15,12 @@ import { darkTheme } from 'assets/styles/styles';
 import { useUserAuth } from 'context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import api from 'services/api';
 
 function NavbarS() {
 	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 	const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+	const [id, setId] = useState<string>('');
 	const navigate = useNavigate();
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);
@@ -44,11 +46,23 @@ function NavbarS() {
 	const handleLogOut = async () => {
 		try {
 			await logOut();
-			navigate("/")
+			navigate('/');
+			window.location.reload();
 		} catch (error: any) {
 			console.log(error.message);
 		}
 	};
+
+	useEffect(() => {
+		const fetchUserId = async () => {
+			const response = await api.get(`/sellers/get/${user.email}`);
+			setId(response.data._id);
+		};
+
+		if (user) {
+			fetchUserId();
+		}
+	}, [user]);
 
 	return (
 		<ThemeProvider theme={darkTheme}>
@@ -87,7 +101,7 @@ function NavbarS() {
 								onClick={handleOpenNavMenu}
 								color="inherit"
 							>
-								 <MoreVertIcon />
+								<MoreVertIcon />
 							</IconButton>
 							<Menu
 								id="menu-appbar"
@@ -108,61 +122,65 @@ function NavbarS() {
 								}}
 							>
 								<Link to={'/inventory'}>
-								<Button
-									onClick={handleCloseNavMenu}
-									sx={{
-										my: 2,
-										color: 'white',
-										display: 'block',
-									}}
-								>
-									Inventory
-								</Button>
-							</Link>
-							<Link to={'/seller/orders'}>
-								<Button
-									onClick={handleCloseNavMenu}
-									sx={{
-										my: 2,
-										color: 'white',
-										display: 'block',
-									}}
-								>
-									Orders
-								</Button>
-							</Link>
-							<Link to={'/seller/sales'}>
-								<Button
-									onClick={handleCloseNavMenu}
-									sx={{
-										my: 2,
-										color: 'white',
-										display: 'block',
-									}}
-								>
-									Sales
-								</Button>
-							</Link>
+									<Button
+										onClick={handleCloseNavMenu}
+										sx={{
+											my: 2,
+											color: 'white',
+											display: 'block',
+										}}
+									>
+										Inventory
+									</Button>
+								</Link>
+								<Link to={'/seller/orders'}>
+									<Button
+										onClick={handleCloseNavMenu}
+										sx={{
+											my: 2,
+											color: 'white',
+											display: 'block',
+										}}
+									>
+										Orders
+									</Button>
+								</Link>
+								<Link to={'/seller/sales'}>
+									<Button
+										onClick={handleCloseNavMenu}
+										sx={{
+											my: 2,
+											color: 'white',
+											display: 'block',
+										}}
+									>
+										Sales
+									</Button>
+								</Link>
 							</Menu>
 						</Box>
-						<Typography
-							variant="h5"
-							noWrap
-							component="a"
-							href=""
-							sx={{
-								mr: 2,
-								display: { xs: 'flex', md: 'none' },
-								flexGrow: 1,
-								fontFamily: 'monospace',
-								fontWeight: 700,
-								letterSpacing: '.3rem',
-								color: 'inherit',
-								textDecoration: 'none',
-							}}
-						>
-							LastCall
-						</Typography>
+						<Box sx={{ justifyContent: 'center' }}>
+							<Link to="/">
+								<Typography
+									variant="h5"
+									noWrap
+									component="a"
+									href=""
+									sx={{
+										mr: 2,
+										display: { xs: 'flex', md: 'none' },
+										flexGrow: 1,
+										fontFamily: 'monospace',
+										fontWeight: 700,
+										letterSpacing: '.3rem',
+										color: 'inherit',
+										textDecoration: 'none',
+									}}
+								>
+									LastCall
+								</Typography>
+							</Link>
+						</Box>
 						<Box
 							sx={{
 								flexGrow: 1,
@@ -235,7 +253,7 @@ function NavbarS() {
 									open={Boolean(anchorElUser)}
 									onClose={handleCloseUserMenu}
 								>
-									<Link to="/myprofile">
+									<Link to={`/supplier/${id}`}>
 										<MenuItem onClick={handleCloseUserMenu}>
 											<Typography textAlign="center">
 												My profile
@@ -254,7 +272,6 @@ function NavbarS() {
 											Log out
 										</Typography>
 									</MenuItem>
-
 								</Menu>
 							</Box>
 						) : (

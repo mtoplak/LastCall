@@ -22,9 +22,9 @@ const SignInB = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
+	const [resetError, setResetError] = useState('');
 	const [isShownForgot, setIsShownForgot] = useState(false);
 	const [resetMail, setResetMail] = useState('');
-	const [isShownResetAlert, setIsShownResetAlert] = useState(false);
 	const [link, setLink] = useState<any>();
 
 	const navigate = useNavigate();
@@ -35,13 +35,23 @@ const SignInB = () => {
 	const handleResetPassword = async (e: any) => {
 		e.preventDefault();
 		try {
-			await resetPassword(resetMail);
+			const response = await resetPassword(resetMail);
+			//console.log(response);
+			if (response.success) {
+				setResetError('Reset mail sent! Check your email.');
+			} else {
+				setResetError(response.error.message);
+			}
 		} catch (error: any) {
-			setError(error.message);
+			console.error(error);
+			setResetError(error.message);
 		}
 	};
 
 	const handleSubmitSignIn = async (e: any) => {
+		setIsShownForgot(false);
+		setResetError('');
+		setResetMail('');
 		setError('');
 		setLink(null);
 		e.preventDefault();
@@ -125,7 +135,7 @@ const SignInB = () => {
 								justifyContent: 'center',
 							}}
 						>
-							<Box component="form" sx={{ marginTop: '5rem' }}>
+							<Box component="form" sx={{ marginTop: '5rem', px: 10 }}>
 								<Grid>
 									<Grid>
 										<Avatar
@@ -142,9 +152,14 @@ const SignInB = () => {
 											fullWidth
 											required
 											value={email}
-											onChange={(e) =>
-												setEmail(e.target.value)
-											}
+											onChange={(e) => {
+												setError('');
+												setResetError('');
+												setIsShownForgot(false);
+												setResetMail('');
+												setEmail(e.target.value);
+											}}
+											sx={{ mb: 1 }}
 										/>
 										<TextField
 											label="Password"
@@ -153,9 +168,14 @@ const SignInB = () => {
 											fullWidth
 											required
 											value={password}
-											onChange={(e) =>
-												setPassword(e.target.value)
-											}
+											onChange={(e) => {
+												setError('');
+												setResetError('');
+												setResetMail('');
+												setIsShownForgot(false);
+												setPassword(e.target.value);
+											}}
+											sx={{ mb: 1 }}
 										/>
 										<Button
 											type="submit"
@@ -172,7 +192,7 @@ const SignInB = () => {
 									</FormControl>
 									<Typography>
 										Don't have an account yet?{' '}
-										<Link to={'/sell/signup'}>
+										<Link to={'/buy/signup'}>
 											<span style={{ color: 'black' }}>
 												Sign up
 											</span>
@@ -184,7 +204,10 @@ const SignInB = () => {
 												setIsShownForgot(
 													!isShownForgot
 												);
+												setResetError('');
+												setResetMail('');
 												setError('');
+												setLink(null);
 											}}
 											style={{ cursor: 'pointer' }}
 										>
@@ -227,16 +250,17 @@ const SignInB = () => {
 													</FormControl>
 												</Grid>
 											</Grid>
-											{isShownResetAlert && (
-												<Alert severity="info">
-													Reset email sent!
+											{resetError && (
+												<Alert severity="error">
+													{resetError}
 												</Alert>
 											)}
 										</>
 									)}
 									{error && (
 										<Alert severity="error">
-											{error} {link} page.
+											{error} {link && link}{' '}
+											{link && 'page.'}
 										</Alert>
 									)}
 									<Typography sx={{ marginBottom: '8rem' }} />
