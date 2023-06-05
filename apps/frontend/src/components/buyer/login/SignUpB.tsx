@@ -15,6 +15,7 @@ import {
 	Select,
 	MenuItem,
 	Alert,
+	LinearProgress,
 } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
@@ -45,6 +46,7 @@ const initialState = {
 const SignUpB = () => {
 	const [error, setError] = useState('');
 	const [newUserData, setNewUserData] = useState(initialState);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const navigate = useNavigate();
 
@@ -63,6 +65,7 @@ const SignUpB = () => {
 	const { signUp, user } = useUserAuth();
 
 	const handleSubmit = async (e: any) => {
+		setIsLoading(true);
 		setError('');
 		e.preventDefault();
 		if (newUserData.password !== newUserData.password2) {
@@ -95,6 +98,8 @@ const SignUpB = () => {
 			}
 		} catch (error: any) {
 			setError(error.message);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -122,7 +127,7 @@ const SignUpB = () => {
 							<Paper elevation={10} sx={{ px: 4, mb: 3, pb: 2 }}>
 								<Grid container spacing={2}>
 									<Grid item xs={12} md={6}>
-										<Typography variant="h6">
+										<Typography variant="h6" sx={{ mb: 2 }}>
 											Basic info
 										</Typography>
 										<TextField
@@ -200,7 +205,7 @@ const SignUpB = () => {
 										/>
 									</Grid>
 									<Grid item xs={12} md={6}>
-										<Typography variant="h6">
+										<Typography variant="h6" sx={{ mb: 2 }}>
 											Additional Information
 										</Typography>
 										<TextField
@@ -302,6 +307,9 @@ const SignUpB = () => {
 								>
 									Sign up
 								</Button>
+								{isLoading && (
+									<LinearProgress color="inherit" />
+								)}
 								<Typography>
 									Already have an account?{' '}
 									<Link to={'/buy/signin'}>

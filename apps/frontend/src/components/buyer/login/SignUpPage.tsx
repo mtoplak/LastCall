@@ -4,7 +4,7 @@ import SignUpB from './SignUpB';
 
 function SignUpPage() {
 	useEffect(() => {
-		document.title = 'Sign Up';
+		document.title = 'Sign Up | Buyer';
 	}, []);
 	return (
 		<>

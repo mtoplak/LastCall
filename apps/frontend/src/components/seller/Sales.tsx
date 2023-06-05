@@ -112,11 +112,44 @@ function Sales() {
 												placeholder="Enter discount amount"
 												fullWidth
 												value={discountAmount}
-												onChange={(event) =>
-													setDiscountAmount(
-														event.target.value
-													)
-												}
+												onChange={(event) => {
+													let value =
+														event.target.value;
+													// Remove any non-digit characters
+													value = value.replace(
+														/\D/g,
+														''
+													);
+													// Ensure the value is within the specified range
+													if (value === '') {
+														setDiscountAmount('');
+													} else {
+														const numericValue =
+															parseInt(value, 10);
+														if (numericValue < 1) {
+															setDiscountAmount(
+																'1'
+															);
+														} else if (
+															numericValue > 99
+														) {
+															setDiscountAmount(
+																'99'
+															);
+														} else {
+															setDiscountAmount(
+																numericValue.toString()
+															);
+														}
+													}
+												}}
+												inputProps={{
+													min: 1,
+													max: 99,
+												}}
+												InputProps={{
+													endAdornment: '%',
+												}}
 											/>
 											<Button
 												variant="contained"

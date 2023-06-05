@@ -57,7 +57,7 @@ const SignUpS = () => {
 	const { signUp } = useUserAuth();
 
 	useEffect(() => {
-		document.title = 'Sign Up';
+		document.title = 'Sign Up | Seller';
 	}, []);
 
 	const handleChange = (e: { target: { value: any; name: any } }) => {
@@ -160,7 +160,10 @@ const SignUpS = () => {
 								>
 									<Grid container spacing={2}>
 										<Grid item xs={12} md={6}>
-											<Typography variant="h6">
+											<Typography
+												variant="h6"
+												sx={{ mb: 2 }}
+											>
 												Basic info
 											</Typography>
 											<TextField
@@ -264,7 +267,10 @@ const SignUpS = () => {
 											</FormControl>
 										</Grid>
 										<Grid item xs={12} md={6}>
-											<Typography variant="h6">
+											<Typography
+												variant="h6"
+												sx={{ mb: 2 }}
+											>
 												Additional Information
 											</Typography>
 											<TextField
@@ -365,18 +371,26 @@ const SignUpS = () => {
 												placeholder="Enter minimum price"
 												fullWidth
 												name="minPrice"
+												type="number"
 												value={newUserData.minPrice}
 												onChange={handleChange}
 												sx={{ mb: 2 }}
+												InputProps={{
+													endAdornment: '€',
+												}}
 											/>
 											<TextField
-												label="Maximum distance location"
+												label="Maximum distance for delivery"
 												placeholder="Enter maximum distance"
 												fullWidth
 												name="maxDistance"
+												type="number"
 												value={newUserData.maxDistance}
 												onChange={handleChange}
 												sx={{ mb: 2 }}
+												InputProps={{
+													endAdornment: 'km',
+												}}
 											/>
 											<TextField
 												label="Delivery Cost"
@@ -386,6 +400,10 @@ const SignUpS = () => {
 												value={newUserData.deliveryCost}
 												onChange={handleChange}
 												sx={{ mb: 2 }}
+												type="number"
+												InputProps={{
+													endAdornment: '€',
+												}}
 											/>
 										</Grid>
 									</Grid>

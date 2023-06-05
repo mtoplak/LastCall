@@ -30,6 +30,7 @@ import { checkoutButton, style } from 'assets/styles/styles';
 import { getCurrentDate } from '../../utils/getCurrentDate';
 import { ISeller } from 'models/seller';
 import { useCartContext } from 'context/CartContext';
+import payments from '../../assets/images/payments.jpg';
 
 interface GroupedProduct {
 	product: IDrink;
@@ -746,6 +747,11 @@ function Cart() {
 					)}
 					{isLoading && <LinearProgress color="inherit" />}
 					<Typography sx={{ mt: 2 }}>
+						<img
+							src={payments}
+							alt="heroImg"
+							style={{ width: '100%' }}
+						/>
 						<Button
 							sx={{ mt: 2 }}
 							color="primary"

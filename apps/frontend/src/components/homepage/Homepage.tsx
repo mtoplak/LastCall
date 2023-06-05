@@ -53,7 +53,6 @@ const Homepage = () => {
 							/>
 						</Link>
 					</Box>
-
 					<Box sx={{ flex: '1.25' }}>
 						<img
 							src={heroImg}
