@@ -88,7 +88,7 @@ function Sales() {
 						Product List
 					</Typography>
 					<Grid container spacing={2}>
-						<Grid item xs={12} md={2}>
+						<Grid item xs={12} md={3}>
 							<Card sx={{ mb: 3 }}>
 								<CardContent>
 									<Typography
@@ -100,7 +100,12 @@ function Sales() {
 									</Typography>
 									<Divider />
 									<Box my={2}>
-										<FormControl>
+										<FormControl
+											sx={{
+												display: 'flex',
+												flexDirection: 'column',
+											}}
+										>
 											<TextField
 												sx={{ mb: 2 }}
 												label="Discount"
@@ -137,7 +142,8 @@ function Sales() {
 								</CardContent>
 							</Card>
 						</Grid>
-						<Grid item xs={12} md={10}>
+
+						<Grid item xs={12} md={9}>
 							{products.map((product) => (
 								<Card sx={{ mb: 3 }} key={product._id}>
 									<Grid
@@ -175,9 +181,7 @@ function Sales() {
 													variant="h6"
 													component="h2"
 												>
-													<b>
-														{product.title}
-													</b>
+													<b>{product.title}</b>
 												</Typography>
 												<Typography
 													variant="body2"
