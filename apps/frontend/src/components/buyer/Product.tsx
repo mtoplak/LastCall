@@ -118,9 +118,7 @@ function Product() {
 								onClick={() => {
 									setShowWarning(false);
 								}}
-							>
-								<CloseOutlinedIcon fontSize="inherit" />
-							</IconButton>
+							></IconButton>
 						}
 					>
 						<AlertTitle>
@@ -178,7 +176,10 @@ function Product() {
 												gutterBottom
 											>
 												{' '}
-												{drink?.actualPrice.toFixed(2)} €
+												{drink?.actualPrice.toFixed(
+													2
+												)}{' '}
+												€
 											</Typography>
 											<Typography
 												variant="body1"

@@ -50,7 +50,7 @@ export const CartContextProvider = ({
 				);
 				setCartProducts(response.data.cart);
 			} catch (error: any) {
-				console.log(error.response.data.message);
+				console.error(error.response.data.message);
 			}
 		};
 		if (user && role === 'buyer') {

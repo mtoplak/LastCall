@@ -4,7 +4,7 @@ import SignInB from './SignInB';
 
 function SignInPage() {
 	useEffect(() => {
-		document.title = 'Sign In';
+		document.title = 'Sign In | Buyer';
 	}, []);
 	return (
 		<>
