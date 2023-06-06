@@ -162,7 +162,6 @@ function Cart() {
 			});
 			const results = await Promise.all(requests);
 			const eligibility = results.every((result) => result); // Check if all sellers are eligible
-			setCheckEligibility(eligibility);
 			//console.log(eligibility);
 			return eligibility;
 		} else {
@@ -407,11 +406,12 @@ function Cart() {
 		return Object.entries(groupedProducts).map(([seller, products]) => (
 			<Grid container spacing={2} key={seller}>
 				<Grid item xs={12} md={8}>
-					<Typography variant="h6" component="h2" >
+					<Typography variant="h6" component="h2">
 						Seller: {products[0].product.seller.title}
 					</Typography>
 					<Typography variant="body2" color="text.secondary" mb={2}>
-						Minimum price for delivery: {products[0].product.seller.minPrice} €
+						Minimum price for delivery:{' '}
+						{products[0].product.seller.minPrice} €
 					</Typography>
 					{products.map((item) => (
 						<Card

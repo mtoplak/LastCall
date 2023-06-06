@@ -108,16 +108,6 @@ function Product() {
 						<Alert
 							severity="error"
 							style={{ marginBottom: '3rem' }}
-							action={
-								<IconButton
-									aria-label="close"
-									color="inherit"
-									size="small"
-									onClick={() => {
-										setShowWarning(false);
-									}}
-								></IconButton>
-							}
 						>
 							<AlertTitle>
 								You must be logged in to add items to cart.
