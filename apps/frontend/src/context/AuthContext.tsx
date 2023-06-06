@@ -7,6 +7,7 @@ import {
 	onAuthStateChanged,
 	sendPasswordResetEmail,
 	sendEmailVerification,
+	deleteUser,
 } from 'firebase/auth';
 import api from 'services/api';
 import { Link } from 'react-router-dom';
@@ -21,6 +22,7 @@ const AuthContext = createContext({
 	logOut: async (): Promise<any> => {},
 	resetPassword: async (email: string): Promise<any> => {},
 	verifyEmail: async (): Promise<any> => {},
+	deleteAccount: async (): Promise<any> => {},
 	user: null as any,
 	isLoading: true,
 	role: '',
@@ -140,6 +142,16 @@ export function AuthContextProvider({ children }: { children: any }) {
 		}
 	}
 
+	async function deleteAccount() {
+		try {
+			const response = await deleteUser(auth.currentUser!); //user!
+			return { success: true, response };
+		} catch (error) {
+			console.error(error);
+			return { success: false, error };
+		}
+	}
+
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
 			//console.log('Auth state changed');
@@ -203,6 +215,7 @@ export function AuthContextProvider({ children }: { children: any }) {
 				logOut,
 				resetPassword,
 				verifyEmail,
+				deleteAccount,
 				isLoading,
 				role,
 			}}

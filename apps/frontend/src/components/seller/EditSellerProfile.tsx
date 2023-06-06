@@ -59,7 +59,7 @@ const initialState = {
 };
 
 function EditSellerProfile() {
-	const { user, logOut } = useUserAuth();
+	const { user, deleteAccount } = useUserAuth();
 	const [sellerProfile, setSellerProfile] =
 		useState<SellerProfile>(initialState);
 	const [alert, setAlert] = useState<string>('');
@@ -118,7 +118,7 @@ function EditSellerProfile() {
 					Authorization: user?.stsTokenManager?.accessToken,
 				},
 			});
-			await logOut();
+			await deleteAccount();
 			setIsOpenModal(false);
 		} catch (error) {
 			console.error(error);

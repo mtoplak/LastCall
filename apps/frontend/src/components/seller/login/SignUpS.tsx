@@ -313,6 +313,7 @@ const SignUpS = () => {
 												placeholder="Enter register number"
 												fullWidth
 												name="registerNumber"
+												type="number"
 												value={
 													newUserData.registerNumber
 												}
