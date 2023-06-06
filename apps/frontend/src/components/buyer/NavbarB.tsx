@@ -10,7 +10,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { ThemeProvider } from '@mui/material';
+import { Grid, ThemeProvider } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useUserAuth } from 'context/AuthContext';
 import { darkTheme } from 'assets/styles/styles';
@@ -57,7 +57,7 @@ function NavbarB() {
 	return (
 		<ThemeProvider theme={darkTheme}>
 			<AppBar position="static">
-				<Container maxWidth="xl">
+				<Container maxWidth="xl" >
 					<Toolbar disableGutters>
 						<Link to="/">
 							<Typography
@@ -136,10 +136,20 @@ function NavbarB() {
 										Suppliers
 									</Button>
 								</Link>
+								<Link to="/orders">
+								<Button
+									onClick={handleCloseNavMenu}
+									sx={{
+										my: 2,
+										color: 'white',
+										display: 'block',
+									}}
+								>
+									My orders
+								</Button>
+							</Link>
 							</Menu>
 						</Box>
-						<Box sx={{ justifyContent: 'center' }}>
-							<Link to="/">
 								<Typography
 									variant="h5"
 									noWrap
@@ -156,10 +166,10 @@ function NavbarB() {
 										textDecoration: 'none',
 									}}
 								>
+									<Link to="/">
 									LastCall
+									</Link>
 								</Typography>
-							</Link>
-						</Box>
 						<Box
 							sx={{
 								flexGrow: 1,
@@ -188,6 +198,18 @@ function NavbarB() {
 									}}
 								>
 									Suppliers
+								</Button>
+							</Link>
+							<Link to="/orders">
+								<Button
+									onClick={handleCloseNavMenu}
+									sx={{
+										my: 2,
+										color: 'white',
+										display: 'block',
+									}}
+								>
+									My orders
 								</Button>
 							</Link>
 						</Box>
@@ -241,13 +263,6 @@ function NavbarB() {
 									open={Boolean(anchorElUser)}
 									onClose={handleCloseUserMenu}
 								>
-									<Link to="/orders">
-										<MenuItem onClick={handleCloseUserMenu}>
-											<Typography textAlign="center">
-												My orders
-											</Typography>
-										</MenuItem>
-									</Link>
 									<MenuItem onClick={handleLogOut}>
 										<Typography textAlign="center">
 											Log out
