@@ -1,4 +1,4 @@
-import { Box, Card, Container, Grid, Typography } from '@mui/material';
+import { Box, Card, Container, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import Drink from './DrinkB';
 import SearchProductsInput from './SearchProductsInput';

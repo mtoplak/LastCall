@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { ThemeProvider } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useUserAuth } from 'context/AuthContext';
 import { darkTheme } from 'assets/styles/styles';
 import { useCartContext } from 'context/CartContext';
@@ -23,6 +23,7 @@ function NavbarB() {
 	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 	const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 	const { cartProducts } = useCartContext();
+	const navigate = useNavigate();
 
 	const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);
@@ -48,6 +49,7 @@ function NavbarB() {
 	const handleLogOut = async () => {
 		try {
 			await logOut();
+			navigate('/');
 			window.location.reload();
 		} catch (error: any) {
 			console.log(error.message);
@@ -136,30 +138,38 @@ function NavbarB() {
 										Suppliers
 									</Button>
 								</Link>
+								<Link to="/orders">
+									<Button
+										onClick={handleCloseNavMenu}
+										sx={{
+											my: 2,
+											color: 'white',
+											display: 'block',
+										}}
+									>
+										My orders
+									</Button>
+								</Link>
 							</Menu>
 						</Box>
-						<Box sx={{ justifyContent: 'center' }}>
-							<Link to="/">
-								<Typography
-									variant="h5"
-									noWrap
-									component="a"
-									href=""
-									sx={{
-										mr: 2,
-										display: { xs: 'flex', md: 'none' },
-										flexGrow: 1,
-										fontFamily: 'monospace',
-										fontWeight: 700,
-										letterSpacing: '.3rem',
-										color: 'inherit',
-										textDecoration: 'none',
-									}}
-								>
-									LastCall
-								</Typography>
-							</Link>
-						</Box>
+						<Typography
+							variant="h5"
+							noWrap
+							component="a"
+							href=""
+							sx={{
+								mr: 2,
+								display: { xs: 'flex', md: 'none' },
+								flexGrow: 1,
+								fontFamily: 'monospace',
+								fontWeight: 700,
+								letterSpacing: '.3rem',
+								color: 'inherit',
+								textDecoration: 'none',
+							}}
+						>
+							<Link to="/">LastCall</Link>
+						</Typography>
 						<Box
 							sx={{
 								flexGrow: 1,
@@ -188,6 +198,18 @@ function NavbarB() {
 									}}
 								>
 									Suppliers
+								</Button>
+							</Link>
+							<Link to="/orders">
+								<Button
+									onClick={handleCloseNavMenu}
+									sx={{
+										my: 2,
+										color: 'white',
+										display: 'block',
+									}}
+								>
+									My orders
 								</Button>
 							</Link>
 						</Box>
@@ -241,13 +263,6 @@ function NavbarB() {
 									open={Boolean(anchorElUser)}
 									onClose={handleCloseUserMenu}
 								>
-									<Link to="/orders">
-										<MenuItem onClick={handleCloseUserMenu}>
-											<Typography textAlign="center">
-												My orders
-											</Typography>
-										</MenuItem>
-									</Link>
 									<MenuItem onClick={handleLogOut}>
 										<Typography textAlign="center">
 											Log out

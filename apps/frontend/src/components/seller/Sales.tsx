@@ -18,6 +18,7 @@ import { useEffect, useState } from 'react';
 import api from 'services/api';
 import NavbarS from './NavbarS';
 import { getDiscountColor } from 'utils/getDiscountColor';
+import { Link } from 'react-router-dom';
 
 function Sales() {
 	const [products, setProducts] = useState<IDrink[]>([]);
@@ -227,14 +228,18 @@ function Sales() {
 											/>
 										</Grid>
 										<Grid item xs={3}>
-											<CardMedia
-												component="img"
-												image={product.picture}
-												sx={{
-													maxHeight: 150,
-													maxWidth: 150,
-												}}
-											/>
+											<Link
+												to={`/product/${product._id}`}
+											>
+												<CardMedia
+													component="img"
+													image={product.picture}
+													sx={{
+														maxHeight: 150,
+														maxWidth: 150,
+													}}
+												/>
+											</Link>
 										</Grid>
 										<Grid item xs={5}>
 											<CardContent>
@@ -242,7 +247,12 @@ function Sales() {
 													variant="h6"
 													component="h2"
 												>
-													<b>{product.title}</b>
+													<Link
+														to={`/product/${product._id}`}
+														className="blackLink"
+													>
+														<b>{product.title}</b>
+													</Link>
 												</Typography>
 												<Typography
 													variant="body2"

@@ -10,7 +10,7 @@ export class CartService {
   constructor(
     private readonly buyersRepository: BuyersRepository,
     private readonly productsRepository: ProductsRepository,
-    private readonly buyersService: BuyersService
+    private readonly buyersService: BuyersService,
   ) {}
 
   async addToCart(
@@ -69,22 +69,22 @@ export class CartService {
     if (!buyer) {
       return null;
     }
-  
+
     const { productId, quantity } = productData;
-  
+
     if (!productId) {
       throw new NotFoundException('Invalid product ID');
     }
-  
+
     const product = await this.productsRepository.findOne({ _id: productId });
     if (!product) {
       throw new NotFoundException('Product not found');
     }
-  
+
     const existingItem = buyer.cart.find(
       (item) => item.productId._id.toString() === productId,
     );
-  
+
     if (existingItem) {
       existingItem.quantity = quantity;
     } else {
@@ -93,17 +93,16 @@ export class CartService {
         quantity: quantity,
       });
     }
-  
+
     await buyer.save();
-  
+
     const updatedCart = buyer.cart.map((item) => ({
       product: item.productId,
       quantity: item.quantity,
     }));
-  
+
     return { cart: updatedCart };
   }
-  
 
   async getCart(email: string): Promise<CartResponse | null> {
     const buyer = await this.buyersService.getSingleBuyerByEmail(email);
@@ -139,7 +138,7 @@ export class CartService {
       (item) => item.productId._id.toString() !== productId,
     );
 
-    await buyer.save();
+    await this.buyersService.updateBuyer(buyer._id, buyer);
 
     const updatedCart = buyer.cart.map((item) => {
       return {
@@ -153,34 +152,34 @@ export class CartService {
 
   async deleteProductsFromCart(
     email: string,
-    productIds: string[]
+    productIds: string[],
   ): Promise<CartResponse> {
     const buyer = await this.buyersService.getSingleBuyerByEmail(email);
     if (!buyer) {
       throw new NotFoundException('Buyer not found');
     }
-  
+
     const existingProducts = buyer.cart.some((item) =>
-      productIds.includes(item.productId._id.toString())
+      productIds.includes(item.productId._id.toString()),
     );
-    
+
     if (!existingProducts) {
       throw new NotFoundException('Products not found in the cart');
     }
-  
+
     buyer.cart = buyer.cart.filter(
-      (item) => !productIds.includes(item.productId._id.toString())
+      (item) => !productIds.includes(item.productId._id.toString()),
     );
-  
+
     await buyer.save();
-  
+
     const updatedCart = buyer.cart.map((item) => {
       return {
         product: item.productId,
         quantity: item.quantity,
       };
     });
-  
+
     return { cart: updatedCart };
   }
 
@@ -193,5 +192,4 @@ export class CartService {
     await buyer.save();
     return { cart: [] };
   }
-
 }

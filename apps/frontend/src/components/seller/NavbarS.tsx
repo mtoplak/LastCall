@@ -159,8 +159,6 @@ function NavbarS() {
 								</Link>
 							</Menu>
 						</Box>
-						<Box sx={{ justifyContent: 'center' }}>
-							<Link to="/">
 								<Typography
 									variant="h5"
 									noWrap
@@ -177,10 +175,10 @@ function NavbarS() {
 										textDecoration: 'none',
 									}}
 								>
+									<Link to="/">
 									LastCall
+									</Link>
 								</Typography>
-							</Link>
-						</Box>
 						<Box
 							sx={{
 								flexGrow: 1,
