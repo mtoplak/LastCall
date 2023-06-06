@@ -100,246 +100,254 @@ function Product() {
 	};
 
 	return (
-		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '80vh' }}>
+		<>
 			{role === 'seller' ? <NavbarS /> : <NavbarB />}
-			<Container style={{ paddingBottom: '3rem' }} sx={{ mt: 5 }}>
-				{!(role === 'seller' || role === 'buyer') && (
-					<Alert
-						severity="error"
-						style={{ marginBottom: '3rem' }}
-						action={
-							<IconButton
-								aria-label="close"
-								color="inherit"
-								size="small"
-								onClick={() => {
-									setShowWarning(false);
-								}}
-							></IconButton>
-						}
-					>
-						<AlertTitle>
-							You must be logged in to add items to cart.
-						</AlertTitle>
-						Go to{' '}
-						<Link to="/buy/signin">
-							<span className="blackLink">sign in</span>
-						</Link>
-						.
-					</Alert>
-				)}
-				<Paper sx={{ mb: 2 }}>
-					<Grid container spacing={2}>
-						<Grid item md={5} xs={12}>
-							<Box sx={{ my: '1rem', mx: '1rem' }}>
-								<img
-									src={drink?.picture}
-									alt="heroImg"
-									style={{ maxWidth: '100%' }}
-								/>
-							</Box>
-						</Grid>
-						<Divider orientation="vertical" flexItem />
-						<Grid item md={6} xs={12} sx={{ my: '1rem' }}>
-							<Box
-								sx={{
-									minHeight: '52vh',
-									mx: '1rem',
-								}}
-							>
-								<Typography
-									variant="h4"
-									component="span"
-									gutterBottom
-								>
-									{drink?.title}
-								</Typography>
+			<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '80vh' }}>
+				<Container style={{ paddingBottom: '3rem' }} sx={{ pt: 5 }}>
+					{!(role === 'seller' || role === 'buyer') && (
+						<Alert
+							severity="error"
+							style={{ marginBottom: '3rem' }}
+							action={
+								<IconButton
+									aria-label="close"
+									color="inherit"
+									size="small"
+									onClick={() => {
+										setShowWarning(false);
+									}}
+								></IconButton>
+							}
+						>
+							<AlertTitle>
+								You must be logged in to add items to cart.
+							</AlertTitle>
+							Go to{' '}
+							<Link to="/buy/signin">
+								<span className="blackLink">sign in</span>
+							</Link>
+							.
+						</Alert>
+					)}
+					<Paper sx={{ mb: 2 }}>
+						<Grid container spacing={2}>
+							<Grid item md={5} xs={12}>
+								<Box sx={{ my: '1rem', mx: '1rem' }}>
+									<img
+										src={drink?.picture}
+										alt="heroImg"
+										style={{ maxWidth: '100%' }}
+									/>
+								</Box>
+							</Grid>
+							<Divider orientation="vertical" flexItem />
+							<Grid item md={6} xs={12} sx={{ my: '1rem' }}>
 								<Box
 									sx={{
-										display: 'flex',
-										alignItems: 'center',
+										minHeight: '52vh',
+										mx: '1rem',
 									}}
 								>
-									{drink?.actualPrice !== drink?.price ? (
-										<>
-											<Typography
-												variant="body1"
-												sx={{
-													textDecoration:
-														'line-through',
-													color: 'text.secondary',
-													mr: 1,
-												}}
-												gutterBottom
-											>
-												{' '}
-												{drink?.actualPrice.toFixed(
-													2
-												)}{' '}
+									<Typography
+										variant="h4"
+										component="span"
+										gutterBottom
+									>
+										{drink?.title}
+									</Typography>
+									<Box
+										sx={{
+											display: 'flex',
+											alignItems: 'center',
+										}}
+									>
+										{drink?.actualPrice !== drink?.price ? (
+											<>
+												<Typography
+													variant="body1"
+													sx={{
+														textDecoration:
+															'line-through',
+														color: 'text.secondary',
+														mr: 1,
+													}}
+													gutterBottom
+												>
+													{' '}
+													{drink?.actualPrice.toFixed(
+														2
+													)}{' '}
+													€
+												</Typography>
+												<Typography
+													variant="body1"
+													sx={{ color: 'error.main' }}
+													gutterBottom
+												>
+													{drink?.price.toFixed(2)} €
+												</Typography>
+											</>
+										) : (
+											<Typography variant="body1">
+												Price:{' '}
+												{drink?.actualPrice.toFixed(2)}{' '}
 												€
 											</Typography>
-											<Typography
-												variant="body1"
-												sx={{ color: 'error.main' }}
-												gutterBottom
-											>
-												{drink?.price.toFixed(2)} €
-											</Typography>
-										</>
-									) : (
-										<Typography variant="body1">
-											Price:{' '}
-											{drink?.actualPrice.toFixed(2)} €
-										</Typography>
-									)}
-								</Box>
-								<Divider />
-								<Typography
-									variant="h6"
-									component="span"
-									sx={{ flex: '1' }}
-								>
-									<List>
-										<ListItem>
-											<ListItemText
-												primary={
-													'Category: ' +
-													drink?.drinkCategory
-												}
-											/>
-										</ListItem>
-										<ListItem>
-											<ListItemText
-												primary={'Size: ' + drink?.size}
-											/>
-										</ListItem>
-										<ListItem>
-											<ListItemText
-												primary={
-													'Packaging: ' +
-													drink?.packaging
-												}
-											/>
-										</ListItem>
-									</List>
-								</Typography>
-								{drink?.discount !== 0 && (
-									<Alert
-										severity="info"
-										sx={{ mb: 2, mt: 1 }}
-									>
-										There is currently a {drink?.discount}%
-										discount on this product!
-										<br />
-									</Alert>
-								)}
-								{role === 'buyer' && (
-									<Box>
-										<Divider />
-										<Typography
-											variant="h6"
-											component="span"
-											sx={{ flex: '1' }}
-										>
-											Add product to cart
-											<Box
-												display="flex"
-												alignItems="center"
-												sx={{ mt: 1 }}
-												gap={10}
-											>
-												<Box flex="1">
-													<TextField
-														value={quantity}
-														onChange={(e) =>
-															setQuantity(
-																Number(
-																	e.target
-																		.value
-																)
-															)
-														}
-														label="Quantity"
-														placeholder="1"
-														type="number"
-														fullWidth
-														inputProps={{
-															min: 1,
-														}}
-													/>
-												</Box>
-												<Box>
-													<Button onClick={addToCart}>
-														Add to cart
-													</Button>
-												</Box>
-											</Box>
-											<p style={{ fontSize: '15px' }}>
-												In stock: {drink?.stock}
-											</p>
-										</Typography>
+										)}
 									</Box>
-								)}
-								{showAlert && (
-									<Alert
-										severity="success"
-										style={{
-											marginTop: '1rem',
-											marginBottom: '1rem',
-										}}
-										action={
-											<IconButton
-												aria-label="close"
-												color="inherit"
-												size="small"
-												onClick={() =>
-													setShowAlert(false)
-												}
+									<Divider />
+									<Typography
+										variant="h6"
+										component="span"
+										sx={{ flex: '1' }}
+									>
+										<List>
+											<ListItem>
+												<ListItemText
+													primary={
+														'Category: ' +
+														drink?.drinkCategory
+													}
+												/>
+											</ListItem>
+											<ListItem>
+												<ListItemText
+													primary={
+														'Size: ' + drink?.size
+													}
+												/>
+											</ListItem>
+											<ListItem>
+												<ListItemText
+													primary={
+														'Packaging: ' +
+														drink?.packaging
+													}
+												/>
+											</ListItem>
+										</List>
+									</Typography>
+									{drink?.discount !== 0 && (
+										<Alert
+											severity="info"
+											sx={{ mb: 2, mt: 1 }}
+										>
+											There is currently a{' '}
+											{drink?.discount}% discount on this
+											product!
+											<br />
+										</Alert>
+									)}
+									{role === 'buyer' && (
+										<Box>
+											<Divider />
+											<Typography
+												variant="h6"
+												component="span"
+												sx={{ flex: '1' }}
 											>
-												<CloseOutlinedIcon fontSize="inherit" />
-											</IconButton>
-										}
+												Add product to cart
+												<Box
+													display="flex"
+													alignItems="center"
+													sx={{ mt: 1 }}
+													gap={10}
+												>
+													<Box flex="1">
+														<TextField
+															value={quantity}
+															onChange={(e) =>
+																setQuantity(
+																	Number(
+																		e.target
+																			.value
+																	)
+																)
+															}
+															label="Quantity"
+															placeholder="1"
+															type="number"
+															fullWidth
+															inputProps={{
+																min: 1,
+															}}
+														/>
+													</Box>
+													<Box>
+														<Button
+															onClick={addToCart}
+														>
+															Add to cart
+														</Button>
+													</Box>
+												</Box>
+												<p style={{ fontSize: '15px' }}>
+													In stock: {drink?.stock}
+												</p>
+											</Typography>
+										</Box>
+									)}
+									{showAlert && (
+										<Alert
+											severity="success"
+											style={{
+												marginTop: '1rem',
+												marginBottom: '1rem',
+											}}
+											action={
+												<IconButton
+													aria-label="close"
+													color="inherit"
+													size="small"
+													onClick={() =>
+														setShowAlert(false)
+													}
+												>
+													<CloseOutlinedIcon fontSize="inherit" />
+												</IconButton>
+											}
+										>
+											<AlertTitle>
+												Product added to cart
+											</AlertTitle>
+											Go to{' '}
+											<Link to="/cart">
+												<span className="blackLink">
+													cart
+												</span>
+											</Link>{' '}
+											to checkout.
+										</Alert>
+									)}
+									<Divider sx={{ mb: 1 }} />
+									<Typography
+										variant="h6"
+										gutterBottom
+										sx={{ ml: 1 }}
 									>
-										<AlertTitle>
-											Product added to cart
-										</AlertTitle>
-										Go to{' '}
-										<Link to="/cart">
-											<span className="blackLink">
-												cart
-											</span>
-										</Link>{' '}
-										to checkout.
-									</Alert>
-								)}
-								<Divider sx={{ mb: 1 }} />
-								<Typography
-									variant="h6"
-									gutterBottom
-									sx={{ ml: 1 }}
-								>
-									<Link
-										to={`/supplier/${drink?.seller._id}`}
-										className="blackLink"
+										<Link
+											to={`/supplier/${drink?.seller._id}`}
+											className="blackLink"
+										>
+											{drink?.seller.title}
+										</Link>
+									</Typography>
+									<Typography
+										variant="subtitle1"
+										gutterBottom
+										sx={{ ml: 1 }}
 									>
-										{drink?.seller.title}
-									</Link>
-								</Typography>
-								<Typography
-									variant="subtitle1"
-									gutterBottom
-									sx={{ ml: 1 }}
-								>
-									{drink?.seller.address},{' '}
-									{drink?.seller.city},{' '}
-									{drink?.seller.country}
-								</Typography>
-							</Box>
+										{drink?.seller.address},{' '}
+										{drink?.seller.city},{' '}
+										{drink?.seller.country}
+									</Typography>
+								</Box>
+							</Grid>
 						</Grid>
-					</Grid>
-				</Paper>
-			</Container>
-		</Box>
+					</Paper>
+				</Container>
+			</Box>
+		</>
 	);
 }
 

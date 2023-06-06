@@ -14,11 +14,14 @@ import {
 	Checkbox,
 	ListItemText,
 	OutlinedInput,
+	Alert,
+	Modal,
 } from '@mui/material';
 import api from 'services/api';
 import NavbarS from './NavbarS';
 import { useUserAuth } from 'context/AuthContext';
 import { SellerType } from 'enums/seller.enum';
+import { style } from 'assets/styles/styles';
 const markets = ['Slovenia', 'Italy', 'France', 'Austria', 'United Kingdom'];
 
 interface SellerProfile {
@@ -56,9 +59,11 @@ const initialState = {
 };
 
 function EditSellerProfile() {
-	const { user } = useUserAuth();
+	const { user, logOut } = useUserAuth();
 	const [sellerProfile, setSellerProfile] =
 		useState<SellerProfile>(initialState);
+	const [alert, setAlert] = useState<string>('');
+	const [isOpenModal, setIsOpenModal] = useState(false);
 
 	useEffect(() => {
 		if (!user) return;
@@ -100,8 +105,23 @@ function EditSellerProfile() {
 					},
 				}
 			);
+			setAlert('Profile updated successfully!');
 		} catch (error) {
 			throw error;
+		}
+	};
+
+	const handleDeleteProfile = async () => {
+		try {
+			const response = api.delete(`sellers/delete/${user.email}`, {
+				headers: {
+					Authorization: user?.stsTokenManager?.accessToken,
+				},
+			});
+			await logOut();
+			setIsOpenModal(false);
+		} catch (error) {
+			console.error(error);
 		}
 	};
 
@@ -127,11 +147,11 @@ function EditSellerProfile() {
 						>
 							Edit profile info
 						</Typography>
-						<Grid>
+						<Grid sx={{ pb: 2 }}>
 							<Paper elevation={10} sx={{ px: 4, mb: 3, pb: 2 }}>
 								<Grid container spacing={2}>
 									<Grid item xs={6}>
-										<Typography variant="h6">
+										<Typography variant="h6" sx={{ mb: 3 }}>
 											Basic info
 										</Typography>
 										<TextField
@@ -142,12 +162,13 @@ function EditSellerProfile() {
 											name="name"
 											sx={{ mb: 2 }}
 											value={sellerProfile.name}
-											onChange={(event) =>
+											onChange={(event) => {
 												setSellerProfile({
 													...sellerProfile,
 													name: event.target.value,
-												})
-											}
+												});
+												setAlert('');
+											}}
 										/>
 										<TextField
 											label="Last Name"
@@ -157,12 +178,13 @@ function EditSellerProfile() {
 											name="surname"
 											sx={{ mb: 2 }}
 											value={sellerProfile.surname}
-											onChange={(event) =>
+											onChange={(event) => {
 												setSellerProfile({
 													...sellerProfile,
 													surname: event.target.value,
-												})
-											}
+												});
+												setAlert('');
+											}}
 										/>
 										<TextField
 											label="Company name"
@@ -172,12 +194,13 @@ function EditSellerProfile() {
 											name="title"
 											sx={{ mb: 2 }}
 											value={sellerProfile.title}
-											onChange={(event) =>
+											onChange={(event) => {
 												setSellerProfile({
 													...sellerProfile,
 													title: event.target.value,
-												})
-											}
+												});
+												setAlert('');
+											}}
 										/>
 										<TextField
 											label="Phone Number"
@@ -187,12 +210,13 @@ function EditSellerProfile() {
 											name="phone"
 											sx={{ mb: 2 }}
 											value={sellerProfile.phone}
-											onChange={(event) =>
+											onChange={(event) => {
 												setSellerProfile({
 													...sellerProfile,
 													phone: event.target.value,
-												})
-											}
+												});
+												setAlert('');
+											}}
 										/>
 										<FormControl
 											fullWidth
@@ -209,14 +233,15 @@ function EditSellerProfile() {
 													sellerProfile.companyType
 												}
 												name="companyType"
-												onChange={(event) =>
+												onChange={(event) => {
 													setSellerProfile({
 														...sellerProfile,
 														companyType: event
 															.target
 															.value as SellerType,
-													})
-												}
+													});
+													setAlert('');
+												}}
 											>
 												{Object.values(SellerType).map(
 													(type) => (
@@ -238,16 +263,17 @@ function EditSellerProfile() {
 											name="address"
 											sx={{ mb: 2 }}
 											value={sellerProfile.address}
-											onChange={(event) =>
+											onChange={(event) => {
 												setSellerProfile({
 													...sellerProfile,
 													address: event.target.value,
-												})
-											}
+												});
+												setAlert('');
+											}}
 										/>
 									</Grid>
 									<Grid item xs={6}>
-										<Typography variant="h6">
+										<Typography variant="h6" sx={{ mb: 3 }}>
 											Additional Information
 										</Typography>
 										<TextField
@@ -258,12 +284,13 @@ function EditSellerProfile() {
 											name="city"
 											sx={{ mb: 2 }}
 											value={sellerProfile.city}
-											onChange={(event) =>
+											onChange={(event) => {
 												setSellerProfile({
 													...sellerProfile,
 													city: event.target.value,
-												})
-											}
+												});
+												setAlert('');
+											}}
 										/>
 										<TextField
 											label="Country"
@@ -273,12 +300,13 @@ function EditSellerProfile() {
 											name="country"
 											sx={{ mb: 2 }}
 											value={sellerProfile.country}
-											onChange={(event) =>
+											onChange={(event) => {
 												setSellerProfile({
 													...sellerProfile,
 													country: event.target.value,
-												})
-											}
+												});
+												setAlert('');
+											}}
 										/>
 										<FormControl sx={{ width: '100%' }}>
 											<InputLabel id="demo-multiple-checkbox-label">
@@ -294,11 +322,12 @@ function EditSellerProfile() {
 												}
 												name="targetedMarkets"
 												sx={{ mb: 2 }}
-												onChange={(event) =>
+												onChange={(event) => {
 													handleTargetedMarketsChange(
 														event
-													)
-												}
+													);
+													setAlert('');
+												}}
 												value={
 													sellerProfile.targetedMarkets
 												}
@@ -331,12 +360,13 @@ function EditSellerProfile() {
 											name="website"
 											sx={{ mb: 2 }}
 											value={sellerProfile.website}
-											onChange={(event) =>
+											onChange={(event) => {
 												setSellerProfile({
 													...sellerProfile,
 													website: event.target.value,
-												})
-											}
+												});
+												setAlert('');
+											}}
 										/>
 										<TextField
 											label="Maximum distance for delivery"
@@ -346,14 +376,15 @@ function EditSellerProfile() {
 											name="maxDistance"
 											sx={{ mb: 2 }}
 											value={sellerProfile.maxDistance}
-											onChange={(event) =>
+											onChange={(event) => {
 												setSellerProfile({
 													...sellerProfile,
 													maxDistance: parseInt(
 														event.target.value
 													),
-												})
-											}
+												});
+												setAlert('');
+											}}
 										/>
 										<TextField
 											label="Minimum order value"
@@ -363,14 +394,15 @@ function EditSellerProfile() {
 											name="minPrice"
 											sx={{ mb: 2 }}
 											value={sellerProfile.minPrice}
-											onChange={(event) =>
+											onChange={(event) => {
 												setSellerProfile({
 													...sellerProfile,
 													minPrice: parseFloat(
 														event.target.value
 													),
-												})
-											}
+												});
+												setAlert('');
+											}}
 										/>
 										<TextField
 											label="Delivery cost"
@@ -380,14 +412,15 @@ function EditSellerProfile() {
 											name="deliveryCost"
 											sx={{ mb: 2 }}
 											value={sellerProfile.deliveryCost}
-											onChange={(event) =>
+											onChange={(event) => {
 												setSellerProfile({
 													...sellerProfile,
 													deliveryCost: parseFloat(
 														event.target.value
 													),
-												})
-											}
+												});
+												setAlert('');
+											}}
 										/>
 									</Grid>
 								</Grid>
@@ -399,11 +432,81 @@ function EditSellerProfile() {
 								>
 									Confirm
 								</Button>
+								{alert && (
+									<>
+										<Alert
+											severity="success"
+											sx={{ mt: 2 }}
+										>
+											{alert}
+										</Alert>
+									</>
+								)}
 							</Paper>
+
+							<Grid container justifyContent="center">
+								<Button
+									variant="contained"
+									color="error"
+									onClick={() => {
+										setIsOpenModal(true);
+									}}
+								>
+									Delete my account
+								</Button>
+							</Grid>
 						</Grid>
 					</Box>
 				</Container>
 			</Box>
+			<Modal
+				open={isOpenModal}
+				onClose={() => {
+					setIsOpenModal(false);
+				}}
+				aria-labelledby="modal-modal-title"
+				aria-describedby="modal-modal-description"
+			>
+				<Box component="form" sx={style}>
+					<Typography
+						id="modal-modal-title"
+						variant="h6"
+						component="h2"
+						textAlign="center"
+					>
+						Are you sure you want to delete your account? You will
+						also delete all your products.
+					</Typography>
+					<Box
+						sx={{
+							display: 'flex',
+							justifyContent: 'space-between',
+						}}
+					>
+						<Button
+							sx={{ mt: 2, width: '48%' }}
+							color="primary"
+							variant="contained"
+							onClick={() => {
+								setIsOpenModal(false);
+							}}
+						>
+							No
+						</Button>
+						<Button
+							sx={{ mt: 2, width: '48%' }}
+							color="error"
+							variant="contained"
+							onClick={() => {
+								handleDeleteProfile();
+								setIsOpenModal(false);
+							}}
+						>
+							Yes
+						</Button>
+					</Box>
+				</Box>
+			</Modal>
 		</>
 	);
 }

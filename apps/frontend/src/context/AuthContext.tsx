@@ -102,7 +102,7 @@ export function AuthContextProvider({ children }: { children: any }) {
 								</Link>
 							);
 						throw new Error(
-							`You're ${response.data}! Please sign in on the`
+							`You are ${response.data}! Please sign in on the`
 						);
 					}
 				} catch (error: any) {

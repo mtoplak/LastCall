@@ -217,9 +217,7 @@ const ProductsS = () => {
 										labelId="drink-category-select"
 										id="drink-category-select"
 										name="drinkCategory"
-										value={
-											newProduct.drinkCategory || ''
-										}
+										value={newProduct.drinkCategory || ''}
 										onChange={handleInputChange}
 									>
 										<MenuItem value="">
@@ -269,6 +267,10 @@ const ProductsS = () => {
 									value={newProduct.actualPrice}
 									onChange={handleInputChange}
 									sx={{ mb: 2 }}
+									inputProps={{
+										min: 0,
+										pattern: '[0-9]*', // Allows only positive numbers
+									}}
 								/>
 								<TextField
 									label="Stock"
@@ -280,6 +282,9 @@ const ProductsS = () => {
 									value={newProduct.stock}
 									onChange={handleInputChange}
 									sx={{ mb: 2 }}
+									inputProps={{
+										min: 1,
+									}}
 								/>
 								<MuiFileInput
 									value={productImage}

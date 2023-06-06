@@ -14,6 +14,7 @@ import {
 	InputLabel,
 	ListItemText,
 	OutlinedInput,
+	LinearProgress,
 } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { btnstyle } from 'assets/styles/styles';
@@ -50,10 +51,11 @@ const initialState = {
 const SignUpS = () => {
 	const [error, setError] = useState('');
 	const [newUserData, setNewUserData] = useState(initialState);
+	const [isLoading, setIsLoading] = useState(false);
+
 	const companyTypes = Object.values(SellerType);
 
 	const navigate = useNavigate();
-
 	const { signUp } = useUserAuth();
 
 	useEffect(() => {
@@ -66,8 +68,9 @@ const SignUpS = () => {
 	};
 
 	const handleSubmit = async (e: any) => {
-		setError('');
 		e.preventDefault();
+		setError('');
+		setIsLoading(true);
 		if (newUserData.password !== newUserData.password2) {
 			setError('Passwords do not match');
 			return;
@@ -120,6 +123,8 @@ const SignUpS = () => {
 			}
 		} catch (error: any) {
 			setError(error.message);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -420,6 +425,9 @@ const SignUpS = () => {
 									>
 										Sign up
 									</Button>
+									{isLoading && (
+										<LinearProgress color="inherit" />
+									)}
 									<Typography>
 										Already have an account?{' '}
 										<Link to={'/sell/signin'}>
