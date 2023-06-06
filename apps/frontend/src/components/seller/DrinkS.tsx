@@ -159,7 +159,7 @@ const DrinkS: React.FC<DrinkProps> = ({
 
 	return (
 		<>
-			<HouseBox>
+			<HouseBox sx={{ width: '300px', height: '450px' }}>
 				<Link to={`/product/${drink._id}`}>
 					<ImgContainer>
 						<Image src={drink.picture} alt={drink.title} />

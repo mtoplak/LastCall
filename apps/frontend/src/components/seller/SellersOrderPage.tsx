@@ -352,10 +352,10 @@ function SellerOrdersPage() {
 															variant="body2"
 															color="text.secondary"
 														>
-															Date of delivery:{' '}
+															Date of Purchase:{' '}
 															{formatDate(
 																new Date(
-																	order.lastDateOfDelivery
+																	order.dateOfPurchase
 																)
 															)}
 														</Typography>
@@ -363,11 +363,26 @@ function SellerOrdersPage() {
 															variant="body2"
 															color="text.secondary"
 														>
-															Date of purchase:{' '}
+															Estimated Delivery
+															Date:{' '}
 															{formatDate(
 																new Date(
-																	order.dateOfPurchase
+																	order.lastDateOfDelivery
 																)
+															)}
+														</Typography>
+														<Typography>
+															{order.status ===
+																OrderStatus.DELIVERED && (
+																<>
+																	Date of
+																	Delivery:{' '}
+																	{formatDate(
+																		new Date(
+																			order.actualDateOfDelivery
+																		)
+																	)}
+																</>
 															)}
 														</Typography>
 													</CardContent>
@@ -563,11 +578,17 @@ function SellerOrdersPage() {
 															variant="body2"
 															color="text.secondary"
 														>
-															Date of purchase:{' '}
-															{formatDate(
-																new Date(
-																	order.dateOfPurchase
-																)
+															{order.status ===
+																OrderStatus.DELIVERED && (
+																<>
+																	Date of
+																	Delivery:{' '}
+																	{formatDate(
+																		new Date(
+																			order.actualDateOfDelivery
+																		)
+																	)}
+																</>
 															)}
 														</Typography>
 													</CardContent>

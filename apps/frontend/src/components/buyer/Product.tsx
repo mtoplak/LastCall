@@ -130,15 +130,26 @@ function Product() {
 				)}
 				<Paper sx={{ mb: 2 }}>
 					<Grid container spacing={2}>
-						<Grid item md={5} xs={12}>
-							<Box sx={{ my: '1rem', mx: '1rem' }}>
+						<Grid item md={5} xs={12} sm={12}>
+							<Box
+								sx={{
+									my: '1rem',
+									mx: 'auto',
+									textAlign: 'center',
+									maxWidth: '100%',
+									'@media (max-width: 900px)': {
+										maxWidth: '60%',
+									},
+								}}
+							>
 								<img
 									src={drink?.picture}
 									alt="heroImg"
-									style={{ maxWidth: '100%' }}
+									style={{ width: '100%', height: 'auto' }}
 								/>
 							</Box>
 						</Grid>
+
 						<Divider orientation="vertical" flexItem />
 						<Grid item md={6} xs={12} sx={{ my: '1rem' }}>
 							<Box

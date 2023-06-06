@@ -98,10 +98,9 @@ export class SellersService {
   
 
   async removeSellerByEmail(email: string): Promise<SuccessResponse> {
-    await this.sellersRepository.deleteOne({
+    return await this.sellersRepository.deleteOne({
       email: email,
     });
-    return { success: true };
   }
 
   async getAllProductsBySeller(email: string): Promise<Product[]> {

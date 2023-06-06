@@ -8,7 +8,11 @@ import { SuccessResponse } from 'src/data.response';
 
 @Injectable()
 export class SellersRepository {
-  constructor(@InjectModel('Seller') private sellersModel: Model<Seller>) {}
+  constructor(
+    @InjectModel('Seller') private sellersModel: Model<Seller>,
+    @InjectModel('Product') private productsModel: Model<Product>,
+
+    ) {}
 
   async findOne(sellerFilterQuery: FilterQuery<Seller>): Promise<Seller> {
     try {
@@ -57,6 +61,8 @@ export class SellersRepository {
 
   async deleteOne(sellerFilterQuery: FilterQuery<Seller>): Promise<SuccessResponse> {
     try {
+      await this.productsModel.find({ seller: sellerFilterQuery });
+      await this.productsModel.deleteMany({ seller: sellerFilterQuery });
       await this.sellersModel.deleteOne(sellerFilterQuery);
       return { success: true };
     } catch (err) {

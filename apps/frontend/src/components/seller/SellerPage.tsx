@@ -59,7 +59,7 @@ function SellerPage() {
 				throw error;
 			}
 		};
-	
+
 		fetchData();
 	}, [id]);
 
@@ -69,7 +69,6 @@ function SellerPage() {
 				const response = await api.get(
 					'sellers/average-score/' + seller?._id
 				);
-				console.log(response.data);
 				setRating(response.data);
 			} catch (error: any) {
 				setError(error.response.data);
@@ -177,7 +176,13 @@ function SellerPage() {
 									}}
 								>
 									<EmailIcon sx={{ marginRight: '0.5rem' }} />
-									<b>{seller?.email}</b>
+									<Link
+										href={`mailto:${seller?.email}`}
+										color="inherit"
+										underline="none"
+									>
+										<b>{seller?.email}</b>
+									</Link>
 								</Typography>
 							</Grid>
 							<Grid item sx={{ mx: 2 }}>
@@ -191,7 +196,13 @@ function SellerPage() {
 									}}
 								>
 									<PhoneIcon sx={{ marginRight: '0.5rem' }} />
-									<b>{seller?.phone}</b>
+									<Link
+										href={`tel:${seller?.phone}`}
+										color="inherit"
+										underline="none"
+									>
+										<b>{seller?.phone}</b>
+									</Link>
 								</Typography>
 							</Grid>
 							<Grid item>

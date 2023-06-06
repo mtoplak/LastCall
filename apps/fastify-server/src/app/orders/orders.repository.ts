@@ -81,8 +81,7 @@ export class OrdersRepository {
       products: orderedProducts,
       buyer: buyer._id,
       seller: seller._id,
-      uid: uuidv4().substr(0, 6),
-      //uid: uuidv4().substr(0, 6).toUpperCase(),
+      uid: uuidv4().substr(0, 6).toUpperCase(),
     });
     const result = await newOrder.save();
 

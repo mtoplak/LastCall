@@ -452,8 +452,8 @@ function Cart() {
 										{item.product?.discount !== 0 && (
 											<Alert severity="info">
 												There is currently a{' '}
-												{item.product?.discount} %
-												discount for this product!
+												{item.product?.discount}%
+												discount on this product!
 												<br />
 											</Alert>
 										)}

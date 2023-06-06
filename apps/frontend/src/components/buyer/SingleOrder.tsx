@@ -10,6 +10,7 @@ import {
 	Button,
 	Modal,
 	Rating,
+	Link,
 	IconButton,
 } from '@mui/material';
 import { IOrder } from 'models/order';
@@ -22,9 +23,10 @@ import { useUserAuth } from 'context/AuthContext';
 import NavbarS from 'components/seller/NavbarS';
 import { OrderStatus } from 'enums/order.enum';
 import { style } from 'assets/styles/styles';
-import { IRating } from 'models/rating';
 import Page404 from 'components/404/Page404';
-
+import LanguageIcon from '@mui/icons-material/Language';
+import EmailIcon from '@mui/icons-material/Email';
+import PhoneIcon from '@mui/icons-material/Phone';
 
 function SingleOrder() {
 	const [order, setOrder] = useState<IOrder>();
@@ -165,26 +167,32 @@ function SingleOrder() {
 											</Typography>
 											<Typography
 												variant="h6"
-												sx={{mb: 2}}
+												sx={{ mb: 2 }}
 											>
 												<b>Order ID:</b> {order.uid}
 											</Typography>
 										</Grid>
-										<Grid item xs={12} md={6} sx={{ mt:{xs: 0, md: 5} }}>
+										<Grid
+											item
+											xs={12}
+											md={6}
+											sx={{ mt: { xs: 0, md: 5 } }}
+										>
 											{role !== 'seller' && (
 												<>
 													<Button
-													variant="outlined"
-													sx={{
-														mr: 3,
-														mb: 2,
-														color: '#878787',
-														border: '2px solid #878787',
-														'&:hover': {
+														variant="outlined"
+														sx={{
+															mr: 3,
+															mb: 2,
+															color: '#878787',
 															border: '2px solid #878787',
-															backgroundColor: '#e0e0e0',
-														},
-													}}
+															'&:hover': {
+																border: '2px solid #878787',
+																backgroundColor:
+																	'#e0e0e0',
+															},
+														}}
 														onClick={() => {
 															setOpen(true);
 														}}
@@ -225,15 +233,22 @@ function SingleOrder() {
 										container
 										sx={{ mb: 4, color: 'text.secondary' }}
 									>
-										<Grid item xs={12} md={6} sx={{mb:2}}>
+										<Grid
+											item
+											xs={12}
+											md={6}
+											sx={{ mb: 1 }}
+										>
+											<Typography>
+												Name: {order.buyer.name}{' '}
+												{order.buyer.surname}
+											</Typography>
 											<Typography>
 												Address: {order.address}
 											</Typography>
 											<Typography>
-												City: {order.city}
-											</Typography>
-											<Typography>
-												Country: {order.country}
+												Location: {order.city},{' '}
+												{order.country}
 											</Typography>
 										</Grid>
 										<Grid item xs={12} md={6}>
@@ -320,8 +335,21 @@ function SingleOrder() {
 														color: 'text.secondary',
 													}}
 												>
-													<Grid item xs={12} sm={4} md={3}>
-														<Card sx={{maxWidth: {xs: 400, sm:200, md:200}}}>
+													<Grid
+														item
+														xs={12}
+														sm={4}
+														md={3}
+													>
+														<Card
+															sx={{
+																maxWidth: {
+																	xs: 400,
+																	sm: 200,
+																	md: 200,
+																},
+															}}
+														>
 															<CardMedia
 																component="img"
 																image={
@@ -374,39 +402,199 @@ function SingleOrder() {
 										))}
 									</Grid>
 								</Card>
+								<Card
+									sx={{
+										py: 2,
+										alignItems: 'flex-start',
+										mb: 2,
+										px: 2,
+									}}
+								>
+									<Grid
+										container
+										sx={{ mb: 4, color: 'text.secondary' }}
+									>
+										{' '}
+										<Grid
+											item
+											xs={12}
+											sm={6}
+											sx={{ mb: 2 }}
+										>
+											<Typography
+												variant="h6"
+												sx={{ mb: 2 }}
+											>
+												Seller details
+											</Typography>
+											<Typography sx={{ mb: 1 }}>
+												<b>{order.seller.title}</b>
+											</Typography>
+											<Typography sx={{ mb: 1 }}>
+												{order.seller?.address}
+											</Typography>
+											<Typography>
+												{order.seller?.city},{' '}
+												{order.seller?.country}
+											</Typography>
+										</Grid>
+										<Grid item xs={12} sm={6}>
+											<Typography
+												variant="h6"
+												sx={{ mb: 2 }}
+											>
+												Seller contact information
+											</Typography>
+											<Grid item>
+												<Typography
+													variant="body2"
+													sx={{
+														fontSize: '15px',
+														color: 'gray',
+														display: 'flex',
+														alignItems: 'center',
+													}}
+												>
+													<EmailIcon
+														sx={{
+															marginRight:
+																'0.5rem',
+															mb: 1,
+														}}
+													/>
+													<Link
+														href={`mailto:${order.seller?.email}`}
+														color="inherit"
+														underline="none"
+													>
+														<b>
+															{
+																order.seller
+																	?.email
+															}
+														</b>
+													</Link>
+												</Typography>
+											</Grid>
+											<Grid item sx={{ ml: 0 }}>
+												<Typography
+													variant="body2"
+													sx={{
+														fontSize: '15px',
+														color: 'gray',
+														display: 'flex',
+														alignItems: 'center',
+													}}
+												>
+													<PhoneIcon
+														sx={{
+															marginRight:
+																'0.5rem',
+															mb: 1,
+														}}
+													/>
+													<Link
+														href={`tel:${order.seller?.phone}`}
+														color="inherit"
+														underline="none"
+													>
+														<b>
+															{
+																order.seller
+																	?.phone
+															}
+														</b>
+													</Link>
+												</Typography>
+											</Grid>
+											<Grid item>
+												<Link
+													href={order.seller?.website}
+													underline="none"
+												>
+													<Typography
+														variant="body2"
+														sx={{
+															fontSize: '15px',
+															color: 'gray',
+															display: 'flex',
+															alignItems:
+																'center',
+														}}
+													>
+														<LanguageIcon
+															sx={{
+																marginRight:
+																	'0.5rem',
+															}}
+														/>
+														<b>
+															{
+																order.seller
+																	?.website
+															}
+														</b>
+													</Typography>
+												</Link>
+											</Grid>
+										</Grid>
+									</Grid>
+								</Card>
 							</Grid>
 						</>
 					)}
 				</Grid>
 			</Container>
 			<Modal
-	open={open}
-	onClose={() => {
-		setOpen(false);
-		setError('');
-	}}
-	aria-labelledby="modal-modal-title"
-	aria-describedby="modal-modal-description"
->
-	<Box sx={style} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px' }}>
-		<Typography variant="h6" component="h2" style={{ marginBottom: '16px' }}>
-			Rate your experience with this seller
-		</Typography>
-		<Rating
-			name="simple-controlled"
-			value={score}
-			onChange={(event, newValue) => {
-				setScore(newValue!);
-			}}
-			style={{ marginBottom: '16px' }}
-		/>
-		{error && <Typography color="error" style={{ marginBottom: '16px' }}>{error}</Typography>}
-		<Button variant="contained" color="primary" onClick={handleRate}>
-			Confirm
-		</Button>
-	</Box>
-</Modal>
-
+				open={open}
+				onClose={() => {
+					setOpen(false);
+					setError('');
+				}}
+				aria-labelledby="modal-modal-title"
+				aria-describedby="modal-modal-description"
+			>
+				<Box
+					sx={style}
+					style={{
+						display: 'flex',
+						flexDirection: 'column',
+						alignItems: 'center',
+						padding: '16px',
+					}}
+				>
+					<Typography
+						variant="h6"
+						component="h2"
+						style={{ marginBottom: '16px' }}
+					>
+						Rate your experience with this seller
+					</Typography>
+					<Rating
+						name="simple-controlled"
+						value={score}
+						onChange={(event, newValue) => {
+							setScore(newValue!);
+						}}
+						style={{ marginBottom: '16px' }}
+					/>
+					{error && (
+						<Typography
+							color="error"
+							style={{ marginBottom: '16px' }}
+						>
+							{error}
+						</Typography>
+					)}
+					<Button
+						variant="contained"
+						color="primary"
+						onClick={handleRate}
+					>
+						Confirm
+					</Button>
+				</Box>
+			</Modal>
 		</Box>
 	);
 }
