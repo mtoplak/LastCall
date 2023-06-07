@@ -6,6 +6,25 @@
 
 Last Call is an application that aims to facilitate the sales and delivery planning for beverage manufacturers while providing an easy way for customers to search for and order drinks for a specific location and day. The service primarily targets small, local beverage producers, helping them streamline their delivery operations. Customers include restaurants and bars that want to directly order beverages from the manufacturers. Additionally, individual customers who typically purchase larger quantities of drinks or prioritize delivery dates can also use the platform.
 
+## Key Functionalities
+
+##### Customer functionalities:
+
+- Searching for products and sellers based on offer type, location and name
+- Displaying sellers on a map
+- Placing orders with specifying delivery location and time
+- Order tracking
+- Rating sellers
+- Communication with sellers
+
+##### Seller functionalities:
+
+- Defining delivery conditions
+- Confirming or rejecting individual orders
+- Offering discounts on products
+- Communication with customers through emails regarding deliveries
+
+
 ## Tech Stack
 
 <div style="width: 100%; text-align: center;">
