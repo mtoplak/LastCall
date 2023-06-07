@@ -1,11 +1,13 @@
 import {
 	Alert,
+	AlertTitle,
 	Box,
 	Button,
 	Card,
 	Container,
 	Divider,
 	Grid,
+	IconButton,
 	Link,
 	Modal,
 	Rating,
@@ -27,6 +29,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
 import LanguageIcon from '@mui/icons-material/Language';
 import Page404 from 'components/404/Page404';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 function SellerPage() {
 	const [seller, setSeller] = useState<ISeller>();
@@ -40,6 +43,7 @@ function SellerPage() {
 	const [buyerEmail, setBuyerEmail] = useState(
 		user && user.email ? user.email : ''
 	);
+	const [isMessageSent, setIsMessageSent] = useState(false);
 
 	useEffect(() => {
 		if (user && user.email) {
@@ -90,9 +94,13 @@ function SellerPage() {
 
 	const handleSendMessage = async () => {
 		try {
+			if (message.trim() === '') {
+				setError('Message cannot be empty.');
+				return;
+			}
 			const response = await api.post('/contact/sendMessage', {
 				seller: seller?.email,
-				buyer: user.email,
+				buyer: buyerEmail,
 				message: message,
 			});
 			if (response.data.success !== true) {
@@ -101,11 +109,14 @@ function SellerPage() {
 				setError('');
 				setMessage('');
 				setIsOpenModal(false);
-				// alert na strani da je blo uspešno poslano
+				setIsMessageSent(true);
 			}
 		} catch (error: any) {
 			setError(error.response.data);
 		}
+	};
+	const handleCloseMessage = () => {
+		setIsMessageSent(false);
 	};
 
 	return (
@@ -186,37 +197,31 @@ function SellerPage() {
 									</Link>
 								</Typography>
 							</Grid>
-							<Grid item >
-												<Typography
-													variant="body2"
-													sx={{
-														fontSize: '15px',
-														color: 'gray',
-														display: 'flex',
-														alignItems: 'center',
-													}}
-												>
-													<PhoneIcon
-														sx={{
-															marginRight:
-																'0.5rem',
-															mb: 1,
-														}}
-													/>
-													<Link
-														href={`tel:${seller?.phone}`}
-														color="inherit"
-														underline="none"
-													>
-														<b>
-															{
-																seller
-																	?.phone
-															}
-														</b>
-													</Link>
-												</Typography>
-											</Grid>
+							<Grid item>
+								<Typography
+									variant="body2"
+									sx={{
+										fontSize: '15px',
+										color: 'gray',
+										display: 'flex',
+										alignItems: 'center',
+									}}
+								>
+									<PhoneIcon
+										sx={{
+											marginRight: '0.5rem',
+											mb: 1,
+										}}
+									/>
+									<Link
+										href={`tel:${seller?.phone}`}
+										color="inherit"
+										underline="none"
+									>
+										<b>{seller?.phone}</b>
+									</Link>
+								</Typography>
+							</Grid>
 							<Grid item>
 								<Link href={seller?.website} underline="none">
 									<Typography
@@ -297,9 +302,23 @@ function SellerPage() {
 								</Box>
 							</Grid>
 						</Grid>
+						{isMessageSent && (
+							<Alert severity="success" sx={{ mt: 1}}>
+									Message has been successfully sent.
+								<IconButton
+									aria-label="close"
+									color="inherit"
+									size="small"
+									onClick={handleCloseMessage}
+								>
+									<CloseOutlinedIcon fontSize="inherit" />
+								</IconButton>
+							</Alert>
+						)}
 					</Card>
 				</Box>
 			</Box>
+
 			<Box sx={{ backgroundColor: '#f2f2f2', py: 3 }}>
 				<Container>
 					<PropertiesTextBox>
