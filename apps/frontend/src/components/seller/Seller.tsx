@@ -9,6 +9,7 @@ function Seller() {
 
 	useEffect(() => {
 		document.title = 'My Inventory';
+		window.scrollTo(0, 0);
 	}, []);
 
 	return (

@@ -151,9 +151,9 @@ const SignUpB = () => {
 							Sign up
 						</Typography>
 						<Grid>
-							<Paper elevation={10} sx={{ px: 4, mb: 3, pb: 2 }}>
+							<Paper elevation={10} sx={{ px: 4, mb: 3, pb: 2, maxWidth: 600, margin: '0 auto' }}>
 								<Grid container spacing={2}>
-									<Grid item xs={12} md={6}>
+									<Grid item xs={12} sm={6}>
 										<Typography variant="h6" sx={{ mb: 2 }}>
 											Basic info
 										</Typography>
@@ -231,7 +231,7 @@ const SignUpB = () => {
 											label="Legal Person"
 										/>
 									</Grid>
-									<Grid item xs={12} md={6}>
+									<Grid item xs={12} sm={6}>
 										<Typography variant="h6" sx={{ mb: 2 }}>
 											Additional Information
 										</Typography>
@@ -246,7 +246,7 @@ const SignUpB = () => {
 										/>
 										<TextField
 											label="Address"
-											placeholder="Enter your/company address"
+											placeholder="Enter your address"
 											fullWidth
 											required
 											name="address"
@@ -256,7 +256,7 @@ const SignUpB = () => {
 										/>
 										<TextField
 											label="City"
-											placeholder="Enter your/company city"
+											placeholder="Enter your city"
 											fullWidth
 											required
 											name="city"
@@ -266,7 +266,7 @@ const SignUpB = () => {
 										/>
 										<TextField
 											label="Country"
-											placeholder="Enter your/company country"
+											placeholder="Enter yourcountry"
 											fullWidth
 											required
 											name="country"

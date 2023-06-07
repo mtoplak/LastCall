@@ -16,6 +16,7 @@ const Buyer = () => {
 
 	useEffect(() => {
 		document.title = 'Last Call';
+		window.scrollTo(0, 0);
 	}, []);
 
 	return (

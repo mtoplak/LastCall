@@ -101,6 +101,7 @@ function Cart() {
 
 	useEffect(() => {
 		document.title = 'Shopping Cart';
+		window.scrollTo(0, 0);
 	}, []);
 
 	const handleRemoveFromCart = async (id: string) => {
