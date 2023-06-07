@@ -116,7 +116,7 @@ function EditSellerProfile() {
 
 	const handleDeleteProfile = async () => {
 		try {
-			const response = api.delete(`sellers/delete/${user.email}`, {
+			const response = await api.delete(`sellers/delete/${user.email}`, {
 				headers: {
 					Authorization: user?.stsTokenManager?.accessToken,
 				},

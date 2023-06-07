@@ -356,7 +356,7 @@ function SellerPage() {
 					<br />
 					<TextField
 						label="Your Email"
-						placeholder="Enter email address"
+						placeholder="Enter your email address"
 						type="text"
 						fullWidth
 						required
