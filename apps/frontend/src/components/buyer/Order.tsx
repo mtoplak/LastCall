@@ -125,9 +125,11 @@ const Order: React.FC<OrderProps> = ({ order }) => {
 									variant="body2"
 									color="text.secondary"
 								>
-									{`+${
-										order.products.length - 3
-									} more products`}
+									{`+${order.products.length - 3} more ${
+										order.products.length - 3 === 1
+											? 'product'
+											: 'products'
+									}`}
 								</Typography>
 							</Grid>
 						)}
@@ -154,12 +156,13 @@ const Order: React.FC<OrderProps> = ({ order }) => {
 							<>
 								<Tooltip
 									title={
-										order.status !== OrderStatus.DELIVERED && order.status !==
-										OrderStatus.REJECTED
+										order.status !==
+											OrderStatus.DELIVERED &&
+										order.status !== OrderStatus.REJECTED
 											? 'You can rate this seller when the order is delivered'
 											: order.status ===
 											  OrderStatus.REJECTED
-											? "You cannot rate the seller since the order was rejected"
+											? 'You cannot rate the seller since the order was rejected'
 											: ''
 									}
 									placement="top"

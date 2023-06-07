@@ -98,8 +98,11 @@ function SellerOrdersPage() {
 					api.patch(`/orders/${orderId}`, { status })
 				)
 			);
+			const currentDate = new Date();
 			const updatedOrders = orders.map((order) =>
-				orderIds.includes(order._id) ? { ...order, status } : order
+				orderIds.includes(order._id)
+					? { ...order, status, actualDateOfDelivery: currentDate }
+					: order
 			);
 			setOrders(updatedOrders as IOrder[]);
 			setChecked([]);
@@ -107,6 +110,11 @@ function SellerOrdersPage() {
 		} catch (error) {
 			throw error;
 		}
+	};
+
+	const handleOpenModal = () => {
+		if (checked.length === 0) return;
+		setIsOpenModal(true);
 	};
 
 	return (
@@ -185,7 +193,7 @@ function SellerOrdersPage() {
 												sx={{ mb: 1 }}
 												fullWidth
 												onClick={() => {
-													setIsOpenModal(true);
+													handleOpenModal();
 													setSelectedStatus(
 														OrderStatus.ACCEPTED
 													);
@@ -199,7 +207,7 @@ function SellerOrdersPage() {
 												sx={{ mb: 1 }}
 												fullWidth
 												onClick={() => {
-													setIsOpenModal(true);
+													handleOpenModal();
 													setSelectedStatus(
 														OrderStatus.INTRANSIT
 													);
@@ -213,7 +221,7 @@ function SellerOrdersPage() {
 												sx={{ mb: 1 }}
 												fullWidth
 												onClick={() => {
-													setIsOpenModal(true);
+													handleOpenModal();
 													setSelectedStatus(
 														OrderStatus.DELIVERED
 													);
@@ -227,7 +235,7 @@ function SellerOrdersPage() {
 												sx={{ mb: 1 }}
 												fullWidth
 												onClick={() => {
-													setIsOpenModal(true);
+													handleOpenModal();
 													setSelectedStatus(
 														OrderStatus.REJECTED
 													);

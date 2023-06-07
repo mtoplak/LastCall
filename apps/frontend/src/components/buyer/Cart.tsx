@@ -314,6 +314,7 @@ function Cart() {
 				)
 			);
 			setGroupedProducts(updatedGroupedProducts);
+			window.scrollTo(0, 0);
 		} catch (error: any) {
 			setError(error.response.data.message);
 		} finally {
@@ -377,6 +378,7 @@ function Cart() {
 			setCartItems([]);
 			setIsShownAlert(true);
 			await api.delete(`/cart/${user.email}`);
+			window.scrollTo(0, 0);
 		} catch (error: any) {
 			setError(error.response?.data?.message || 'An error occurred');
 		} finally {
