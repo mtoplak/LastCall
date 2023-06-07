@@ -42,11 +42,11 @@ const initialState = {
 	city: '',
 	companyType: '',
 	country: '',
-	registerNumber: 0,
+	registerNumber: '',
 	targetedMarkets: [] as string[],
-	minPrice: 0,
-	maxDistance: 0,
-	deliveryCost: 0,
+	minPrice: '',
+	maxDistance: '',
+	deliveryCost: '',
 };
 
 const requiredFields: (keyof any)[] = [
@@ -125,7 +125,7 @@ const SignUpS = () => {
 						}&addressdetails=1&limit=1&polygon_svg=1`
 					);
 					const data = await response.json();
-					//console.log(data);
+					console.log(data);
 					if (data.length === 0) {
 						setError('Address not found');
 						return;

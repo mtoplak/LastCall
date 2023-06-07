@@ -171,7 +171,7 @@ export class CartService {
       (item) => !productIds.includes(item.productId._id.toString()),
     );
 
-    await buyer.save();
+    await this.buyersService.updateBuyer(buyer._id, buyer);
 
     const updatedCart = buyer.cart.map((item) => {
       return {

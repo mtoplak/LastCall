@@ -1,7 +1,7 @@
 import { IDrink } from 'models/drink';
 import React, { useEffect, useState } from 'react';
 import api from 'services/api';
-import { Grid, Typography, Box } from '@mui/material';
+import { Grid, Typography, Box, CircularProgress } from '@mui/material';
 import { Link } from 'react-router-dom';
 import HouseBox from 'components/ui/HouseBox';
 import ImgContainer from 'components/ui/ImgContainer';
@@ -14,12 +14,20 @@ interface SellerProductsProps {
 
 const SellerProducts: React.FC<SellerProductsProps> = ({ sellerId }) => {
 	const [products, setProducts] = useState<IDrink[]>([]);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
 
 	useEffect(() => {
 		const fetchSellerProducts = async () => {
-			const response = await api.get(`/sellers/${sellerId}/products`);
-			//console.log(response.data);
-			setProducts(response.data);
+			try {
+				const response = await api.get(`/sellers/${sellerId}/products`);
+				setProducts(response.data);
+
+				//console.log(response.data);
+			} catch (error) {
+				console.error(error);
+			} finally {
+				setIsLoading(false);
+			}
 		};
 
 		fetchSellerProducts();
@@ -36,7 +44,9 @@ const SellerProducts: React.FC<SellerProductsProps> = ({ sellerId }) => {
 				mt: 2,
 			}}
 		>
-			{products.length > 0 ? (
+			{isLoading ? (
+				<CircularProgress color="inherit" />
+			) : products.length > 0 ? (
 				products.map((drink) => (
 					<Box sx={{ mx: 1 }} key={drink._id}>
 						<HouseBox>
