@@ -1,0 +1,26 @@
+LastCall
+
+Spletna aplikacija, ki si prizadeva olajšati načrtovanje prodaje in dostave za proizvajalce pijač, obenem pa ponuja kupcem enostaven način iskanja in naročanja pijače na določeno lokacijo in določen dan.
+
+Leto izdelave: 2023
+
+Maša Toplak
+Elena U. Bežan
+Tia Žvajker
+
+Domača stran: https://lastcall-1d57c.web.app/
+Vir podatkov: https://lastcall-masatoplak45.vercel.app/
+...
+Koda: https://github.com/mtoplak/LastCall
+
+Kategorizacija: celovita informacijska rešitev, spletna aplikacija
+
+Oznake: OdprtiPodatki, ReactJS, TypeScript, MongoDB, NodeJS, Scrum, AgilenRazvoj, GitHub, Git, Yarn, NestJS, TurboRepo, Docker, Firebase, Vercel, REST...
+
+Opis projekta:
+LastCall združuje proizvajalce in kupce pijač na eni platformi, kar pripomore k izboljšanju prodajnih procesov, optimizaciji dostave in izboljšani uporabniški izkušnji.
+Storitev je predvsem namenjena lokalnim proizvajalcem pijač, saj jim omogoča učinkovito upravljanje inventarja, načrtovanje akcij in sledenje naročil.
+Stranke so lahko pravne osebe, torej restavracije in bari, ki želijo neposredno naročati pijače od proizvajalcev ali pa fizične osebe, ki običajno kupujejo večje količine pijač ali dajejo prednost določenim datumom dostave. Aplikacija jim omogoča izbiro med različnimi vrstami pijač, preprost naročilni postopek in ocenjevanje naročil oz. prodajalcev.
+Komunikacija med strankami in proizvajalci poteka preko elektronske pošte.
+
+

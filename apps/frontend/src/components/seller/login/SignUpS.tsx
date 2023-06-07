@@ -23,7 +23,6 @@ import { useUserAuth } from 'context/AuthContext';
 import { useEffect, useState } from 'react';
 import api from 'services/api';
 import CustomBox from 'components/ui/CustomBox';
-//import { companyTypes } from 'constants/companyTypeConstants';
 import { markets } from 'constants/marketConstants';
 import { SellerType } from '../../../enums/seller.enum';
 import { ISeller } from 'models/seller';
@@ -42,11 +41,11 @@ const initialState = {
 	city: '',
 	companyType: '',
 	country: '',
-	registerNumber: 0,
+	registerNumber: '',
 	targetedMarkets: [] as string[],
-	minPrice: 0,
-	maxDistance: 0,
-	deliveryCost: 0,
+	minPrice: '',
+	maxDistance: '',
+	deliveryCost: '',
 };
 
 const requiredFields: (keyof any)[] = [
@@ -126,7 +125,7 @@ const SignUpS = () => {
 						}&addressdetails=1&limit=1&polygon_svg=1`
 					);
 					const data = await response.json();
-					//console.log(data);
+					console.log(data);
 					if (data.length === 0) {
 						setError('Address not found');
 						return;

@@ -154,8 +154,12 @@ const Order: React.FC<OrderProps> = ({ order }) => {
 							<>
 								<Tooltip
 									title={
-										order.status !== OrderStatus.DELIVERED
+										order.status !== OrderStatus.DELIVERED && order.status !==
+										OrderStatus.REJECTED
 											? 'You can rate this seller when the order is delivered'
+											: order.status ===
+											  OrderStatus.REJECTED
+											? "You cannot rate the seller since the order was rejected"
 											: ''
 									}
 									placement="top"
@@ -168,11 +172,10 @@ const Order: React.FC<OrderProps> = ({ order }) => {
 												mr: 3,
 												mb: 2,
 												color: '#878787',
-												position: 'relative', // Added position property
+												position: 'relative',
 												'&:hover': {
 													border: '2px solid #878787',
 													backgroundColor: '#e0e0e0',
-													cursor: 'not-allowed',
 												},
 												border: '2px solid #878787',
 											}}

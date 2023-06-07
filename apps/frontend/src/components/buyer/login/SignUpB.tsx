@@ -39,7 +39,7 @@ const initialState = {
 	title: '',
 	city: '',
 	country: '',
-	registerNumber: 0,
+	registerNumber: '',
 	targetedMarkets: [],
 };
 

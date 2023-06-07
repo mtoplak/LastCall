@@ -13,7 +13,7 @@ import { Cart } from '../buyers/buyers.model';
 
 @Controller('cart')
 export class CartController {
-  constructor(private readonly cartService: CartService) { }
+  constructor(private readonly cartService: CartService) {}
 
   @Post('/add')
   @UseGuards(FirebaseTokenGuard)
@@ -32,7 +32,7 @@ export class CartController {
   @UseGuards(FirebaseTokenGuard)
   async changeQuantity(
     @Body('email') email: string,
-    @Body('cart') cart: { productId: string; quantity: number; },
+    @Body('cart') cart: { productId: string; quantity: number },
   ): Promise<CartResponse | null> {
     const result = await this.cartService.changeQuantity(email, cart);
     if (!result?.cart) {
@@ -63,11 +63,10 @@ export class CartController {
     return this.cartService.deleteProductsFromCart(email, productIds);
   }
 
-  @Delete(':email/cart')
+  @Delete(':email')
   async deleteAllFromCart(
     @Param('email') email: string,
   ): Promise<CartResponse> {
     return this.cartService.deleteAllFromCart(email);
   }
-
 }

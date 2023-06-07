@@ -251,6 +251,7 @@ function SellerPage() {
 								<Button
 									variant="contained"
 									sx={{
+										mb: 1,
 										backgroundColor: '#24336e',
 										'&:hover': {
 											backgroundColor: '#1a2756',
@@ -277,7 +278,7 @@ function SellerPage() {
 													color: 'gray',
 												}}
 											>
-												Average rating for this seller:
+												Average rating for {seller?.title}:
 											</Typography>
 											<Rating
 												name="read-only"

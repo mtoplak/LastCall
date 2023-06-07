@@ -35,9 +35,9 @@ const initialState = {
 	drinkCategory: '',
 	packaging: '',
 	size: '',
-	actualPrice: 0,
-	price: 0,
-	stock: 0,
+	actualPrice: '',
+	price: '',
+	stock: '',
 	seller: '',
 	image: '',
 };
