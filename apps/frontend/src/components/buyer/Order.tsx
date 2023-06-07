@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
 	Typography,
-	Card,
 	Grid,
 	Divider,
 	Accordion,
@@ -16,7 +15,7 @@ import {
 } from '@mui/material';
 import { IOrder } from 'models/order';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { formatDate } from 'utils/formatDate';
 import { getOrderStatusColor } from 'utils/getOrderStatusColor';
 import { useUserAuth } from 'context/AuthContext';

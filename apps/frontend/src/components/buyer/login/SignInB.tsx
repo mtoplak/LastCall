@@ -55,6 +55,10 @@ const SignInB = () => {
 		setResetMail('');
 		setError('');
 		setLink(null);
+		if (!email || !password) {
+			setError('Please fill in all fields');
+			return;
+		}
 		try {
 			const signUpResponse = await signIn(email, password, 'buyer');
 			//console.log(signUpResponse);

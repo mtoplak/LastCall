@@ -17,7 +17,7 @@ import {
 	Alert,
 	LinearProgress,
 } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useUserAuth } from 'context/AuthContext';
 import api from 'services/api';
@@ -43,14 +43,28 @@ const initialState = {
 	targetedMarkets: [],
 };
 
+const requiredFields: (keyof any)[] = [
+	'name',
+	'surname',
+	'email',
+	'password',
+	'password2',
+	'address',
+	'city',
+	'country',
+	'phone',
+	'registerNumber',
+];
+
 const SignUpB = () => {
 	const [error, setError] = useState('');
 	const [newUserData, setNewUserData] = useState(initialState);
 	const [isLoading, setIsLoading] = useState(false);
-
-	const navigate = useNavigate();
+	const [successInfo, setSuccessInfo] = useState(false);
 
 	const handleChange = (e: { target: { value: any; name: any } }) => {
+		setSuccessInfo(false);
+		setError('');
 		const { value, name } = e.target;
 		if (name === 'legalPerson') {
 			setNewUserData({
@@ -68,6 +82,18 @@ const SignUpB = () => {
 		setIsLoading(true);
 		setError('');
 		e.preventDefault();
+		for (const field of requiredFields) {
+			if (!newUserData[field as keyof typeof newUserData]) {
+				setError(
+					`${
+						String(field).charAt(0).toUpperCase() +
+						String(field).slice(1)
+					} is required`
+				);
+				setIsLoading(false);
+				return;
+			}
+		}
 		if (newUserData.password !== newUserData.password2) {
 			setError('Passwords do not match');
 			setIsLoading(false);
@@ -87,8 +113,8 @@ const SignUpB = () => {
 						...newUserData,
 						// targetedMarket: targetedMarkets,
 					});
-					console.log(response.data);
-					navigate('/buy/signin');
+					//console.log(response.data);
+					setSuccessInfo(true);
 				} catch (error: any) {
 					setError(error.message);
 				}
@@ -297,6 +323,19 @@ const SignUpB = () => {
 								</Grid>
 								{error && (
 									<Alert severity="error">{error}</Alert>
+								)}
+								{successInfo && (
+									<Alert severity="success">
+										You've successfully signed up! Verify
+										your email to{' '}
+										<Link
+											to={'/buy/signin'}
+											className="blackLink"
+										>
+											log in
+										</Link>
+										. Also, check your spam folder.
+									</Alert>
 								)}
 								<Button
 									type="submit"

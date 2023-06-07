@@ -1,9 +1,9 @@
 export interface IBuyer {
-	_id: string;
+	_id?: string;
 	name: string;
 	surname: string;
 	email: string;
-	legalPerson: boolean; //?
+	legalPerson: boolean;
 	address: string;
 	city: string;
 	country: string;

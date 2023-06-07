@@ -7,11 +7,7 @@ import {
 	Card,
 	Divider,
 	CardMedia,
-	Button,
-	Modal,
-	Rating,
 	Link,
-	IconButton,
 } from '@mui/material';
 import { IOrder } from 'models/order';
 import { useParams } from 'react-router-dom';
@@ -22,7 +18,6 @@ import { getOrderStatusColor } from 'utils/getOrderStatusColor';
 import { useUserAuth } from 'context/AuthContext';
 import NavbarS from 'components/seller/NavbarS';
 import { OrderStatus } from 'enums/order.enum';
-import { style } from 'assets/styles/styles';
 import Page404 from 'components/404/Page404';
 import LanguageIcon from '@mui/icons-material/Language';
 import EmailIcon from '@mui/icons-material/Email';
@@ -33,8 +28,6 @@ function SingleOrder() {
 	const [fetchError, setFetchError] = useState(false);
 	const { id } = useParams<{ id: string }>();
 	const { role, user } = useUserAuth();
-	const [open, setOpen] = useState(false);
-	const [error, setError] = useState('');
 
 	useEffect(() => {
 		if (!user) return;

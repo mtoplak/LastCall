@@ -5,7 +5,7 @@ import { useUserAuth } from 'context/AuthContext';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
-	const { user, role } = useUserAuth();
+	const { role } = useUserAuth();
 
 	return (
 		<Box sx={{ py: 10, backgroundColor: '#E6F0FF' }}>
@@ -75,7 +75,7 @@ const Footer = () => {
 						<FooterLink>Sitemap</FooterLink>
 					</Box>
 
-					{user && role !== 'seller' && (
+					{role !== 'seller' && (
 						<Box>
 							<Typography
 								sx={{

@@ -16,7 +16,7 @@ import {
 	OutlinedInput,
 	LinearProgress,
 } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { btnstyle } from 'assets/styles/styles';
 import NavbarS from '../NavbarS';
 import { useUserAuth } from 'context/AuthContext';
@@ -26,6 +26,7 @@ import CustomBox from 'components/ui/CustomBox';
 //import { companyTypes } from 'constants/companyTypeConstants';
 import { markets } from 'constants/marketConstants';
 import { SellerType } from '../../../enums/seller.enum';
+import { ISeller } from 'models/seller';
 
 const initialState = {
 	name: '',
@@ -48,14 +49,29 @@ const initialState = {
 	deliveryCost: 0,
 };
 
+const requiredFields: (keyof any)[] = [
+	'name',
+	'surname',
+	'email',
+	'password',
+	'password2',
+	'phone',
+	'title',
+	'companyType',
+	'address',
+	'city',
+	'country',
+	'registerNumber',
+];
+
 const SignUpS = () => {
 	const [error, setError] = useState('');
 	const [newUserData, setNewUserData] = useState(initialState);
 	const [isLoading, setIsLoading] = useState(false);
+	const [successInfo, setSuccessInfo] = useState<boolean>(false);
 
 	const companyTypes = Object.values(SellerType);
 
-	const navigate = useNavigate();
 	const { signUp } = useUserAuth();
 
 	useEffect(() => {
@@ -63,6 +79,8 @@ const SignUpS = () => {
 	}, []);
 
 	const handleChange = (e: { target: { value: any; name: any } }) => {
+		setSuccessInfo(false);
+		setError('');
 		const { value, name } = e.target;
 		setNewUserData({ ...newUserData, [name]: value });
 	};
@@ -71,12 +89,23 @@ const SignUpS = () => {
 		e.preventDefault();
 		setError('');
 		setIsLoading(true);
+		for (const field of requiredFields) {
+			if (!newUserData[field as keyof typeof newUserData]) {
+				setError(
+					`${
+						String(field).charAt(0).toUpperCase() +
+						String(field).slice(1)
+					} is required`
+				);
+				setIsLoading(false);
+				return;
+			}
+		}
 		if (newUserData.password !== newUserData.password2) {
 			setError('Passwords do not match');
 			setIsLoading(false);
 			return;
 		}
-
 		try {
 			const signUpResponse = await signUp(
 				newUserData.email,
@@ -96,7 +125,7 @@ const SignUpS = () => {
 						}&addressdetails=1&limit=1&polygon_svg=1`
 					);
 					const data = await response.json();
-					console.log(data);
+					//console.log(data);
 					if (data.length === 0) {
 						setError('Address not found');
 						return;
@@ -107,9 +136,9 @@ const SignUpS = () => {
 								coordinates: [data[0].lat, data[0].lon],
 								// targetedMarket: targetedMarkets,
 							});
-							console.log(response.data);
-							console.log(response.data.seller);
-							navigate('/sell/signin');
+							//console.log(response.data);
+							//console.log(response.data.seller);
+							setSuccessInfo(true);
 						} catch (error: any) {
 							setError(error.message);
 						}
@@ -416,6 +445,19 @@ const SignUpS = () => {
 									</Grid>
 									{error && (
 										<Alert severity="error">{error}</Alert>
+									)}
+									{successInfo && (
+										<Alert severity="success">
+											You've successfully signed up!
+											Verify your email to{' '}
+											<Link
+												to={'/sell/signin'}
+												className="blackLink"
+											>
+												log in
+											</Link>
+											. Also, check your spam folder.
+										</Alert>
 									)}
 									<Button
 										type="submit"

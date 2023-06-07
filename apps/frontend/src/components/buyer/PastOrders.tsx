@@ -4,7 +4,6 @@ import {
 	Container,
 	Typography,
 	Grid,
-	Divider,
 	CircularProgress,
 } from '@mui/material';
 import NavbarB from './NavbarB';
