@@ -81,6 +81,7 @@ function SellerPage() {
 
 	useEffect(() => {
 		document.title = seller?.title || '';
+		window.scrollTo(0, 0);
 	}, [seller]);
 
 	if (fetchError) {

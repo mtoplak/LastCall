@@ -34,6 +34,7 @@ const SignInS = () => {
 
 	useEffect(() => {
 		document.title = 'Sign In | Seller';
+		window.scrollTo(0, 0);
 	}, []);
 
 	const handleResetPassword = async (e: any) => {
@@ -248,6 +249,7 @@ const SignInS = () => {
 									display: 'flex',
 									alignItems: 'center',
 									justifyContent: 'center',
+									py: 5,
 									order: [2, 1],
 								}}
 							>

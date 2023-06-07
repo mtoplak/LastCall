@@ -75,6 +75,7 @@ function SellerOrdersPage() {
 
 	useEffect(() => {
 		document.title = 'Orders';
+		window.scrollTo(0, 0);
 	}, []);
 
 	const handleToggle = (order: IOrder) => () => {

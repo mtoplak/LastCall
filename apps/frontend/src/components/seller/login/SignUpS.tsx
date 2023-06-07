@@ -76,6 +76,7 @@ const SignUpS = () => {
 
 	useEffect(() => {
 		document.title = 'Sign Up | Seller';
+		window.scrollTo(0, 0);
 	}, []);
 
 	const handleChange = (e: { target: { value: any; name: any } }) => {
@@ -191,10 +192,10 @@ const SignUpS = () => {
 							<Grid>
 								<Paper
 									elevation={10}
-									sx={{ px: 4, mb: 3, pb: 2 }}
+									sx={{ px: 4, mb: 3, pb: 2, maxWidth: 600, margin: '0 auto' }}
 								>
 									<Grid container spacing={2}>
-										<Grid item xs={12} md={6}>
+										<Grid item xs={12} sm={6}>
 											<Typography
 												variant="h6"
 												sx={{ mb: 2 }}
@@ -301,7 +302,7 @@ const SignUpS = () => {
 												</Select>
 											</FormControl>
 										</Grid>
-										<Grid item xs={12} md={6}>
+										<Grid item xs={12} sm={6}>
 											<Typography
 												variant="h6"
 												sx={{ mb: 2 }}
@@ -310,7 +311,7 @@ const SignUpS = () => {
 											</Typography>
 											<TextField
 												label="Address"
-												placeholder="Enter your/company address"
+												placeholder="Enter your address"
 												fullWidth
 												required
 												name="address"
@@ -320,7 +321,7 @@ const SignUpS = () => {
 											/>
 											<TextField
 												label="City"
-												placeholder="Enter your/company city"
+												placeholder="Enter your city"
 												fullWidth
 												required
 												name="city"
@@ -330,7 +331,7 @@ const SignUpS = () => {
 											/>
 											<TextField
 												label="Country"
-												placeholder="Enter your/company country"
+												placeholder="Enter your country"
 												fullWidth
 												required
 												name="country"

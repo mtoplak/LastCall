@@ -16,7 +16,10 @@ import {
 	OutlinedInput,
 	Alert,
 	Modal,
+	Divider,
+	IconButton,
 } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import api from 'services/api';
 import NavbarS from './NavbarS';
 import { useUserAuth } from 'context/AuthContext';
@@ -125,6 +128,11 @@ function EditSellerProfile() {
 		}
 	};
 
+	useEffect(() => {
+		document.title = 'Edit profile | Seller';
+		window.scrollTo(0, 0);
+	}, []);
+
 	return (
 		<>
 			<NavbarS />
@@ -148,9 +156,18 @@ function EditSellerProfile() {
 							Edit profile info
 						</Typography>
 						<Grid sx={{ pb: 2 }}>
-							<Paper elevation={10} sx={{ px: 4, mb: 3, pb: 2 }}>
+							<Paper
+								elevation={10}
+								sx={{
+									px: 4,
+									mb: 3,
+									pb: 2,
+									maxWidth: 600,
+									margin: '0 auto',
+								}}
+							>
 								<Grid container spacing={2}>
-									<Grid item xs={6}>
+									<Grid item xs={12} sm={6}>
 										<Typography variant="h6" sx={{ mb: 3 }}>
 											Basic info
 										</Typography>
@@ -257,7 +274,7 @@ function EditSellerProfile() {
 										</FormControl>
 										<TextField
 											label="Address"
-											placeholder="Enter your/company address"
+											placeholder="Enter your address"
 											fullWidth
 											required
 											name="address"
@@ -272,13 +289,13 @@ function EditSellerProfile() {
 											}}
 										/>
 									</Grid>
-									<Grid item xs={6}>
+									<Grid item xs={12} sm={6}>
 										<Typography variant="h6" sx={{ mb: 3 }}>
 											Additional Information
 										</Typography>
 										<TextField
 											label="City"
-											placeholder="Enter your/company city"
+											placeholder="Enter your city"
 											fullWidth
 											required
 											name="city"
@@ -294,7 +311,7 @@ function EditSellerProfile() {
 										/>
 										<TextField
 											label="Country"
-											placeholder="Enter your/company country"
+											placeholder="Enter your country"
 											fullWidth
 											required
 											name="country"
@@ -442,19 +459,24 @@ function EditSellerProfile() {
 										</Alert>
 									</>
 								)}
-							</Paper>
-
-							<Grid container justifyContent="center">
-								<Button
-									variant="contained"
-									color="error"
-									onClick={() => {
-										setIsOpenModal(true);
-									}}
+								<Divider sx={{ my: 1 }}/>
+								<Grid
+									container
+									justifyContent="flex-end"
 								>
-									Delete my account
-								</Button>
-							</Grid>
+									<IconButton
+										onClick={() => {
+											setIsOpenModal(true);
+										}}
+										sx={{ color: 'gray' }}
+									>
+										<Typography variant="body2">
+											Delete my account.
+										</Typography>
+										<DeleteIcon />
+									</IconButton>
+								</Grid>
+							</Paper>
 						</Grid>
 					</Box>
 				</Container>

@@ -2,10 +2,24 @@ import { Typography, Box } from '@mui/material';
 import CustomContainer from 'components/ui/CustomContainer';
 import FooterLink from 'components/ui/FooterLink';
 import { useUserAuth } from 'context/AuthContext';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import api from 'services/api';
 
 const Footer = () => {
-	const { role } = useUserAuth();
+	const { user, role } = useUserAuth();
+	const [id, setId] = useState<string>('');
+
+	useEffect(() => {
+		const fetchUserId = async () => {
+			const response = await api.get(`/sellers/get/${user.email}`);
+			setId(response.data._id);
+		};
+
+		if (user) {
+			fetchUserId();
+		}
+	}, [user]);
 
 	return (
 		<Box sx={{ py: 10, backgroundColor: '#E6F0FF' }}>
@@ -34,24 +48,29 @@ const Footer = () => {
 					</Box>
 
 					<Box>
-						<Link to={'/buy/signin'}>
-							<Typography
-								sx={{
-									fontSize: '20px',
-									color: '#1C1C1D',
-									fontWeight: '700',
-									mb: 2,
-								}}
+						<Typography
+							sx={{
+								fontSize: '20px',
+								color: '#1C1C1D',
+								fontWeight: '700',
+								mb: 2,
+							}}
 							>
-								Account
-							</Typography>
-						</Link>
-
-						<FooterLink>My account</FooterLink>
-						<br />
+							Account
+						</Typography>
+						<Link to={'/buy/signin'}>
 						<FooterLink>Sign in</FooterLink>
+						</Link>
 						<br />
+						<Link to={'/buy/signup'}>
 						<FooterLink>Register</FooterLink>
+						</Link>
+						<br />
+						{role === 'seller' && (
+						<Link to={`/supplier/${id}`}>
+						<FooterLink>My account</FooterLink>
+						</Link>
+						)}
 					</Box>
 
 					<Box>
