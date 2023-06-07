@@ -23,7 +23,6 @@ import { useUserAuth } from 'context/AuthContext';
 import { useEffect, useState } from 'react';
 import api from 'services/api';
 import CustomBox from 'components/ui/CustomBox';
-//import { companyTypes } from 'constants/companyTypeConstants';
 import { markets } from 'constants/marketConstants';
 import { SellerType } from '../../../enums/seller.enum';
 

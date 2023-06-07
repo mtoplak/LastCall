@@ -1,11 +1,16 @@
-import { Box, Typography, Container, Grid, useMediaQuery, createTheme } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import {
+	Box,
+	Typography,
+	Container,
+	Grid,
+	useMediaQuery,
+	createTheme,
+} from '@mui/material';
 import heroImg from '../../assets/images/homepageDrink.png';
 import CustomBox from 'components/ui/CustomBox';
 import Title from 'components/ui/Title';
 
 const Hero = () => {
-	//const theme = useTheme();
 
 	const theme = createTheme({
 		breakpoints: {
@@ -33,12 +38,13 @@ const Hero = () => {
 		},
 	});
 
+	const isSmallScreen = useMediaQuery('(max-width:1200px)');
+	const isExtraSmallScreen = useMediaQuery('(max-width:600px)');
 	const isExtraLargeScreen = useMediaQuery(theme.breakpoints.up('xl'));
 
 	let minHeight = '95vh';
-
 	if (isExtraLargeScreen) {
-		minHeight = '50vh';
+		minHeight = '45vh';
 	}
 
 	return (
@@ -64,7 +70,7 @@ const Hero = () => {
 										fontSize: '18px',
 										color: '#687690',
 										fontWeight: '500',
-										mt: 10,
+										mt: isExtraSmallScreen ? 6 : 11,
 										mb: 4,
 									}}
 								>
@@ -96,15 +102,15 @@ const Hero = () => {
 							</Box>
 						</Grid>
 						<Grid item xs={12} sm={12} lg={6}>
-							<Box sx={{ textAlign: 'center' }}>
-								<img
-									src={heroImg}
-									alt="heroImg"
-									style={{
-										maxWidth: '70%',
-										marginTop: '6rem',
-									}}
-								/>
+							<Box sx={{ textAlign: 'center', mt: isExtraSmallScreen ? 6 : 10, mb: 4 }}>
+							<img
+                  src={heroImg}
+                  alt="heroImg"
+                  style={{
+                    width: isSmallScreen ? '70%' : '100%',
+                    marginTop: isSmallScreen ? '6rem' : 0,
+                  }}
+                />
 							</Box>
 						</Grid>
 					</Grid>

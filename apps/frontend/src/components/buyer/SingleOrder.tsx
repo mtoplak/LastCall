@@ -7,11 +7,8 @@ import {
 	Card,
 	Divider,
 	CardMedia,
-	Button,
-	Modal,
-	Rating,
 	Link,
-	IconButton,
+	Rating,
 } from '@mui/material';
 import { IOrder } from 'models/order';
 import { useParams } from 'react-router-dom';
@@ -22,7 +19,6 @@ import { getOrderStatusColor } from 'utils/getOrderStatusColor';
 import { useUserAuth } from 'context/AuthContext';
 import NavbarS from 'components/seller/NavbarS';
 import { OrderStatus } from 'enums/order.enum';
-import { style } from 'assets/styles/styles';
 import Page404 from 'components/404/Page404';
 import LanguageIcon from '@mui/icons-material/Language';
 import EmailIcon from '@mui/icons-material/Email';
@@ -33,8 +29,9 @@ function SingleOrder() {
 	const [fetchError, setFetchError] = useState(false);
 	const { id } = useParams<{ id: string }>();
 	const { role, user } = useUserAuth();
-	const [open, setOpen] = useState(false);
 	const [error, setError] = useState('');
+	const [score, setScore] = useState<number | null>(null);
+	const [rated, setRated] = useState(false);
 
 	useEffect(() => {
 		if (!user) return;
@@ -55,8 +52,24 @@ function SingleOrder() {
 	}, [id, user]);
 
 	useEffect(() => {
+		const fetchRating = async () => {
+			try {
+				const response = await api.get(`/rating/order/${order?._id}`);
+				setScore(response.data);
+				setRated(!!response.data);
+			} catch (error: any) {
+				setError(error.response.data.message);
+			}
+		};
+		if (order?.score) {
+			fetchRating();
+		}
+	}, [order]);
+
+	useEffect(() => {
 		if (!order) return;
 		document.title = `Order ${order?.uid} details`;
+		window.scrollTo(0, 0);
 	}, [order?.uid, order]);
 
 	if (fetchError) {
@@ -124,6 +137,22 @@ function SingleOrder() {
 											>
 												<b>Order ID:</b> {order.uid}
 											</Typography>
+										</Grid>
+
+										<Grid
+											item
+											xs={12}
+											md={6}
+											sx={{ mt: { xs: 0, md: 5 } }}
+										>
+											{role !== 'seller' && rated ? (
+												<Rating
+													value={score!}
+													readOnly
+												/>
+											) : (
+												null
+											)}
 										</Grid>
 									</Grid>
 									<Divider />
@@ -212,7 +241,10 @@ function SingleOrder() {
 									<Typography
 										sx={{ mt: 1, color: 'text.secondary' }}
 									>
-										<b>Total: {order.totalPrice} €</b>
+										<b>
+											Total: {order.totalPrice.toFixed(2)}{' '}
+											€
+										</b>
 									</Typography>
 								</Card>
 								<Card
@@ -327,6 +359,7 @@ function SingleOrder() {
 										>
 											<Typography
 												variant="h6"
+												color="black"
 												sx={{ mb: 2 }}
 											>
 												Seller details
@@ -345,13 +378,13 @@ function SingleOrder() {
 										<Grid item xs={12} sm={6}>
 											<Typography
 												variant="h6"
+												color="black"
 												sx={{ mb: 2 }}
 											>
 												Seller contact information
 											</Typography>
 											<Grid item>
 												<Typography
-													variant="body2"
 													sx={{
 														fontSize: '15px',
 														color: 'gray',
@@ -371,12 +404,7 @@ function SingleOrder() {
 														color="inherit"
 														underline="none"
 													>
-														<b>
-															{
-																order.seller
-																	?.email
-															}
-														</b>
+														{order.seller?.email}
 													</Link>
 												</Typography>
 											</Grid>
@@ -402,12 +430,7 @@ function SingleOrder() {
 														color="inherit"
 														underline="none"
 													>
-														<b>
-															{
-																order.seller
-																	?.phone
-															}
-														</b>
+														{order.seller?.phone}
 													</Link>
 												</Typography>
 											</Grid>
@@ -432,12 +455,7 @@ function SingleOrder() {
 																	'0.5rem',
 															}}
 														/>
-														<b>
-															{
-																order.seller
-																	?.website
-															}
-														</b>
+														{order.seller?.website}
 													</Typography>
 												</Link>
 											</Grid>
