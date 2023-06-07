@@ -17,6 +17,7 @@ import {
 	AlertTitle,
 	IconButton,
 	LinearProgress,
+	CircularProgress,
 } from '@mui/material';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import NavbarB from './NavbarB';
@@ -59,28 +60,35 @@ function Cart() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [checkEligibility, setCheckEligibility] = useState(false);
 	const [checkOutAll, setCheckOutAll] = useState(false);
+	const [isLoadingCart, setIsLoadingCart] = useState(true);
 
 	useEffect(() => {
 		if (!user) return;
 		const fetchCart = async () => {
-			const response = await api.post(
-				'/cart/get',
-				{ email: user.email },
-				{
-					headers: {
-						Authorization: user?.stsTokenManager?.accessToken,
-					},
-				}
-			);
-			setCartItems(response.data.cart);
-			setGroupedProducts(groupProductsBySeller(response.data.cart));
+			setIsLoadingCart(true);
+			try {
+				const response = await api.post(
+					'/cart/get',
+					{ email: user.email },
+					{
+						headers: {
+							Authorization: user?.stsTokenManager?.accessToken,
+						},
+					}
+				);
+				setCartItems(response.data.cart);
+				setGroupedProducts(groupProductsBySeller(response.data.cart));
+			} catch (error) {
+				console.error(error);
+			} finally {
+				setIsLoadingCart(false);
+			}
 		};
 		if (user) fetchCart();
 	}, [user]);
 
 	const groupProductsBySeller = (cart: any) => {
 		const groupedProducts: SellerGroup = {};
-
 		for (const item of cart) {
 			const seller = item.product.seller._id;
 			if (!groupedProducts[seller]) {
@@ -88,12 +96,12 @@ function Cart() {
 			}
 			groupedProducts[seller].push(item);
 		}
-
 		return groupedProducts;
 	};
 
 	useEffect(() => {
 		document.title = 'Shopping Cart';
+		window.scrollTo(0, 0);
 	}, []);
 
 	const handleRemoveFromCart = async (id: string) => {
@@ -368,6 +376,7 @@ function Cart() {
 			setCartProducts([]);
 			setCartItems([]);
 			setIsShownAlert(true);
+			await api.delete(`/cart/${user.email}`);
 		} catch (error: any) {
 			setError(error.response?.data?.message || 'An error occurred');
 		} finally {
@@ -604,7 +613,15 @@ function Cart() {
 							to see details.
 						</Alert>
 					)}
-					{cartItems && cartItems.length > 0 ? (
+					{isLoadingCart ? (
+						<Grid
+							container
+							justifyContent="center"
+							alignItems="center"
+						>
+							<CircularProgress color="inherit" />
+						</Grid>
+					) : cartItems && cartItems.length > 0 ? (
 						<>
 							{renderGroupedProducts(
 								groupProductsBySeller(cartItems)

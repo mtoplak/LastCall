@@ -55,6 +55,10 @@ const SignInB = () => {
 		setResetMail('');
 		setError('');
 		setLink(null);
+		if (!email || !password) {
+			setError('Please fill in all fields');
+			return;
+		}
 		try {
 			const signUpResponse = await signIn(email, password, 'buyer');
 			//console.log(signUpResponse);
@@ -105,6 +109,7 @@ const SignInB = () => {
 								display: 'flex',
 								alignItems: 'center',
 								justifyContent: 'center',
+								py: 5,
 								order: [2, 1],
 							}}
 						>
@@ -137,7 +142,7 @@ const SignInB = () => {
 						>
 							<Box
 								component="form"
-								sx={{ marginTop: '5rem', px: 10 }}
+								sx={{ marginTop: '5rem', px: 4, }}
 							>
 								<Grid>
 									<Grid>

@@ -108,6 +108,11 @@ function Sales() {
 		}
 	};
 
+	useEffect(() => {
+		document.title = 'Sales';
+		window.scrollTo(0, 0);
+	}, []);
+
 	return (
 		<>
 			<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>

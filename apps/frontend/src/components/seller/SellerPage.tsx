@@ -81,6 +81,7 @@ function SellerPage() {
 
 	useEffect(() => {
 		document.title = seller?.title || '';
+		window.scrollTo(0, 0);
 	}, [seller]);
 
 	if (fetchError) {
@@ -91,7 +92,7 @@ function SellerPage() {
 		try {
 			const response = await api.post('/contact/sendMessage', {
 				seller: seller?.email,
-				buyer: user.email,
+				buyer: buyerEmail,
 				message: message,
 			});
 			if (response.data.success !== true) {
@@ -185,37 +186,31 @@ function SellerPage() {
 									</Link>
 								</Typography>
 							</Grid>
-							<Grid item >
-												<Typography
-													variant="body2"
-													sx={{
-														fontSize: '15px',
-														color: 'gray',
-														display: 'flex',
-														alignItems: 'center',
-													}}
-												>
-													<PhoneIcon
-														sx={{
-															marginRight:
-																'0.5rem',
-															mb: 1,
-														}}
-													/>
-													<Link
-														href={`tel:${seller?.phone}`}
-														color="inherit"
-														underline="none"
-													>
-														<b>
-															{
-																seller
-																	?.phone
-															}
-														</b>
-													</Link>
-												</Typography>
-											</Grid>
+							<Grid item>
+								<Typography
+									variant="body2"
+									sx={{
+										fontSize: '15px',
+										color: 'gray',
+										display: 'flex',
+										alignItems: 'center',
+									}}
+								>
+									<PhoneIcon
+										sx={{
+											marginRight: '0.5rem',
+											mb: 1,
+										}}
+									/>
+									<Link
+										href={`tel:${seller?.phone}`}
+										color="inherit"
+										underline="none"
+									>
+										<b>{seller?.phone}</b>
+									</Link>
+								</Typography>
+							</Grid>
 							<Grid item>
 								<Link href={seller?.website} underline="none">
 									<Typography

@@ -5,6 +5,7 @@ import SignUpB from './SignUpB';
 function SignUpPage() {
 	useEffect(() => {
 		document.title = 'Sign Up | Buyer';
+		window.scrollTo(0, 0);
 	}, []);
 	return (
 		<>

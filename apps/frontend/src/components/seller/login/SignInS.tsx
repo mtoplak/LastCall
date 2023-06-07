@@ -34,6 +34,7 @@ const SignInS = () => {
 
 	useEffect(() => {
 		document.title = 'Sign In | Seller';
+		window.scrollTo(0, 0);
 	}, []);
 
 	const handleResetPassword = async (e: any) => {
@@ -57,6 +58,10 @@ const SignInS = () => {
 		setResetMail('');
 		setError('');
 		setLink(null);
+		if (!email || !password) {
+			setError('Please fill in all fields');
+			return;
+		}
 		try {
 			const signUpResponse = await signIn(email, password, 'seller');
 			//console.log(signUpResponse);
@@ -244,6 +249,7 @@ const SignInS = () => {
 									display: 'flex',
 									alignItems: 'center',
 									justifyContent: 'center',
+									py: 5,
 									order: [2, 1],
 								}}
 							>

@@ -48,6 +48,7 @@ function Suppliers() {
 
 	useEffect(() => {
 		document.title = 'Suppliers';
+		window.scrollTo(0, 0);
 	}, []);
 
 	useEffect(() => {

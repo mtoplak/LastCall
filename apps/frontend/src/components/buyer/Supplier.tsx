@@ -28,7 +28,6 @@ const Supplier: React.FC<SupplierProps> = ({ seller }) => {
 				console.error('Error fetching rating:', error);
 			}
 		};
-
 		fetchRating();
 	}, [seller._id]);
 
@@ -60,13 +59,13 @@ const Supplier: React.FC<SupplierProps> = ({ seller }) => {
 					</Grid>
 					<Grid item xs={12} md={3} sx={{ my: 1 }}>
 						{rating !== 0 ? (
-								<Rating
-									name="read-only"
-									precision={0.25}
-									value={rating}
-									readOnly
-									sx={{ ml: 1 }}
-								/>
+							<Rating
+								name="read-only"
+								precision={0.25}
+								value={rating}
+								readOnly
+								sx={{ ml: 1 }}
+							/>
 						) : (
 							<Typography
 								variant="body2"

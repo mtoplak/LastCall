@@ -16,7 +16,7 @@ import {
 	OutlinedInput,
 	LinearProgress,
 } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { btnstyle } from 'assets/styles/styles';
 import NavbarS from '../NavbarS';
 import { useUserAuth } from 'context/AuthContext';
@@ -25,6 +25,7 @@ import api from 'services/api';
 import CustomBox from 'components/ui/CustomBox';
 import { markets } from 'constants/marketConstants';
 import { SellerType } from '../../../enums/seller.enum';
+import { ISeller } from 'models/seller';
 
 const initialState = {
 	name: '',
@@ -40,28 +41,46 @@ const initialState = {
 	city: '',
 	companyType: '',
 	country: '',
-	registerNumber: 0,
+	registerNumber: '',
 	targetedMarkets: [] as string[],
-	minPrice: 0,
-	maxDistance: 0,
-	deliveryCost: 0,
+	minPrice: '',
+	maxDistance: '',
+	deliveryCost: '',
 };
+
+const requiredFields: (keyof any)[] = [
+	'name',
+	'surname',
+	'email',
+	'password',
+	'password2',
+	'phone',
+	'title',
+	'companyType',
+	'address',
+	'city',
+	'country',
+	'registerNumber',
+];
 
 const SignUpS = () => {
 	const [error, setError] = useState('');
 	const [newUserData, setNewUserData] = useState(initialState);
 	const [isLoading, setIsLoading] = useState(false);
+	const [successInfo, setSuccessInfo] = useState<boolean>(false);
 
 	const companyTypes = Object.values(SellerType);
 
-	const navigate = useNavigate();
 	const { signUp } = useUserAuth();
 
 	useEffect(() => {
 		document.title = 'Sign Up | Seller';
+		window.scrollTo(0, 0);
 	}, []);
 
 	const handleChange = (e: { target: { value: any; name: any } }) => {
+		setSuccessInfo(false);
+		setError('');
 		const { value, name } = e.target;
 		setNewUserData({ ...newUserData, [name]: value });
 	};
@@ -70,12 +89,23 @@ const SignUpS = () => {
 		e.preventDefault();
 		setError('');
 		setIsLoading(true);
+		for (const field of requiredFields) {
+			if (!newUserData[field as keyof typeof newUserData]) {
+				setError(
+					`${
+						String(field).charAt(0).toUpperCase() +
+						String(field).slice(1)
+					} is required`
+				);
+				setIsLoading(false);
+				return;
+			}
+		}
 		if (newUserData.password !== newUserData.password2) {
 			setError('Passwords do not match');
 			setIsLoading(false);
 			return;
 		}
-
 		try {
 			const signUpResponse = await signUp(
 				newUserData.email,
@@ -106,9 +136,9 @@ const SignUpS = () => {
 								coordinates: [data[0].lat, data[0].lon],
 								// targetedMarket: targetedMarkets,
 							});
-							console.log(response.data);
-							console.log(response.data.seller);
-							navigate('/sell/signin');
+							//console.log(response.data);
+							//console.log(response.data.seller);
+							setSuccessInfo(true);
 						} catch (error: any) {
 							setError(error.message);
 						}
@@ -161,10 +191,10 @@ const SignUpS = () => {
 							<Grid>
 								<Paper
 									elevation={10}
-									sx={{ px: 4, mb: 3, pb: 2 }}
+									sx={{ px: 4, mb: 3, pb: 2, maxWidth: 600, margin: '0 auto' }}
 								>
 									<Grid container spacing={2}>
-										<Grid item xs={12} md={6}>
+										<Grid item xs={12} sm={6}>
 											<Typography
 												variant="h6"
 												sx={{ mb: 2 }}
@@ -271,7 +301,7 @@ const SignUpS = () => {
 												</Select>
 											</FormControl>
 										</Grid>
-										<Grid item xs={12} md={6}>
+										<Grid item xs={12} sm={6}>
 											<Typography
 												variant="h6"
 												sx={{ mb: 2 }}
@@ -280,7 +310,7 @@ const SignUpS = () => {
 											</Typography>
 											<TextField
 												label="Address"
-												placeholder="Enter your/company address"
+												placeholder="Enter your address"
 												fullWidth
 												required
 												name="address"
@@ -290,7 +320,7 @@ const SignUpS = () => {
 											/>
 											<TextField
 												label="City"
-												placeholder="Enter your/company city"
+												placeholder="Enter your city"
 												fullWidth
 												required
 												name="city"
@@ -300,7 +330,7 @@ const SignUpS = () => {
 											/>
 											<TextField
 												label="Country"
-												placeholder="Enter your/company country"
+												placeholder="Enter your country"
 												fullWidth
 												required
 												name="country"
@@ -415,6 +445,19 @@ const SignUpS = () => {
 									</Grid>
 									{error && (
 										<Alert severity="error">{error}</Alert>
+									)}
+									{successInfo && (
+										<Alert severity="success">
+											You've successfully signed up!
+											Verify your email to{' '}
+											<Link
+												to={'/sell/signin'}
+												className="blackLink"
+											>
+												log in
+											</Link>
+											. Also, check your spam folder.
+										</Alert>
 									)}
 									<Button
 										type="submit"

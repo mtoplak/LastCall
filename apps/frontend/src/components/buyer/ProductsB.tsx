@@ -42,6 +42,7 @@ const Products = () => {
 		location.pathname === '/products'
 			? (document.title = 'Products')
 			: (document.title = 'Last Call');
+			window.scrollTo(0, 0);
 	}, [location]);
 
 	// filtering

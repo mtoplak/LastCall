@@ -17,7 +17,7 @@ import {
 	Alert,
 	LinearProgress,
 } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useUserAuth } from 'context/AuthContext';
 import api from 'services/api';
@@ -39,18 +39,32 @@ const initialState = {
 	title: '',
 	city: '',
 	country: '',
-	registerNumber: 0,
+	registerNumber: '',
 	targetedMarkets: [],
 };
+
+const requiredFields: (keyof any)[] = [
+	'name',
+	'surname',
+	'email',
+	'password',
+	'password2',
+	'address',
+	'city',
+	'country',
+	'phone',
+	'registerNumber',
+];
 
 const SignUpB = () => {
 	const [error, setError] = useState('');
 	const [newUserData, setNewUserData] = useState(initialState);
 	const [isLoading, setIsLoading] = useState(false);
-
-	const navigate = useNavigate();
+	const [successInfo, setSuccessInfo] = useState(false);
 
 	const handleChange = (e: { target: { value: any; name: any } }) => {
+		setSuccessInfo(false);
+		setError('');
 		const { value, name } = e.target;
 		if (name === 'legalPerson') {
 			setNewUserData({
@@ -68,6 +82,18 @@ const SignUpB = () => {
 		setIsLoading(true);
 		setError('');
 		e.preventDefault();
+		for (const field of requiredFields) {
+			if (!newUserData[field as keyof typeof newUserData]) {
+				setError(
+					`${
+						String(field).charAt(0).toUpperCase() +
+						String(field).slice(1)
+					} is required`
+				);
+				setIsLoading(false);
+				return;
+			}
+		}
 		if (newUserData.password !== newUserData.password2) {
 			setError('Passwords do not match');
 			setIsLoading(false);
@@ -87,8 +113,8 @@ const SignUpB = () => {
 						...newUserData,
 						// targetedMarket: targetedMarkets,
 					});
-					console.log(response.data);
-					navigate('/buy/signin');
+					//console.log(response.data);
+					setSuccessInfo(true);
 				} catch (error: any) {
 					setError(error.message);
 				}
@@ -125,9 +151,9 @@ const SignUpB = () => {
 							Sign up
 						</Typography>
 						<Grid>
-							<Paper elevation={10} sx={{ px: 4, mb: 3, pb: 2 }}>
+							<Paper elevation={10} sx={{ px: 4, mb: 3, pb: 2, maxWidth: 600, margin: '0 auto' }}>
 								<Grid container spacing={2}>
-									<Grid item xs={12} md={6}>
+									<Grid item xs={12} sm={6}>
 										<Typography variant="h6" sx={{ mb: 2 }}>
 											Basic info
 										</Typography>
@@ -205,7 +231,7 @@ const SignUpB = () => {
 											label="Legal Person"
 										/>
 									</Grid>
-									<Grid item xs={12} md={6}>
+									<Grid item xs={12} sm={6}>
 										<Typography variant="h6" sx={{ mb: 2 }}>
 											Additional Information
 										</Typography>
@@ -220,7 +246,7 @@ const SignUpB = () => {
 										/>
 										<TextField
 											label="Address"
-											placeholder="Enter your/company address"
+											placeholder="Enter your address"
 											fullWidth
 											required
 											name="address"
@@ -230,7 +256,7 @@ const SignUpB = () => {
 										/>
 										<TextField
 											label="City"
-											placeholder="Enter your/company city"
+											placeholder="Enter your city"
 											fullWidth
 											required
 											name="city"
@@ -240,7 +266,7 @@ const SignUpB = () => {
 										/>
 										<TextField
 											label="Country"
-											placeholder="Enter your/company country"
+											placeholder="Enter yourcountry"
 											fullWidth
 											required
 											name="country"
@@ -297,6 +323,19 @@ const SignUpB = () => {
 								</Grid>
 								{error && (
 									<Alert severity="error">{error}</Alert>
+								)}
+								{successInfo && (
+									<Alert severity="success">
+										You've successfully signed up! Verify
+										your email to{' '}
+										<Link
+											to={'/buy/signin'}
+											className="blackLink"
+										>
+											log in
+										</Link>
+										. Also, check your spam folder.
+									</Alert>
 								)}
 								<Button
 									type="submit"

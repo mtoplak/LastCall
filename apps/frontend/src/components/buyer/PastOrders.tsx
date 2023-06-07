@@ -4,7 +4,6 @@ import {
 	Container,
 	Typography,
 	Grid,
-	Divider,
 	CircularProgress,
 } from '@mui/material';
 import NavbarB from './NavbarB';
@@ -41,6 +40,7 @@ function PastOrders() {
 			}
 		};
 		fetchPastOrders();
+		window.scrollTo(0, 0);
 	}, [user]);
 
 	useEffect(() => {
