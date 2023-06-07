@@ -22,13 +22,13 @@ export class RatingController {
   @UseGuards(FirebaseTokenGuard)
   async addRating(
     @Body() createRatingDto: CreateUpdateRatingDto,
-    @Body('seller') sellerEmail: string,
+    @Body('seller') sellerId: string,
     @Body('buyer') buyerEmail: string,
     @Body('order') orderId: string,
   ): Promise<Rating> {
     return this.ratingService.createRating(
       createRatingDto,
-      sellerEmail,
+      sellerId,
       buyerEmail,
       orderId
     );

@@ -38,17 +38,17 @@ export class RatingRepository {
 
   async create(
     ratingData: Rating,
-    sellerEmail: string,
+    sellerId: string,
     buyerEmail: string,
   ): Promise<Rating> {
     try {
       const { ...restRatingData } = ratingData;
-      const seller = await this.sellersService.getSingleSellerByEmail(
-        sellerEmail,
+      const seller = await this.sellersService.getSingleSeller(
+        sellerId,
       );
       if (!seller) {
         throw new NotFoundException(
-          `Could not find the seller with email ${sellerEmail}.`,
+          `Could not find the seller with id ${sellerId}.`,
         );
       }
       const buyer = await this.buyerService.getSingleBuyerByEmail(buyerEmail);

@@ -185,26 +185,37 @@ function SellerPage() {
 									</Link>
 								</Typography>
 							</Grid>
-							<Grid item sx={{ mx: 2 }}>
-								<Typography
-									variant="body2"
-									sx={{
-										fontSize: '14px',
-										color: 'gray',
-										display: 'flex',
-										alignItems: 'center',
-									}}
-								>
-									<PhoneIcon sx={{ marginRight: '0.5rem' }} />
-									<Link
-										href={`tel:${seller?.phone}`}
-										color="inherit"
-										underline="none"
-									>
-										<b>{seller?.phone}</b>
-									</Link>
-								</Typography>
-							</Grid>
+							<Grid item >
+												<Typography
+													variant="body2"
+													sx={{
+														fontSize: '15px',
+														color: 'gray',
+														display: 'flex',
+														alignItems: 'center',
+													}}
+												>
+													<PhoneIcon
+														sx={{
+															marginRight:
+																'0.5rem',
+															mb: 1,
+														}}
+													/>
+													<Link
+														href={`tel:${seller?.phone}`}
+														color="inherit"
+														underline="none"
+													>
+														<b>
+															{
+																seller
+																	?.phone
+															}
+														</b>
+													</Link>
+												</Typography>
+											</Grid>
 							<Grid item>
 								<Link href={seller?.website} underline="none">
 									<Typography

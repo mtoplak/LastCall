@@ -34,9 +34,7 @@ function SingleOrder() {
 	const { id } = useParams<{ id: string }>();
 	const { role, user } = useUserAuth();
 	const [open, setOpen] = useState(false);
-	const [score, setScore] = useState<number | null>(null);
 	const [error, setError] = useState('');
-	const [rated, setRated] = useState(false);
 
 	useEffect(() => {
 		if (!user) return;
@@ -48,9 +46,6 @@ function SingleOrder() {
 					},
 				});
 				setOrder(response.data);
-				setRated(!!response.data?.score); // Check if score exists and set `rated` accordingly
-				//setRated(!!response.data && response.data.score !== null);
-				//setScore(parseFloat(response.data?.score) || null);
 			} catch (error) {
 				setFetchError(true);
 				throw error;
@@ -64,51 +59,9 @@ function SingleOrder() {
 		document.title = `Order ${order?.uid} details`;
 	}, [order?.uid, order]);
 
-	useEffect(() => {
-		const fetchRating = async () => {
-			try {
-				const response = await api.get(`/rating/order/${order?._id}`);
-				setScore(response.data);
-			} catch (error: any) {
-				setError(error.response.data.message);
-			}
-		};
-		if (order?.score) {
-			fetchRating();
-		}
-	}, [order]);
-
 	if (fetchError) {
 		return <Page404 notFound="Order" />;
 	}
-
-	const handleRate = async () => {
-		if (score === null || score === undefined || score === 0) {
-			setError('Please select a score');
-			return;
-		}
-		try {
-			await api.post(
-				`/rating`,
-				{
-					score: score,
-					seller: order?.seller.email,
-					order: order?._id,
-					buyer: user.email,
-				},
-				{
-					headers: {
-						Authorization: user?.stsTokenManager?.accessToken,
-					},
-				}
-			);
-			setOpen(false);
-			setRated(true);
-			setScore(score);
-		} catch (error: any) {
-			setError(error.response.data.message);
-		}
-	};
 
 	return (
 		<Box sx={{ backgroundColor: '#f2f2f2', minHeight: '100vh' }}>
@@ -171,55 +124,6 @@ function SingleOrder() {
 											>
 												<b>Order ID:</b> {order.uid}
 											</Typography>
-										</Grid>
-										<Grid
-											item
-											xs={12}
-											md={6}
-											sx={{ mt: { xs: 0, md: 5 } }}
-										>
-											{role !== 'seller' && (
-												<>
-													<Button
-														variant="outlined"
-														sx={{
-															mr: 3,
-															mb: 2,
-															color: '#878787',
-															border: '2px solid #878787',
-															'&:hover': {
-																border: '2px solid #878787',
-																backgroundColor:
-																	'#e0e0e0',
-															},
-														}}
-														onClick={() => {
-															setOpen(true);
-														}}
-														disabled={
-															rated ||
-															order.status !==
-																OrderStatus.DELIVERED
-														}
-													>
-														{rated ? (
-															<>
-																You have rated
-																this seller:{' '}
-																<Rating
-																	value={
-																		score!
-																	}
-																/>
-															</>
-														) : (
-															<>
-																Rate this seller
-															</>
-														)}
-													</Button>
-												</>
-											)}
 										</Grid>
 									</Grid>
 									<Divider />
@@ -545,56 +449,6 @@ function SingleOrder() {
 					)}
 				</Grid>
 			</Container>
-			<Modal
-				open={open}
-				onClose={() => {
-					setOpen(false);
-					setError('');
-				}}
-				aria-labelledby="modal-modal-title"
-				aria-describedby="modal-modal-description"
-			>
-				<Box
-					sx={style}
-					style={{
-						display: 'flex',
-						flexDirection: 'column',
-						alignItems: 'center',
-						padding: '16px',
-					}}
-				>
-					<Typography
-						variant="h6"
-						component="h2"
-						style={{ marginBottom: '16px' }}
-					>
-						Rate your experience with this seller
-					</Typography>
-					<Rating
-						name="simple-controlled"
-						value={score}
-						onChange={(event, newValue) => {
-							setScore(newValue!);
-						}}
-						style={{ marginBottom: '16px' }}
-					/>
-					{error && (
-						<Typography
-							color="error"
-							style={{ marginBottom: '16px' }}
-						>
-							{error}
-						</Typography>
-					)}
-					<Button
-						variant="contained"
-						color="primary"
-						onClick={handleRate}
-					>
-						Confirm
-					</Button>
-				</Box>
-			</Modal>
 		</Box>
 	);
 }

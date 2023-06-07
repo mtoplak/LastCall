@@ -41,6 +41,7 @@ function NavbarB() {
 	};
 
 	const { user, logOut, role } = useUserAuth();
+	//console.log(role)
 	//console.log(user);
 	//console.log(user?.email);
 	//console.log(user?.accessToken);
@@ -200,18 +201,22 @@ function NavbarB() {
 									Suppliers
 								</Button>
 							</Link>
-							<Link to="/orders">
-								<Button
-									onClick={handleCloseNavMenu}
-									sx={{
-										my: 2,
-										color: 'white',
-										display: 'block',
-									}}
-								>
-									My orders
-								</Button>
-							</Link>
+							{user && role === 'buyer' && (
+								<>
+									<Link to="/orders">
+										<Button
+											onClick={handleCloseNavMenu}
+											sx={{
+												my: 2,
+												color: 'white',
+												display: 'block',
+											}}
+										>
+											My orders
+										</Button>
+									</Link>
+								</>
+							)}
 						</Box>
 						{user && role === 'buyer' && (
 							<Link to={'/cart'} onClick={handleCloseNavMenu}>

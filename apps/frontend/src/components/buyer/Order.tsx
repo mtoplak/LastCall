@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	Typography,
 	Card,
@@ -9,18 +9,77 @@ import {
 	AccordionDetails,
 	CardMedia,
 	Button,
+	Rating,
+	Modal,
+	Box,
+	Tooltip,
 } from '@mui/material';
 import { IOrder } from 'models/order';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { formatDate } from 'utils/formatDate';
 import { getOrderStatusColor } from 'utils/getOrderStatusColor';
+import { useUserAuth } from 'context/AuthContext';
+import api from 'services/api';
+import { OrderStatus } from 'enums/order.enum';
+import { style } from 'assets/styles/styles';
 
 interface OrderProps {
 	order: IOrder;
 }
 
 const Order: React.FC<OrderProps> = ({ order }) => {
+	const { role, user } = useUserAuth();
+	const [open, setOpen] = useState(false);
+	const [score, setScore] = useState<number | null>(null);
+	const [error, setError] = useState('');
+	const [rated, setRated] = useState(false);
+
+	useEffect(() => {
+		const fetchRating = async () => {
+			try {
+				const response = await api.get(`/rating/order/${order?._id}`);
+				setScore(response.data);
+				setRated(!!response.data);
+			} catch (error: any) {
+				setError(error.response.data.message);
+			}
+		};
+		if (order?.score) {
+			fetchRating();
+		}
+	}, [order]);
+
+	const handleRate = async () => {
+		if (score === null || score === undefined || score === 0) {
+			setError('Please select a score');
+			return;
+		}
+		try {
+			//console.log(order?.seller._id);
+			//console.log(order?.seller);
+			await api.post(
+				`/rating`,
+				{
+					score: score,
+					seller: order?.seller,
+					order: order?._id,
+					buyer: user.email,
+				},
+				{
+					headers: {
+						Authorization: user?.stsTokenManager?.accessToken,
+					},
+				}
+			);
+			setOpen(false);
+			setRated(true);
+			setScore(score);
+		} catch (error: any) {
+			setError(error.response.data.message);
+		}
+	};
+
 	return (
 		<Accordion>
 			<AccordionSummary
@@ -54,11 +113,11 @@ const Order: React.FC<OrderProps> = ({ order }) => {
 								sm={6}
 								md={4}
 							>
-									<CardMedia
-										component="img"
-										image={orderProduct.product.picture}
-										sx={{ maxHeight: 220, maxWidth: 220 }}
-									/>
+								<CardMedia
+									component="img"
+									image={orderProduct.product.picture}
+									sx={{ maxHeight: 220, maxWidth: 220 }}
+								/>
 							</Grid>
 						))}
 						{order.products.length > 3 && (
@@ -78,15 +137,104 @@ const Order: React.FC<OrderProps> = ({ order }) => {
 				<Divider />
 				<Grid
 					container
-					sx={{ mt: 2, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}
+					sx={{
+						mt: 2,
+						display: 'flex',
+						flexWrap: 'wrap',
+						justifyContent: 'space-between',
+					}}
 				>
-					<Grid item xs={12} sm={6}>
+					<Grid item xs={12} sm={3}>
 						<Typography sx={{ width: '33%', flexShrink: 0 }}>
 							<b>Order ID: </b>
 							{order.uid}
 						</Typography>
 					</Grid>
-					<Grid item xs={12} sm={2} sx={{justifyContent: 'flex-end'}}>
+					<Grid item xs={12} sm={6} sx={{ mt: 1 }}>
+						{role !== 'seller' && (
+							<>
+								<Tooltip
+									title={
+										order.status !== OrderStatus.DELIVERED
+											? 'You can rate this seller when the order is delivered'
+											: ''
+									}
+									placement="top"
+									arrow
+								>
+									<span>
+										<Button
+											variant="outlined"
+											sx={{
+												mr: 3,
+												mb: 2,
+												color: '#878787',
+												position: 'relative', // Added position property
+												'&:hover': {
+													border: '2px solid #878787',
+													backgroundColor: '#e0e0e0',
+													cursor: 'not-allowed',
+												},
+												border: '2px solid #878787',
+											}}
+											onClick={() => {
+												setOpen(true);
+											}}
+											disabled={
+												rated ||
+												order.status !==
+													OrderStatus.DELIVERED
+											}
+										>
+											{rated ? (
+												<>
+													You have rated this seller:{' '}
+													<Rating value={score!} />
+												</>
+											) : (
+												<>Rate this seller</>
+											)}
+											{order.status !==
+												OrderStatus.DELIVERED && (
+												<Typography
+													variant="body2"
+													sx={{
+														position: 'absolute',
+														top: '50%',
+														left: '50%',
+														transform:
+															'translate(-50%, -50%)',
+														backgroundColor:
+															'rgba(0, 0, 0, 0.7)',
+														color: '#ffffff',
+														padding: '4px 8px',
+														borderRadius: '4px',
+														whiteSpace: 'nowrap',
+														opacity: 0,
+														transition:
+															'opacity 0.3s',
+														pointerEvents: 'none',
+														'&:hover': {
+															opacity: 1,
+														},
+													}}
+												>
+													You can't rate this seller
+													yet
+												</Typography>
+											)}
+										</Button>
+									</span>
+								</Tooltip>
+							</>
+						)}
+					</Grid>
+					<Grid
+						item
+						xs={12}
+						sm={2}
+						sx={{ justifyContent: 'flex-end' }}
+					>
 						<Link to={`/order/${order._id}`} key={order._id}>
 							<Button
 								variant="outlined"
@@ -108,6 +256,56 @@ const Order: React.FC<OrderProps> = ({ order }) => {
 					</Grid>
 				</Grid>
 			</AccordionDetails>
+			<Modal
+				open={open}
+				onClose={() => {
+					setOpen(false);
+					setError('');
+				}}
+				aria-labelledby="modal-modal-title"
+				aria-describedby="modal-modal-description"
+			>
+				<Box
+					sx={style}
+					style={{
+						display: 'flex',
+						flexDirection: 'column',
+						alignItems: 'center',
+						padding: '16px',
+					}}
+				>
+					<Typography
+						variant="h6"
+						component="h2"
+						style={{ marginBottom: '16px' }}
+					>
+						Rate your experience with this seller
+					</Typography>
+					<Rating
+						name="simple-controlled"
+						value={score}
+						onChange={(event, newValue) => {
+							setScore(newValue!);
+						}}
+						style={{ marginBottom: '16px' }}
+					/>
+					{error && (
+						<Typography
+							color="error"
+							style={{ marginBottom: '16px' }}
+						>
+							{error}
+						</Typography>
+					)}
+					<Button
+						variant="contained"
+						color="primary"
+						onClick={handleRate}
+					>
+						Confirm
+					</Button>
+				</Box>
+			</Modal>
 		</Accordion>
 	);
 };

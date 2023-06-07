@@ -1,9 +1,8 @@
-import { Box, Typography, Container, Grid, useMediaQuery } from '@mui/material';
+import { Box, Typography, Container, Grid, useMediaQuery, createTheme } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import heroImg from '../../assets/images/homepageDrink.png';
 import CustomBox from 'components/ui/CustomBox';
 import Title from 'components/ui/Title';
-import { createTheme } from '@mui/material/styles';
 
 const Hero = () => {
 	//const theme = useTheme();

@@ -14,13 +14,13 @@ export class RatingService {
 
   async createRating(
     ratingData: CreateUpdateRatingDto,
-    sellerEmail: string,
+    sellerId: string,
     buyerEmail: string,
     orderId: string,
   ): Promise<Rating> {
     const rating = await this.ratingRepository.create(
       ratingData,
-      sellerEmail,
+      sellerId,
       buyerEmail,
     );
 
