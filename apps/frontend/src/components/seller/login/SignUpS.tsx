@@ -73,6 +73,7 @@ const SignUpS = () => {
 		setIsLoading(true);
 		if (newUserData.password !== newUserData.password2) {
 			setError('Passwords do not match');
+			setIsLoading(false);
 			return;
 		}
 

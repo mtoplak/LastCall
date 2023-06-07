@@ -2,8 +2,10 @@ import {
 	Alert,
 	Box,
 	Button,
+	CircularProgress,
 	Container,
 	FormControl,
+	Grid,
 	IconButton,
 	InputLabel,
 	MenuItem,
@@ -67,6 +69,7 @@ const ProductsS = () => {
 	const [isOpenAdd, setIsOpenAdd] = useState(false);
 	const [error, setError] = useState('');
 	const [productImage, setProductImage] = useState<File | null>(null);
+	const [isLoading, setIsLoading] = useState(true);
 	const { user } = useUserAuth();
 
 	const handleFormSubmit = async (imageURL: string) => {
@@ -121,6 +124,8 @@ const ProductsS = () => {
 				setDrinks(response.data);
 			} catch (error) {
 				throw error;
+			} finally {
+				setIsLoading(false);
 			}
 		};
 		fetchSellerProducts();
@@ -318,7 +323,16 @@ const ProductsS = () => {
 					</Typography>
 				</PropertiesTextBox>
 				<PropertiesBox>
-					{drinks &&
+					{isLoading ? (
+						<Grid
+							container
+							justifyContent="center"
+							alignItems="center"
+							style={{ minHeight: '200px' }}
+						>
+							<CircularProgress color="inherit" />
+						</Grid>
+					) : (
 						drinks.map((drink: IDrink, index: number) => (
 							<DrinkContainer key={index}>
 								<Drink
@@ -327,7 +341,8 @@ const ProductsS = () => {
 									drinks={drinks}
 								/>
 							</DrinkContainer>
-						))}
+						))
+					)}
 				</PropertiesBox>
 			</Container>
 		</Box>

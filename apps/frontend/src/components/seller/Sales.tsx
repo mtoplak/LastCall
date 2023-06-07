@@ -5,6 +5,7 @@ import {
 	CardContent,
 	CardMedia,
 	Checkbox,
+	CircularProgress,
 	Container,
 	Divider,
 	FormControl,
@@ -23,8 +24,9 @@ import { Link } from 'react-router-dom';
 function Sales() {
 	const [products, setProducts] = useState<IDrink[]>([]);
 	const [checked, setChecked] = useState<IDrink[]>([]);
-	const { user } = useUserAuth();
 	const [discountAmount, setDiscountAmount] = useState('');
+	const [isLoading, setIsLoading] = useState<boolean>(true);
+	const { user } = useUserAuth();
 
 	useEffect(() => {
 		if (!user) return;
@@ -36,6 +38,8 @@ function Sales() {
 				setProducts(response.data);
 			} catch (error) {
 				// Handle error
+			} finally {
+				setIsLoading(false);
 			}
 		};
 		fetchProducts();
@@ -206,137 +210,162 @@ function Sales() {
 						</Grid>
 
 						<Grid item xs={12} md={9}>
-							{products.map((product) => (
-								<Card sx={{ mb: 3 }} key={product._id}>
-									<Grid
-										container
-										spacing={2}
-										sx={{ mt: 2, mb: 2 }}
-									>
-										<Grid item xs={1} sx={{ mt: 6 }}>
-											<Checkbox
-												checked={checked.some(
-													(checkedProduct) =>
-														checkedProduct._id ===
-														product._id
-												)}
-												onChange={handleToggle(product)}
-												inputProps={{
-													'aria-label':
-														'select order',
-												}}
-											/>
-										</Grid>
-										<Grid item xs={3}>
-											<Link
-												to={`/product/${product._id}`}
-											>
-												<CardMedia
-													component="img"
-													image={product.picture}
-													sx={{
-														maxHeight: 150,
-														maxWidth: 150,
+							{isLoading ? (
+								<Grid
+									container
+									justifyContent="center"
+									alignItems="center"
+									style={{ minHeight: '200px' }}
+								>
+									<CircularProgress color="inherit" />
+								</Grid>
+							) : (
+								products.map((product) => (
+									<Card sx={{ mb: 3 }} key={product._id}>
+										<Grid
+											container
+											spacing={2}
+											sx={{ mt: 2, mb: 2 }}
+										>
+											<Grid item xs={1} sx={{ mt: 6 }}>
+												<Checkbox
+													checked={checked.some(
+														(checkedProduct) =>
+															checkedProduct._id ===
+															product._id
+													)}
+													onChange={handleToggle(
+														product
+													)}
+													inputProps={{
+														'aria-label':
+															'select order',
 													}}
 												/>
-											</Link>
-										</Grid>
-										<Grid item xs={5}>
-											<CardContent>
-												<Typography
-													variant="h6"
-													component="h2"
+											</Grid>
+											<Grid item xs={3}>
+												<Link
+													to={`/product/${product._id}`}
 												>
-													<Link
-														to={`/product/${product._id}`}
-														className="blackLink"
-													>
-														<b>{product.title}</b>
-													</Link>
-												</Typography>
-												<Typography
-													variant="body2"
-													color="text.secondary"
-												>
-													ID: {product._id}
-												</Typography>
-												<Typography
-													variant="body2"
-													color="text.secondary"
-												>
-													Original price:{' '}
-													{product.actualPrice} €
-												</Typography>
-												<Typography
-													variant="body2"
-													color="text.secondary"
-												>
-													Stock: {product.stock}
-												</Typography>
-												<Typography
-													variant="body2"
-													color="text.secondary"
-												>
-													Size: {product.packaging},{' '}
-													{product.size}
-												</Typography>
-											</CardContent>
-										</Grid>
-										<Grid item xs={3}>
-											{product.discount !== 0 ? (
-												<CardContent>
-													Current discount:
-													<Typography
-														color={getDiscountColor(
-															product.discount
-														)}
-													>
-														<b>
-															{product.discount}%
-														</b>
-													</Typography>
-													<Divider
-														sx={{ mt: 2, mb: 2 }}
+													<CardMedia
+														component="img"
+														image={product.picture}
+														sx={{
+															maxHeight: 150,
+															maxWidth: 150,
+														}}
 													/>
-													Price with discount:
+												</Link>
+											</Grid>
+											<Grid item xs={5}>
+												<CardContent>
 													<Typography
-														color={getDiscountColor(
-															product.discount
-														)}
+														variant="h6"
+														component="h2"
 													>
-														<b>
-															{product.price.toFixed(
-																2
-															)}{' '}
-															€
-														</b>
+														<Link
+															to={`/product/${product._id}`}
+															className="blackLink"
+														>
+															<b>
+																{product.title}
+															</b>
+														</Link>
+													</Typography>
+													<Typography
+														variant="body2"
+														color="text.secondary"
+													>
+														ID: {product._id}
+													</Typography>
+													<Typography
+														variant="body2"
+														color="text.secondary"
+													>
+														Original price:{' '}
+														{product.actualPrice} €
+													</Typography>
+													<Typography
+														variant="body2"
+														color="text.secondary"
+													>
+														Stock: {product.stock}
+													</Typography>
+													<Typography
+														variant="body2"
+														color="text.secondary"
+													>
+														Size:{' '}
+														{product.packaging},{' '}
+														{product.size}
 													</Typography>
 												</CardContent>
-											) : (
-												<CardContent>
-													No discount
-													<Divider
-														sx={{ mt: 2, mb: 2 }}
-													/>
-													Original price:
-													<Typography
-														color={getDiscountColor(
-															product.discount
-														)}
-													>
-														<b>
-															{product.actualPrice.toFixed(
-																2
-															)}{' '}
-															€
-														</b>
-													</Typography>
-												</CardContent>
-											)}
+											</Grid>
+											<Grid item xs={3}>
+												{product.discount !== 0 ? (
+													<CardContent>
+														Current discount:
+														<Typography
+															color={getDiscountColor(
+																product.discount
+															)}
+														>
+															<b>
+																{
+																	product.discount
+																}
+																%
+															</b>
+														</Typography>
+														<Divider
+															sx={{
+																mt: 2,
+																mb: 2,
+															}}
+														/>
+														Price with discount:
+														<Typography
+															color={getDiscountColor(
+																product.discount
+															)}
+														>
+															<b>
+																{product.price.toFixed(
+																	2
+																)}{' '}
+																€
+															</b>
+														</Typography>
+													</CardContent>
+												) : (
+													<CardContent>
+														No discount
+														<Divider
+															sx={{
+																mt: 2,
+																mb: 2,
+															}}
+														/>
+														Original price:
+														<Typography
+															color={getDiscountColor(
+																product.discount
+															)}
+														>
+															<b>
+																{product.actualPrice.toFixed(
+																	2
+																)}{' '}
+																€
+															</b>
+														</Typography>
+													</CardContent>
+												)}
+											</Grid>
 										</Grid>
-									</Grid>
-								</Card>
-							))}
+									</Card>
+								))
+							)}
 						</Grid>
 					</Grid>
 				</Container>

@@ -1,5 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Box, Card, Container, Grid, Typography } from '@mui/material';
+import {
+	Box,
+	Card,
+	CircularProgress,
+	Container,
+	Grid,
+	Typography,
+} from '@mui/material';
 import { ISeller } from 'models/seller';
 import api from 'services/api';
 import SearchSuppliersInput from './SearchSuppliersInput';
@@ -36,7 +43,7 @@ function Suppliers() {
 	const [filterName, setFilterName] = useState('');
 	const [filterLocation, setFilterLocation] = useState('any');
 	const [filterType, setFilterType] = useState<SellerType | 'any'>('any');
-
+	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [isChecked, setIsChecked] = useState(false);
 
 	useEffect(() => {
@@ -51,6 +58,8 @@ function Suppliers() {
 				setSellers(response.data);
 			} catch (error) {
 				throw error;
+			} finally {
+				setIsLoading(false);
 			}
 		};
 		fetchSellers();
@@ -114,7 +123,7 @@ function Suppliers() {
 						</Typography>
 					</PropertiesTextBox>
 					<Box>
-						<Card  sx={{mb: 2}}>
+						<Card sx={{ mb: 2 }}>
 							<SearchSuppliersInput
 								setFilterName={setFilterName}
 								setFilterLocation={setFilterLocation}
@@ -195,47 +204,66 @@ function Suppliers() {
 						''
 					)}
 
-					<Grid item xs={12}>
-						{filteredSellers.length > 0 &&
-						(filterType !== 'any' ||
-							filterName !== '' ||
-							filterLocation !== 'any') ? (
-							filteredSellers.map((seller) => (
-								<Grid container spacing={2} key={seller._id}>
-									<Grid item xs={12}>
-										<Link
-											to={`/supplier/${seller._id}`}
-											key={seller._id}
-										>
-											<Supplier seller={seller} />
-										</Link>
-									</Grid>
-								</Grid>
-							))
-						) : (filterType !== 'any' ||
+					{isLoading ? (
+						<Grid
+							container
+							justifyContent="center"
+							alignItems="center"
+							style={{ minHeight: '200px' }}
+						>
+							<CircularProgress color="inherit" />
+						</Grid>
+					) : (
+						<Grid item xs={12}>
+							{filteredSellers.length > 0 &&
+							(filterType !== 'any' ||
 								filterName !== '' ||
-								filterLocation !== 'any') &&
-						  filteredSellers.length === 0 ? (
-							<Grid item xs={12}>
-								<Typography variant="body1">
-									Nothing found &#128549;
-								</Typography>
-							</Grid>
-						) : (
-							sellers.map((seller) => (
-								<Grid container spacing={2} key={seller._id}>
-									<Grid item xs={12}>
-										<Link
-											to={`/supplier/${seller._id}`}
-											key={seller._id}
-										>
-											<Supplier seller={seller} />
-										</Link>
+								filterLocation !== 'any') ? (
+								filteredSellers.map((seller) => (
+									<Grid
+										container
+										spacing={2}
+										key={seller._id}
+									>
+										<Grid item xs={12}>
+											<Link
+												to={`/supplier/${seller._id}`}
+												key={seller._id}
+											>
+												<Supplier seller={seller} />
+											</Link>
+										</Grid>
 									</Grid>
+								))
+							) : (filterType !== 'any' ||
+									filterName !== '' ||
+									filterLocation !== 'any') &&
+							  filteredSellers.length === 0 ? (
+								<Grid item xs={12}>
+									<Typography variant="body1">
+										Nothing found &#128549;
+									</Typography>
 								</Grid>
-							))
-						)}
-					</Grid>
+							) : (
+								sellers.map((seller) => (
+									<Grid
+										container
+										spacing={2}
+										key={seller._id}
+									>
+										<Grid item xs={12}>
+											<Link
+												to={`/supplier/${seller._id}`}
+												key={seller._id}
+											>
+												<Supplier seller={seller} />
+											</Link>
+										</Grid>
+									</Grid>
+								))
+							)}
+						</Grid>
+					)}
 				</Container>
 			</Box>
 		</>

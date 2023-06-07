@@ -1,27 +1,29 @@
 import { Typography, Box } from '@mui/material';
 import CustomContainer from 'components/ui/CustomContainer';
 import FooterLink from 'components/ui/FooterLink';
+import { useUserAuth } from 'context/AuthContext';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
+	const { user, role } = useUserAuth();
+
 	return (
 		<Box sx={{ py: 10, backgroundColor: '#E6F0FF' }}>
 			<CustomContainer>
 				<CustomContainer>
 					<Box>
 						<Link to={'/'}>
-						<Typography
-							sx={{
-								fontSize: '20px',
-								color: '#1C1C1D',
-								fontWeight: '700',
-								mb: 2,
-							}}
-						>
-							Products
-						</Typography>
+							<Typography
+								sx={{
+									fontSize: '20px',
+									color: '#1C1C1D',
+									fontWeight: '700',
+									mb: 2,
+								}}
+							>
+								Products
+							</Typography>
 						</Link>
-
 						<FooterLink>Beer</FooterLink>
 						<br />
 						<FooterLink>Wine</FooterLink>
@@ -33,16 +35,16 @@ const Footer = () => {
 
 					<Box>
 						<Link to={'/buy/signin'}>
-						<Typography
-							sx={{
-								fontSize: '20px',
-								color: '#1C1C1D',
-								fontWeight: '700',
-								mb: 2,
-							}}
-						>
-							Account
-						</Typography>
+							<Typography
+								sx={{
+									fontSize: '20px',
+									color: '#1C1C1D',
+									fontWeight: '700',
+									mb: 2,
+								}}
+							>
+								Account
+							</Typography>
 						</Link>
 
 						<FooterLink>My account</FooterLink>
@@ -73,34 +75,50 @@ const Footer = () => {
 						<FooterLink>Sitemap</FooterLink>
 					</Box>
 
-					<Box>
-						<Typography
-							sx={{
-								fontSize: '20px',
-								color: '#1C1C1D',
-								fontWeight: '700',
-								mb: 2,
-							}}
-						>
-							Become a seller
-						</Typography>
-
-						<Link to={'/seller'}>
+					{user && role !== 'seller' && (
+						<Box>
 							<Typography
 								sx={{
-									fontSize: '16px',
-									color: '#7A7A7E',
-									fontWeight: '500',
-									cursor: 'pointer',
-									'&:hover': {
-										color: '#000',
-									},
+									fontSize: '20px',
+									color: '#1C1C1D',
+									fontWeight: '700',
+									mb: 2,
 								}}
 							>
-								Click here to become a seller.
+								Become a seller
 							</Typography>
-						</Link>
-					</Box>
+							<Link to={'/sell/signin'}>
+								<Typography
+									sx={{
+										fontSize: '16px',
+										color: '#7A7A7E',
+										fontWeight: '500',
+										cursor: 'pointer',
+										'&:hover': {
+											color: '#000',
+										},
+									}}
+								>
+									Log in
+								</Typography>
+							</Link>
+							<Link to={'/sell/signup'}>
+								<Typography
+									sx={{
+										fontSize: '16px',
+										color: '#7A7A7E',
+										fontWeight: '500',
+										cursor: 'pointer',
+										'&:hover': {
+											color: '#000',
+										},
+									}}
+								>
+									Sign up
+								</Typography>
+							</Link>
+						</Box>
+					)}
 				</CustomContainer>
 			</CustomContainer>
 		</Box>

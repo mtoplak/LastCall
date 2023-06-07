@@ -139,18 +139,20 @@ function NavbarB() {
 										Suppliers
 									</Button>
 								</Link>
-								<Link to="/orders">
-									<Button
-										onClick={handleCloseNavMenu}
-										sx={{
-											my: 2,
-											color: 'white',
-											display: 'block',
-										}}
-									>
-										My orders
-									</Button>
-								</Link>
+								{user && role === 'buyer' && (
+									<Link to="/orders">
+										<Button
+											onClick={handleCloseNavMenu}
+											sx={{
+												my: 2,
+												color: 'white',
+												display: 'block',
+											}}
+										>
+											My orders
+										</Button>
+									</Link>
+								)}
 							</Menu>
 						</Box>
 						<Typography

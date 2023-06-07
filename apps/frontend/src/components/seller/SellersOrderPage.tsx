@@ -7,6 +7,7 @@ import {
 	Card,
 	CardContent,
 	Checkbox,
+	CircularProgress,
 	Container,
 	Divider,
 	Grid,
@@ -32,6 +33,7 @@ function SellerOrdersPage() {
 	const [isOpenModal, setIsOpenModal] = useState(false);
 	const [selectedStatus, setSelectedStatus] = useState<OrderStatus>();
 	const [showAlert, setShowAlert] = useState(false); // alert for success status change
+	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const { user } = useUserAuth();
 
 	// filtering orders
@@ -64,6 +66,8 @@ function SellerOrdersPage() {
 				setOrders(response.data);
 			} catch (error) {
 				console.log(error);
+			} finally {
+				setIsLoading(false);
 			}
 		};
 		fetchOrders();
@@ -136,7 +140,16 @@ function SellerOrdersPage() {
 							</AlertTitle>
 						</Alert>
 					)}
-					{orders.length === 0 ? (
+					{isLoading ? (
+						<Grid
+							container
+							justifyContent="center"
+							alignItems="center"
+							style={{ minHeight: '200px' }}
+						>
+							<CircularProgress color="inherit" />
+						</Grid>
+					) : orders.length === 0 ? (
 						<Typography variant="body1" mb={4} mt={2}>
 							Your order list is empty.
 						</Typography>
@@ -229,7 +242,6 @@ function SellerOrdersPage() {
 									filterStatus={filterStatus}
 								/>
 							</Grid>
-
 							<Grid item xs={12} md={9}>
 								{filteredOrders.length > 0 &&
 								filterStatus !== 'any' ? (
