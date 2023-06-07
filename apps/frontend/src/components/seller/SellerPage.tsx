@@ -278,7 +278,8 @@ function SellerPage() {
 													color: 'gray',
 												}}
 											>
-												Average rating for {seller?.title}:
+												Average rating for{' '}
+												{seller?.title}:
 											</Typography>
 											<Rating
 												name="read-only"
@@ -304,8 +305,8 @@ function SellerPage() {
 							</Grid>
 						</Grid>
 						{isMessageSent && (
-							<Alert severity="success" sx={{ mt: 1}}>
-									Message has been successfully sent.
+							<Alert severity="success" sx={{ mt: 1 }}>
+								Message has been successfully sent.
 								<IconButton
 									aria-label="close"
 									color="inherit"
@@ -356,7 +357,7 @@ function SellerPage() {
 					<br />
 					<TextField
 						label="Your Email"
-						placeholder="Enter email address"
+						placeholder="Enter your email address"
 						type="text"
 						fullWidth
 						required

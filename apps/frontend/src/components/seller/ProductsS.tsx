@@ -8,6 +8,7 @@ import {
 	Grid,
 	IconButton,
 	InputLabel,
+	LinearProgress,
 	MenuItem,
 	Modal,
 	Select,
@@ -70,6 +71,7 @@ const ProductsS = () => {
 	const [error, setError] = useState('');
 	const [productImage, setProductImage] = useState<File | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
+	const [isLoadingProduct, setIsLoadingProduct] = useState(false);
 	const { user } = useUserAuth();
 
 	const handleFormSubmit = async (imageURL: string) => {
@@ -84,6 +86,7 @@ const ProductsS = () => {
 				return;
 			}
 		}
+		setIsLoadingProduct(true);
 		try {
 			const updatedProduct = {
 				...newProduct,
@@ -102,6 +105,7 @@ const ProductsS = () => {
 		} catch (error) {
 			setError('Error adding product');
 			console.error(error);
+			setIsLoadingProduct(false);
 		}
 	};
 
@@ -302,6 +306,9 @@ const ProductsS = () => {
 									<Alert severity="error">
 										<b>{error}</b>
 									</Alert>
+								)}
+								{isLoadingProduct && (
+									<LinearProgress color="inherit" />
 								)}
 								<Typography sx={{ mt: 2 }}>
 									<Button

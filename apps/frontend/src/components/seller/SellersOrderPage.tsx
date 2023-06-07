@@ -269,24 +269,26 @@ function SellerOrdersPage() {
 													sx={{ mt: 3 }}
 												>
 													{order.status !==
-														OrderStatus.DELIVERED && (
-														<Checkbox
-															checked={checked.some(
-																(
-																	checkedOrder
-																) =>
-																	checkedOrder._id ===
-																	order._id
-															)}
-															onChange={handleToggle(
-																order
-															)}
-															inputProps={{
-																'aria-label':
-																	'select order',
-															}}
-														/>
-													)}
+														OrderStatus.DELIVERED &&
+														order.status !==
+															OrderStatus.REJECTED && (
+															<Checkbox
+																checked={checked.some(
+																	(
+																		checkedOrder
+																	) =>
+																		checkedOrder._id ===
+																		order._id
+																)}
+																onChange={handleToggle(
+																	order
+																)}
+																inputProps={{
+																	'aria-label':
+																		'select order',
+																}}
+															/>
+														)}
 												</Grid>
 												<Grid item xs={8}>
 													<CardContent>
@@ -472,24 +474,26 @@ function SellerOrdersPage() {
 													sx={{ mt: 3 }}
 												>
 													{order.status !==
-														OrderStatus.DELIVERED && (
-														<Checkbox
-															checked={checked.some(
-																(
-																	checkedOrder
-																) =>
-																	checkedOrder._id ===
-																	order._id
-															)}
-															onChange={handleToggle(
-																order
-															)}
-															inputProps={{
-																'aria-label':
-																	'select order',
-															}}
-														/>
-													)}
+														OrderStatus.DELIVERED &&
+														order.status !==
+															OrderStatus.REJECTED && (
+															<Checkbox
+																checked={checked.some(
+																	(
+																		checkedOrder
+																	) =>
+																		checkedOrder._id ===
+																		order._id
+																)}
+																onChange={handleToggle(
+																	order
+																)}
+																inputProps={{
+																	'aria-label':
+																		'select order',
+																}}
+															/>
+														)}
 												</Grid>
 												<Grid item xs={8}>
 													<CardContent>

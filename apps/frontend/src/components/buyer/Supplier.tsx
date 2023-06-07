@@ -1,6 +1,4 @@
 import { Card, CardMedia, Grid, Rating, Typography } from '@mui/material';
-import HouseBox from 'components/ui/HouseBox';
-import InfoBox from 'components/ui/InfoBox';
 import { ISeller } from 'models/seller';
 import React, { useEffect, useState } from 'react';
 import winery from '../../assets/images/wine.png';

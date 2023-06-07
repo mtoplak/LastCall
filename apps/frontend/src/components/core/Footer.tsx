@@ -26,7 +26,7 @@ const Footer = () => {
 			<CustomContainer>
 				<CustomContainer>
 					<Box>
-						<Link to={'/'}>
+						<Link to={'/products'}>
 							<Typography
 								sx={{
 									fontSize: '20px',
@@ -46,33 +46,27 @@ const Footer = () => {
 						<br />
 						<FooterLink>& More</FooterLink>
 					</Box>
-
-					<Box>
-						<Typography
-							sx={{
-								fontSize: '20px',
-								color: '#1C1C1D',
-								fontWeight: '700',
-								mb: 2,
-							}}
+					{role !== 'buyer' && role !== 'seller' && (
+						<Box>
+							<Typography
+								sx={{
+									fontSize: '20px',
+									color: '#1C1C1D',
+									fontWeight: '700',
+									mb: 2,
+								}}
 							>
-							Account
-						</Typography>
-						<Link to={'/buy/signin'}>
-						<FooterLink>Sign in</FooterLink>
-						</Link>
-						<br />
-						<Link to={'/buy/signup'}>
-						<FooterLink>Register</FooterLink>
-						</Link>
-						<br />
-						{role === 'seller' && (
-						<Link to={`/supplier/${id}`}>
-						<FooterLink>My account</FooterLink>
-						</Link>
-						)}
-					</Box>
-
+								Account
+							</Typography>
+							<Link to={'/buy/signin'}>
+								<FooterLink>Sign in</FooterLink>
+							</Link>
+							<br />
+							<Link to={'/buy/signup'}>
+								<FooterLink>Register</FooterLink>
+							</Link>
+						</Box>
+					)}
 					<Box>
 						<Typography
 							sx={{

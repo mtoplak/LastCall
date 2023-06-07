@@ -283,15 +283,28 @@ function Product() {
 														<Box flex="1">
 															<TextField
 																value={quantity}
-																onChange={(e) =>
-																	setQuantity(
+																onChange={(
+																	e
+																) => {
+																	let value =
 																		Number(
 																			e
 																				.target
 																				.value
-																		)
-																	)
-																}
+																		);
+																	if (
+																		value <
+																		1
+																	) {
+																		value = 1;
+																	} else {
+																		setQuantity(
+																			Number(
+																				value
+																			)
+																		);
+																	}
+																}}
 																label="Quantity"
 																placeholder="1"
 																type="number"
@@ -311,13 +324,6 @@ function Product() {
 															</Button>
 														</Box>
 													</Box>
-													<p
-														style={{
-															fontSize: '15px',
-														}}
-													>
-														In stock: {drink?.stock}
-													</p>
 												</Typography>
 											</Box>
 										)}
@@ -353,7 +359,7 @@ function Product() {
 												to checkout.
 											</Alert>
 										)}
-										<Divider sx={{ mb: 1 }} />
+										<Divider sx={{ mb: 1, mt: 2 }} />
 										<Typography
 											variant="h6"
 											gutterBottom
