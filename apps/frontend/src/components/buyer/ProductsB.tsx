@@ -60,7 +60,7 @@ const Products = () => {
 	});
 
 	return (
-		<Box sx={{ backgroundColor: '#f2f2f2', py: 10 }}>
+		<Box sx={{ backgroundColor: '#f2f2f2', py: 10, minHeight: "80vh" }}>
 			<Container>
 				<PropertiesTextBox>
 					<Typography

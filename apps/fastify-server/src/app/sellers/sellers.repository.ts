@@ -11,8 +11,7 @@ export class SellersRepository {
   constructor(
     @InjectModel('Seller') private sellersModel: Model<Seller>,
     @InjectModel('Product') private productsModel: Model<Product>,
-
-    ) {}
+  ) {}
 
   async findOne(sellerFilterQuery: FilterQuery<Seller>): Promise<Seller> {
     try {
@@ -59,17 +58,23 @@ export class SellersRepository {
     }
   }
 
-  async deleteOne(sellerFilterQuery: FilterQuery<Seller>): Promise<SuccessResponse> {
+  async deleteOne(
+    sellerFilterQuery: FilterQuery<Seller>,
+  ): Promise<SuccessResponse> {
     try {
-      await this.productsModel.find({ seller: sellerFilterQuery });
-      await this.productsModel.deleteMany({ seller: sellerFilterQuery });
+      const seller = await this.sellersModel.findOne(sellerFilterQuery);
+      if (!seller) {
+        throw new NotFoundException('Seller not found.');
+      }
+
+      await this.productsModel.find({ seller: seller._id });
+      await this.productsModel.deleteMany({ seller: seller._id });
       await this.sellersModel.deleteOne(sellerFilterQuery);
       return { success: true };
     } catch (err) {
       throw new NotFoundException('Could not delete the seller.');
     }
   }
-  
 
   async getAllProductsBySeller(email: string): Promise<Product[]> {
     const seller = await this.sellersModel
