@@ -175,7 +175,7 @@ const ProductsS = () => {
 	};
 
 	return (
-		<Box sx={{ backgroundColor: '#f2f2f2', py: 10,  minHeight: "80vh" }}>
+		<Box sx={{ backgroundColor: '#f2f2f2', py: 10, minHeight: '80vh' }}>
 			<Container>
 				<PropertiesTextBox>
 					<Typography
@@ -280,6 +280,9 @@ const ProductsS = () => {
 										min: 0,
 										pattern: '[0-9]*', // Allows only positive numbers
 									}}
+									InputProps={{
+										endAdornment: '€',
+									}}
 								/>
 								<TextField
 									label="Stock"
@@ -339,6 +342,8 @@ const ProductsS = () => {
 						>
 							<CircularProgress color="inherit" />
 						</Grid>
+					) : drinks.length === 0 ? (
+						<>No products. &#128549;</>
 					) : (
 						drinks.map((drink: IDrink, index: number) => (
 							<DrinkContainer key={index}>

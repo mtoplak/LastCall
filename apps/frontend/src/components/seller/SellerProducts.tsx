@@ -21,7 +21,6 @@ const SellerProducts: React.FC<SellerProductsProps> = ({ sellerId }) => {
 			try {
 				const response = await api.get(`/sellers/${sellerId}/products`);
 				setProducts(response.data);
-
 				//console.log(response.data);
 			} catch (error) {
 				console.error(error);

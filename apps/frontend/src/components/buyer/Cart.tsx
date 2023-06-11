@@ -415,14 +415,18 @@ function Cart() {
 
 	const renderGroupedProducts = (groupedProducts: SellerGroup) => {
 		return Object.entries(groupedProducts).map(([seller, products]) => (
-			<Grid container spacing={2} key={seller}>
+			<Grid container spacing={2} key={seller} sx={{ mt: 5 }}>
 				<Grid item xs={12} md={8}>
 					<Typography variant="h6" component="h2">
 						Seller: {products[0].product.seller.title}
 					</Typography>
-					<Typography variant="body2" color="text.secondary" mb={2}>
+					<Typography variant="body2" color="text.secondary">
 						Minimum price for delivery:{' '}
 						{products[0].product.seller.minPrice} €
+					</Typography>
+					<Typography variant="body2" color="text.secondary" mb={2}>
+						Maximum distance for delivery:{' '}
+						{products[0].product.seller.maxDistance} km
 					</Typography>
 					{products.map((item) => (
 						<Card

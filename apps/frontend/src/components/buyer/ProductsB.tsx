@@ -42,7 +42,7 @@ const Products = () => {
 		location.pathname === '/products'
 			? (document.title = 'Products')
 			: (document.title = 'Last Call');
-			window.scrollTo(0, 0);
+		window.scrollTo(0, 0);
 	}, [location]);
 
 	// filtering
@@ -60,7 +60,7 @@ const Products = () => {
 	});
 
 	return (
-		<Box sx={{ backgroundColor: '#f2f2f2', py: 10, minHeight: "80vh" }}>
+		<Box sx={{ backgroundColor: '#f2f2f2', py: 10, minHeight: '80vh' }}>
 			<Container>
 				<PropertiesTextBox>
 					<Typography
@@ -105,39 +105,39 @@ const Products = () => {
 				>
 					{isLoading ? (
 						<CircularProgress color="inherit" />
-					) : (
-						filteredDrinks.length > 0 &&
-						(filterType !== 'any' ||
-						filterName !== '' ||
-						filterLocation !== 'any' ? (
-							filteredDrinks.map((drink) => (
-								<Link
-									to={`/product/${drink._id}`}
-									key={drink._id}
-								>
-									<DrinkContainer>
-										<Drink drink={drink} />
-									</DrinkContainer>
-								</Link>
-							))
-						) : (
-							<>
-								{filteredDrinks.length === 0 ? (
-									<>Nothing found &#128549;</>
-								) : (
-									drinks.map((drink) => (
-										<Link
-											to={`/product/${drink._id}`}
-											key={drink._id}
-										>
-											<DrinkContainer>
-												<Drink drink={drink} />
-											</DrinkContainer>
-										</Link>
-									))
-								)}
-							</>
+					) : filteredDrinks.length > 0 &&
+					  (filterType !== 'any' ||
+							filterName !== '' ||
+							filterLocation !== 'any') ? (
+						filteredDrinks.map((drink) => (
+							<Link to={`/product/${drink._id}`} key={drink._id}>
+								<DrinkContainer>
+									<Drink drink={drink} />
+								</DrinkContainer>
+							</Link>
 						))
+					) : (
+						<>
+							{filteredDrinks.length === 0 &&
+							(filterType !== 'any' ||
+								filterName !== '' ||
+								filterLocation !== 'any') ? (
+								<>
+									No products matching your filters. &#128549;
+								</>
+							) : (
+								drinks.map((drink) => (
+									<Link
+										to={`/product/${drink._id}`}
+										key={drink._id}
+									>
+										<DrinkContainer>
+											<Drink drink={drink} />
+										</DrinkContainer>
+									</Link>
+								))
+							)}
+						</>
 					)}
 				</PropertiesBox>
 			</Container>

@@ -283,6 +283,9 @@ function Product() {
 														<Box flex="1">
 															<TextField
 																value={quantity}
+																inputProps={{
+																	min: 1,
+																}}
 																onChange={(
 																	e
 																) => {
@@ -297,6 +300,13 @@ function Product() {
 																		1
 																	) {
 																		value = 1;
+																	} else if (
+																		value >
+																		200
+																	) {
+																		setQuantity(
+																			200
+																		);
 																	} else {
 																		setQuantity(
 																			Number(
@@ -309,9 +319,6 @@ function Product() {
 																placeholder="1"
 																type="number"
 																fullWidth
-																inputProps={{
-																	min: 1,
-																}}
 															/>
 														</Box>
 														<Box>

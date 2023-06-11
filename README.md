@@ -4,7 +4,7 @@
 
 ## Description
 
-Last Call is an application that aims to facilitate the sales and delivery planning for beverage manufacturers while providing an easy way for customers to search for and order drinks for a specific location and day. The service primarily targets small, local beverage producers, helping them streamline their delivery operations. Customers include restaurants and bars that want to directly order beverages from the manufacturers. Additionally, individual customers who typically purchase larger quantities of drinks or prioritize delivery dates can also use the platform.
+Last Call is an application that aims to facilitate sales and delivery planning for beverage manufacturers while providing an easy way for customers to search for and order drinks for a specific location and day. The service primarily targets small, local beverage producers, helping them streamline their delivery operations. Customers include restaurants and bars that want to directly order beverages from the manufacturers. Additionally, individual customers who typically purchase larger quantities of drinks or prioritize delivery dates can also use the platform.
 
 ## Key Functionalities
 
@@ -19,6 +19,7 @@ Last Call is an application that aims to facilitate the sales and delivery plann
 
 ##### Seller functionalities:
 
+- Managing inventory
 - Defining delivery conditions
 - Confirming or rejecting individual orders
 - Offering discounts on products
@@ -74,6 +75,8 @@ Run the `frontend` and `fastify-server` in one command thanks to [Turborepo's Pi
 ```
 yarn dev
 ```
+
+Frontend is available at `localhost:3000`, backend is available at `localhost:4000`.
 
 ## Docker
 

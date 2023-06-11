@@ -25,7 +25,6 @@ import api from 'services/api';
 import CustomBox from 'components/ui/CustomBox';
 import { markets } from 'constants/marketConstants';
 import { SellerType } from '../../../enums/seller.enum';
-import { ISeller } from 'models/seller';
 
 const initialState = {
 	name: '',
@@ -191,7 +190,13 @@ const SignUpS = () => {
 							<Grid>
 								<Paper
 									elevation={10}
-									sx={{ px: 4, mb: 3, pb: 2, maxWidth: 600, margin: '0 auto' }}
+									sx={{
+										px: 4,
+										mb: 3,
+										pb: 2,
+										maxWidth: 600,
+										margin: '0 auto',
+									}}
 								>
 									<Grid container spacing={2}>
 										<Grid item xs={12} sm={6}>

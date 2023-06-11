@@ -215,6 +215,19 @@ function SellerOrdersPage() {
 											>
 												In-Transit
 											</Button>
+										</Box>
+										<Box
+											my={2}
+											sx={{
+												display: 'flex',
+												flexDirection: {
+													xs: 'row',
+													sm: 'row',
+													md: 'column',
+												},
+												gap: { xs: 2, sm: 2, md: 0 },
+											}}
+										>
 											<Button
 												variant="contained"
 												color="success"
@@ -266,6 +279,7 @@ function SellerOrdersPage() {
 												<Grid
 													item
 													xs={1}
+													sm={1}
 													sx={{ mt: 3 }}
 												>
 													{order.status !==
@@ -290,7 +304,7 @@ function SellerOrdersPage() {
 															/>
 														)}
 												</Grid>
-												<Grid item xs={8}>
+												<Grid item xs={11} sm={8}>
 													<CardContent>
 														<Typography
 															variant="subtitle1"
@@ -313,7 +327,7 @@ function SellerOrdersPage() {
 														</Typography>
 													</CardContent>
 												</Grid>
-												<Grid item xs={3}>
+												<Grid item xs={12} sm={3}>
 													<CardContent>
 														Current status:
 														<Typography
@@ -471,6 +485,7 @@ function SellerOrdersPage() {
 												<Grid
 													item
 													xs={1}
+													sm={1}
 													sx={{ mt: 3 }}
 												>
 													{order.status !==
@@ -495,7 +510,7 @@ function SellerOrdersPage() {
 															/>
 														)}
 												</Grid>
-												<Grid item xs={8}>
+												<Grid item xs={11} sm={8}>
 													<CardContent>
 														<Typography
 															variant="subtitle1"
@@ -518,7 +533,7 @@ function SellerOrdersPage() {
 														</Typography>
 													</CardContent>
 												</Grid>
-												<Grid item xs={3}>
+												<Grid item xs={12} sm={3}>
 													<CardContent>
 														Current status:
 														<Typography

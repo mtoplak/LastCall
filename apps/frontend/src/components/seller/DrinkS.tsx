@@ -177,44 +177,49 @@ const DrinkS: React.FC<DrinkProps> = ({
 						</Typography>
 					</Link>
 					<Box
+						sx={{
+							display: 'flex',
+							alignItems: 'center',
+						}}
+					>
+						{drink?.actualPrice !== drink?.price ? (
+							<>
+								<Typography
+									variant="body1"
 									sx={{
-										display: 'flex',
-										alignItems: 'center',
+										textDecoration: 'line-through',
+										color: 'text.secondary',
+										mr: 1,
 									}}
+									gutterBottom
 								>
-					{drink?.actualPrice !== drink?.price ? (
-										<>
-											<Typography
-												variant="body1"
-												sx={{
-													textDecoration:
-														'line-through',
-													color: 'text.secondary',
-													mr: 1,
-												}}
-												gutterBottom
-											>
-												{' '}
-												{drink?.actualPrice.toFixed(
-													2
-												)}{' '}
-												€
-											</Typography>
-											<Typography
-												variant="body1"
-												sx={{ color: 'error.main' }}
-												gutterBottom
-											>
-												{drink?.price.toFixed(2)} €
-											</Typography>
-										</>
-									) : (
-										<Typography variant="body1" sx={{ mb: 1}}>
-											{' '}
-											{drink?.actualPrice.toFixed(2)} €
-										</Typography>
-									)}
-									</Box>
+									{' '}
+									{drink?.actualPrice.toFixed(2)} €
+								</Typography>
+								<Typography
+									variant="body1"
+									sx={{ color: 'error.main' }}
+									gutterBottom
+								>
+									{drink?.price.toFixed(2)} €
+								</Typography>
+							</>
+						) : (
+							<Typography variant="body1">
+								{' '}
+								{drink?.actualPrice.toFixed(2)} €
+							</Typography>
+						)}
+					</Box>
+					<Box>
+						<Typography
+							variant="body1"
+							sx={{ color: 'text.secondary', mb: 1 }}
+							gutterBottom
+						>
+							In stock: {drink?.stock}
+						</Typography>
+					</Box>
 					<Box
 						sx={{
 							display: 'flex',
@@ -376,6 +381,9 @@ const DrinkS: React.FC<DrinkProps> = ({
 						value={selectedDrink.actualPrice || 0}
 						onChange={handleInputChange}
 						sx={{ mb: 2 }}
+						InputProps={{
+							endAdornment: '€',
+						}}
 					/>
 					<TextField
 						label="Stock"

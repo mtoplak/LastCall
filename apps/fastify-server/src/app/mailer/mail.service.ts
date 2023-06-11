@@ -188,8 +188,6 @@ export class MailService {
                         } or reply to this email.</p>
                     </div>
                     <div class="contact-info">
-                        <p>For any questions, please contact us at</p>
-                        <p>${sellerData.email} or reply to this email.</p>
                         <p>In the meantime, you can check the order status at:</p>
                         <p><a href="https://lastcall-1d57c.web.app/order/${
                           orderData._id
@@ -409,6 +407,9 @@ export class MailService {
                     <p>Shipping Address: ${order.address}, ${order.city}, ${
       order.country
     }</p>
+                    <p>For any questions, please contact us at ${
+                      seller.email
+                    } or reply to this email.</p>
                     <div class="thank-you">
                         <p>Thank you,</p>
                         <p>Last Call Company</p>
