@@ -26,12 +26,12 @@ import PhoneIcon from '@mui/icons-material/Phone';
 
 function SingleOrder() {
 	const [order, setOrder] = useState<IOrder>();
-	const [fetchError, setFetchError] = useState(false);
+	const [isFetchError, setIsFetchError] = useState(false);
 	const { id } = useParams<{ id: string }>();
 	const { role, user } = useUserAuth();
 	const [error, setError] = useState('');
 	const [score, setScore] = useState<number | null>(null);
-	const [rated, setRated] = useState(false);
+	const [isRated, setIsRated] = useState(false);
 
 	useEffect(() => {
 		if (!user) return;
@@ -44,7 +44,7 @@ function SingleOrder() {
 				});
 				setOrder(response.data);
 			} catch (error) {
-				setFetchError(true);
+				setIsFetchError(true);
 				throw error;
 			}
 		};
@@ -56,7 +56,7 @@ function SingleOrder() {
 			try {
 				const response = await api.get(`/rating/order/${order?._id}`);
 				setScore(response.data);
-				setRated(!!response.data);
+				setIsRated(!!response.data);
 			} catch (error: any) {
 				setError(error.response.data.message);
 			}
@@ -72,7 +72,7 @@ function SingleOrder() {
 		window.scrollTo(0, 0);
 	}, [order?.uid, order]);
 
-	if (fetchError) {
+	if (isFetchError) {
 		return <Page404 notFound="Order" />;
 	}
 
@@ -145,14 +145,12 @@ function SingleOrder() {
 											md={6}
 											sx={{ mt: { xs: 0, md: 5 } }}
 										>
-											{role !== 'seller' && rated ? (
+											{role !== 'seller' && isRated ? (
 												<Rating
 													value={score!}
 													readOnly
 												/>
-											) : (
-												null
-											)}
+											) : null}
 										</Grid>
 									</Grid>
 									<Divider />

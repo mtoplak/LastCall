@@ -33,7 +33,7 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 function SellerPage() {
 	const [seller, setSeller] = useState<ISeller>();
-	const [fetchError, setFetchError] = useState(false);
+	const [isFetchError, setIsFetchError] = useState(false);
 	const [isOpenModal, setIsOpenModal] = useState(false);
 	const [error, setError] = useState('');
 	const [message, setMessage] = useState('');
@@ -58,7 +58,7 @@ function SellerPage() {
 				setSeller(response.data);
 			} catch (error: any) {
 				if (error.response.status === 404) {
-					setFetchError(true);
+					setIsFetchError(true);
 				}
 				throw error;
 			}
@@ -88,7 +88,7 @@ function SellerPage() {
 		window.scrollTo(0, 0);
 	}, [seller]);
 
-	if (fetchError) {
+	if (isFetchError) {
 		return <Page404 notFound="Seller" />;
 	}
 

@@ -60,10 +60,10 @@ const SignUpB = () => {
 	const [error, setError] = useState('');
 	const [newUserData, setNewUserData] = useState(initialState);
 	const [isLoading, setIsLoading] = useState(false);
-	const [successInfo, setSuccessInfo] = useState(false);
+	const [isSuccessInfo, setIsSuccessInfo] = useState(false);
 
 	const handleChange = (e: { target: { value: any; name: any } }) => {
-		setSuccessInfo(false);
+		setIsSuccessInfo(false);
 		setError('');
 		const { value, name } = e.target;
 		if (name === 'legalPerson') {
@@ -114,7 +114,7 @@ const SignUpB = () => {
 						// targetedMarket: targetedMarkets,
 					});
 					//console.log(response.data);
-					setSuccessInfo(true);
+					setIsSuccessInfo(true);
 				} catch (error: any) {
 					setError(error.message);
 				}
@@ -151,7 +151,16 @@ const SignUpB = () => {
 							Sign up
 						</Typography>
 						<Grid>
-							<Paper elevation={10} sx={{ px: 4, mb: 3, pb: 2, maxWidth: 600, margin: '0 auto' }}>
+							<Paper
+								elevation={10}
+								sx={{
+									px: 4,
+									mb: 3,
+									pb: 2,
+									maxWidth: 600,
+									margin: '0 auto',
+								}}
+							>
 								<Grid container spacing={2}>
 									<Grid item xs={12} sm={6}>
 										<Typography variant="h6" sx={{ mb: 2 }}>
@@ -324,7 +333,7 @@ const SignUpB = () => {
 								{error && (
 									<Alert severity="error">{error}</Alert>
 								)}
-								{successInfo && (
+								{isSuccessInfo && (
 									<Alert severity="success">
 										You've successfully signed up! Verify
 										your email to{' '}

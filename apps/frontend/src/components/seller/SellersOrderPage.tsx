@@ -32,7 +32,7 @@ function SellerOrdersPage() {
 	const [checked, setChecked] = useState<IOrder[]>([]); // the orders you want to change status
 	const [isOpenModal, setIsOpenModal] = useState(false);
 	const [selectedStatus, setSelectedStatus] = useState<OrderStatus>();
-	const [showAlert, setShowAlert] = useState(false); // alert for success status change
+	const [isShownAlert, setIsShownAlert] = useState(false); // alert for success status change
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const { user } = useUserAuth();
 
@@ -90,7 +90,7 @@ function SellerOrdersPage() {
 	};
 
 	const handleChangeStatus = async (status: OrderStatus) => {
-		setShowAlert(false);
+		setIsShownAlert(false);
 		try {
 			const orderIds = checked.map((order) => order._id);
 			await Promise.all(
@@ -106,7 +106,7 @@ function SellerOrdersPage() {
 			);
 			setOrders(updatedOrders as IOrder[]);
 			setChecked([]);
-			setShowAlert(true);
+			setIsShownAlert(true);
 		} catch (error) {
 			throw error;
 		}
@@ -129,7 +129,7 @@ function SellerOrdersPage() {
 					>
 						Order List
 					</Typography>
-					{showAlert && (
+					{isShownAlert && (
 						<Alert
 							severity="success"
 							style={{ marginTop: '1rem' }}
@@ -138,7 +138,7 @@ function SellerOrdersPage() {
 									aria-label="close"
 									color="inherit"
 									size="small"
-									onClick={() => setShowAlert(false)}
+									onClick={() => setIsShownAlert(false)}
 								>
 									<CloseOutlinedIcon fontSize="inherit" />
 								</IconButton>

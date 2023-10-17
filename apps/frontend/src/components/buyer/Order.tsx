@@ -29,17 +29,17 @@ interface OrderProps {
 
 const Order: React.FC<OrderProps> = ({ order }) => {
 	const { role, user } = useUserAuth();
-	const [open, setOpen] = useState(false);
+	const [isOpen, setIsOpen] = useState(false);
 	const [score, setScore] = useState<number | null>(null);
 	const [error, setError] = useState('');
-	const [rated, setRated] = useState(false);
+	const [isRated, setIsRated] = useState(false);
 
 	useEffect(() => {
 		const fetchRating = async () => {
 			try {
 				const response = await api.get(`/rating/order/${order?._id}`);
 				setScore(response.data);
-				setRated(!!response.data);
+				setIsRated(!!response.data);
 			} catch (error: any) {
 				setError(error.response.data.message);
 			}
@@ -71,8 +71,8 @@ const Order: React.FC<OrderProps> = ({ order }) => {
 					},
 				}
 			);
-			setOpen(false);
-			setRated(true);
+			setIsOpen(false);
+			setIsRated(true);
 			setScore(score);
 		} catch (error: any) {
 			setError(error.response.data.message);
@@ -183,15 +183,15 @@ const Order: React.FC<OrderProps> = ({ order }) => {
 												border: '2px solid #878787',
 											}}
 											onClick={() => {
-												setOpen(true);
+												setIsOpen(true);
 											}}
 											disabled={
-												rated ||
+												isRated ||
 												order.status !==
 													OrderStatus.DELIVERED
 											}
 										>
-											{rated ? (
+											{isRated ? (
 												<>
 													You have rated this seller:{' '}
 													<Rating value={score!} />
@@ -262,9 +262,9 @@ const Order: React.FC<OrderProps> = ({ order }) => {
 				</Grid>
 			</AccordionDetails>
 			<Modal
-				open={open}
+				open={isOpen}
 				onClose={() => {
-					setOpen(false);
+					setIsOpen(false);
 					setError('');
 				}}
 				aria-labelledby="modal-modal-title"

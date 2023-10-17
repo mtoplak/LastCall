@@ -59,7 +59,7 @@ function Cart() {
 	const { setCartProducts } = useCartContext();
 	const [isLoading, setIsLoading] = useState(false);
 	const [checkEligibility, setCheckEligibility] = useState(false);
-	const [checkOutAll, setCheckOutAll] = useState(false);
+	const [isCheckoutAll, setIsCheckoutAll] = useState(false);
 	const [isLoadingCart, setIsLoadingCart] = useState(true);
 
 	useEffect(() => {
@@ -151,7 +151,7 @@ function Cart() {
 			return;
 		}
 
-		if (checkOutAll) {
+		if (isCheckoutAll) {
 			// Check out all sellers
 			const sellerIds = Object.keys(groupedProducts);
 			const requests = sellerIds.map(async (sellerId) => {
@@ -196,9 +196,9 @@ function Cart() {
 
 	const handleCheckMinPrice = async (
 		selectedSeller?: any,
-		checkOutAll?: boolean
+		isCheckoutAll?: boolean
 	) => {
-		if (checkOutAll) {
+		if (isCheckoutAll) {
 			const promises = Object.entries(groupedProducts).map(
 				async ([sellerId, products]) => {
 					const order = products.map((item: any) => ({
@@ -382,7 +382,7 @@ function Cart() {
 		} catch (error: any) {
 			setError(error.response?.data?.message || 'An error occurred');
 		} finally {
-			setCheckOutAll(false);
+			setIsCheckoutAll(false);
 			setIsLoading(false);
 		}
 	};
@@ -675,13 +675,13 @@ function Cart() {
 												sx={checkoutButton}
 												onClick={() => {
 													setIsOpenModal(true);
-													setCheckOutAll(true);
+													setIsCheckoutAll(true);
 													setCheckEligibility(false);
 													handleCheckMinPrice(
 														undefined,
 														true
 													);
-													setCheckOutAll(true);
+													setIsCheckoutAll(true);
 												}}
 											>
 												Checkout All
@@ -704,7 +704,7 @@ function Cart() {
 				onClose={() => {
 					setIsOpenModal(false);
 					setError('');
-					setCheckOutAll(false);
+					setIsCheckoutAll(false);
 				}}
 				aria-labelledby="modal-modal-title"
 				aria-describedby="modal-modal-description"
@@ -785,7 +785,9 @@ function Cart() {
 							fullWidth
 							disabled={!checkEligibility}
 							onClick={
-								checkOutAll ? handleCheckoutAll : handleCheckout
+								isCheckoutAll
+									? handleCheckoutAll
+									: handleCheckout
 							}
 						>
 							Buy

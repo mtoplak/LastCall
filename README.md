@@ -55,6 +55,8 @@ Create `.env.dev` and `.env.prod` files in the `apps/fastify-server` directory w
 
 ```env
  DATABASE_URI = "mongodb+srv://<username>:<password>@lastcall.apyanwb.mongodb.net/?retryWrites=true&w=majority"
+ FIREBASE_PROJECT_ID=<project-id>
+ MAILER_PASS=<password>
 ```
 
 Create `.env.dev` and `.env.prod` files in the `apps/frontend` directory with the following content:
@@ -128,9 +130,9 @@ docker-compose up
 ## Project Structure
 
 ```bash
+├───_PROMOCIJA (promotion)
 ├───.husky
 ├───.yarn
-│   ├───cache
 │   └───releases
 ├───apps
 │   ├───fastify-server
@@ -200,6 +202,6 @@ docker-compose up
 
 ## Authors
 
-- Maša Toplak
-- Elena U. Bežan
-- Tia Žvajker
+- [Maša Toplak](https://github.com/mtoplak)
+- [Elena U. Bežan](https://github.com/ElenaBezan)
+- [Tia Žvajker](https://github.com/tiazv)

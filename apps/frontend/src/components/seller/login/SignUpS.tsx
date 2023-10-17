@@ -66,7 +66,7 @@ const SignUpS = () => {
 	const [error, setError] = useState('');
 	const [newUserData, setNewUserData] = useState(initialState);
 	const [isLoading, setIsLoading] = useState(false);
-	const [successInfo, setSuccessInfo] = useState<boolean>(false);
+	const [isSuccessInfo, setIsSuccessInfo] = useState<boolean>(false);
 
 	const companyTypes = Object.values(SellerType);
 
@@ -78,7 +78,7 @@ const SignUpS = () => {
 	}, []);
 
 	const handleChange = (e: { target: { value: any; name: any } }) => {
-		setSuccessInfo(false);
+		setIsSuccessInfo(false);
 		setError('');
 		const { value, name } = e.target;
 		setNewUserData({ ...newUserData, [name]: value });
@@ -137,7 +137,7 @@ const SignUpS = () => {
 							});
 							//console.log(response.data);
 							//console.log(response.data.seller);
-							setSuccessInfo(true);
+							setIsSuccessInfo(true);
 						} catch (error: any) {
 							setError(error.message);
 						}
@@ -451,7 +451,7 @@ const SignUpS = () => {
 									{error && (
 										<Alert severity="error">{error}</Alert>
 									)}
-									{successInfo && (
+									{isSuccessInfo && (
 										<Alert severity="success">
 											You've successfully signed up!
 											Verify your email to{' '}
