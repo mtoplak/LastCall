@@ -84,7 +84,7 @@ Frontend is available at `localhost:3000`, backend is available at `localhost:40
 
 ### Build backend image only
 
-Run these commands the root directory:
+Run these commands in the root directory:
 
 #### Build image
 
@@ -103,7 +103,7 @@ Available at `localhost:8080`.
 
 ### Build frontend image only
 
-Run these commands the root directory:
+Run these commands in the root directory:
 
 #### Build image
 
@@ -124,6 +124,16 @@ Available at `localhost:3000`.
 
 ```
 docker-compose up
+```
+
+## Test
+
+### Frontend
+
+Run in `frontend` directory:
+
+```
+npm run test
 ```
 
 
