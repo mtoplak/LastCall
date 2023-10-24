@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Hero component should render 1`] = `
+<div>
+  <div
+    class="MuiBox-root css-ff6udn"
+  >
+    <div
+      class="MuiContainer-root MuiContainer-maxWidthLg css-1oqqzyl-MuiContainer-root"
+    >
+      <div
+        class="MuiBox-root css-y2rtej"
+      >
+        <div
+          class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 css-mhc70k-MuiGrid-root"
+        >
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-12 MuiGrid-grid-lg-6 css-ogcrwo-MuiGrid-root"
+          >
+            <div
+              class="MuiBox-root css-xi606m"
+            >
+              <p
+                class="MuiTypography-root MuiTypography-body2 css-7irn93-MuiTypography-root"
+              >
+                Welcome to LastCall
+              </p>
+              <h1
+                class="MuiTypography-root MuiTypography-h1 css-1qd72hw-MuiTypography-root"
+              >
+                Bridging the Gap Between Drink
+                 
+                <span
+                  style="color: rgb(36, 51, 110);"
+                >
+                  Buyers
+                </span>
+                 
+                and Sellers
+              </h1>
+              <p
+                class="MuiTypography-root MuiTypography-body2 css-16rwcaa-MuiTypography-root"
+              >
+                With an unwavering commitment to enhancing the beverage industry, we unite suppliers, distributors, retailers, and enthusiastic consumers.
+              </p>
+            </div>
+          </div>
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-12 MuiGrid-grid-lg-6 css-f0xsrb-MuiGrid-root"
+          >
+            <div
+              class="MuiBox-root css-y5loaw"
+            >
+              <img
+                alt="heroImg"
+                src="homepageDrink.png"
+                style="width: 100%; margin-top: 0px;"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
