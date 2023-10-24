@@ -159,26 +159,25 @@ function NavbarS() {
 								</Link>
 							</Menu>
 						</Box>
-								<Typography
-									variant="h5"
-									noWrap
-									component="a"
-									href=""
-									sx={{
-										mr: 2,
-										display: { xs: 'flex', md: 'none' },
-										flexGrow: 1,
-										fontFamily: 'monospace',
-										fontWeight: 700,
-										letterSpacing: '.3rem',
-										color: 'inherit',
-										textDecoration: 'none',
-									}}
-								>
-									<Link to="/">
-									LastCall
-									</Link>
-								</Typography>
+						<Link to="/">
+							<Typography
+								variant="h5"
+								noWrap
+								component="span"
+								sx={{
+									mr: 2,
+									display: { xs: 'flex', md: 'none' },
+									flexGrow: 1,
+									fontFamily: 'monospace',
+									fontWeight: 700,
+									letterSpacing: '.3rem',
+									color: 'inherit',
+									textDecoration: 'none',
+								}}
+							>
+								LastCall
+							</Typography>
+						</Link>
 						<Box
 							sx={{
 								flexGrow: 1,
