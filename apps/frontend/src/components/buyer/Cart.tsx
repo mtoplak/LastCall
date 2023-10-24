@@ -32,6 +32,7 @@ import { getCurrentDate } from '../../utils/getCurrentDate';
 import { ISeller } from 'models/seller';
 import { useCartContext } from 'context/CartContext';
 import payments from '../../assets/images/payments.jpg';
+import { groupProductsBySeller } from 'utils/groupProductsBySeller';
 
 interface GroupedProduct {
 	product: IDrink;
@@ -86,18 +87,6 @@ function Cart() {
 		};
 		if (user) fetchCart();
 	}, [user]);
-
-	const groupProductsBySeller = (cart: any) => {
-		const groupedProducts: SellerGroup = {};
-		for (const item of cart) {
-			const seller = item.product.seller._id;
-			if (!groupedProducts[seller]) {
-				groupedProducts[seller] = [];
-			}
-			groupedProducts[seller].push(item);
-		}
-		return groupedProducts;
-	};
 
 	useEffect(() => {
 		document.title = 'Shopping Cart';
