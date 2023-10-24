@@ -26,6 +26,7 @@
 		"husky": "^8.0.1",
 		"lint-staged": "^13.0.3",
 		"prettier": "^2.7.1",
+		"ts-mockery": "^1.2.0",
 		"turbo": "^1.4.3"
 	},
 	"lint-staged": {
