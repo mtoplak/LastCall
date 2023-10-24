@@ -1,4 +1,4 @@
-import { getOrderStatusColor } from './getOrderStatusColor';
+import { getOrderStatusColor } from '../getOrderStatusColor';
 
 describe('getOrderStatusColor function', () => {
 	it("should return 'primary' for status 'Accepted'", () => {

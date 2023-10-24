@@ -1,4 +1,4 @@
-import { groupProductsBySeller } from "./groupProductsBySeller";
+import { groupProductsBySeller } from "../groupProductsBySeller";
 
 describe("Group Products By Seller", () => {
     it("should return grouped products by seller", () => {

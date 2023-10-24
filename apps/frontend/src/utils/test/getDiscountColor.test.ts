@@ -1,4 +1,4 @@
-import { getDiscountColor } from './getDiscountColor';
+import { getDiscountColor } from '../getDiscountColor';
 
 describe('getDiscountColor function', () => {
 	it("should return 'black' for a discount of 0", () => {

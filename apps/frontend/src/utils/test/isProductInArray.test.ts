@@ -1,4 +1,4 @@
-import { isProductInArray } from './isProductInArray';
+import { isProductInArray } from '../isProductInArray';
 
 describe('isProductInArray function', () => {
 	it('should return true if the product ID is found in the array', () => {

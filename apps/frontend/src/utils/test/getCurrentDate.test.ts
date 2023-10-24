@@ -1,4 +1,4 @@
-import { getCurrentDate } from './getCurrentDate';
+import { getCurrentDate } from '../getCurrentDate';
 
 describe('getCurrentDate function', () => {
 	it("should return the current date in the format 'YYYY-MM-DD'", () => {

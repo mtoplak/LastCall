@@ -1,4 +1,4 @@
-import { formatDate } from './formatDate';
+import { formatDate } from '../formatDate';
 
 describe('formatDate function', () => {
 	it("should format a date as a string with the format 'day/month/year'", () => {
