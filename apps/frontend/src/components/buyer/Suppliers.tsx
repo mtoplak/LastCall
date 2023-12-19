@@ -20,12 +20,8 @@ import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import * as L from 'leaflet';
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet.markercluster/dist/leaflet.markercluster';
-
-// Import the marker cluster CSS file
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
-//import MarkerClusterGroup from 'react-leaflet-markercluster';
-//import MarkerClusterGroupProps from 'react-leaflet-markercluster';
 import 'leaflet/dist/leaflet.css';
 import 'react-leaflet-markercluster/dist/styles.min.css';
 import PropertiesTextBox from 'components/ui/PropertiesTextBox';
@@ -55,7 +51,6 @@ function Suppliers() {
 		const fetchSellers = async () => {
 			try {
 				const response = await api.get('/sellers');
-				//console.log(response.data);
 				setSellers(response.data);
 			} catch (error) {
 				throw error;
@@ -66,7 +61,6 @@ function Suppliers() {
 		fetchSellers();
 	}, []);
 
-	// filtering
 	const filteredSellers = sellers.filter((seller) => {
 		const nameMatch =
 			filterName === '' ||
@@ -102,8 +96,6 @@ function Suppliers() {
 		}, [map]);
 		return null;
 	};
-
-	//console.log(filteredSellers);
 
 	return (
 		<>

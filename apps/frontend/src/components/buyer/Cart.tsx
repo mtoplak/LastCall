@@ -122,66 +122,62 @@ function Cart() {
 
 	const handleCheckEligibility = async () => {
 		let coordinates: number[];
+		let eligibility = false;
+	  
 		try {
-			const mapResponse = await fetch(
-				`https://nominatim.openstreetmap.org/search?format=json&q=${
-					address + ' ' + city + ' ' + country
-				}&addressdetails=1&limit=1&polygon_svg=1`
-			);
-			const mapData = await mapResponse.json();
-			if (mapData.length === 0) {
-				setError('Address not found');
-				return;
-			} else {
-				coordinates = [Number(mapData[0].lat), Number(mapData[0].lon)];
-			}
-		} catch (error: any) {
-			setError(error.response.data.message);
-			return;
-		}
-
-		if (isCheckoutAll) {
-			// Check out all sellers
-			const sellerIds = Object.keys(groupedProducts);
-			const requests = sellerIds.map(async (sellerId) => {
-				const seller = groupedProducts[sellerId][0].product.seller;
-				try {
+		  const mapResponse = await fetch(
+			`https://nominatim.openstreetmap.org/search?format=json&q=${
+			  address + ' ' + city + ' ' + country
+			}&addressdetails=1&limit=1&polygon_svg=1`
+		  );
+		  const mapData = await mapResponse.json();
+	  
+		  if (mapData.length === 0) {
+			setError('Address not found');
+		  } else {
+			coordinates = [Number(mapData[0].lat), Number(mapData[0].lon)];
+	  
+			if (isCheckoutAll) {
+			  const sellerIds = Object.keys(groupedProducts);
+			  const results = await Promise.all(
+				sellerIds.map(async (sellerId) => {
+				  const seller = groupedProducts[sellerId][0].product.seller;
+				  try {
 					const response = await api.post('/distance/coordinates', {
-						sellerEmail: seller.email,
-						orderCoordinates: coordinates,
+					  sellerEmail: seller.email,
+					  orderCoordinates: coordinates,
 					});
 					return response.data === true;
-				} catch (error: any) {
+				  } catch (error: any) {
 					setError(error.response.data.message);
-					//console.error(`Error occurred for seller ${sellerId}: ${error}`);
 					return false;
-				}
-			});
-			const results = await Promise.all(requests);
-			const eligibility = results.every((result) => result); // Check if all sellers are eligible
-			//console.log(eligibility);
-			return eligibility;
-		} else {
-			// Check out selected seller only
-			try {
+				  }
+				})
+			  );
+			  eligibility = results.every((result) => result);
+			} else {
+			  try {
 				const response = await api.post('/distance/coordinates', {
-					sellerEmail: selectedSeller?.email,
-					orderCoordinates: coordinates,
+				  sellerEmail: selectedSeller?.email,
+				  orderCoordinates: coordinates,
 				});
-				//console.log(response.data);
-				if (response.data === true) {
-					return true;
-				} else {
-					setError(
-						"Order address is outside the seller's maximum distance."
-					);
-					return false;
+	  
+				eligibility = response.data === true;
+				if (!eligibility) {
+				  setError("Order address is outside the seller's maximum distance.");
 				}
-			} catch (error: any) {
+			  } catch (error: any) {
 				setError(error.message);
+			  }
 			}
+		  }
+		} catch (error: any) {
+		  setError(error.response?.data?.message || error.message);
 		}
-	};
+	  
+		return eligibility;
+	  };
+	  
 
 	const handleCheckMinPrice = async (
 		selectedSeller?: any,

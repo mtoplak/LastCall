@@ -9,11 +9,8 @@ export class DistanceService {
     sellerEmail: string,
     orderCoordinates: number[],
   ): Promise<number> {
-    const earthRadiusKm = 6371;
 
-    const seller = await this.sellersService.getSingleSellerByEmail(
-      sellerEmail,
-    );
+    const seller = await this.sellersService.getSingleSellerByEmail(sellerEmail,);
     if (!seller) {
       throw new NotFoundException('Seller not found');
     }
@@ -37,7 +34,7 @@ export class DistanceService {
 
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-    const distance = earthRadiusKm * c;
+    const distance = 6371 * c;
 
     if (!distance) {
       throw new NotFoundException('Could not calculate distance');
