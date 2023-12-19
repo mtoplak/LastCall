@@ -12,14 +12,13 @@ import api from 'services/api';
 import SearchSuppliersInput from './SearchSuppliersInput';
 import { Link } from 'react-router-dom';
 import Supplier from './Supplier';
-
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css'; // Re-uses images from ~leaflet package
 import * as L from 'leaflet';
 import 'leaflet-defaulticon-compatibility';
 import 'leaflet.markercluster/dist/leaflet.markercluster';
+// Import the marker cluster CSS file
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import 'leaflet/dist/leaflet.css';
@@ -61,6 +60,7 @@ function Suppliers() {
 		fetchSellers();
 	}, []);
 
+	// filtering
 	const filteredSellers = sellers.filter((seller) => {
 		const nameMatch =
 			filterName === '' ||
