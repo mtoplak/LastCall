@@ -62,17 +62,10 @@ function Suppliers() {
 
 	// filtering
 	const filteredSellers = sellers.filter((seller) => {
-		const nameMatch =
-			filterName === '' ||
-			seller.title.toLowerCase().includes(filterName.toLowerCase());
-		const typeMatch =
-			filterType === 'any' ||
-			seller.companyType.toLowerCase() === filterType.toLowerCase();
-		const locationMatch =
-			filterLocation === 'any' ||
-			seller.country
-				.toLowerCase()
-				.includes(filterLocation.toLowerCase()) ||
+		const nameMatch = filterName === '' || seller.title.toLowerCase().includes(filterName.toLowerCase());
+		const typeMatch = filterType === 'any' || seller.companyType.toLowerCase() === filterType.toLowerCase();
+		const locationMatch = filterLocation === 'any' ||
+			seller.country.toLowerCase().includes(filterLocation.toLowerCase()) ||
 			seller.city.toLowerCase().includes(filterLocation.toLowerCase()) ||
 			seller.address.toLowerCase().includes(filterLocation.toLowerCase());
 
@@ -196,7 +189,6 @@ function Suppliers() {
 					) : (
 						''
 					)}
-
 					{isLoading ? (
 						<Grid
 							container
